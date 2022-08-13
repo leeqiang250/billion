@@ -30,6 +30,7 @@
 
     <modules>
         <module>gateway</module>
+        <module>model</module>
         <module>quote</module>
     </modules>
 
@@ -71,6 +72,12 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.billion</groupId>
+                <artifactId>model</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
