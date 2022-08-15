@@ -27,6 +27,7 @@
         <project.build.sourceEncoding>${encoding.version}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${encoding.version}</project.reporting.outputEncoding>
         <com.baomidou.mybatis-plus-boot-starter.version>3.5.2</com.baomidou.mybatis-plus-boot-starter.version>
+        <mysql-connector-java.version>8.0.29</mysql-connector-java.version>
     </properties>
 
     <modules>
