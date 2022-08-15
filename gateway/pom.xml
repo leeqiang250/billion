@@ -42,6 +42,13 @@
 			<groupId>com.billion</groupId>
 			<artifactId>model</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.billion</groupId>
+			<artifactId>service</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

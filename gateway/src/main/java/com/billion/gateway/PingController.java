@@ -1,4 +1,4 @@
-package com.billion.gateway.test;
+package com.billion.gateway;
 
 import com.billion.model.response.Response;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author liqiang
  */
 @RestController
-@RequestMapping(path = {"/","/test"})
-public class Controller {
+@RequestMapping(path = {"/","/ping"})
+public class PingController {
 
     @GetMapping(path = {"/", "/success"})
     public Response success() {
