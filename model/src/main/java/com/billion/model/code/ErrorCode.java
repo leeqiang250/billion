@@ -6,12 +6,14 @@ package com.billion.model.code;
 public interface ErrorCode {
 
     /**
-     * 错误代号
+     * 错误码
+     * @return 错误码
      */
     int getCode();
 
     /**
-     * 具体信息
+     * 错误描述
+     * @return 错误描述
      */
     String getMessage();
 }

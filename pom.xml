@@ -26,12 +26,15 @@
         <maven.compiler.target>${jdk.version}</maven.compiler.target>
         <project.build.sourceEncoding>${encoding.version}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${encoding.version}</project.reporting.outputEncoding>
+        <com.baomidou.mybatis-plus-boot-starter.version>3.5.2</com.baomidou.mybatis-plus-boot-starter.version>
     </properties>
 
     <modules>
+        <module>dao</module>
         <module>gateway</module>
         <module>model</module>
         <module>quote</module>
+        <module>service</module>
     </modules>
 
     <dependencies>
@@ -76,6 +79,12 @@
 
             <dependency>
                 <groupId>com.billion</groupId>
+                <artifactId>dao</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.billion</groupId>
                 <artifactId>model</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -94,6 +103,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

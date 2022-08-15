@@ -1,6 +1,8 @@
 #! /bin/sh
 
-mvn clean -DskipTests=true package
+#mvn clean -DskipTests=true package
+
+mvn clean -DskipTests=true install
 
 #sudo mvn clean -DskipTests=true package spring-boot:build-image
 
