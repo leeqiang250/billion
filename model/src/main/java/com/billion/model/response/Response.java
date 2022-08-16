@@ -16,10 +16,10 @@ import java.io.Serializable;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Response<T> implements Serializable {
 
-    int code = 0;
-    long ts;
-    String msg = null;
-    T data;
+    private int code = 0;
+    private long ts;
+    private String msg = null;
+    private T data;
 
     public static Response success() {
         return success(null);

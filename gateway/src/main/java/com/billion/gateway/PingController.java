@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author liqiang
  */
 @RestController
-@RequestMapping({"/", "/ping"})
+@RequestMapping({"", "/", "/ping"})
 public class PingController {
 
-    @GetMapping(path = {"/", "/success"})
+    @GetMapping(path = {"", "/", "/success"})
     public Response success() {
         return Response.success();
     }
