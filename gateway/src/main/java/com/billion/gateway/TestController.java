@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,7 +22,7 @@ public class TestController {
     TestService testService;
 
     @GetMapping("/list")
-    public Response list() {
+    public Response<List<Test>> list() {
         testService.save(Test.builder().name(UUID.randomUUID().toString()).build());
         return Response.success(testService.list());
     }

@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @TableName("t_test")
 public class Test implements Serializable {
 
