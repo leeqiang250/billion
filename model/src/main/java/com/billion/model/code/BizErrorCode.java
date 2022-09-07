@@ -17,12 +17,12 @@ public enum BizErrorCode implements ErrorCode {
     INVALID_URL(100001, "invalid url"),
 
     /**
-     * URL签名无效
+     * 签名无效
      */
     BAD_SIGNATURE(100002, "bad signature"),
 
     /**
-     * API签名无效: %s
+     * API签名无效
      */
     API_SIGNATURE_NOT_VALID(100003, "api signature not valid"),
 

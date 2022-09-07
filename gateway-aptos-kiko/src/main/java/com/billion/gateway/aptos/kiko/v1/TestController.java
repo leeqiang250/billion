@@ -1,4 +1,4 @@
-package com.billion.gateway.aptos.kiko;
+package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.entity.Test;
 import com.billion.model.response.Response;
@@ -11,11 +11,13 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
 
+import static com.billion.gateway.aptos.kiko.v1.RequestPathConstant.V1_TEST;
+
 /**
  * @author liqiang
  */
 @RestController
-@RequestMapping({"/test"})
+@RequestMapping({V1_TEST})
 public class TestController {
 
     @Resource
