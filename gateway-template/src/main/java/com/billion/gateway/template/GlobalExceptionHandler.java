@@ -21,24 +21,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({MissingServletRequestParameterException.class, HttpMessageNotReadableException.class})
     public Response handlerMessageNotReadable(@NotNull HttpServletRequest request, Exception ex) {
+        //TODO
         System.out.println(String.format("HttpMessageNotReadableException [path={}][msg={}] {}", request.getRequestURI(), ex.getMessage(), ex));
         return Response.failure(BizErrorCode.DATA_VALIDATION_FAILURE);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     public Response handlerMethodArgumentNotValid(@NotNull HttpServletRequest request, Exception ex) {
+        //TODO
         System.out.println(String.format("BindException [path={}][msg={}] {}", request.getRequestURI(), ex.getMessage(), ex));
         return Response.failure(BizErrorCode.DATA_BIND_VALIDATION_FAILURE);
     }
 
     @ExceptionHandler(BizException.class)
     public Response handleBusinessException(@NotNull HttpServletRequest request, BizException ex) {
+        //TODO
         System.out.println(String.format("BizException [path={}][code={}][msg={}] {}", request.getRequestURI(), ex.getCode(), ex.getMessage(), ex));
         return Response.failure(ex.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public Response handleException(@NotNull HttpServletRequest request, Exception ex) {
+        //TODO
         System.out.println(String.format("Exception [path={}][msg={}] {}", request.getRequestURI(), ex.getMessage(), ex));
         return Response.failure(BizErrorCode.SYSTEM_ERROR);
     }

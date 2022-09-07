@@ -13,20 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping({"", "/", "/ping"})
 public class PingController {
 
-    //    @Value("${spring.application.name}")
+    @Value("${spring.application.name}")
     private String applicationName;
 
-//    @Value("${demo.param1}")
-    private String param;
+    @Value("${spring.profiles.active}")
+    private String profilesActive;
 
-    @GetMapping(path = {"", "/", "/success"})
-    public Response success() {
-        return Response.success(applicationName);
-    }
-
-    @GetMapping("/failure")
-    public Response failure() {
-        return Response.failure(applicationName);
+    @GetMapping(path = {"", "/", "/failure", "/success"})
+    public Response ping() {
+        return Response.success(applicationName + ":" + profilesActive);
     }
 
 }
