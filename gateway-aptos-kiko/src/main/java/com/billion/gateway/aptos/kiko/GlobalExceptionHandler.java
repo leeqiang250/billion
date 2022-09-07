@@ -1,4 +1,4 @@
-package com.billion.gateway;
+package com.billion.gateway.aptos.kiko;
 
 import com.billion.model.code.BizErrorCode;
 import com.billion.model.exception.BizException;

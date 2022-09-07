@@ -1,4 +1,4 @@
-package com.billion.gateway;
+package com.billion.gateway.template;
 
 import com.billion.model.response.Response;
 import org.springframework.web.bind.annotation.GetMapping;

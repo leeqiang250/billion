@@ -1,4 +1,4 @@
-package com.billion.gateway;
+package com.billion.gateway.aptos.kiko;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @MapperScan({"com.billion.dao"})
-@ComponentScan({"com.billion.service", "com.billion.gateway"})
+@ComponentScan({"com.billion.service", "com.billion.gateway.aptos.kiko"})
 public class GatewayApplication {
 
     public static void main(String[] args) {
