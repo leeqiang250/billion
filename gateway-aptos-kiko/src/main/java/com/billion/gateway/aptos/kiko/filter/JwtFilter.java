@@ -1,4 +1,4 @@
-package com.billion.gateway.aptos.kiko;
+package com.billion.gateway.aptos.kiko.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -14,7 +14,7 @@ import static com.billion.gateway.aptos.kiko.v1.RequestPathConstant.*;
  * @author liqiang
  */
 @Component
-public class FilterJwt implements Filter {
+public class JwtFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

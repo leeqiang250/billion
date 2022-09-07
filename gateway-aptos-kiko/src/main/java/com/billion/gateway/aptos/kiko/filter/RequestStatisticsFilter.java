@@ -1,4 +1,4 @@
-package com.billion.gateway.aptos.kiko;
+package com.billion.gateway.aptos.kiko.filter;
 
 import com.billion.model.request.ResponseElapsed;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author liqiang
  */
 @Component
-public class FilterResponseElapsed implements Filter {
+public class RequestStatisticsFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
