@@ -9,8 +9,3 @@ spring:
       label: main
       profile: ${spring.profiles.active}
       uri: http://13.251.180.31:8888
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://52.77.131.111:3306/ido_server?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: admin
-    password: OdeWzZNalcTPk2LAo0Lg
