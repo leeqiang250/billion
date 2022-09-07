@@ -32,7 +32,8 @@
 
     <modules>
         <module>dao</module>
-        <module>gateway</module>
+        <module>gateway-aptos-kiko</module>
+        <module>gateway-template</module>
         <module>model</module>
         <module>quote</module>
         <module>service</module>

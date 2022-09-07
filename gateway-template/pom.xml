@@ -10,11 +10,11 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gateway</artifactId>
+    <artifactId>gateway-template</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>gateway</name>
-    <description>gateway</description>
+    <name>gateway-template</name>
+    <description>gateway-template</description>
 
     <dependencies>
         <dependency>

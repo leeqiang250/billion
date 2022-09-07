@@ -1,0 +1,11 @@
+server:
+  port: 8889
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://52.77.131.111:3306/ido_server?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: admin
+    password: OdeWzZNalcTPk2LAo0Lg
