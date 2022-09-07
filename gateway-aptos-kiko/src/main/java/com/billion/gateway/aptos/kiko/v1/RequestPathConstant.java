@@ -15,10 +15,6 @@ public interface RequestPathConstant {
     /**
      * common路径下无需鉴权
      */
-    String V1_TEST = V1_COMMON + "/test";
-    /**
-     * common路径下无需鉴权
-     */
     String V1_IMAGE = V1_COMMON + "/image";
     /**
      * common路径下无需鉴权

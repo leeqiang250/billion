@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -16,16 +18,16 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_test")
-public class Test implements Serializable {
+@TableName("image")
+public class Image implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    @TableField("name")
-    private String name;
+    @TableField("uri")
+    private String uri;
+
 
 }
