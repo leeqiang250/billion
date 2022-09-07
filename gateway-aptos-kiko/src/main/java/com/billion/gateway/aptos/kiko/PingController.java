@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping({"", "/", "/ping"})
 public class PingController {
 
-//    @Value("${spring.application.name}")
+    //    @Value("${spring.application.name}")
     private String applicationName;
+
+//    @Value("${demo.param1}")
+    private String param;
 
     @GetMapping(path = {"", "/", "/success"})
     public Response success() {
