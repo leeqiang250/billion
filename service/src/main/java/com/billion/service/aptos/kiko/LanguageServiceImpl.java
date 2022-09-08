@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * @author liqiang
  */
 @Service
-public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Language> implements LanguageService {
+public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Language> implements ILanguageService {
 
 }

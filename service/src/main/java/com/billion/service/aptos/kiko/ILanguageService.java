@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * @author liqiang
  */
-public interface LanguageService extends IService<Language>, IRedisService<Language> {
+public interface ILanguageService extends IService<Language>, IRedisService<Language> {
 
     /**
      * getLanguage

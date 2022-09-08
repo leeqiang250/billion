@@ -3,7 +3,7 @@ package com.billion.gateway.aptos.kiko.v1;
 import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.entity.Image;
 import com.billion.model.response.Response;
-import com.billion.service.aptos.kiko.ImageService;
+import com.billion.service.aptos.kiko.IImageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +25,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
 public class ImageController {
 
     @Resource
-    ImageService imageService;
+    IImageService imageService;
 
     @GetMapping("/{id}")
     public Response get(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
