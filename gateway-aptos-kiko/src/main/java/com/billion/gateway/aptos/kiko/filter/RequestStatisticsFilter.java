@@ -1,6 +1,7 @@
 package com.billion.gateway.aptos.kiko.filter;
 
 import com.billion.model.request.ResponseElapsed;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -10,6 +11,7 @@ import java.io.IOException;
 /**
  * @author liqiang
  */
+@Slf4j
 @Component
 public class RequestStatisticsFilter implements Filter {
 
@@ -19,9 +21,7 @@ public class RequestStatisticsFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
         String uri = ((HttpServletRequest) servletRequest).getRequestURI();
         ResponseElapsed responseElapsed = ResponseElapsed.builder().uri(uri).elapsed(System.currentTimeMillis() - ms).build();
-        //TODO
-        System.out.println("----------");
-        System.out.println(responseElapsed.toString());
+        log.info("{}", responseElapsed);
     }
 
     @Override
