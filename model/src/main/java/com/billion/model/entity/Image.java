@@ -29,5 +29,4 @@ public class Image implements Serializable {
     @TableField("uri")
     private String uri;
 
-
 }

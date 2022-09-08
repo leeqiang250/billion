@@ -4,7 +4,7 @@ import com.billion.model.response.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.billion.gateway.aptos.kiko.v1.RequestPathConstant.V1_ERROR;
+import static com.billion.model.constant.RequestPathConstant.V1_ERROR;
 
 /**
  * @author liqiang

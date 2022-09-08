@@ -6,6 +6,6 @@ import com.billion.model.entity.Image;
 /**
  * @author liqiang
  */
-public interface ImageService extends IService<Image> {
+public interface ImageService extends IService<Image>, IRedisService<Image> {
 
 }

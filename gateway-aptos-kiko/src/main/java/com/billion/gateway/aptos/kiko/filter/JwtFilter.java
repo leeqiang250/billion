@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.billion.gateway.aptos.kiko.v1.RequestPathConstant.*;
+import static com.billion.model.constant.RequestPathConstant.V1_COMMON;
+import static com.billion.model.constant.RequestPathConstant.V1_ERROR;
 
 /**
  * @author liqiang

@@ -1,11 +1,11 @@
-package com.billion.gateway.aptos.kiko.v1;
+package com.billion.model.constant;
 
 /**
  * @author liqiang
  */
 public interface RequestPathConstant {
-    String CHAIN = "/aptos";
-    String APP = CHAIN + "/kiko";
+    String APTOS = "/aptos";
+    String APP = APTOS + "/kiko";
     String V1_VERSION = APP + "/v1";
 
     /**
