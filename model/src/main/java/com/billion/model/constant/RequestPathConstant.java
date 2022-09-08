@@ -19,6 +19,10 @@ public interface RequestPathConstant {
     /**
      * common路径下无需鉴权
      */
+    String V1_LANGUAGE = V1_COMMON + "/language";
+    /**
+     * common路径下无需鉴权
+     */
     String V1_ERROR = V1_COMMON + "/error";
     /**
      * common路径下无需鉴权

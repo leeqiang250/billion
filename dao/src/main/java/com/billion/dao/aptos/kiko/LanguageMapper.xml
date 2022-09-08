@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.LanguageMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,language_ as language_
+        ,key_ as key_
+        ,value_ as value_
+    </sql>
+
+</mapper>
