@@ -21,6 +21,7 @@ public interface ILanguageService extends IService<Language>, IRedisService<Lang
      * @param language language
      * @return Map
      */
+    @SuppressWarnings(value = {"rawtypes"})
     default Map getLanguage(String language) {
         Map languageMap = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.LANGUAGE + language);
         if (!languageMap.isEmpty()) {
