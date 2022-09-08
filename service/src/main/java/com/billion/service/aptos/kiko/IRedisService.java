@@ -15,16 +15,16 @@ public interface IRedisService<T> extends IService<T> {
     /**
      * RedisTemplate
      *
-     * @return
+     * @return RedisTemplate<Serializable, T>
      */
     RedisTemplate<Serializable, T> getRedisTemplate();
 
     /**
      * getCacheById
      *
-     * @param redisKeyPrefix
-     * @param id
-     * @return
+     * @param redisKeyPrefix redisKeyPrefix
+     * @param id id
+     * @return T
      */
     default T getCacheById(String redisKeyPrefix, Serializable id) {
         return this.getCacheById(redisKeyPrefix, id, Duration.ofHours(1L));
@@ -33,10 +33,10 @@ public interface IRedisService<T> extends IService<T> {
     /**
      * getCacheById
      *
-     * @param redisKeyPrefix
-     * @param id
-     * @param timeout
-     * @return
+     * @param redisKeyPrefix redisKeyPrefix
+     * @param id id
+     * @param timeout timeout
+     * @return T
      */
     default T getCacheById(String redisKeyPrefix, Serializable id, Duration timeout) {
         T t = this.getRedisTemplate().opsForValue().get(redisKeyPrefix + id);
