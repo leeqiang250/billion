@@ -1,9 +1,9 @@
 package com.billion.model.constant;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,6 +13,9 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Chain {
 
+    /**
+     * APTOS
+     */
     APTOS("aptos", "Aptos(我是描述,不要把我当作Key)"),
     ;
 
@@ -28,18 +31,21 @@ public enum Chain {
         return this.desc;
     }
 
-    public static Chain of(@NonNull String code) {
-        for (Chain e : values()) {
-            if (e.code.equalsIgnoreCase(code)) {
-                return e;
-            }
-        }
-
-        return Chain.APTOS;
+    public static Chain of(String code) {
+        map();
+        return mapV2.getOrDefault(code, Chain.APTOS);
     }
 
+    static Map mapV1;
+
+    static Map<String, Chain> mapV2;
+
     public static Map map() {
-        return Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e.desc));
+        if (Objects.isNull(mapV1)) {
+            mapV1 = Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e.desc));
+            mapV2 = Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e));
+        }
+        return mapV1;
     }
 
 }

@@ -31,6 +31,7 @@
         <com.aptos.aptos-sdk.version>1.0.0</com.aptos.aptos-sdk.version>
         <com.github.rholder.guava-retrying.version>2.0.0</com.github.rholder.guava-retrying.version>
         <org.projectlombok.lombok.version>1.18.24</org.projectlombok.lombok.version>
+        <com.alibaba.fastjson2.fastjson2.version>2.0.13</com.alibaba.fastjson2.fastjson2.version>
     </properties>
 
     <modules>
@@ -88,6 +89,12 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${com.alibaba.fastjson2.fastjson2.version}</version>
             </dependency>
 
             <dependency>

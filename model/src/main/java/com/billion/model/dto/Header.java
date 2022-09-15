@@ -5,27 +5,29 @@ import com.billion.model.constant.Language;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @author liqiang
  */
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Header implements Serializable {
 
-    Chain chain;
+    @Getter
+    @Setter
+    String chain;
 
-    Language language;
+    @Getter
+    @Setter
+    String language;
 
-    public Chain getChain() {
-        return Objects.isNull(this.chain) ? Chain.APTOS : this.chain;
+    public String getChain() {
+        return Chain.of(this.chain).code();
     }
 
-    public Language getLanguage() {
-        return Objects.isNull(this.language) ? Language.ZH_TC : this.language;
+    public String getLanguage() {
+        return Language.of(this.language).code();
     }
 
 }

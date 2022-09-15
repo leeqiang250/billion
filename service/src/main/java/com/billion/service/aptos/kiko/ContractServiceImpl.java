@@ -28,17 +28,17 @@ public class ContractServiceImpl extends RedisServiceImpl<ContractMapper, Contra
     ContextService contextService;
 
     public Map getContract(@NonNull Header header) {
-        Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.CONTRACT + header.getChain().code());
+        Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.CONTRACT + header.getChain());
         if (!map.isEmpty()) {
             return map;
         }
         QueryWrapper<Contract> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Contract::getChain, header.getChain().code());
+        wrapper.lambda().eq(Contract::getChain, header.getChain());
         List<Contract> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Contract::getName, Contract::getContract, (key1, key2) -> key2));
         if (this.contextService.isProd()) {
-            this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.CONTRACT + header.getChain().code(), map);
-            this.getRedisTemplate().expire(RedisPathConstant.CONTRACT + header.getChain().code(), Duration.ofHours(1L));
+            this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.CONTRACT + header.getChain(), map);
+            this.getRedisTemplate().expire(RedisPathConstant.CONTRACT + header.getChain(), Duration.ofHours(1L));
         }
         return map;
     }
