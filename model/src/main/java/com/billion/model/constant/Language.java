@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public enum Language {
 
     //ZHCN("zh-CN", "简体中文"),
-    ZHTC("zh-TC", "繁體中文"),
+    ZH_TC("zh-TC", "繁體中文"),
     EN("en", "English"),
     ;
 
@@ -31,7 +31,7 @@ public enum Language {
             }
         }
 
-        return Language.ZHTC;
+        return Language.ZH_TC;
     }
 
     public static Map map() {
