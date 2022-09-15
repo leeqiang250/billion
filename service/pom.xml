@@ -41,6 +41,11 @@
 
         <dependency>
             <groupId>com.billion</groupId>
+            <artifactId>framework</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.billion</groupId>
             <artifactId>model</artifactId>
         </dependency>
 
