@@ -38,6 +38,11 @@
             <artifactId>framework</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aptos</groupId>
+            <artifactId>aptos-sdk</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

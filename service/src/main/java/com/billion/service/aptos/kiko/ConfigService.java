@@ -4,6 +4,7 @@ import com.billion.model.constant.Chain;
 import com.billion.model.constant.Language;
 import com.billion.model.dto.Config;
 import com.billion.model.dto.Context;
+import com.billion.service.aptos.AptosService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,12 @@ public class ConfigService {
 
     public Config get(@NonNull Context context) {
         return Config.builder()
-                .context(context)
+                .currentContext(context)
+                .currentNode(AptosService.getAptosClient().requestNode())
                 .supportChain(Chain.map())
                 .supportLanguage(Language.map())
-                .text(languageService.getLanguage(context))
-                .contract(contractService.getContract(context))
+                .supportText(languageService.getLanguage(context))
+                .supportContract(contractService.getContract(context))
                 .build();
     }
 

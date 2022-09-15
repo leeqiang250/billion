@@ -1,5 +1,6 @@
 package com.billion.model.dto;
 
+import com.aptos.request.v1.response.ResponseNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,16 +16,19 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuppressWarnings(value = {"rawtypes"})
 public class Config implements Serializable {
 
-    Context context;
+    Context currentContext;
+
+    ResponseNode currentNode;
 
     Map supportChain;
 
     Map supportLanguage;
 
-    Map text;
+    Map supportText;
 
-    Map contract;
+    Map supportContract;
 
 }

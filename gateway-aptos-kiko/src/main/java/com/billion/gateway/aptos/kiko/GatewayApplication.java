@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @MapperScan({"com.billion.dao"})
-@ComponentScan({"com.billion.service", "com.billion.gateway"})
+@ComponentScan({"com.billion.service", "com.billion.model", "com.billion.gateway"})
 public class GatewayApplication {
 
     public static void main(String[] args) {
