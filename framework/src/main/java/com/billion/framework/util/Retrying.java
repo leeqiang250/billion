@@ -1,4 +1,4 @@
-package com.billion.framework;
+package com.billion.framework.util;
 
 import com.github.rholder.retry.*;
 import lombok.extern.slf4j.Slf4j;
@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author liqiang
+ */
 @Slf4j
-public class RetryingUtil {
+public class Retrying {
 
     public static <T> T retry(Callable<T> callable, int attempt, long delay, Class<? extends Throwable> exceptionClass) {
         try {
-            return RetryingUtil.<T>buildRetryer(attempt, delay, exceptionClass).call(callable);
+            return Retrying.<T>buildRetriever(attempt, delay, exceptionClass).call(callable);
         } catch (Exception e) {
             throw new RuntimeException(e.getCause());
         }
@@ -19,7 +22,7 @@ public class RetryingUtil {
 
     public static void retry(Runnable runnable, int attempt, long delay, Class<? extends Throwable> exceptionClass) {
         try {
-            RetryingUtil.buildRetryer(attempt, delay, exceptionClass).call(() -> {
+            Retrying.buildRetriever(attempt, delay, exceptionClass).call(() -> {
                 runnable.run();
                 return null;
             });
@@ -28,7 +31,7 @@ public class RetryingUtil {
         }
     }
 
-    public static <T> Retryer<T> buildRetryer(int attempt, long delay, Class<? extends Throwable> exceptionClass) {
+    public static <T> Retryer<T> buildRetriever(int attempt, long delay, Class<? extends Throwable> exceptionClass) {
         return RetryerBuilder.<T>newBuilder()
                 .retryIfExceptionOfType(exceptionClass)
                 .withStopStrategy(StopStrategies.stopAfterAttempt(attempt))
