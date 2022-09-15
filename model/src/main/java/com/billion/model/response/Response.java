@@ -1,10 +1,7 @@
 package com.billion.model.response;
 
 import com.billion.model.code.ErrorCode;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -12,6 +9,7 @@ import java.io.Serializable;
  * @author liqiang
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Response<T> implements Serializable {
