@@ -22,7 +22,7 @@ public class JwtFilter implements Filter {
         String uri = ((HttpServletRequest) servletRequest).getRequestURI();
         boolean result = false;
         for (int i = 0; i < WHITE.length; i++) {
-            if (StringUtils.startsWithIgnoreCase(WHITE[i], uri)) {
+            if (StringUtils.startsWithIgnoreCase(uri, WHITE[i])) {
                 result = true;
                 break;
             }

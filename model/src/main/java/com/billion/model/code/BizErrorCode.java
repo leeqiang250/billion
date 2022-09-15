@@ -41,9 +41,9 @@ public enum BizErrorCode implements ErrorCode {
      */
     SIGN_CALL_FAILURE(100016, "sign call failure");
 
-    private final int code;
+    final int code;
 
-    private final String message;
+    final String message;
 
     BizErrorCode(final int code, final String message) {
         this.code = code;

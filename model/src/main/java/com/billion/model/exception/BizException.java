@@ -9,11 +9,9 @@ import lombok.Data;
 @Data
 public class BizException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    int code;
 
-    private int code;
-
-    private String message;
+    String message;
 
     public BizException() {
         super();

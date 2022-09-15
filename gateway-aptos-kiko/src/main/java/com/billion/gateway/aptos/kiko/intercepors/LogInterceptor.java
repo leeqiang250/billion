@@ -30,7 +30,7 @@ public class LogInterceptor implements HandlerInterceptor {
         log.info("[THREAD_END][{}]", (request).getRequestURI());
     }
 
-    private void initThreadName(HttpServletRequest request) {
+    void initThreadName(HttpServletRequest request) {
         String ip = getIpAddr(request);
         int random = (int) (Math.random() * 100);
         String threadName = new SimpleDateFormat("HHmmssSSS").format(new Timestamp(System.currentTimeMillis())) + String.valueOf(random);
@@ -38,7 +38,7 @@ public class LogInterceptor implements HandlerInterceptor {
         log.info("[THREAD_BEGIN][{}][{}]", ip, (request).getRequestURI());
     }
 
-    private static String getIpAddr(HttpServletRequest request) {
+    static String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");

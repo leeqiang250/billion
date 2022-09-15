@@ -40,10 +40,11 @@ public class Retrying {
                     @Override
                     public <V> void onRetry(Attempt<V> attempt) {
                         if (attempt.hasException()) {
-                            log.info("retry time: {}, msg: {}", attempt.getAttemptNumber(), attempt.getExceptionCause().getMessage());
+                            log.info("retry time:{}, msg:{}", attempt.getAttemptNumber(), attempt.getExceptionCause().getMessage());
                         }
                     }
                 })
                 .build();
     }
+
 }

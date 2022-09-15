@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Slf4j
 @Service
 public class AptosService {
 
     @Value("${aptos.host}")
-    private String aptosHost;
+    String aptosHost;
 
     @Getter
     static AptosClient aptosClient;
@@ -26,25 +27,29 @@ public class AptosService {
         log.info("Aptos{}", AptosService.aptosClient.requestNode());
     }
 
-    public boolean checkTransaction(String hash) {
-        log.info("合约hash:{}", hash);
+    int i;
+
+    public boolean checkTransaction(String hash2) {
+
+
         return Retrying.retry(
                 () -> {
-                    ResponseTransaction responseTransaction = AptosService.aptosClient.requestTransactionByHash(hash);
-                    if (responseTransaction == null) {
-                        throw new RuntimeException("合约执行中... " + "txn:" + hash);
+                    i++;
+                    String hash = hash2 + i;
+                    ResponseTransaction responseTransaction = null;
+                    try {
+                        responseTransaction = AptosService.aptosClient.requestTransactionByHash(hash);
+                    } catch (Exception exception) {
+                    }
+                    if (Objects.isNull(responseTransaction)) {
+                        throw new RuntimeException("non-existent hash:" + hash);
                     } else {
-                        if (responseTransaction.isSuccess()) {
-                            log.info("合约执行成功，result: {}", responseTransaction);
-                            return true;
-                        } else {
-                            log.info("合约执行失败，result:{}", responseTransaction);
-                            return false;
-                        }
+                        log.info("hash:{} result:{}", responseTransaction.getHash(), responseTransaction.isSuccess());
+                        return responseTransaction.isSuccess();
                     }
                 },
                 60,
-                2000,
+                1000L,
                 Exception.class
         );
     }
