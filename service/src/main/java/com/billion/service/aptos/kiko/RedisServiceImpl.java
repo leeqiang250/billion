@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * @author liqiang
  */
-public class RedisServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements IRedisService<T> {
+public class RedisServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements RedisService<T> {
 
     @Resource
     RedisTemplate<Serializable, T> redisTemplate;

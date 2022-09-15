@@ -1,9 +1,6 @@
 package com.billion.model.constant;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author liqiang
@@ -16,12 +13,12 @@ public interface RequestPathConstant {
 
     String APP = APTOS + "/kiko";
 
-    String V1_VERSION = APP + "/v1";
+    String V1 = APP + "/v1";
 
     /**
      * common路径下无需鉴权
      */
-    String V1_COMMON = V1_VERSION + "/common";
+    String V1_COMMON = V1 + "/common";
 
     /**
      * common路径下无需鉴权
@@ -41,17 +38,19 @@ public interface RequestPathConstant {
     /**
      * common路径下无需鉴权
      */
-    String V1_NFT = V1_VERSION + "/nft";
+    String V1_CONTRACT = V1_COMMON + "/contract";
 
-    String V1_LIQUIDITY = V1_VERSION + "/liquidity";
+    String V1_NFT = V1 + "/nft";
 
-    String V1_SWAP = V1_VERSION + "/swap";
+    String V1_LIQUIDITY = V1 + "/liquidity";
 
-    String V1_META = V1_VERSION + "/meta";
+    String V1_SWAP = V1 + "/swap";
 
-    String V1_FARM = V1_VERSION + "/farm";
+    String V1_META = V1 + "/meta";
 
-    String V1_LOAN = V1_VERSION + "/loan";
+    String V1_FARM = V1 + "/farm";
+
+    String V1_LOAN = V1 + "/loan";
 
     String[] WHITE = List.of("/", PING, V1_COMMON).toArray(String[]::new);
 

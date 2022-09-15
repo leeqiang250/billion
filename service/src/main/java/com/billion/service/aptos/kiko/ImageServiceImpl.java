@@ -15,7 +15,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
  * @author liqiang
  */
 @Service
-public class ImageServiceImpl extends RedisServiceImpl<ImageMapper, Image> implements IImageService {
+public class ImageServiceImpl extends RedisServiceImpl<ImageMapper, Image> implements ImageService {
 
     @Resource
     ContextService contextService;

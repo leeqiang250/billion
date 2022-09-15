@@ -7,7 +7,7 @@ import lombok.NonNull;
 /**
  * @author liqiang
  */
-public interface IImageService extends IService<Image>, IRedisService<Image> {
+public interface ImageService extends IService<Image>, RedisService<Image> {
 
     /**
      * add
