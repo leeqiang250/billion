@@ -1,11 +1,9 @@
 package com.billion.gateway.aptos.kiko.v1;
 
+import com.billion.model.dto.Header;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.LanguageService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -21,9 +19,9 @@ public class LanguageController {
     @Resource
     LanguageService languageService;
 
-    @GetMapping("/{language}")
-    public Response get(@PathVariable("language") String language) {
-        return Response.success(this.languageService.getLanguage(language));
+    @GetMapping({"", "/"})
+    public Response get(@RequestHeader Header header) {
+        return Response.success(this.languageService.getLanguage(header));
     }
 
 }

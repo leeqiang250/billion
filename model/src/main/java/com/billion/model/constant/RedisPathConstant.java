@@ -6,6 +6,7 @@ package com.billion.model.constant;
 public interface RedisPathConstant {
 
     String IMAGE = "image::";
+
     String LANGUAGE = "language::";
 
     String CONTRACT = "contract::";

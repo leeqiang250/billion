@@ -3,6 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.LanguageMapper;
 import com.billion.model.constant.RedisPathConstant;
+import com.billion.model.dto.Header;
 import com.billion.model.entity.Language;
 import com.billion.service.aptos.ContextService;
 import lombok.NonNull;
@@ -25,18 +26,18 @@ public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Langua
 
     @Override
     @SuppressWarnings(value = {"rawtypes"})
-    public Map getLanguage(@NonNull String language) {
-        Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.LANGUAGE + language);
+    public Map getLanguage(@NonNull Header header) {
+        Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.LANGUAGE + header.getLanguage().getCode());
         if (!map.isEmpty()) {
             return map;
         }
         QueryWrapper<Language> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Language::getLanguage, language);
+        wrapper.lambda().eq(Language::getLanguage, header.getChain().getCode());
         List<Language> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
         if (this.contextService.isProd()) {
-            this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.LANGUAGE + language, map);
-            this.getRedisTemplate().expire(RedisPathConstant.LANGUAGE + language, Duration.ofHours(1L));
+            this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.LANGUAGE + header.getLanguage().getCode(), map);
+            this.getRedisTemplate().expire(RedisPathConstant.LANGUAGE + header.getLanguage().getCode(), Duration.ofHours(1L));
         }
         return map;
     }

@@ -27,8 +27,8 @@ public class ConfigService {
         return Config.builder()
                 .chain(Chain.values())
                 .language(Language.map())
-                .text(languageService.getLanguage(header.getLanguage().getCode()))
-                .contract(contractService.getContract(header.getChain().getCode()))
+                .text(languageService.getLanguage(header))
+                .contract(contractService.getContract(header))
                 .build();
     }
 
