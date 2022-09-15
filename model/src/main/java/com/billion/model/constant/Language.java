@@ -13,7 +13,9 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Language {
 
-    //ZHCN("zh-CN", "简体中文"),
+    /**
+     * ZHCN("zh-CN", "简体中文"),
+     */
 
     /**
      * ZH_TC

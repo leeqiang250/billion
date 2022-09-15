@@ -66,11 +66,8 @@ public class ReplaceRequestHeaderMethodArgumentResolver extends AbstractNamedVal
     @Override
     protected @Nullable Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
         String[] headerValues = request.getHeaderValues(name);
-
-        if (headerValues == null) {
-            //TODO
+        if (Objects.isNull(headerValues)) {
             return JSONObject.parseObject("{}", parameter.getParameterType());
-            //return null;
         }
 
         if (String.class != parameter.getParameterType()) {
@@ -87,7 +84,9 @@ public class ReplaceRequestHeaderMethodArgumentResolver extends AbstractNamedVal
 
     @Override
     protected void handleMissingValue(String name, MethodParameter parameter) throws ServletRequestBindingException {
-        //throw new MissingRequestHeaderException(name, parameter);
+        /**
+         * throw new MissingRequestHeaderException(name, parameter);
+         */
     }
 
     static final class RequestHeaderNamedValueInfo extends NamedValueInfo {
