@@ -30,8 +30,6 @@ public class AptosService {
     int i;
 
     public boolean checkTransaction(String hash2) {
-
-
         return Retrying.retry(
                 () -> {
                     i++;
@@ -42,9 +40,9 @@ public class AptosService {
                     } catch (Exception exception) {
                     }
                     if (Objects.isNull(responseTransaction)) {
-                        throw new RuntimeException("non-existent hash:" + hash);
+                        throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("hash:{} result:{}", responseTransaction.getHash(), responseTransaction.isSuccess());
+                        log.info("result:{} transaction:{}", responseTransaction.isSuccess(), responseTransaction.getHash());
                         return responseTransaction.isSuccess();
                     }
                 },
