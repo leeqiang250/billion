@@ -1,7 +1,7 @@
 package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.billion.model.dto.Header;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
 import lombok.NonNull;
 
@@ -15,9 +15,9 @@ public interface LanguageService extends IService<Language>, RedisService<Langua
     /**
      * getLanguage
      *
-     * @param header header
+     * @param context context
      * @return Map
      */
-    Map getLanguage(@NonNull Header header);
+    Map getLanguage(@NonNull Context context);
 
 }

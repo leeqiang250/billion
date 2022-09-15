@@ -3,7 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.billion.model.constant.Chain;
 import com.billion.model.constant.Language;
 import com.billion.model.dto.Config;
-import com.billion.model.dto.Header;
+import com.billion.model.dto.Context;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,13 @@ public class ConfigService {
     @Resource
     LanguageService languageService;
 
-    public Config get(@NonNull Header header) {
+    public Config get(@NonNull Context context) {
         return Config.builder()
-                .header(header)
+                .context(context)
                 .supportChain(Chain.map())
                 .supportLanguage(Language.map())
-                .text(languageService.getLanguage(header))
-                .contract(contractService.getContract(header))
+                .text(languageService.getLanguage(context))
+                .contract(contractService.getContract(context))
                 .build();
     }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Config implements Serializable {
 
-    Header header;
+    Context context;
 
     Map supportChain;
 

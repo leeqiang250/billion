@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Header implements Serializable {
+public class Context implements Serializable {
 
     @Getter
     @Setter
