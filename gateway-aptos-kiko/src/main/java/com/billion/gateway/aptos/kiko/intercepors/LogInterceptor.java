@@ -1,14 +1,10 @@
 package com.billion.gateway.aptos.kiko.intercepors;
 
-
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +20,11 @@ public class LogInterceptor implements HandlerInterceptor {
         initThreadName(request);
         return true;
     }
+
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
     }
+
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
         log.info("[THREAD_END][{}]", (request).getRequestURI());
@@ -34,8 +32,8 @@ public class LogInterceptor implements HandlerInterceptor {
 
     private void initThreadName(HttpServletRequest request) {
         String ip = getIpAddr(request);
-        int random = (int)(Math.random() * 100);
-        String threadName = new SimpleDateFormat("HHmmssSSS").format(new Timestamp(System.currentTimeMillis())) + String.valueOf(random) ;
+        int random = (int) (Math.random() * 100);
+        String threadName = new SimpleDateFormat("HHmmssSSS").format(new Timestamp(System.currentTimeMillis())) + String.valueOf(random);
         Thread.currentThread().setName(threadName);
         log.info("[THREAD_BEGIN][{}][{}]", ip, (request).getRequestURI());
     }
