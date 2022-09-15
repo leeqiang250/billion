@@ -28,6 +28,10 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.billion</groupId>
+            <artifactId>framework</artifactId>
+        </dependency>
 
     </dependencies>
 

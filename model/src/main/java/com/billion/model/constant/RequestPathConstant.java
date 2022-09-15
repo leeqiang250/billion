@@ -40,6 +40,11 @@ public interface RequestPathConstant {
      */
     String V1_CONTRACT = V1_COMMON + "/contract";
 
+    /**
+     * common路径下无需鉴权
+     */
+    String V1_CONFIG = V1_COMMON + "/config";
+
     String V1_NFT = V1 + "/nft";
 
     String V1_LIQUIDITY = V1 + "/liquidity";
