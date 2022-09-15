@@ -1,7 +1,6 @@
 package com.billion.model.constant;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Map;
@@ -11,8 +10,6 @@ import java.util.stream.Stream;
 /**
  * @author liqiang
  */
-
-@Getter
 @AllArgsConstructor
 public enum Language {
 
@@ -22,11 +19,20 @@ public enum Language {
     ;
 
     String code;
+
     String desc;
+
+    public String code() {
+        return this.code;
+    }
+
+    public String desc() {
+        return this.desc;
+    }
 
     public static Language of(@NonNull String code) {
         for (Language e : values()) {
-            if (code.equalsIgnoreCase(e.code)) {
+            if (e.code.equalsIgnoreCase(code)) {
                 return e;
             }
         }

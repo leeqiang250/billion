@@ -1,7 +1,6 @@
 package com.billion.model.dto;
 
 import com.billion.model.constant.Chain;
-import com.billion.model.constant.Language;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +17,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Config implements Serializable {
+
+    Header header;
 
     Chain[] chain;
 

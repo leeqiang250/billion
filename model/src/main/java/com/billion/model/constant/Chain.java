@@ -1,14 +1,11 @@
 package com.billion.model.constant;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
  * @author liqiang
  */
-
-@Getter
 @AllArgsConstructor
 public enum Chain {
 
@@ -17,9 +14,13 @@ public enum Chain {
 
     String code;
 
+    public String code() {
+        return this.code;
+    }
+
     public static Chain of(@NonNull String code) {
         for (Chain e : values()) {
-            if (code.equalsIgnoreCase(e.code)) {
+            if (e.code.equalsIgnoreCase(code)) {
                 return e;
             }
         }
