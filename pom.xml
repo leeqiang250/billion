@@ -28,6 +28,7 @@
         <project.reporting.outputEncoding>${encoding.version}</project.reporting.outputEncoding>
         <com.baomidou.mybatis-plus-boot-starter.version>3.5.2</com.baomidou.mybatis-plus-boot-starter.version>
         <mysql-connector-java.version>8.0.29</mysql-connector-java.version>
+        <com.aptos.aptos-sdk.version>1.0.0</com.aptos.aptos-sdk.version>
     </properties>
 
     <modules>
@@ -94,6 +95,12 @@
                 <groupId>com.billion</groupId>
                 <artifactId>service</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aptos</groupId>
+                <artifactId>aptos-sdk</artifactId>
+                <version>${com.aptos.aptos-sdk.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
