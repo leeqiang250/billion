@@ -16,9 +16,12 @@ import java.io.Serializable;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Response<T> implements Serializable {
 
-    int code = 0;
+    int code;
+
     long ts;
-    String msg = null;
+
+    String msg;
+
     T data;
 
     public static Response success() {
@@ -26,7 +29,7 @@ public class Response<T> implements Serializable {
     }
 
     public static <T> Response success(final T data) {
-        return build(0, null, data);
+        return build(200, null, data);
     }
 
     public static Response failure() {

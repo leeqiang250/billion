@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class ResponseElapsed implements Serializable {
 
     String uri;
+
     long elapsed;
 
 }
