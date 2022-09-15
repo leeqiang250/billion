@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContextService {
 
+    @Getter
     @Value("${spring.profiles.active}")
     String env;
 
