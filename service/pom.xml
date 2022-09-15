@@ -17,16 +17,16 @@
     <description>service</description>
 
     <dependencies>
+
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${com.baomidou.mybatis-plus-boot-starter.version}</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${com.baomidou.mybatis-plus-boot-starter.version}</version>
         </dependency>
 
         <dependency>
