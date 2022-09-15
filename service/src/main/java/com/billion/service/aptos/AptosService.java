@@ -1,5 +1,6 @@
 package com.billion.service.aptos;
 
+import com.aptos.request.v1.response.ResponseNode;
 import com.aptos.request.v1.response.ResponseTransaction;
 import com.aptos.utils.AptosClient;
 import com.billion.framework.util.Retrying;
@@ -49,6 +50,23 @@ public class AptosService {
                 1000L,
                 Exception.class
         );
+    }
+
+
+    ResponseNode responseNode;
+
+    long responseNodeTs;
+
+    public ResponseNode requestNodeCache() {
+        if (Objects.isNull(this.responseNode) || System.currentTimeMillis() > (this.responseNodeTs + 5000L)) {
+            ResponseNode responseNode = AptosService.getAptosClient().requestNode();
+            if (Objects.nonNull(responseNode)) {
+                this.responseNodeTs = System.currentTimeMillis();
+                this.responseNode = responseNode;
+            }
+        }
+
+        return this.responseNode;
     }
 
 }
