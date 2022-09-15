@@ -19,7 +19,7 @@ public class LanguageController {
     @Resource
     LanguageService languageService;
 
-    @GetMapping({"", "/"})
+    @RequestMapping({"", "/"})
     public Response get(@RequestHeader Header header) {
         return Response.success(this.languageService.getLanguage(header));
     }

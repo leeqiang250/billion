@@ -27,7 +27,7 @@ public class ImageController {
     @Resource
     ImageService imageService;
 
-    @GetMapping("/{id}")
+    @RequestMapping("/{id}")
     public Response get(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
         Image image = this.imageService.getCacheById(RedisPathConstant.IMAGE, id);
         if (!Objects.isNull(image) && !Objects.isNull(image.getUri()) && !"".equals(image.getUri())) {

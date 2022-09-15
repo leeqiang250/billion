@@ -30,7 +30,7 @@ public class PingController {
     @Resource
     ImageService imageService;
 
-    @GetMapping(path = {"", "/", "/failure", "/success"})
+    @RequestMapping(path = {"", "/", "/failure", "/success"})
     public Response ping() {
         return Response.success(this.contextService.getApplicationName() + ":" + this.contextService.getEnv());
     }

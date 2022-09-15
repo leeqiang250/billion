@@ -19,7 +19,7 @@ public class ContractController {
     @Resource
     ContractService contractService;
 
-    @GetMapping({"", "/"})
+    @RequestMapping({"", "/"})
     public Response get(@RequestHeader Header header) {
         return Response.success(this.contractService.getContract(header));
     }
