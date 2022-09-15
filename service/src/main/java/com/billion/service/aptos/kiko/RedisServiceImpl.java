@@ -17,7 +17,7 @@ public class RedisServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M,
 
     @Override
     public RedisTemplate<Serializable, T> getRedisTemplate() {
-        return redisTemplate;
+        return this.redisTemplate;
     }
 
 }

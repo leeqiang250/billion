@@ -29,7 +29,7 @@ public class ImageController {
 
     @GetMapping("/{id}")
     public Response get(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
-        Image image = imageService.getCacheById(RedisPathConstant.IMAGE, id);
+        Image image = this.imageService.getCacheById(RedisPathConstant.IMAGE, id);
         if (!Objects.isNull(image) && !Objects.isNull(image.getUri()) && !"".equals(image.getUri())) {
             response.sendRedirect(image.getUri());
         }

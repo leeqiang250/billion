@@ -5,35 +5,31 @@ import com.aptos.utils.AptosClient;
 import com.billion.framework.util.Retrying;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Objects;
 
 @Slf4j
 @Service
 public class AptosService {
 
-    @Value("${aptos.host}")
-    String aptosHost;
-
     @Getter
     static AptosClient aptosClient;
 
+    @Resource
+    ContextService contextService;
+
     @PostConstruct
     public void init() {
-        AptosService.aptosClient = new AptosClient(this.aptosHost);
+        AptosService.aptosClient = new AptosClient(this.contextService.aptosHost);
         log.info("Aptos{}", AptosService.aptosClient.requestNode());
     }
 
-    int i;
-
-    public boolean checkTransaction(String hash2) {
+    public boolean checkTransaction(String hash) {
         return Retrying.retry(
                 () -> {
-                    i++;
-                    String hash = hash2 + i;
                     ResponseTransaction responseTransaction = null;
                     try {
                         responseTransaction = AptosService.aptosClient.requestTransactionByHash(hash);

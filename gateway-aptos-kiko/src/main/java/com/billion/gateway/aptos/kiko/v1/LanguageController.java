@@ -23,7 +23,7 @@ public class LanguageController {
 
     @GetMapping("/{language}")
     public Response get(@PathVariable("language") String language) {
-        return Response.success(languageService.getLanguage(language));
+        return Response.success(this.languageService.getLanguage(language));
     }
 
 }
