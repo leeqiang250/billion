@@ -16,21 +16,22 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Language {
 
-    CHT("cht", "繁體中文"),
+    //ZHCN("zh-CN", "简体中文"),
+    ZHTC("zh-TC", "繁體中文"),
     EN("en", "English"),
     ;
 
-    private String code;
-    private String desc;
+    String code;
+    String desc;
 
     public static Language of(@NonNull String code) {
-        for (Language language : values()) {
-            if (code.equalsIgnoreCase(language.code)) {
-                return language;
+        for (Language e : values()) {
+            if (code.equalsIgnoreCase(e.code)) {
+                return e;
             }
         }
 
-        return Language.CHT;
+        return Language.ZHTC;
     }
 
     public static Map map() {

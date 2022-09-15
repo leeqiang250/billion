@@ -22,11 +22,10 @@ public class ConfigService {
     LanguageService languageService;
 
     public Config get() {
-
         return Config.builder()
                 .chain(Chain.values())
                 .language(Language.map())
-                .text(languageService.getLanguage(Language.CHT.getCode()))
+                .text(languageService.getLanguage(Language.ZHTC.getCode()))
                 .contract(contractService.getContract(Chain.APTOS.getCode()))
                 .build();
     }

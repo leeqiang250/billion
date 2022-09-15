@@ -15,12 +15,12 @@ public enum Chain {
     APTOS("aptos"),
     ;
 
-    private String code;
+    String code;
 
     public static Chain of(@NonNull String code) {
-        for (Chain language : values()) {
-            if (code.equalsIgnoreCase(language.code)) {
-                return language;
+        for (Chain e : values()) {
+            if (code.equalsIgnoreCase(e.code)) {
+                return e;
             }
         }
 
