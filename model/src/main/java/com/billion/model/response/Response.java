@@ -29,11 +29,11 @@ public class Response<T> implements Serializable {
     }
 
     public static <T> Response success(final T data) {
-        return build(200, null, data);
+        return build(200, "success", data);
     }
 
     public static Response failure() {
-        return failure(-1, null);
+        return failure(-1, "failure");
     }
 
     public static Response failure(final String msg) {
