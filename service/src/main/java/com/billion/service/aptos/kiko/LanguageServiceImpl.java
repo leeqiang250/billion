@@ -32,7 +32,7 @@ public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Langua
             return map;
         }
         QueryWrapper<Language> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Language::getLanguage, header.getChain().code());
+        wrapper.lambda().eq(Language::getLanguage, header.getLanguage().code());
         List<Language> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
         if (this.contextService.isProd()) {

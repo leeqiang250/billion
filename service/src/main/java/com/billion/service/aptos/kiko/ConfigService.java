@@ -26,8 +26,8 @@ public class ConfigService {
     public Config get(@NonNull Header header) {
         return Config.builder()
                 .header(header)
-                .chain(Chain.values())
-                .language(Language.map())
+                .supportChain(Chain.map())
+                .supportLanguage(Language.map())
                 .text(languageService.getLanguage(header))
                 .contract(contractService.getContract(header))
                 .build();

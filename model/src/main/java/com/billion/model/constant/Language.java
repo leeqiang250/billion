@@ -14,8 +14,8 @@ import java.util.stream.Stream;
 public enum Language {
 
     //ZHCN("zh-CN", "简体中文"),
-    ZH_TC("zh-TC", "繁體中文"),
-    EN("en", "English"),
+    ZH_TC("zh-TC", "繁體中文(我是描述,不要把我当作Key)"),
+    EN("en", "English(我是描述,不要把我当作Key)"),
     ;
 
     String code;
@@ -41,7 +41,7 @@ public enum Language {
     }
 
     public static Map map() {
-        return Stream.of(values()).collect(Collectors.toMap(item -> item.code, item -> item.desc));
+        return Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e.desc));
     }
 
 }
