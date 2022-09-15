@@ -21,30 +21,31 @@ import java.io.Serializable;
 @TableName("language")
 public class Language implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     /**
      * ID
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    Long id;
 
     /**
      * 语言类型
      */
     @TableField("language_")
-    private String language;
+    String language;
 
     /**
      * key
      */
     @TableField("key_")
-    private String key;
+    String key;
 
     /**
      * value
      */
     @TableField("value_")
-    private String value;
+    String value;
+
 
 }

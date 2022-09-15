@@ -23,12 +23,12 @@ import java.io.Serializable;
 @Slf4j
 public class Image implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    Long id;
 
     @TableField("uri")
-    private String uri;
+    String uri;
 
 }
