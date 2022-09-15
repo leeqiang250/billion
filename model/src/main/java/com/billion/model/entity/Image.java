@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 
@@ -20,15 +19,24 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("image")
-@Slf4j
 public class Image implements Serializable {
 
-    static final long serialVersionUID = 1L;
-
+    /**
+     * ID
+     */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
+    /**
+     * 实际
+     */
     @TableField("uri")
     String uri;
+
+    /**
+     * 代理
+     */
+    @TableField("proxy")
+    String proxy;
 
 }

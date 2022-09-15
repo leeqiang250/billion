@@ -23,7 +23,7 @@ public interface IRedisService<T> extends IService<T> {
      * getCacheById
      *
      * @param redisKeyPrefix redisKeyPrefix
-     * @param id id
+     * @param id             id
      * @return T
      */
     default T getCacheById(String redisKeyPrefix, Serializable id) {
@@ -34,8 +34,8 @@ public interface IRedisService<T> extends IService<T> {
      * getCacheById
      *
      * @param redisKeyPrefix redisKeyPrefix
-     * @param id id
-     * @param timeout timeout
+     * @param id             id
+     * @param timeout        timeout
      * @return T
      */
     default T getCacheById(String redisKeyPrefix, Serializable id, Duration timeout) {

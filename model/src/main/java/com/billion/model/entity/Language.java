@@ -21,8 +21,6 @@ import java.io.Serializable;
 @TableName("language")
 public class Language implements Serializable {
 
-    static final long serialVersionUID = 1L;
-
     /**
      * ID
      */
@@ -46,6 +44,5 @@ public class Language implements Serializable {
      */
     @TableField("value_")
     String value;
-
 
 }
