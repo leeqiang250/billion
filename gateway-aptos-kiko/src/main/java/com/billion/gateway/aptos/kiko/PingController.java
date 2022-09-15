@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+import static com.billion.model.constant.RequestPathConstant.PING;
+
 /**
  * @author liqiang
  */
 @Slf4j
 @RestController
-@RequestMapping({"/", "/ping"})
+@RequestMapping({"", "/", PING})
 public class PingController {
 
     @Resource
