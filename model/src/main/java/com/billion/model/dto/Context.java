@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * @author liqiang
  */
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
