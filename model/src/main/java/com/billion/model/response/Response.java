@@ -23,7 +23,7 @@ public class Response<T> implements Serializable {
     T data;
 
     public static Response success() {
-        return success(null);
+        return success;
     }
 
     public static <T> Response success(final T data) {
@@ -31,7 +31,7 @@ public class Response<T> implements Serializable {
     }
 
     public static Response failure() {
-        return failure(-1, "failure");
+        return failure;
     }
 
     public static Response failure(final String msg) {
@@ -47,7 +47,12 @@ public class Response<T> implements Serializable {
     }
 
     public static <T> Response build(final int code, final String msg, final T data) {
+
         return new Response<T>(code, System.currentTimeMillis(), msg, data);
     }
+
+    final static Response success = Response.success(null);
+
+    final static Response failure = Response.failure(-1, "failure");
 
 }
