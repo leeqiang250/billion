@@ -18,16 +18,15 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author liqiang
  */
 @Component
 public class ReplaceRequestHeaderMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver {
+
+    Map header = new HashMap();
 
     @Resource
     RequestMappingHandlerAdapter requestMappingHandlerAdapter;
@@ -67,13 +66,13 @@ public class ReplaceRequestHeaderMethodArgumentResolver extends AbstractNamedVal
     protected @Nullable Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
         String[] headerValues = request.getHeaderValues(name);
         if (Objects.isNull(headerValues)) {
-            return JSONObject.parseObject("{}", parameter.getParameterType());
+            return header.computeIfAbsent(parameter.getParameterType().toString(), o -> JSONObject.parseObject("{}", parameter.getParameterType()));
         }
 
         if (String.class != parameter.getParameterType()) {
             String headerValue = headerValues[0];
             if (Objects.isNull(headerValue) || "".equals(headerValue)) {
-                return JSONObject.parseObject("{}", parameter.getParameterType());
+                return header.computeIfAbsent(parameter.getParameterType().toString(), o -> JSONObject.parseObject("{}", parameter.getParameterType()));
             }
 
             return JSONObject.parseObject(URLDecoder.decode(headerValue, "UTF-8"), parameter.getParameterType());
