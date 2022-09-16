@@ -20,20 +20,30 @@ public class ContextService {
     @Getter
     static String env;
 
-    @Getter
-    static boolean isProd;
-
     @Value("${spring.application.name}")
     String applicationName_;
 
     @Getter
     static String applicationName;
 
-    @Value("${aptos.host}")
-    String aptosHost_;
+
+    @Value("${cache.long}")
+    long cacheLong_;
 
     @Getter
-    static String aptosHost;
+    static long cacheLong;
+
+    @Value("${cache.middle}")
+    long cacheMiddle_;
+
+    @Getter
+    static long cacheMiddle;
+
+    @Value("${cache.short}")
+    long cacheShort_;
+
+    @Getter
+    static long cacheShort;
 
     @Value("${kiko.host}")
     String kikoHost_;
@@ -41,13 +51,21 @@ public class ContextService {
     @Getter
     static String kikoHost;
 
+    @Value("${aptos.host}")
+    String aptosHost_;
+
+    @Getter
+    static String aptosHost;
+
     @PostConstruct
     public void init() {
         ContextService.env = this.env_;
-        ContextService.isProd = "prod".equalsIgnoreCase(this.env_);
         ContextService.applicationName = this.applicationName_;
-        ContextService.aptosHost = this.aptosHost_;
+        ContextService.cacheLong = this.cacheLong_;
+        ContextService.cacheMiddle = this.cacheMiddle_;
+        ContextService.cacheShort = this.cacheShort_;
         ContextService.kikoHost = this.kikoHost_;
+        ContextService.aptosHost = this.aptosHost_;
     }
 
 }

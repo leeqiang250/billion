@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.NftGroupMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,chain as chain
+        ,type as type
+        ,meta as meta
+        ,body as body
+        ,display_name as display_name
+        ,total_supply as total_supply
+        ,logo as logo
+        ,desc as desc
+        ,creator_id as creator_id
+        ,creator_address as creator_address
+        ,enabled as enabled
+    </sql>
+
+</mapper>

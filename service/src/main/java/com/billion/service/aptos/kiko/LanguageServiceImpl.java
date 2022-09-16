@@ -35,10 +35,9 @@ public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Langua
         wrapper.lambda().eq(Language::getLanguage, context.getLanguage());
         List<Language> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
-        if (ContextService.isProd()) {
-            this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.LANGUAGE + context.getLanguage(), map);
-            this.getRedisTemplate().expire(RedisPathConstant.LANGUAGE + context.getLanguage(), Duration.ofHours(1L));
-        }
+        this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.LANGUAGE + context.getLanguage(), map);
+        this.getRedisTemplate().expire(RedisPathConstant.LANGUAGE + context.getLanguage(), Duration.ofSeconds(ContextService.getCacheMiddle()));
+
         return map;
     }
 
