@@ -3,7 +3,7 @@ package com.billion.service.aptos;
 import com.aptos.request.v1.response.ResponseNode;
 import com.aptos.request.v1.response.ResponseTransaction;
 import com.aptos.utils.AptosClient;
-import com.billion.framework.util.Retrying;
+import com.billion.framework.util.RetryingUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class AptosService {
     }
 
     public boolean checkTransaction(String hash) {
-        return Retrying.retry(
+        return RetryingUtils.retry(
                 () -> {
                     ResponseTransaction responseTransaction = null;
                     try {

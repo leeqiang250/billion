@@ -4,6 +4,7 @@ import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.entity.Image;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.ImageService;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,11 +30,11 @@ public class ImageController {
     @RequestMapping("/{id}")
     public Response get(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
         Image image = this.imageService.getCacheById(RedisPathConstant.IMAGE, id);
-        if (!Objects.isNull(image) && !Objects.isNull(image.getUri()) && !"".equals(image.getUri())) {
+        if (!Objects.isNull(image) && StringUtils.isNotEmpty(image.getUri())) {
             response.sendRedirect(image.getUri());
         }
 
-        return Response.success();
+        return Response.failure();
     }
 
 }

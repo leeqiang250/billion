@@ -6,6 +6,7 @@ import com.billion.model.entity.StcNftInfo;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.StcNftGroupService;
 import com.billion.service.aptos.kiko.StcNftInfoService;
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,11 +37,11 @@ public class ImageStcController {
     @RequestMapping("/group/{id}")
     public Response getGroupImage(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
         StcNftGroup model = this.stcNftGroupService.getCacheById(RedisPathConstant.IMAGE_STC, id);
-        if (!Objects.isNull(model) && !Objects.isNull(model.getNftTypeImageLink()) && !"".equals(model.getNftTypeImageLink())) {
+        if (!Objects.isNull(model) && StringUtils.isNotEmpty(model.getNftTypeImageLink())) {
             response.sendRedirect(model.getNftTypeImageLink());
         }
 
-        return Response.success();
+        return Response.failure();
     }
 
     @RequestMapping("/info/{id}")
@@ -51,11 +52,11 @@ public class ImageStcController {
         }
 
         StcNftInfo model = this.stcNftInfoService.getCacheById(RedisPathConstant.IMAGE_STC, id);
-        if (!Objects.isNull(model) && !Objects.isNull(model.getImageLink()) && !"".equals(model.getImageLink())) {
+        if (!Objects.isNull(model) && StringUtils.isNotEmpty(model.getImageLink())) {
             response.sendRedirect(model.getImageLink());
         }
 
-        return Response.success();
+        return Response.failure();
     }
 
 }

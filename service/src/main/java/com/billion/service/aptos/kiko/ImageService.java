@@ -1,6 +1,7 @@
 package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.billion.model.constant.RequestPathConstant;
 import com.billion.model.entity.Image;
 import com.billion.service.aptos.ContextService;
 import lombok.NonNull;
@@ -25,7 +26,7 @@ public interface ImageService extends IService<Image>, RedisService<Image> {
     default Image add(@NonNull String uri, @NonNull String desc) {
         Image image = Image.builder()
                 .uri(uri)
-                .proxy("")
+                .proxy(RequestPathConstant.EMPTY)
                 .desc(desc)
                 .build();
         this.save(image);

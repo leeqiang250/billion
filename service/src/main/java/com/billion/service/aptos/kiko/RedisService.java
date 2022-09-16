@@ -29,7 +29,7 @@ public interface RedisService<T> extends IService<T> {
      * @return T
      */
     default T getCacheById(@NonNull String redisKeyPrefix, @NonNull Serializable id) {
-        return this.getCacheById(redisKeyPrefix, id, Duration.ofHours(1L));
+        return this.getCacheById(redisKeyPrefix, id, Duration.ofMinutes(10L));
     }
 
     /**
@@ -45,7 +45,7 @@ public interface RedisService<T> extends IService<T> {
         if (Objects.isNull(t)) {
             t = this.getById(id);
         }
-        if (ContextService.isProd()) {
+        if (Objects.nonNull(t) && ContextService.isProd()) {
             this.getRedisTemplate().opsForValue().set(redisKeyPrefix + id, t, timeout);
         }
 

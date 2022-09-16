@@ -1,6 +1,7 @@
 package com.billion.gateway.aptos.kiko.filter;
 
 import com.alibaba.fastjson2.JSONObject;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.MethodParameter;
@@ -71,7 +72,7 @@ public class ReplaceRequestHeaderMethodArgumentResolver extends AbstractNamedVal
 
         if (String.class != parameter.getParameterType()) {
             String headerValue = headerValues[0];
-            if (Objects.isNull(headerValue) || "".equals(headerValue)) {
+            if (StringUtils.isEmpty(headerValue)) {
                 return header.computeIfAbsent(parameter.getParameterType().toString(), o -> JSONObject.parseObject("{}", parameter.getParameterType()));
             }
 
