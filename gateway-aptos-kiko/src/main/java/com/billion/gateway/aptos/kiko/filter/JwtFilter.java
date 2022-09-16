@@ -9,8 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-import static com.billion.model.constant.RequestPathConstant.SLASH;
-import static com.billion.model.constant.RequestPathConstant.WHITE;
+import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
  * @author liqiang

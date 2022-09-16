@@ -10,10 +10,10 @@ import static com.billion.model.constant.RequestPathConstant.*;
  * @author liqiang
  */
 @RestController
-@RequestMapping({V1_ERROR})
-public class ErrorController {
+@RequestMapping({EMPTY, SLASH, V1_ERROR})
+public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
-    @RequestMapping({EMPTY,SLASH})
+    @RequestMapping({EMPTY, SLASH, "/error"})
     public Response error() {
         return Response.failure();
     }
