@@ -1,13 +1,12 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.constant.RedisPathConstant;
-import com.billion.model.entity.Image;
 import com.billion.model.entity.StcNftGroup;
 import com.billion.model.entity.StcNftInfo;
 import com.billion.model.response.Response;
-import com.billion.service.aptos.kiko.ImageService;
 import com.billion.service.aptos.kiko.StcNftGroupService;
 import com.billion.service.aptos.kiko.StcNftInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,20 +15,17 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Objects;
 
-import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
+import static com.billion.model.constant.RequestPathConstant.STC_IMAGE;
 
 /**
  * @author liqiang
  */
+@Slf4j
 @RestController
-@RequestMapping({V1_IMAGE + "sdfdsf"})
+@RequestMapping({STC_IMAGE})
 public class ImageStcController {
-
-    @Resource
-    ImageService imageService;
 
     @Resource
     StcNftGroupService stcNftGroupService;
@@ -49,6 +45,11 @@ public class ImageStcController {
 
     @RequestMapping("/info/{id}")
     public Response getInfoImage(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
+        if (21657L <= id && id < 21731L) {
+            log.info("3EYEDCat OLD:{} NEW:{}", id, id + 1L);
+            id++;
+        }
+
         StcNftInfo model = this.stcNftInfoService.getCacheById(RedisPathConstant.IMAGE_STC, id);
         if (!Objects.isNull(model) && !Objects.isNull(model.getImageLink()) && !"".equals(model.getImageLink())) {
             response.sendRedirect(model.getImageLink());

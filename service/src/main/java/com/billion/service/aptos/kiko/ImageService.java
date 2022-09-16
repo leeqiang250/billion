@@ -6,6 +6,7 @@ import com.billion.service.aptos.ContextService;
 import lombok.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.billion.model.constant.RequestPathConstant.SLASH;
 import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
 
 /**
@@ -28,7 +29,7 @@ public interface ImageService extends IService<Image>, RedisService<Image> {
                 .desc(desc)
                 .build();
         this.save(image);
-        image.setProxy(ContextService.getKikoHost() + V1_IMAGE + "/" + image.getId());
+        image.setProxy(ContextService.getKikoHost() + V1_IMAGE + SLASH + image.getId());
         this.updateById(image);
 
         return image;

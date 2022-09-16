@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import static com.billion.model.constant.RequestPathConstant.SLASH;
 import static com.billion.model.constant.RequestPathConstant.V1_CONTRACT;
 
 /**
@@ -19,7 +20,7 @@ public class ContractController {
     @Resource
     ContractService contractService;
 
-    @RequestMapping({"", "/"})
+    @RequestMapping({SLASH})
     public Response get(@RequestHeader Context context) {
         return Response.success(this.contractService.getContract(context));
     }

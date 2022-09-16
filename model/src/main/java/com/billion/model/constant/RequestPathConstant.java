@@ -7,6 +7,10 @@ import java.util.List;
  */
 public interface RequestPathConstant {
 
+    String STC_IMAGE = "/v1/nft/image";
+
+    String SLASH = "/";
+
     String PING = "/ping";
 
     String APTOS = "/aptos";
@@ -57,6 +61,6 @@ public interface RequestPathConstant {
 
     String V1_LOAN = V1 + "/loan";
 
-    String[] WHITE = List.of("/", PING, V1_COMMON).toArray(String[]::new);
+    String[] WHITE = List.of(V1_COMMON, PING, STC_IMAGE).toArray(String[]::new);
 
 }

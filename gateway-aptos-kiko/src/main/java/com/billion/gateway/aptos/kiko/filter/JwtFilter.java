@@ -7,6 +7,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+import static com.billion.model.constant.RequestPathConstant.SLASH;
 import static com.billion.model.constant.RequestPathConstant.WHITE;
 
 /**
@@ -18,8 +19,14 @@ public class JwtFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String uri = ((HttpServletRequest) servletRequest).getRequestURI();
+        if (SLASH.equals(uri)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         boolean result = false;
         for (int i = 0; i < WHITE.length; i++) {
+            System.out.println(WHITE[i]);
             if (StringUtils.startsWithIgnoreCase(uri, WHITE[i])) {
                 result = true;
                 break;
