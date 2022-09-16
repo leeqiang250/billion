@@ -14,7 +14,6 @@ import javax.annotation.PostConstruct;
 @Service
 public class ContextService {
 
-    @Getter
     @Value("${spring.profiles.active}")
     String env_;
 
@@ -24,7 +23,6 @@ public class ContextService {
     @Getter
     static boolean isProd;
 
-    @Getter
     @Value("${spring.application.name}")
     String applicationName_;
 
@@ -37,7 +35,6 @@ public class ContextService {
     @Getter
     static String aptosHost;
 
-    @Getter
     @Value("${kiko.host}")
     String kikoHost_;
 
