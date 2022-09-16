@@ -5,3 +5,5 @@
 2.gateway的对外接口，Controller层级的路径：必须在RequestPathConstant声明
 
 3.Redis的Key：必须在RedisPathConstant声明
+
+4.数据库链类型存储：chain varchar(16)
