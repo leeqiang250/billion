@@ -5,7 +5,9 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
 import lombok.NonNull;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author liqiang
@@ -28,5 +30,14 @@ public interface LanguageService extends IService<Language>, RedisService<Langua
      * @return String
      */
     String getByKey(@NonNull String key, @NonNull Context context);
+
+    /**
+     * getByKeys
+     *
+     * @param keys    keys
+     * @param context context
+     * @return Map
+     */
+    Map getByKeys(@NonNull Set keys, @NonNull Context context);
 
 }

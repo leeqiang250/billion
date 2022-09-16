@@ -7,18 +7,25 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 import com.billion.service.aptos.ContextService;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * @author liqiang
  */
+@Slf4j
 @Service
 public class NftGroupServiceImpl extends RedisServiceImpl<NftGroupMapper, NftGroup> implements NftGroupService {
+
+    @Resource
+    LanguageService languageService;
 
     @Override
     @SuppressWarnings(value = {"rawtypes"})
@@ -32,10 +39,12 @@ public class NftGroupServiceImpl extends RedisServiceImpl<NftGroupMapper, NftGro
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getEnabled, Boolean.TRUE);
         List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
-        map = list.stream().collect(Collectors.toMap(NftGroup::getId, (e) -> e));
+
+        changeLanguage(list, context);
+
+        map = list.stream().collect(Collectors.toMap(e -> e.getId(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, Duration.ofSeconds(ContextService.getCacheMiddle()));
-
 
         return map;
     }
@@ -52,6 +61,9 @@ public class NftGroupServiceImpl extends RedisServiceImpl<NftGroupMapper, NftGro
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getEnabled, Boolean.TRUE);
         List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
+
+        changeLanguage(list, context);
+
         map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "::" + e.getBody(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, Duration.ofSeconds(ContextService.getCacheMiddle()));
@@ -60,13 +72,27 @@ public class NftGroupServiceImpl extends RedisServiceImpl<NftGroupMapper, NftGro
     }
 
     @Override
-    public Object getById(@NonNull String id, @NonNull Context context) {
+    public Object getById(@NonNull Long id, @NonNull Context context) {
         return this.getAllById(context).get(id);
     }
 
     @Override
-    public Object getById(@NonNull String meta, @NonNull String body, @NonNull Context context) {
+    public Object getByMetaBody(@NonNull String meta, @NonNull String body, @NonNull Context context) {
         return this.getAllByMetaBody(context).get(meta + "::" + body);
+    }
+
+
+    public void changeLanguage(List<NftGroup> list, @NonNull Context context) {
+        Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
+        Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
+
+        Map mapDisplayName = languageService.getByKeys(setDisplayName, context);
+        Map mapDescription = languageService.getByKeys(setDescription, context);
+
+        list.forEach(e -> {
+            e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
+            e.setDescription(mapDescription.get(e.getDescription()).toString());
+        });
     }
 
 }

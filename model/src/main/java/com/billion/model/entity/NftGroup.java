@@ -36,8 +36,8 @@ public class NftGroup implements Serializable {
     /**
      * 可拆性(0:不可拆卸,1:可拆卸)
      */
-    @TableField("type")
-    Boolean type;
+    @TableField("split")
+    Boolean split;
 
     /**
      * Meta
@@ -72,8 +72,8 @@ public class NftGroup implements Serializable {
     /**
      * 系列描述
      */
-    @TableField("desc")
-    String desc;
+    @TableField("description")
+    String description;
 
     /**
      * 创作者ID

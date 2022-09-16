@@ -7,13 +7,13 @@
         id
         as id
         ,chain as chain
-        ,type as type
+        ,split as split
         ,meta as meta
         ,body as body
         ,display_name as display_name
         ,total_supply as total_supply
         ,logo as logo
-        ,desc as desc
+        ,description as description
         ,creator_id as creator_id
         ,creator_address as creator_address
         ,enabled as enabled

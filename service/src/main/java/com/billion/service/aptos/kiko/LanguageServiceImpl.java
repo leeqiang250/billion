@@ -7,17 +7,21 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
 import com.billion.service.aptos.ContextService;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static com.billion.model.constant.RequestPathConstant.DEFAULT_TEXT;
 
 /**
  * @author liqiang
  */
+@Slf4j
 @Service
 public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Language> implements LanguageService {
 
@@ -45,7 +49,33 @@ public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Langua
 
     @Override
     public String getByKey(@NonNull String key, @NonNull Context context) {
-        return this.getAll(context).getOrDefault(key, "***").toString();
+        Object value = this.getAll(context).get(key);
+        if (Objects.isNull(value)) {
+            value = DEFAULT_TEXT;
+            log.info("missing language:[{}] key:[{}]", context.getLanguage(), key);
+        }
+
+        return value.toString();
+    }
+
+    @Override
+    public Map getByKeys(@NonNull Set keys, @NonNull Context context) {
+        Map values = new HashMap(keys.size());
+        Map map = this.getAll(context);
+        keys.forEach(new Consumer() {
+            @Override
+            public void accept(Object e) {
+                Object value = map.get(e);
+                if (Objects.isNull(value)) {
+                    value = DEFAULT_TEXT;
+                    log.info("missing language:[{}] key:[{}]", context.getLanguage(), e);
+                }
+
+                values.put(e, value);
+            }
+        });
+
+        return values;
     }
 
 }

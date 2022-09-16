@@ -12,12 +12,39 @@ import java.util.Map;
  */
 public interface NftGroupService extends IService<NftGroup>, RedisService<NftGroup> {
 
+    /**
+     * getAllById
+     *
+     * @param context context
+     * @return Map
+     */
     Map getAllById(@NonNull Context context);
 
+    /**
+     * getAllByMetaBody
+     *
+     * @param context context
+     * @return Map
+     */
     Map getAllByMetaBody(@NonNull Context context);
 
-    Object getById(@NonNull String id, @NonNull Context context);
+    /**
+     * getById
+     *
+     * @param id      id
+     * @param context context
+     * @return Object
+     */
+    Object getById(@NonNull Long id, @NonNull Context context);
 
-    Object getById(@NonNull String meta, @NonNull String body, @NonNull Context context);
+    /**
+     * getByMetaBody
+     *
+     * @param meta    meta
+     * @param body    body
+     * @param context context
+     * @return Object
+     */
+    Object getByMetaBody(@NonNull String meta, @NonNull String body, @NonNull Context context);
 
 }

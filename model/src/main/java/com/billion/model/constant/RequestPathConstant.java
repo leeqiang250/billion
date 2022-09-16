@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface RequestPathConstant {
 
+    String DEFAULT_TEXT = "***";
+
     String STC_IMAGE = "/v1/nft/image";
 
     String EMPTY = "";
@@ -52,6 +54,8 @@ public interface RequestPathConstant {
     String V1_CONFIG = V1_COMMON + "/config";
 
     String V1_NFT = V1 + "/nft";
+
+    String V1_NFT_GROUP = V1_NFT + "/group";
 
     String V1_LIQUIDITY = V1 + "/liquidity";
 
