@@ -27,7 +27,7 @@ public class AptosService {
 
     @PostConstruct
     public void init() {
-        AptosService.aptosClient = new AptosClient(this.contextService.aptosHost);
+        AptosService.aptosClient = new AptosClient(ContextService.getAptosHost());
         log.info("Aptos{}", AptosService.aptosClient.requestNode());
     }
 
@@ -51,7 +51,6 @@ public class AptosService {
                 Exception.class
         );
     }
-
 
     ResponseNode responseNode;
 

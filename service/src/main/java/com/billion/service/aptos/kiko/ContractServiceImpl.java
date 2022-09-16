@@ -10,7 +10,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +23,6 @@ import java.util.stream.Collectors;
 
 public class ContractServiceImpl extends RedisServiceImpl<ContractMapper, Contract> implements ContractService {
 
-    @Resource
-    ContextService contextService;
-
     public Map getContract(@NonNull Context context) {
         Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.CONTRACT + context.getChain());
         if (!map.isEmpty()) {
@@ -36,10 +32,11 @@ public class ContractServiceImpl extends RedisServiceImpl<ContractMapper, Contra
         wrapper.lambda().eq(Contract::getChain, context.getChain());
         List<Contract> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Contract::getName, Contract::getContract, (key1, key2) -> key2));
-        if (this.contextService.isProd()) {
+        if (ContextService.isProd()) {
             this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.CONTRACT + context.getChain(), map);
             this.getRedisTemplate().expire(RedisPathConstant.CONTRACT + context.getChain(), Duration.ofHours(1L));
         }
+
         return map;
     }
 

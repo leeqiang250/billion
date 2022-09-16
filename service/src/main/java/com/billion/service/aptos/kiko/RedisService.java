@@ -1,6 +1,7 @@
 package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.billion.service.aptos.ContextService;
 import lombok.NonNull;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -44,7 +45,10 @@ public interface RedisService<T> extends IService<T> {
         if (Objects.isNull(t)) {
             t = this.getById(id);
         }
-        this.getRedisTemplate().opsForValue().set(redisKeyPrefix + id, t, timeout);
+        if (ContextService.isProd()) {
+            this.getRedisTemplate().opsForValue().set(redisKeyPrefix + id, t, timeout);
+        }
+
         return t;
     }
 

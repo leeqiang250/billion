@@ -18,31 +18,19 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("image")
-public class Image implements Serializable {
+@TableName("stc_nft_group")
+public class StcNftGroup implements Serializable {
 
     /**
-     * ID
+     * 主键id
      */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
     /**
-     * 实际
+     * 本期NFT图片连接
      */
-    @TableField("uri")
-    String uri;
-
-    /**
-     * 代理
-     */
-    @TableField("proxy")
-    String proxy;
-
-    /**
-     * 描述
-     */
-    @TableField("desc")
-    String desc;
+    @TableField("nft_type_image_link")
+    String nftTypeImageLink;
 
 }
