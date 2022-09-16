@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.SLASH;
-import static com.billion.model.constant.RequestPathConstant.V1_CONFIG;
+import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
  * @author liqiang
@@ -22,7 +21,7 @@ public class ConfigController {
     @Resource
     ConfigService configService;
 
-    @RequestMapping({SLASH})
+    @RequestMapping({EMPTY, SLASH})
     public Response get(@RequestHeader Context context) {
         return Response.success(configService.get(context));
     }

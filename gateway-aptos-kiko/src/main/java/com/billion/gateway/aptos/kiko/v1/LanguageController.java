@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.SLASH;
-import static com.billion.model.constant.RequestPathConstant.V1_LANGUAGE;
+import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
  * @author liqiang
@@ -20,7 +19,7 @@ public class LanguageController {
     @Resource
     LanguageService languageService;
 
-    @RequestMapping({SLASH})
+    @RequestMapping(value = {EMPTY, SLASH})
     public Response get(@RequestHeader Context context) {
         return Response.success(this.languageService.getLanguage(context));
     }

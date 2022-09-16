@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.PING;
-import static com.billion.model.constant.RequestPathConstant.SLASH;
+import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
  * @author liqiang
@@ -30,7 +29,7 @@ public class PingController {
     @Resource
     ImageService imageService;
 
-    @RequestMapping(path = {SLASH, "/failure", "/success"})
+    @RequestMapping(path = {EMPTY, SLASH})
     public Response ping() {
         return Response.success(ContextService.getApplicationName() + ":" + ContextService.getEnv());
     }

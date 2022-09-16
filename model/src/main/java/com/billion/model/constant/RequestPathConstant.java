@@ -9,6 +9,8 @@ public interface RequestPathConstant {
 
     String STC_IMAGE = "/v1/nft/image";
 
+    String EMPTY = "";
+
     String SLASH = "/";
 
     String PING = "/ping";

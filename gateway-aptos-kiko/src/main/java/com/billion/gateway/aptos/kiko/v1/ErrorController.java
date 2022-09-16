@@ -4,8 +4,7 @@ import com.billion.model.response.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.billion.model.constant.RequestPathConstant.SLASH;
-import static com.billion.model.constant.RequestPathConstant.V1_ERROR;
+import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
  * @author liqiang
@@ -14,7 +13,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_ERROR;
 @RequestMapping({V1_ERROR})
 public class ErrorController {
 
-    @RequestMapping(value = {SLASH})
+    @RequestMapping({EMPTY,SLASH})
     public Response error() {
         return Response.failure();
     }

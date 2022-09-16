@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author liqiang
  */
 @Slf4j
-@Component
+//@Component
 public class RequestStatisticsFilter implements Filter {
 
     @Override
@@ -20,7 +20,10 @@ public class RequestStatisticsFilter implements Filter {
         long ms = System.currentTimeMillis();
         filterChain.doFilter(servletRequest, servletResponse);
         String uri = ((HttpServletRequest) servletRequest).getRequestURI();
-        ResponseElapsed responseElapsed = ResponseElapsed.builder().uri(uri).elapsed(System.currentTimeMillis() - ms).build();
+        ResponseElapsed responseElapsed = ResponseElapsed.builder()
+                .uri(uri)
+                .elapsed(System.currentTimeMillis() - ms)
+                .build();
         log.info("{}", responseElapsed);
     }
 

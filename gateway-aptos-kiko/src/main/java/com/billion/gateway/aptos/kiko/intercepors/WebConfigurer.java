@@ -6,11 +6,13 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
+
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
 
 
-    @Autowired
+    @Resource
     LogInterceptor logInterceptor;
 
     // 配置静态资源的，比如html，js，css，等等
