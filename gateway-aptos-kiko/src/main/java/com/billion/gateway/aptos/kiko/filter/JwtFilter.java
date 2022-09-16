@@ -5,10 +5,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.billion.model.constant.RequestPathConstant.V1_ERROR;
 import static com.billion.model.constant.RequestPathConstant.WHITE;
 
 /**
@@ -33,6 +31,8 @@ public class JwtFilter implements Filter {
             return;
         }
 
-        ((HttpServletResponse) servletResponse).sendRedirect(V1_ERROR);
+        //TODO 稍后放开
+        //((HttpServletResponse) servletResponse).sendRedirect(V1_ERROR);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
