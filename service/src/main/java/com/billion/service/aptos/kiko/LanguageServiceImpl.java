@@ -62,17 +62,14 @@ public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Langua
     public Map getByKeys(@NonNull Set keys, @NonNull Context context) {
         Map values = new HashMap(keys.size());
         Map map = this.getAll(context);
-        keys.forEach(new Consumer() {
-            @Override
-            public void accept(Object e) {
-                Object value = map.get(e);
-                if (Objects.isNull(value)) {
-                    value = DEFAULT_TEXT;
-                    log.info("missing language:[{}] key:[{}]", context.getLanguage(), e);
-                }
-
-                values.put(e, value);
+        keys.forEach(e -> {
+            Object value = map.get(e);
+            if (Objects.isNull(value)) {
+                value = DEFAULT_TEXT;
+                log.info("missing language:[{}] key:[{}]", context.getLanguage(), e);
             }
+
+            values.put(e, value);
         });
 
         return values;
