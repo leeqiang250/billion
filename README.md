@@ -7,3 +7,5 @@
 3.Redis的Key：必须在RedisPathConstant声明
 
 4.数据库链类型存储：chain varchar(16)
+
+5.数据库多语言Key存储：language varchar(16)
