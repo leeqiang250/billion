@@ -67,6 +67,8 @@ public interface RequestPathConstant {
 
     String V1_LOAN = V1 + "/loan";
 
+    String V1_REDIS= V1 + "/redis";
+
     String[] WHITE = List.of(V1_COMMON, PING, STC_IMAGE).toArray(String[]::new);
 
 }

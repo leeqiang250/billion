@@ -37,6 +37,7 @@
     <modules>
         <module>dao</module>
         <module>framework</module>
+        <module>gateway-aptos-cms</module>
         <module>gateway-aptos-kiko</module>
         <module>model</module>
         <module>quote</module>
