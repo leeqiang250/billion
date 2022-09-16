@@ -27,7 +27,7 @@ public class PrivateRedisServiceImpl implements PrivateRedisService {
     public Map get() {
         Map map = new HashMap<>(100);
 
-        Cursor cursor = this.redisTemplate.scan(ScanOptions.scanOptions().count(3L).build());
+        Cursor cursor = this.redisTemplate.scan(ScanOptions.scanOptions().count(1000L).build());
         while (cursor.hasNext()) {
             Object key = cursor.next();
             Object value = null;
@@ -49,7 +49,10 @@ public class PrivateRedisServiceImpl implements PrivateRedisService {
                         }
                     }
                     case HASH -> value = this.redisTemplate.opsForHash().entries(key);
-                    default -> log.info("{} {}", key, dataType.code());
+                    default -> {
+                        value = dataType.code();
+                        log.info("{} {}", key, dataType.code());
+                    }
                 }
             }
 
