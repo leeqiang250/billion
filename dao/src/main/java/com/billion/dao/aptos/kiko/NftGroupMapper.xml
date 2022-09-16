@@ -17,6 +17,7 @@
         ,creator_id as creator_id
         ,creator_address as creator_address
         ,enabled as enabled
+        ,sort as sort
     </sql>
 
 </mapper>

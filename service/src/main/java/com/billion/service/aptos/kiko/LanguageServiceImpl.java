@@ -26,19 +26,26 @@ public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Langua
 
     @Override
     @SuppressWarnings(value = {"rawtypes"})
-    public Map getLanguage(@NonNull Context context) {
-        Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.LANGUAGE + context.getLanguage());
+    public Map getAll(@NonNull Context context) {
+        String key = RedisPathConstant.LANGUAGE + context.getLanguage();
+        Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
         }
+
         QueryWrapper<Language> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Language::getLanguage, context.getLanguage());
         List<Language> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
-        this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.LANGUAGE + context.getLanguage(), map);
-        this.getRedisTemplate().expire(RedisPathConstant.LANGUAGE + context.getLanguage(), Duration.ofSeconds(ContextService.getCacheMiddle()));
+        this.getRedisTemplate().opsForHash().putAll(key, map);
+        this.getRedisTemplate().expire(key, Duration.ofSeconds(ContextService.getCacheMiddle()));
 
         return map;
+    }
+
+    @Override
+    public String getByKey(@NonNull String key, @NonNull Context context) {
+        return this.getAll(context).getOrDefault(key, "***").toString();
     }
 
 }

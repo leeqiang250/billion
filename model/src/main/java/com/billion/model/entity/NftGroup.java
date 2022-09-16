@@ -93,4 +93,10 @@ public class NftGroup implements Serializable {
     @TableField("enabled")
     Boolean enabled;
 
+    /**
+     * 排序
+     */
+    @TableField("sort")
+    Long sort;
+
 }

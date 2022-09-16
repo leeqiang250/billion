@@ -21,7 +21,7 @@ public class ContractController {
 
     @RequestMapping({EMPTY,SLASH})
     public Response get(@RequestHeader Context context) {
-        return Response.success(this.contractService.getContract(context));
+        return Response.success(this.contractService.getAll(context));
     }
 
 }

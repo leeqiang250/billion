@@ -13,4 +13,6 @@ public interface RedisPathConstant {
 
     String CONTRACT = "contract::";
 
+    String NFT = "nft::";
+
 }

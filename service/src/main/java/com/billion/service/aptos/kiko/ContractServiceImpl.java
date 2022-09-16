@@ -23,17 +23,19 @@ import java.util.stream.Collectors;
 
 public class ContractServiceImpl extends RedisServiceImpl<ContractMapper, Contract> implements ContractService {
 
-    public Map getContract(@NonNull Context context) {
-        Map map = this.getRedisTemplate().opsForHash().entries(RedisPathConstant.CONTRACT + context.getChain());
+    public Map getAll(@NonNull Context context) {
+        String key = RedisPathConstant.CONTRACT + context.getChain();
+        Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
         }
+
         QueryWrapper<Contract> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Contract::getChain, context.getChain());
         List<Contract> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Contract::getName, Contract::getContract, (key1, key2) -> key2));
-        this.getRedisTemplate().opsForHash().putAll(RedisPathConstant.CONTRACT + context.getChain(), map);
-        this.getRedisTemplate().expire(RedisPathConstant.CONTRACT + context.getChain(), Duration.ofHours(ContextService.getCacheMiddle()));
+        this.getRedisTemplate().opsForHash().putAll(key, map);
+        this.getRedisTemplate().expire(key, Duration.ofHours(ContextService.getCacheMiddle()));
 
         return map;
     }

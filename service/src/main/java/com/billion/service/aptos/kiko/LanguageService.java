@@ -18,6 +18,15 @@ public interface LanguageService extends IService<Language>, RedisService<Langua
      * @param context context
      * @return Map
      */
-    Map getLanguage(@NonNull Context context);
+    Map getAll(@NonNull Context context);
+
+    /**
+     * getLanguageByKey
+     *
+     * @param key     key
+     * @param context context
+     * @return String
+     */
+    String getByKey(@NonNull String key, @NonNull Context context);
 
 }

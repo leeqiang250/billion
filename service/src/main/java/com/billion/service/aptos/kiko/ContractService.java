@@ -18,6 +18,6 @@ public interface ContractService extends IService<Contract> {
      * @param context context
      * @return Map
      */
-    Map getContract(@NonNull Context context);
+    Map getAll(@NonNull Context context);
 
 }

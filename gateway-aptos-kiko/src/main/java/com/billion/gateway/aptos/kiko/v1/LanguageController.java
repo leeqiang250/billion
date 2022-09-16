@@ -21,7 +21,12 @@ public class LanguageController {
 
     @RequestMapping(value = {EMPTY, SLASH})
     public Response get(@RequestHeader Context context) {
-        return Response.success(this.languageService.getLanguage(context));
+        return Response.success(this.languageService.getAll(context));
+    }
+
+    @RequestMapping("/{key}")
+    public Response get(@PathVariable String key, @RequestHeader Context context) {
+        return Response.success(this.languageService.getByKey(key, context));
     }
 
 }
