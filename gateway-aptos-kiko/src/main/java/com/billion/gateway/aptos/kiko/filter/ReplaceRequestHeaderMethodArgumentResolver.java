@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -76,7 +77,7 @@ public class ReplaceRequestHeaderMethodArgumentResolver extends AbstractNamedVal
                 return header.computeIfAbsent(parameter.getParameterType().toString(), o -> JSONObject.parseObject("{}", parameter.getParameterType()));
             }
 
-            return JSONObject.parseObject(URLDecoder.decode(headerValue, "UTF-8"), parameter.getParameterType());
+            return JSONObject.parseObject(URLDecoder.decode(headerValue, StandardCharsets.UTF_8), parameter.getParameterType());
         }
 
         return (1 == headerValues.length ? headerValues[0] : headerValues);
