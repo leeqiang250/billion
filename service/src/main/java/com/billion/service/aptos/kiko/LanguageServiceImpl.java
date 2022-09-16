@@ -22,7 +22,7 @@ import static com.billion.model.constant.RequestPathConstant.DEFAULT_TEXT;
  */
 @Slf4j
 @Service
-public class LanguageServiceImpl extends RedisServiceImpl<LanguageMapper, Language> implements LanguageService {
+public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, Language> implements LanguageService {
 
     @Resource
     ContextService contextService;

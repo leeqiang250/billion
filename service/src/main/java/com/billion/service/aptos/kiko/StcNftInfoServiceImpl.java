@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * @author liqiang
  */
 @Service
-public class StcNftInfoServiceImpl extends RedisServiceImpl<StcNftInfoMapper, StcNftInfo> implements StcNftInfoService {
+public class StcNftInfoServiceImpl extends AbstractRedisService<StcNftInfoMapper, StcNftInfo> implements StcNftInfoService {
 
 }

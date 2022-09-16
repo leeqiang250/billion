@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * @author liqiang
  */
 @Service
-public class ImageServiceImpl extends RedisServiceImpl<ImageMapper, Image> implements ImageService {
+public class ImageServiceImpl extends AbstractRedisService<ImageMapper, Image> implements ImageService {
 
 }

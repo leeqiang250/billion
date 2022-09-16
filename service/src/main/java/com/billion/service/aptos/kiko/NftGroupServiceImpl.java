@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class NftGroupServiceImpl extends RedisServiceImpl<NftGroupMapper, NftGroup> implements NftGroupService {
+public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, NftGroup> implements NftGroupService {
 
     @Resource
     LanguageService languageService;

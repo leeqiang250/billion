@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 
-public class ContractServiceImpl extends RedisServiceImpl<ContractMapper, Contract> implements ContractService {
+public class ContractServiceImpl extends AbstractRedisService<ContractMapper, Contract> implements ContractService {
 
     public Map getAll(@NonNull Context context) {
         String key = RedisPathConstant.CONTRACT + context.getChain();
