@@ -9,9 +9,8 @@ import java.io.Serializable;
  * @author liqiang
  */
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Response<T> implements Serializable {
 
     int code;
