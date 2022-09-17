@@ -24,9 +24,6 @@ import static com.billion.model.constant.RequestPathConstant.DEFAULT_TEXT;
 @Service
 public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, Language> implements LanguageService {
 
-    @Resource
-    ContextService contextService;
-
     @Override
     @SuppressWarnings({"rawtypes"})
     public Map getAll(@NonNull Context context) {
