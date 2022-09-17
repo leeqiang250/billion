@@ -1,6 +1,6 @@
 package com.billion.model.exception;
 
-import com.billion.model.code.ErrorCode;
+import com.billion.model.enums.BizErrorCode;
 import lombok.Data;
 
 /**
@@ -22,7 +22,7 @@ public class BizException extends RuntimeException {
         this.message = message;
     }
 
-    public BizException(ErrorCode errorCode) {
+    public BizException(BizErrorCode errorCode) {
         super(errorCode.getMessage());
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
@@ -34,7 +34,7 @@ public class BizException extends RuntimeException {
         this.message = message;
     }
 
-    public BizException(ErrorCode errorCode, Throwable cause) {
+    public BizException(BizException errorCode, Throwable cause) {
         super(errorCode.getMessage(), cause);
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();

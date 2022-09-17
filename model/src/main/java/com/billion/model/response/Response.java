@@ -1,6 +1,6 @@
 package com.billion.model.response;
 
-import com.billion.model.code.ErrorCode;
+import com.billion.model.enums.BizErrorCode;
 import lombok.*;
 
 import java.io.Serializable;
@@ -42,12 +42,11 @@ public class Response<T> implements Serializable {
         return build(code, msg, null);
     }
 
-    public static Response failure(final ErrorCode errorCode) {
-        return failure(errorCode.getCode(), errorCode.getMessage());
+    public static Response failure(final BizErrorCode bizErrorCode) {
+        return failure(bizErrorCode.getCode(), bizErrorCode.getMessage());
     }
 
     public static <T> Response build(final int code, final String msg, final T data) {
-
         return new Response<T>(code, System.currentTimeMillis(), msg, data);
     }
 

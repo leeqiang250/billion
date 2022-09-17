@@ -1,6 +1,5 @@
 package com.billion.model.enums;
 
-import com.billion.model.code.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum BizErrorCode implements ErrorCode {
+public enum BizErrorCode {
 
     /**
      * 系统个错误
