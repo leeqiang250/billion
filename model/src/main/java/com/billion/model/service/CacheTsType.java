@@ -1,9 +1,10 @@
 package com.billion.model.service;
 
-import java.util.EnumSet;
-import java.util.Iterator;
+import lombok.Getter;
+
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * @author liqiang
@@ -14,29 +15,26 @@ public enum CacheTsType {
     CACHE_TS_MIDDLE("cache_ts_middle", "中期缓存时间"),
     CACHE_TS_LONG("cache_ts_long", "长期缓存时间");
 
-    private static final Map<String, CacheTsType> codeLookup = new ConcurrentHashMap(7);
 
+    @Getter
     final String code;
 
+    @Getter
     final String desc;
 
-    private CacheTsType(String code, String desc) {
+    CacheTsType(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-
-    public static CacheTsType fromCode(String code) {
-        return codeLookup.getOrDefault(code, CACHE_TS_SHORT);
+    public static CacheTsType of(String code) {
+        return kv.getOrDefault(code, CACHE_TS_SHORT);
     }
+
+    static final Map<String, CacheTsType> kv = new HashMap<>(CacheTsType.values().length);
 
     static {
-        Iterator var0 = EnumSet.allOf(CacheTsType.class).iterator();
-
-        while (var0.hasNext()) {
-            CacheTsType type = (CacheTsType) var0.next();
-            codeLookup.put(type.code, type);
-        }
-
+        Stream.of(CacheTsType.values()).forEach(e -> kv.put(e.getCode(), e));
     }
+
 }
