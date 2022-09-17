@@ -16,7 +16,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuppressWarnings(value = {"rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class Config implements Serializable {
 
     Context currentContext;

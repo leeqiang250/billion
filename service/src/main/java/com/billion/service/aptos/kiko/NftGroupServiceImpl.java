@@ -28,7 +28,7 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
     LanguageService languageService;
 
     @Override
-    @SuppressWarnings(value = {"rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public Map getAllById(@NonNull Context context) {
         String key = RedisPathConstant.NFT + context.getChain() + "::id";
         Map map = this.getRedisTemplate().opsForHash().entries(key);
@@ -50,7 +50,7 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
     }
 
     @Override
-    @SuppressWarnings(value = {"rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public Map getAllByMetaBody(@NonNull Context context) {
         String key = RedisPathConstant.NFT + context.getChain() + "::meta-body";
         Map map = this.getRedisTemplate().opsForHash().entries(key);

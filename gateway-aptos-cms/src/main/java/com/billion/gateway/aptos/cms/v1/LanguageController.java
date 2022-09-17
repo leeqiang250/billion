@@ -19,7 +19,7 @@ public class LanguageController {
     @Resource
     LanguageService languageService;
 
-    @RequestMapping(value = {EMPTY, SLASH})
+    @RequestMapping({EMPTY, SLASH})
     public Response get(@RequestHeader Context context) {
         return Response.success(this.languageService.getAll(context));
     }

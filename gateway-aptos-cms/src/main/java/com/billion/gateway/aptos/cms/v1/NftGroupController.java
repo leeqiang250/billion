@@ -24,7 +24,7 @@ public class NftGroupController {
     @Resource
     NftGroupService nftGroupService;
 
-    @RequestMapping(value = {EMPTY, SLASH})
+    @RequestMapping({EMPTY, SLASH})
     public Response get(@RequestHeader Context context) {
         return Response.success(this.nftGroupService.getAllById(context).values().stream().collect(Collectors.toList()));
     }

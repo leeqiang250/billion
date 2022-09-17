@@ -29,7 +29,7 @@ public class PingController {
     @Resource
     ImageService imageService;
 
-    @RequestMapping(path = {EMPTY, SLASH})
+    @RequestMapping({EMPTY, SLASH})
     public Response ping() {
         return Response.success(ContextService.getApplicationName() + ":" + ContextService.getEnv());
     }

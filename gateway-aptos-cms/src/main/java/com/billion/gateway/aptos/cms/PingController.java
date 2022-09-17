@@ -17,7 +17,7 @@ import static com.billion.model.constant.RequestPathConstant.*;
  */
 @Slf4j
 @RestController
-@RequestMapping({SLASH, PING})
+@RequestMapping({EMPTY, SLASH, PING})
 public class PingController {
 
     @Resource
@@ -29,7 +29,7 @@ public class PingController {
     @Resource
     ImageService imageService;
 
-    @RequestMapping(path = {EMPTY, SLASH})
+    @RequestMapping({EMPTY, SLASH})
     public Response ping() {
         return Response.success(ContextService.getApplicationName() + ":" + ContextService.getEnv());
     }

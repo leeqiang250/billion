@@ -28,7 +28,7 @@ public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, La
     ContextService contextService;
 
     @Override
-    @SuppressWarnings(value = {"rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public Map getAll(@NonNull Context context) {
         String key = RedisPathConstant.LANGUAGE + context.getLanguage();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
