@@ -28,7 +28,7 @@ public class Context implements Serializable {
     }
 
     public String getLanguage() {
-        return Language.of(this.language).code();
+        return Language.of(this.language).toString();
     }
 
 }

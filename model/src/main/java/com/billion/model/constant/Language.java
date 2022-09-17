@@ -1,15 +1,16 @@
 package com.billion.model.constant;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * @author liqiang
  */
+@Getter
 @AllArgsConstructor
 public enum Language {
 
@@ -28,33 +29,27 @@ public enum Language {
     EN("en", "English(我是描述,不要把我当作Key)"),
     ;
 
-    String code;
+    final String code;
 
-    String desc;
+    final String desc;
 
-    public String code() {
-        return this.code;
-    }
+    static final Map<String, Language> KV0 = new HashMap<>(Language.values().length);
 
-    public String desc() {
-        return this.desc;
+    @Getter
+    static final Map KV1 = new HashMap<>(Language.values().length);
+
+    static {
+        Stream.of(Language.values()).forEach(e -> KV0.put(e.code, e));
+        Stream.of(Language.values()).forEach(e -> KV1.put(e.code, e.desc));
     }
 
     public static Language of(String code) {
-        map();
-        return mapV2.getOrDefault(code, Language.ZH_TC);
+        return KV0.getOrDefault(code, Language.ZH_TC);
     }
 
-    static Map mapV1;
-
-    static Map<String, Language> mapV2;
-
-    public static Map map() {
-        if (Objects.isNull(mapV1)) {
-            mapV1 = Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e.desc));
-            mapV2 = Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e));
-        }
-        return mapV1;
+    @Override
+    public String toString() {
+        return this.code;
     }
 
 }

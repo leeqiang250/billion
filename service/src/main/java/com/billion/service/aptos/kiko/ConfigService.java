@@ -31,7 +31,7 @@ public class ConfigService {
                 .currentContext(context)
                 .currentNode(aptosService.requestNodeCache())
                 .supportChain(Chain.map())
-                .supportLanguage(Language.map())
+                .supportLanguage(Language.getKV1())
                 .supportText(languageService.getAll(context))
                 .supportContract(contractService.getAll(context))
                 .build();
