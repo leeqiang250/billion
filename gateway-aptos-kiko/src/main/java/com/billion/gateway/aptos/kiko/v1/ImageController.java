@@ -28,7 +28,7 @@ public class ImageController {
     ImageService imageService;
 
     @RequestMapping("/{id}")
-    public Response get(HttpServletResponse response, @PathVariable("id") long id) throws IOException {
+    public Response get(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
         Image image = this.imageService.getCacheById(RedisPathConstant.IMAGE, id);
         if (!Objects.isNull(image) && StringUtils.isNotEmpty(image.getUri())) {
             response.sendRedirect(image.getUri());
