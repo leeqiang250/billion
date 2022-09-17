@@ -45,6 +45,19 @@ public class ContextService {
     @Getter
     static long cacheShort;
 
+    @Value("${kiko.stc.image-group-api}")
+    String kikoStcImageGroupApi_;
+
+    @Getter
+    static String kikoStcImageGroupApi;
+
+
+    @Value("${kiko.stc.image-info-api}")
+    String kikoStcImageInfoApi_;
+
+    @Getter
+    static String kikoStcImageInfoApi;
+
     @Value("${kiko.host}")
     String kikoHost_;
 
@@ -64,6 +77,8 @@ public class ContextService {
         ContextService.cacheLong = this.cacheLong_;
         ContextService.cacheMiddle = this.cacheMiddle_;
         ContextService.cacheShort = this.cacheShort_;
+        ContextService.kikoStcImageGroupApi = this.kikoStcImageGroupApi_;
+        ContextService.kikoStcImageInfoApi = this.kikoStcImageInfoApi_;
         ContextService.kikoHost = this.kikoHost_;
         ContextService.aptosHost = this.aptosHost_;
     }
