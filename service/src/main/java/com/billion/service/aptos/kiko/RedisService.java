@@ -1,6 +1,6 @@
 package com.billion.service.aptos.kiko;
 
-import com.billion.model.controller.IService;
+import com.billion.model.service.IService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.data.redis.core.RedisTemplate;
 

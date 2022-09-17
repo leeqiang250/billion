@@ -1,7 +1,7 @@
 package com.billion.service.aptos.kiko;
 
 import com.billion.model.constant.RequestPathConstant;
-import com.billion.model.controller.IService;
+import com.billion.model.service.IService;
 import com.billion.model.entity.Image;
 import com.billion.service.aptos.ContextService;
 import org.springframework.transaction.annotation.Transactional;

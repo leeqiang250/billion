@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.controller.IController;
-import com.billion.model.controller.IService;
+import com.billion.model.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
 import com.billion.model.response.Response;
