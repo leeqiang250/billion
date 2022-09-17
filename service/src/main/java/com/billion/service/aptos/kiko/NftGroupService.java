@@ -29,15 +29,6 @@ public interface NftGroupService extends IService<NftGroup>, ICacheService<NftGr
     Map getAllByMetaBody(Context context);
 
     /**
-     * getById
-     *
-     * @param context context
-     * @param id      id
-     * @return Object
-     */
-    Object getById(Context context, Long id);
-
-    /**
      * getByMetaBody
      *
      * @param context context

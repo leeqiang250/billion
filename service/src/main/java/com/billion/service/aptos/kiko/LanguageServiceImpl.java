@@ -42,17 +42,21 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
     }
 
     @Override
-    public String getByKey(Context context, String key) {
-//        String key = RedisPathConstant.LANGUAGE + context.getLanguage();
-//        this.getRedisTemplate().opsForHash().get("", key);
+    public Object getByKey(Context context, String key) {
+        String path = RedisPathConstant.LANGUAGE + context.getLanguage();
 
-        Object value = this.getAll(context).get(key);
+        Object value = this.getRedisTemplate().opsForHash().get(path, key);
         if (Objects.isNull(value)) {
-            value = DEFAULT_TEXT;
-            log.info("missing language:[{}] key:[{}]", context.getLanguage(), key);
+            if (!this.getRedisTemplate().hasKey(path)) {
+                value = this.getAll(context).get(key);
+                if (Objects.isNull(value)) {
+                    value = DEFAULT_TEXT;
+                    log.info("missing language:[{}] key:[{}]", context.getLanguage(), key);
+                }
+            }
         }
 
-        return value.toString();
+        return value;
     }
 
     @Override

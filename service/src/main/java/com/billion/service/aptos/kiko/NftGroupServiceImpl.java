@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +43,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         changeLanguage(context, list);
 
-        map = list.stream().collect(Collectors.toMap(e -> e.getId(), (e) -> e));
+        map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
@@ -63,7 +65,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         changeLanguage(context, list);
 
-        map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "::" + e.getBody(), (e) -> e));
+        map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "-" + e.getBody(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
@@ -71,15 +73,32 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     }
 
     @Override
-    public Object getById(Context context, Long id) {
-        return this.getAllById(context).get(id);
+    public NftGroup getById(Context context, Serializable id) {
+        String key = RedisPathConstant.NFT + context.getChain() + "::id";
+
+        Object value = this.getRedisTemplate().opsForHash().get(key, id);
+        if (Objects.isNull(value)) {
+            if (!this.getRedisTemplate().hasKey(key)) {
+                value = this.getAllById(context).get(id);
+            }
+        }
+
+        return (NftGroup) value;
     }
 
     @Override
     public Object getByMetaBody(Context context, String meta, String body) {
-        return this.getAllByMetaBody(context).get(meta + "::" + body);
-    }
+        String key = RedisPathConstant.NFT + context.getChain() + "::meta-body";
 
+        Object value = this.getRedisTemplate().opsForHash().get(key, meta + "-" + body);
+        if (Objects.isNull(value)) {
+            if (!this.getRedisTemplate().hasKey(key)) {
+                value = this.getAllByMetaBody(context).get(meta + "-" + body);
+            }
+        }
+
+        return value;
+    }
 
     public void changeLanguage(Context context, List<NftGroup> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());

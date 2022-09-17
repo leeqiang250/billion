@@ -26,9 +26,9 @@ public interface LanguageService extends IService<Language>, ICacheService<Langu
      *
      * @param context context
      * @param key     key
-     * @return String
+     * @return Object
      */
-    String getByKey(Context context, String key);
+    Object getByKey(Context context, String key);
 
     /**
      * getByKeys
