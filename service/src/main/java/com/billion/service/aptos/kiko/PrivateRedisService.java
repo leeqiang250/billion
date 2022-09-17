@@ -3,6 +3,8 @@ package com.billion.service.aptos.kiko;
 import java.util.Map;
 
 /**
+ * 只有CMS可以使用
+ *
  * @author liqiang
  */
 public interface PrivateRedisService {
