@@ -5,7 +5,7 @@ import com.billion.dao.aptos.kiko.ContractMapper;
 import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Contract;
-import com.billion.model.service.CacheTsType;
+import com.billion.model.enums.CacheTsType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

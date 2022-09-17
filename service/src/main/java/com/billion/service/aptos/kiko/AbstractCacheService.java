@@ -2,7 +2,7 @@ package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billion.model.service.CacheTsType;
+import com.billion.model.enums.CacheTsType;
 import com.billion.model.service.ICacheService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.data.redis.core.RedisTemplate;

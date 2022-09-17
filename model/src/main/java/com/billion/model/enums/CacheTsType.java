@@ -1,4 +1,4 @@
-package com.billion.model.service;
+package com.billion.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 /**
  * @author liqiang
  */
+@Getter
 @AllArgsConstructor
 public enum CacheTsType {
 
@@ -17,10 +18,8 @@ public enum CacheTsType {
     CACHE_TS_MIDDLE("cache_ts_middle", "中期缓存时间"),
     CACHE_TS_LONG("cache_ts_long", "长期缓存时间");
 
-    @Getter
     final String code;
 
-    @Getter
     final String desc;
 
     @Getter
@@ -34,4 +33,8 @@ public enum CacheTsType {
         return KV.getOrDefault(code, CACHE_TS_SHORT);
     }
 
+    @Override
+    public String toString() {
+        return this.code;
+    }
 }

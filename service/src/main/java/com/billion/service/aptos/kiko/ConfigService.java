@@ -1,7 +1,7 @@
 package com.billion.service.aptos.kiko;
 
-import com.billion.model.constant.Chain;
-import com.billion.model.constant.Language;
+import com.billion.model.enums.Chain;
+import com.billion.model.enums.Language;
 import com.billion.model.dto.Config;
 import com.billion.model.dto.Context;
 import com.billion.service.aptos.AptosService;
@@ -30,7 +30,7 @@ public class ConfigService {
         return Config.builder()
                 .currentContext(context)
                 .currentNode(aptosService.requestNodeCache())
-                .supportChain(Chain.map())
+                .supportChain(Chain.getKV())
                 .supportLanguage(Language.getKV1())
                 .supportText(languageService.getAll(context))
                 .supportContract(contractService.getAll(context))

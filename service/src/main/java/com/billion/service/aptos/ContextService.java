@@ -1,6 +1,6 @@
 package com.billion.service.aptos;
 
-import com.billion.model.service.CacheTsType;
+import com.billion.model.enums.CacheTsType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

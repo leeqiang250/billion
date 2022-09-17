@@ -1,7 +1,7 @@
 package com.billion.model.dto;
 
-import com.billion.model.constant.Chain;
-import com.billion.model.constant.Language;
+import com.billion.model.enums.Chain;
+import com.billion.model.enums.Language;
 import lombok.*;
 
 import java.io.Serializable;
@@ -24,11 +24,11 @@ public class Context implements Serializable {
     String language;
 
     public String getChain() {
-        return Chain.of(this.chain).code();
+        return Chain.of(this.chain).getCode();
     }
 
     public String getLanguage() {
-        return Language.of(this.language).toString();
+        return Language.of(this.language).getCode();
     }
 
 }

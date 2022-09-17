@@ -1,5 +1,6 @@
 package com.billion.model.service;
 
+import com.billion.model.enums.CacheTsType;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;

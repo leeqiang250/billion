@@ -1,4 +1,4 @@
-package com.billion.model.constant;
+package com.billion.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,14 +33,14 @@ public enum Language {
 
     final String desc;
 
-    static final Map<String, Language> KV0 = new HashMap<>(Language.values().length);
+    static final Map<String, Language> KV0 = new HashMap<>(values().length);
 
     @Getter
-    static final Map KV1 = new HashMap<>(Language.values().length);
+    static final Map KV1 = new HashMap<>(values().length);
 
     static {
-        Stream.of(Language.values()).forEach(e -> KV0.put(e.code, e));
-        Stream.of(Language.values()).forEach(e -> KV1.put(e.code, e.desc));
+        Stream.of(values()).forEach(e -> KV0.put(e.code, e));
+        Stream.of(values()).forEach(e -> KV1.put(e.code, e.desc));
     }
 
     public static Language of(String code) {

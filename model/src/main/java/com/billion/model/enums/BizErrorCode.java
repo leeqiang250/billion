@@ -1,9 +1,14 @@
-package com.billion.model.code;
+package com.billion.model.enums;
 
+import com.billion.model.code.ErrorCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author liqiang
  */
+@Getter
+@AllArgsConstructor
 public enum BizErrorCode implements ErrorCode {
 
     /**
@@ -45,24 +50,9 @@ public enum BizErrorCode implements ErrorCode {
 
     final String message;
 
-    BizErrorCode(final int code, final String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    @Override
-    public int getCode() {
-        return this.code;
-    }
-
-    @Override
-    public String getMessage() {
-        return this.message;
-    }
-
     @Override
     public String toString() {
-        return "[" + this.getCode() + "]" + this.getMessage();
+        return String.valueOf(this.code);
     }
 
 }

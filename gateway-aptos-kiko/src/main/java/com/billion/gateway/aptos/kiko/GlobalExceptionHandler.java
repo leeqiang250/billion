@@ -1,6 +1,6 @@
 package com.billion.gateway.aptos.kiko;
 
-import com.billion.model.code.BizErrorCode;
+import com.billion.model.enums.BizErrorCode;
 import com.billion.model.exception.BizException;
 import com.billion.model.response.Response;
 import lombok.extern.slf4j.Slf4j;
