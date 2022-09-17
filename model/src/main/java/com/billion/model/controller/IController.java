@@ -41,7 +41,7 @@ public interface IController<T> {
      * @return Response
      */
     @RequestMapping("/{id}")
-    default Response get(@PathVariable Serializable id, @RequestHeader Context context) {
+    default Response get(@RequestHeader Context context, @PathVariable Serializable id) {
         return Response.success(this.service().getById(id));
     }
 

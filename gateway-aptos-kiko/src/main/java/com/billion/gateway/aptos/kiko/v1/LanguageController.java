@@ -35,8 +35,8 @@ public class LanguageController implements IController<Language> {
     }
 
     @Override
-    public Response get(Serializable id, Context context) {
-        return Response.success(this.languageService.getByKey(id.toString(), context));
+    public Response get(Context context, Serializable id) {
+        return Response.success(this.languageService.getByKey(context, id.toString()));
     }
 
 }

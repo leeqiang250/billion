@@ -35,7 +35,7 @@ public class ContractController implements IController<Contract> {
     }
 
     @Override
-    public Response get(Serializable id, Context context) {
+    public Response get(Context context, Serializable id) {
         return Response.failure();
     }
 

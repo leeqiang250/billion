@@ -39,13 +39,13 @@ public class NftGroupController implements IController<NftGroup> {
     }
 
     @Override
-    public Response get(Serializable id, Context context) {
-        return Response.success(this.nftGroupService.getById(id, context));
+    public Response get(Context context, Serializable id) {
+        return Response.success(this.nftGroupService.getById(context, id));
     }
 
     @RequestMapping("/{meta}/{body}")
-    public Response get(@PathVariable String meta, @PathVariable String body, @RequestHeader Context context) {
-        return Response.success(this.nftGroupService.getByMetaBody(meta, body, context));
+    public Response get(@RequestHeader Context context, @PathVariable String meta, @PathVariable String body) {
+        return Response.success(this.nftGroupService.getByMetaBody(context, meta, body));
     }
 
 }

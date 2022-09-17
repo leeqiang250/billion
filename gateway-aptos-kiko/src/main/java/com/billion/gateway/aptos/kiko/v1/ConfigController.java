@@ -38,7 +38,7 @@ public class ConfigController implements IController<Object> {
     }
 
     @Override
-    public Response get(Serializable id, Context context) {
+    public Response get(Context context, Serializable id) {
         return Response.failure();
     }
 

@@ -31,20 +31,20 @@ public interface NftGroupService extends IService<NftGroup>, ICacheService<NftGr
     /**
      * getById
      *
-     * @param id      id
      * @param context context
+     * @param id      id
      * @return Object
      */
-    Object getById(Long id, Context context);
+    Object getById(Context context, Long id);
 
     /**
      * getByMetaBody
      *
+     * @param context context
      * @param meta    meta
      * @param body    body
-     * @param context context
      * @return Object
      */
-    Object getByMetaBody(String meta, String body, Context context);
+    Object getByMetaBody(Context context, String meta, String body);
 
 }

@@ -27,7 +27,7 @@ public interface IService<T> extends com.baomidou.mybatisplus.extension.service.
      * @param context context
      * @return T
      */
-    default T getById(Serializable id, Context context) {
+    default T getById(Context context, Serializable id) {
         return this.getById(id);
     }
 

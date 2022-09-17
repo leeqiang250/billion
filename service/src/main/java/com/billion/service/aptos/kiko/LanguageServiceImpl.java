@@ -42,7 +42,10 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
     }
 
     @Override
-    public String getByKey(String key, Context context) {
+    public String getByKey(Context context, String key) {
+//        String key = RedisPathConstant.LANGUAGE + context.getLanguage();
+//        this.getRedisTemplate().opsForHash().get("", key);
+
         Object value = this.getAll(context).get(key);
         if (Objects.isNull(value)) {
             value = DEFAULT_TEXT;
@@ -53,7 +56,7 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
     }
 
     @Override
-    public Map getByKeys(Set keys, Context context) {
+    public Map getByKeys(Context context, Set keys) {
         Map values = new HashMap(keys.size());
         Map map = this.getAll(context);
         keys.forEach(e -> {

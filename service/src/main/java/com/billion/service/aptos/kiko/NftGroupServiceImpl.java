@@ -39,7 +39,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         wrapper.lambda().eq(NftGroup::getEnabled, Boolean.TRUE);
         List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
 
-        changeLanguage(list, context);
+        changeLanguage(context, list);
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
@@ -61,7 +61,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         wrapper.lambda().eq(NftGroup::getEnabled, Boolean.TRUE);
         List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
 
-        changeLanguage(list, context);
+        changeLanguage(context, list);
 
         map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "::" + e.getBody(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
@@ -71,22 +71,22 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     }
 
     @Override
-    public Object getById(Long id, Context context) {
+    public Object getById(Context context, Long id) {
         return this.getAllById(context).get(id);
     }
 
     @Override
-    public Object getByMetaBody(String meta, String body, Context context) {
+    public Object getByMetaBody(Context context, String meta, String body) {
         return this.getAllByMetaBody(context).get(meta + "::" + body);
     }
 
 
-    public void changeLanguage(List<NftGroup> list, Context context) {
+    public void changeLanguage(Context context, List<NftGroup> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
 
-        Map mapDisplayName = languageService.getByKeys(setDisplayName, context);
-        Map mapDescription = languageService.getByKeys(setDescription, context);
+        Map mapDisplayName = languageService.getByKeys(context, setDisplayName);
+        Map mapDescription = languageService.getByKeys(context, setDescription);
 
         list.forEach(e -> {
             e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
