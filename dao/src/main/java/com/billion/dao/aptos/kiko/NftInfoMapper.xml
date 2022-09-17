@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.NftInfoMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,nft_id as nft_id
+        ,group_id as group_id
+        ,type as type
+        ,name as name
+        ,owner as owner
+        ,image_link as image_link
+        ,image_data as image_data
+        ,score as score
+        ,rank as rank
+        ,created as created
+        ,state as state
+        ,open_box_time as open_box_time
+        ,create_time as create_time
+        ,update_time as update_time
+    </sql>
+
+</mapper>

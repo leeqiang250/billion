@@ -41,6 +41,11 @@ public interface RequestPathConstant {
     /**
      * common路径下无需鉴权
      */
+    String V1_ATTRIBUTE = V1_COMMON + "/nft/attributea";
+
+    /**
+     * common路径下无需鉴权
+     */
     String V1_ERROR = V1_COMMON + "/error";
 
     /**
