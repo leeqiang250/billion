@@ -1,9 +1,8 @@
 package com.billion.service.aptos.kiko;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billion.model.controller.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
-import lombok.NonNull;
 
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public interface NftGroupService extends IService<NftGroup>, RedisService<NftGro
      * @param context context
      * @return Map
      */
-    Map getAllById(@NonNull Context context);
+    Map getAllById(Context context);
 
     /**
      * getAllByMetaBody
@@ -26,7 +25,7 @@ public interface NftGroupService extends IService<NftGroup>, RedisService<NftGro
      * @param context context
      * @return Map
      */
-    Map getAllByMetaBody(@NonNull Context context);
+    Map getAllByMetaBody(Context context);
 
     /**
      * getById
@@ -35,7 +34,7 @@ public interface NftGroupService extends IService<NftGroup>, RedisService<NftGro
      * @param context context
      * @return Object
      */
-    Object getById(@NonNull Long id, @NonNull Context context);
+    Object getById(Long id, Context context);
 
     /**
      * getByMetaBody
@@ -45,6 +44,6 @@ public interface NftGroupService extends IService<NftGroup>, RedisService<NftGro
      * @param context context
      * @return Object
      */
-    Object getByMetaBody(@NonNull String meta, @NonNull String body, @NonNull Context context);
+    Object getByMetaBody(String meta, String body, Context context);
 
 }

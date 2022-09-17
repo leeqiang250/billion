@@ -1,7 +1,5 @@
 package com.billion.service.aptos.kiko;
 
-import lombok.NonNull;
-
 import java.util.Map;
 
 /**
@@ -22,6 +20,6 @@ public interface PrivateRedisService {
      * @param key key
      * @return Boolean
      */
-    Boolean delete(@NonNull String key);
+    Boolean delete(String key);
 
 }

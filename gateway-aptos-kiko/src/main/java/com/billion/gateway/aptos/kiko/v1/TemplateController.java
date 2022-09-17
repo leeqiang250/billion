@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.v1;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.controller.IController;
+import com.billion.model.controller.IService;
 import com.billion.model.entity.Language;
 import com.billion.service.aptos.kiko.LanguageService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +19,10 @@ public class TemplateController implements IController<Language> {
     @Resource
     LanguageService languageService;
 
+
     @Override
     public IService<Language> service() {
-        return languageService;
+        return this.languageService;
     }
 
 }

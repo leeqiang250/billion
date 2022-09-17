@@ -5,7 +5,6 @@ import com.billion.model.constant.Language;
 import com.billion.model.dto.Config;
 import com.billion.model.dto.Context;
 import com.billion.service.aptos.AptosService;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class ConfigService {
     @Resource
     AptosService aptosService;
 
-    public Config get(@NonNull Context context) {
+    public Config get(Context context) {
         return Config.builder()
                 .currentContext(context)
                 .currentNode(aptosService.requestNodeCache())

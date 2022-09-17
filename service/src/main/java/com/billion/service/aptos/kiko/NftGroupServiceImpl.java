@@ -6,7 +6,6 @@ import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 import com.billion.service.aptos.ContextService;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
 
     @Override
     @SuppressWarnings({"rawtypes"})
-    public Map getAllById(@NonNull Context context) {
+    public Map getAllById(Context context) {
         String key = RedisPathConstant.NFT + context.getChain() + "::id";
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -51,7 +50,7 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
 
     @Override
     @SuppressWarnings({"rawtypes"})
-    public Map getAllByMetaBody(@NonNull Context context) {
+    public Map getAllByMetaBody(Context context) {
         String key = RedisPathConstant.NFT + context.getChain() + "::meta-body";
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -72,17 +71,17 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
     }
 
     @Override
-    public Object getById(@NonNull Long id, @NonNull Context context) {
+    public Object getById(Long id, Context context) {
         return this.getAllById(context).get(id);
     }
 
     @Override
-    public Object getByMetaBody(@NonNull String meta, @NonNull String body, @NonNull Context context) {
+    public Object getByMetaBody(String meta, String body, Context context) {
         return this.getAllByMetaBody(context).get(meta + "::" + body);
     }
 
 
-    public void changeLanguage(List<NftGroup> list, @NonNull Context context) {
+    public void changeLanguage(List<NftGroup> list, Context context) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
 

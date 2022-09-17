@@ -1,11 +1,16 @@
 package com.billion.gateway.aptos.kiko.v1;
 
+import com.billion.model.controller.IController;
+import com.billion.model.controller.IService;
 import com.billion.model.dto.Context;
+import com.billion.model.entity.Language;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.LanguageService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
+import java.io.Serializable;
 
 import static com.billion.model.constant.RequestPathConstant.*;
 
@@ -14,19 +19,24 @@ import static com.billion.model.constant.RequestPathConstant.*;
  */
 @RestController
 @RequestMapping(V1_LANGUAGE)
-public class LanguageController {
+public class LanguageController implements IController<Language> {
 
     @Resource
     LanguageService languageService;
 
-    @RequestMapping({EMPTY, SLASH})
-    public Response get(@RequestHeader Context context) {
+    @Override
+    public IService<Language> service() {
+        return this.languageService;
+    }
+
+    @Override
+    public Response get(Context context) {
         return Response.success(this.languageService.getAll(context));
     }
 
-    @RequestMapping("/{key}")
-    public Response get(@PathVariable String key, @RequestHeader Context context) {
-        return Response.success(this.languageService.getByKey(key, context));
+    @Override
+    public Response get(Serializable id, Context context) {
+        return Response.success(this.languageService.getByKey(id.toString(), context));
     }
 
 }

@@ -1,8 +1,7 @@
 package com.billion.service.aptos.kiko;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billion.model.controller.IService;
 import com.billion.service.aptos.ContextService;
-import lombok.NonNull;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
@@ -28,7 +27,7 @@ public interface RedisService<T> extends IService<T> {
      * @param id             id
      * @return T
      */
-    default T getCacheById(@NonNull String redisKeyPrefix, @NonNull Serializable id) {
+    default T getCacheById(String redisKeyPrefix, Serializable id) {
         return this.getCacheById(redisKeyPrefix, id, Duration.ofMinutes(ContextService.getCacheMiddle()));
     }
 
@@ -40,7 +39,7 @@ public interface RedisService<T> extends IService<T> {
      * @param timeout        timeout
      * @return T
      */
-    default T getCacheById(@NonNull String redisKeyPrefix, @NonNull Serializable id, Duration timeout) {
+    default T getCacheById(String redisKeyPrefix, Serializable id, Duration timeout) {
         T t = this.getRedisTemplate().opsForValue().get(redisKeyPrefix + id);
         if (Objects.isNull(t)) {
             t = this.getById(id);

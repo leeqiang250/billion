@@ -1,11 +1,9 @@
 package com.billion.service.aptos.kiko;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billion.model.controller.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
-import lombok.NonNull;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,7 +18,7 @@ public interface LanguageService extends IService<Language>, RedisService<Langua
      * @param context context
      * @return Map
      */
-    Map getAll(@NonNull Context context);
+    Map getAll(Context context);
 
     /**
      * getLanguageByKey
@@ -29,7 +27,7 @@ public interface LanguageService extends IService<Language>, RedisService<Langua
      * @param context context
      * @return String
      */
-    String getByKey(@NonNull String key, @NonNull Context context);
+    String getByKey(String key, Context context);
 
     /**
      * getByKeys
@@ -38,6 +36,6 @@ public interface LanguageService extends IService<Language>, RedisService<Langua
      * @param context context
      * @return Map
      */
-    Map getByKeys(@NonNull Set keys, @NonNull Context context);
+    Map getByKeys(Set keys, Context context);
 
 }

@@ -6,11 +6,9 @@ import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
 import com.billion.service.aptos.ContextService;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,7 +24,7 @@ public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, La
 
     @Override
     @SuppressWarnings({"rawtypes"})
-    public Map getAll(@NonNull Context context) {
+    public Map getAll(Context context) {
         String key = RedisPathConstant.LANGUAGE + context.getLanguage();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -44,7 +42,7 @@ public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, La
     }
 
     @Override
-    public String getByKey(@NonNull String key, @NonNull Context context) {
+    public String getByKey(String key, Context context) {
         Object value = this.getAll(context).get(key);
         if (Objects.isNull(value)) {
             value = DEFAULT_TEXT;
@@ -55,7 +53,7 @@ public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, La
     }
 
     @Override
-    public Map getByKeys(@NonNull Set keys, @NonNull Context context) {
+    public Map getByKeys(Set keys, Context context) {
         Map values = new HashMap(keys.size());
         Map map = this.getAll(context);
         keys.forEach(e -> {

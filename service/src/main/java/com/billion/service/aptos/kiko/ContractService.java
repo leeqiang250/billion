@@ -1,9 +1,8 @@
 package com.billion.service.aptos.kiko;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.billion.model.controller.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Contract;
-import lombok.NonNull;
 
 import java.util.Map;
 
@@ -18,6 +17,6 @@ public interface ContractService extends IService<Contract> {
      * @param context context
      * @return Map
      */
-    Map getAll(@NonNull Context context);
+    Map getAll(Context context);
 
 }

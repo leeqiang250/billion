@@ -1,10 +1,9 @@
 package com.billion.service.aptos.kiko;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.constant.RequestPathConstant;
+import com.billion.model.controller.IService;
 import com.billion.model.entity.Image;
 import com.billion.service.aptos.ContextService;
-import lombok.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.billion.model.constant.RequestPathConstant.SLASH;
@@ -23,7 +22,7 @@ public interface ImageService extends IService<Image>, RedisService<Image> {
      * @return Image
      */
     @Transactional(rollbackFor = Exception.class)
-    default Image add(@NonNull String uri, @NonNull String desc) {
+    default Image add(String uri, String desc) {
         Image image = Image.builder()
                 .uri(uri)
                 .proxy(RequestPathConstant.EMPTY)

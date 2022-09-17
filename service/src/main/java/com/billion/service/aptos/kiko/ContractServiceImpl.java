@@ -6,7 +6,6 @@ import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Contract;
 import com.billion.service.aptos.ContextService;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class ContractServiceImpl extends AbstractRedisService<ContractMapper, Contract> implements ContractService {
 
-    public Map getAll(@NonNull Context context) {
+    public Map getAll(Context context) {
         String key = RedisPathConstant.CONTRACT + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {

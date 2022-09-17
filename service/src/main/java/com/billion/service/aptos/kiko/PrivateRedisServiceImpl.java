@@ -1,6 +1,5 @@
 package com.billion.service.aptos.kiko;
 
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
@@ -65,7 +64,7 @@ public class PrivateRedisServiceImpl implements PrivateRedisService {
     }
 
     @Override
-    public Boolean delete(@NonNull String key) {
+    public Boolean delete(String key) {
         return this.redisTemplate.delete(key);
     }
 

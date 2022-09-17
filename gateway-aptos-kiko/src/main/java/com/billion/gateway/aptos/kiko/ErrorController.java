@@ -1,4 +1,4 @@
-package com.billion.gateway.aptos.kiko.v1;
+package com.billion.gateway.aptos.kiko;
 
 import com.billion.model.response.Response;
 import org.springframework.web.bind.annotation.RequestMapping;

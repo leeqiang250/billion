@@ -21,19 +21,8 @@ import static com.billion.model.constant.RequestPathConstant.STC_IMAGE;
 @RequestMapping({STC_IMAGE})
 public class ImageStcController {
 
-    //@Resource
-    //StcNftGroupService stcNftGroupService;
-
-    //@Resource
-    //StcNftInfoService stcNftInfoService;
-
     @RequestMapping("/group/{id}")
     public Response getGroupImage(HttpServletResponse response, @PathVariable Long id) throws IOException {
-        //StcNftGroup model = this.stcNftGroupService.getCacheById(RedisPathConstant.IMAGE_STC, id);
-        //if (!Objects.isNull(model) && StringUtils.isNotEmpty(model.getNftTypeImageLink())) {
-        //    response.sendRedirect(model.getNftTypeImageLink());
-        //}
-
         response.sendRedirect(ContextService.getKikoStcImageGroupApi() + id);
 
         return Response.failure();
@@ -41,16 +30,6 @@ public class ImageStcController {
 
     @RequestMapping("/info/{id}")
     public Response getInfoImage(HttpServletResponse response, @PathVariable Long id) throws IOException {
-        //if (21657L <= id && id < 21731L) {
-        //    log.info("3EYEDCat OLD:{} NEW:{}", id, id + 1L);
-        //    id++;
-        //}
-
-        //StcNftInfo model = this.stcNftInfoService.getCacheById(RedisPathConstant.IMAGE_STC, id);
-        //if (!Objects.isNull(model) && StringUtils.isNotEmpty(model.getImageLink())) {
-        //    response.sendRedirect(model.getImageLink());
-        //}
-
         response.sendRedirect(ContextService.getKikoStcImageInfoApi() + id);
 
         return Response.failure();
