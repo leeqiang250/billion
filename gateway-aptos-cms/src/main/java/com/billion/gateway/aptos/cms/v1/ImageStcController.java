@@ -35,7 +35,7 @@ public class ImageStcController {
     StcNftInfoService stcNftInfoService;
 
     @RequestMapping("/group/{id}")
-    public Response getGroupImage(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
+    public Response getGroupImage(HttpServletResponse response, @PathVariable Long id) throws IOException {
         StcNftGroup model = this.stcNftGroupService.getCacheById(RedisPathConstant.IMAGE_STC, id);
         if (!Objects.isNull(model) && StringUtils.isNotEmpty(model.getNftTypeImageLink())) {
             response.sendRedirect(model.getNftTypeImageLink());
@@ -45,7 +45,7 @@ public class ImageStcController {
     }
 
     @RequestMapping("/info/{id}")
-    public Response getInfoImage(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
+    public Response getInfoImage(HttpServletResponse response, @PathVariable Long id) throws IOException {
         if (21657L <= id && id < 21731L) {
             log.info("3EYEDCat OLD:{} NEW:{}", id, id + 1L);
             id++;
