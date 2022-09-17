@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
  * @author liqiang
  */
 @Service
-public class StcNftGroupServiceImpl extends AbstractRedisService<StcNftGroupMapper, StcNftGroup> implements StcNftGroupService {
+public class StcNftGroupServiceImpl extends AbstractCacheService<StcNftGroupMapper, StcNftGroup> implements StcNftGroupService {
 
 }

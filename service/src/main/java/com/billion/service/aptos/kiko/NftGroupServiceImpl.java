@@ -5,12 +5,11 @@ import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
-import com.billion.service.aptos.ContextService;
+import com.billion.model.service.CacheTsType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, NftGroup> implements NftGroupService {
+public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, NftGroup> implements NftGroupService {
 
     @Resource
     LanguageService languageService;
@@ -43,7 +42,7 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, Duration.ofSeconds(ContextService.getCacheMiddle()));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
         return map;
     }
@@ -65,7 +64,7 @@ public class NftGroupServiceImpl extends AbstractRedisService<NftGroupMapper, Nf
 
         map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "::" + e.getBody(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, Duration.ofSeconds(ContextService.getCacheMiddle()));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
         return map;
     }

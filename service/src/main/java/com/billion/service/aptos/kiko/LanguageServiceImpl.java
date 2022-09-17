@@ -5,11 +5,10 @@ import com.billion.dao.aptos.kiko.LanguageMapper;
 import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
-import com.billion.service.aptos.ContextService;
+import com.billion.model.service.CacheTsType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,7 @@ import static com.billion.model.constant.RequestPathConstant.DEFAULT_TEXT;
  */
 @Slf4j
 @Service
-public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, Language> implements LanguageService {
+public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, Language> implements LanguageService {
 
     @Override
     @SuppressWarnings({"rawtypes"})
@@ -36,7 +35,7 @@ public class LanguageServiceImpl extends AbstractRedisService<LanguageMapper, La
         List<Language> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, Duration.ofSeconds(ContextService.getCacheMiddle()));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
         return map;
     }

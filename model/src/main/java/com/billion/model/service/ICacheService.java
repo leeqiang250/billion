@@ -1,7 +1,5 @@
-package com.billion.service.aptos.kiko;
+package com.billion.model.service;
 
-import com.billion.model.service.IService;
-import com.billion.service.aptos.ContextService;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
@@ -11,7 +9,15 @@ import java.util.Objects;
 /**
  * @author liqiang
  */
-public interface RedisService<T> extends IService<T> {
+public interface ICacheService<T> extends IService<T> {
+
+    /**
+     * cacheSecond
+     *
+     * @param cacheTsType cacheTsType
+     * @return long
+     */
+    Duration cacheSecond(CacheTsType cacheTsType);
 
     /**
      * RedisTemplate
@@ -28,7 +34,7 @@ public interface RedisService<T> extends IService<T> {
      * @return T
      */
     default T getCacheById(String redisKeyPrefix, Serializable id) {
-        return this.getCacheById(redisKeyPrefix, id, Duration.ofMinutes(ContextService.getCacheMiddle()));
+        return this.getCacheById(redisKeyPrefix, id, this.cacheSecond(CacheTsType.CACHE_TS_SHORT));
     }
 
     /**

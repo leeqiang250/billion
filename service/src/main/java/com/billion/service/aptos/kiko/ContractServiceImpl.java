@@ -5,11 +5,10 @@ import com.billion.dao.aptos.kiko.ContractMapper;
 import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Contract;
-import com.billion.service.aptos.ContextService;
+import com.billion.model.service.CacheTsType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 
-public class ContractServiceImpl extends AbstractRedisService<ContractMapper, Contract> implements ContractService {
+public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Contract> implements ContractService {
 
     public Map getAll(Context context) {
         String key = RedisPathConstant.CONTRACT + context.getChain();
@@ -34,7 +33,7 @@ public class ContractServiceImpl extends AbstractRedisService<ContractMapper, Co
         List<Contract> list = this.getBaseMapper().selectList(wrapper);
         map = list.stream().collect(Collectors.toMap(Contract::getName, Contract::getContract, (key1, key2) -> key2));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, Duration.ofHours(ContextService.getCacheMiddle()));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
         return map;
     }

@@ -1,6 +1,7 @@
 package com.billion.service.aptos.kiko;
 
 import com.billion.model.constant.RequestPathConstant;
+import com.billion.model.service.ICacheService;
 import com.billion.model.service.IService;
 import com.billion.model.entity.Image;
 import com.billion.service.aptos.ContextService;
@@ -12,7 +13,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
 /**
  * @author liqiang
  */
-public interface ImageService extends IService<Image>, RedisService<Image> {
+public interface ImageService extends IService<Image>, ICacheService<Image> {
 
     /**
      * add

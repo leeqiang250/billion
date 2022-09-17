@@ -1,11 +1,20 @@
 package com.billion.service.aptos;
 
+import com.billion.model.service.CacheTsType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author liqiang
@@ -30,27 +39,20 @@ public class ContextService {
     @Value("${cache.long}")
     long cacheLong_;
 
-    @Getter
-    static long cacheLong;
-
     @Value("${cache.middle}")
     long cacheMiddle_;
-
-    @Getter
-    static long cacheMiddle;
 
     @Value("${cache.short}")
     long cacheShort_;
 
     @Getter
-    static long cacheShort;
+    static Map<CacheTsType, Duration> cacheTsTypeDurationMap = new HashMap<>(CacheTsType.values().length);
 
     @Value("${kiko.stc.image-group-api}")
     String kikoStcImageGroupApi_;
 
     @Getter
     static String kikoStcImageGroupApi;
-
 
     @Value("${kiko.stc.image-info-api}")
     String kikoStcImageInfoApi_;
@@ -74,9 +76,10 @@ public class ContextService {
     public void init() {
         ContextService.env = this.env_;
         ContextService.applicationName = this.applicationName_;
-        ContextService.cacheLong = this.cacheLong_;
-        ContextService.cacheMiddle = this.cacheMiddle_;
-        ContextService.cacheShort = this.cacheShort_;
+        ContextService.cacheTsTypeDurationMap.put(CacheTsType.CACHE_TS_SHORT, Duration.ofSeconds(cacheShort_));
+        ContextService.cacheTsTypeDurationMap.put(CacheTsType.CACHE_TS_MIDDLE, Duration.ofSeconds(cacheMiddle_));
+        ContextService.cacheTsTypeDurationMap.put(CacheTsType.CACHE_TS_LONG, Duration.ofSeconds(cacheLong_));
+        Stream.of(CacheTsType.values()).forEach(e -> Assert.notNull(ContextService.cacheTsTypeDurationMap.get(e), "missing cache ts type"));
         ContextService.kikoStcImageGroupApi = this.kikoStcImageGroupApi_;
         ContextService.kikoStcImageInfoApi = this.kikoStcImageInfoApi_;
         ContextService.kikoHost = this.kikoHost_;

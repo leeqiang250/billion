@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.billion.model.service.ICacheService;
 import com.billion.model.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * @author liqiang
  */
-public interface NftGroupService extends IService<NftGroup>, RedisService<NftGroup> {
+public interface NftGroupService extends IService<NftGroup>, ICacheService<NftGroup> {
 
     /**
      * getAllById

@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.billion.model.service.ICacheService;
 import com.billion.model.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
@@ -10,7 +11,7 @@ import java.util.Set;
 /**
  * @author liqiang
  */
-public interface LanguageService extends IService<Language>, RedisService<Language> {
+public interface LanguageService extends IService<Language>, ICacheService<Language> {
 
     /**
      * getLanguage
