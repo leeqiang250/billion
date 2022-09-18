@@ -9,6 +9,7 @@ import java.util.Collection;
 /**
  * @author liqiang
  */
+@SuppressWarnings({"rawtypes"})
 public interface NftAttributeService extends ICacheService<NftAttribute> {
 
     /**
