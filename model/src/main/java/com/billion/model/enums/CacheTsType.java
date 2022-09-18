@@ -14,8 +14,19 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum CacheTsType {
 
+    /**
+     *
+     */
     CACHE_TS_SHORT("cache_ts_short", "短期缓存时间"),
+
+    /**
+     *
+     */
     CACHE_TS_MIDDLE("cache_ts_middle", "中期缓存时间"),
+
+    /**
+     *
+     */
     CACHE_TS_LONG("cache_ts_long", "长期缓存时间");
 
     final String code;

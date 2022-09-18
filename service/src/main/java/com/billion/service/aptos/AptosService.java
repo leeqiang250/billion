@@ -19,6 +19,8 @@ import java.util.Objects;
 @Service
 public class AptosService {
 
+    final long cacheTs = 5000L;
+
     @Getter
     static AptosClient aptosClient;
 
@@ -57,7 +59,7 @@ public class AptosService {
     long responseNodeTs;
 
     public ResponseNode requestNodeCache() {
-        if (Objects.isNull(this.responseNode) || System.currentTimeMillis() > (this.responseNodeTs + 5000L)) {
+        if (Objects.isNull(this.responseNode) || System.currentTimeMillis() > (this.responseNodeTs + this.cacheTs)) {
             ResponseNode responseNode = AptosService.getAptosClient().requestNode();
             if (Objects.nonNull(responseNode)) {
                 this.responseNodeTs = System.currentTimeMillis();

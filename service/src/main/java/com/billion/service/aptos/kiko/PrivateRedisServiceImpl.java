@@ -34,23 +34,32 @@ public class PrivateRedisServiceImpl implements PrivateRedisService {
             DataType dataType = this.redisTemplate.type(key);
             if (Objects.nonNull(dataType)) {
                 switch (dataType) {
-                    case STRING -> value = this.redisTemplate.opsForValue().get(key);
-                    case LIST -> {
+                    case STRING: {
+                        value = this.redisTemplate.opsForValue().get(key);
+                        break;
+                    }
+                    case LIST: {
                         Long size = this.redisTemplate.opsForList().size(key);
                         if (Objects.nonNull(size)) {
                             value = this.redisTemplate.opsForList().range(key, 0L, size);
                         }
+                        break;
                     }
-                    case SET -> {
+                    case SET: {
                         Long size = this.redisTemplate.opsForSet().size(key);
                         if (Objects.nonNull(size)) {
                             value = this.redisTemplate.opsForSet().randomMembers(key, size);
                         }
+                        break;
                     }
-                    case HASH -> value = this.redisTemplate.opsForHash().entries(key);
-                    default -> {
+                    case HASH: {
+                        value = this.redisTemplate.opsForHash().entries(key);
+                        break;
+                    }
+                    default: {
                         value = dataType.code();
                         log.info("{} {}", key, dataType.code());
+                        break;
                     }
                 }
             }

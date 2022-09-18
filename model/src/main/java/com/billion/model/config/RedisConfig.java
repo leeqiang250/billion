@@ -12,9 +12,7 @@ import org.springframework.data.redis.serializer.*;
 /**
  * @author liqiang
  */
-//@Slf4j
 @Configuration
-//@EnableCaching
 public class RedisConfig {
 
     @Bean
