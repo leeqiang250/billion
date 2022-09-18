@@ -42,7 +42,7 @@ public interface IController<T> {
      */
     @RequestMapping("/{id}")
     default Response get(@RequestHeader Context context, @PathVariable Serializable id) {
-        return Response.success(this.service().getCacheById(context, this.getClass().toString(), id));
+        return Response.success(this.service().cacheById(context, this.getClass().toString(), id));
     }
 
 }

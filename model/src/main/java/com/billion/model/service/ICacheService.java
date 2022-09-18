@@ -48,8 +48,8 @@ public interface ICacheService<T> extends IService<T> {
      * @param id             id
      * @return T
      */
-    default T getCacheById(Context context, String redisKeyPrefix, Serializable id) {
-        return this.getCacheById(context, redisKeyPrefix, id, this.cacheSecond(CacheTsType.CACHE_TS_SHORT));
+    default T cacheById(Context context, String redisKeyPrefix, Serializable id) {
+        return this.cacheById(context, redisKeyPrefix, id, this.cacheSecond(CacheTsType.CACHE_TS_SHORT));
     }
 
     /**
@@ -61,7 +61,7 @@ public interface ICacheService<T> extends IService<T> {
      * @param timeout        timeout
      * @return T
      */
-    default T getCacheById(Context context, String redisKeyPrefix, Serializable id, Duration timeout) {
+    default T cacheById(Context context, String redisKeyPrefix, Serializable id, Duration timeout) {
         T t = this.getRedisTemplate().opsForValue().get(redisKeyPrefix + id);
         if (Objects.isNull(t)) {
             t = this.getById(id);

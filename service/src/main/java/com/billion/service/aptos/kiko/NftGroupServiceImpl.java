@@ -74,7 +74,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     }
 
     @Override
-    public NftGroup getCacheById(Context context, String redisKeyPrefix, Serializable id) {
+    public NftGroup cacheById(Context context, String redisKeyPrefix, Serializable id) {
         String key = RedisPathConstant.NFT + context.getChain() + "::id";
 
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
