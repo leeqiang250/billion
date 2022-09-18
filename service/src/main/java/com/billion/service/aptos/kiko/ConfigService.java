@@ -30,7 +30,7 @@ public class ConfigService {
         return Config.builder()
                 .currentContext(context)
                 .currentNode(aptosService.requestNodeCache())
-                .supportChain(Chain.getKV())
+                .supportChain(Chain.getKV1())
                 .supportLanguage(Language.getKV1())
                 .supportText(languageService.getAll(context))
                 .supportContract(contractService.getAll(context))

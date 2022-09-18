@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 /**
  * @author liqiang
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public interface ICacheService<T extends IModel> extends IService<T> {
 
     /**
@@ -44,6 +45,12 @@ public interface ICacheService<T extends IModel> extends IService<T> {
         return this.cacheMap(context).values();
     }
 
+    /**
+     * cacheMap
+     *
+     * @param context context
+     * @return Map
+     */
     default Map<Serializable, T> cacheMap(Context context) {
         String key = this.getClass().toString() + context.key() + "::id";
         Map map = this.getRedisTemplate().opsForHash().entries(key);

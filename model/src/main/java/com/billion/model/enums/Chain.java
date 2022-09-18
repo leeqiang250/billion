@@ -3,8 +3,8 @@ package com.billion.model.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -12,6 +12,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
+@SuppressWarnings({"rawtypes", "unchecked"})
 public enum Chain {
 
     /**
@@ -25,14 +26,18 @@ public enum Chain {
     final String desc;
 
     @Getter
-    static Map<String, Chain> KV;
+    static final Map<String, Chain> KV0 = new HashMap<>(values().length);
+
+    @Getter
+    static final Map KV1 = new HashMap<>(values().length);
 
     static {
-        KV = Stream.of(values()).collect(Collectors.toMap(e -> e.code, e -> e));
+        Stream.of(values()).forEach(e -> KV0.put(e.code, e));
+        Stream.of(values()).forEach(e -> KV1.put(e.code, e.desc));
     }
 
     public static Chain of(String code) {
-        return KV.getOrDefault(code, Chain.APTOS);
+        return KV0.getOrDefault(code, Chain.APTOS);
     }
 
     @Override
