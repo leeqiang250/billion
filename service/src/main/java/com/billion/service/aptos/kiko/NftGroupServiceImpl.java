@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.constant.RedisPathConstant;
@@ -30,7 +31,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     LanguageService languageService;
 
     @Override
-    public Map getAllById(Context context) {
+    public Map<Serializable, NftGroup> cacheMap(Context context) {
         String key = RedisPathConstant.NFT + "id::" + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -46,6 +47,8 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
+
+        log.warn("cacheMap:{}", key);
 
         return map;
     }
@@ -78,27 +81,31 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
             Boolean result = this.getRedisTemplate().hasKey(key);
-            if (Objects.nonNull(result) && result) {
-                value = this.getAllById(context).get(id);
+            if (Objects.nonNull(result) && !result) {
+                value = this.cacheMap(context).get(id);
             }
+        } else {
+            value = JSONObject.parseObject(JSONObject.toJSONString(value), NftGroup.class);
         }
 
         return (NftGroup) value;
     }
 
     @Override
-    public Object getByMetaBody(Context context, String meta, String body) {
+    public NftGroup getByMetaBody(Context context, String meta, String body) {
         String key = RedisPathConstant.NFT + "meta-body::" + context.getChain();
 
         Object value = this.getRedisTemplate().opsForHash().get(key, meta + "-" + body);
         if (Objects.isNull(value)) {
             Boolean result = this.getRedisTemplate().hasKey(key);
-            if (Objects.nonNull(result) && result) {
+            if (Objects.nonNull(result) && !result) {
                 value = this.getAllByMetaBody(context).get(meta + "-" + body);
             }
+        } else {
+            value = JSONObject.parseObject(JSONObject.toJSONString(value), NftGroup.class);
         }
 
-        return value;
+        return (NftGroup) value;
     }
 
     public void changeLanguage(Context context, List<NftGroup> list) {

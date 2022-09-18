@@ -51,7 +51,8 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
 
         Object value = this.getRedisTemplate().opsForHash().get(path, id);
         if (Objects.isNull(value)) {
-            if (!this.getRedisTemplate().hasKey(path)) {
+            Boolean result = this.getRedisTemplate().hasKey(path);
+            if (Objects.nonNull(result) || !result) {
                 value = this.cacheMap(context).get(id);
                 if (Objects.isNull(value)) {
                     value = DEFAULT_TEXT;

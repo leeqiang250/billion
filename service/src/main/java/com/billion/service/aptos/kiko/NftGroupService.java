@@ -9,15 +9,8 @@ import java.util.Map;
 /**
  * @author liqiang
  */
+@SuppressWarnings({"rawtypes"})
 public interface NftGroupService extends ICacheService<NftGroup> {
-
-    /**
-     * getAllById
-     *
-     * @param context context
-     * @return Map
-     */
-    Map getAllById(Context context);
 
     /**
      * getAllByMetaBody
@@ -33,8 +26,8 @@ public interface NftGroupService extends ICacheService<NftGroup> {
      * @param context context
      * @param meta    meta
      * @param body    body
-     * @return Object
+     * @return NftGroup
      */
-    Object getByMetaBody(Context context, String meta, String body);
+    NftGroup getByMetaBody(Context context, String meta, String body);
 
 }
