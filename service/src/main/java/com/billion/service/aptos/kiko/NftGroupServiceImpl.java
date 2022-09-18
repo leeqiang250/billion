@@ -3,7 +3,6 @@ package com.billion.service.aptos.kiko;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
-import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
@@ -32,7 +31,8 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public Map cacheMap(Context context) {
-        String key = RedisPathConstant.NFT + "id::" + context.getChain();
+        String key = this.cacheMapKey("ids::" + context.getChain());
+
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -55,7 +55,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public Map getAllByMetaBody(Context context) {
-        String key = RedisPathConstant.NFT + "meta-body::" + context.getChain();
+        String key = this.cacheMapKey("meta-body::" + context.getChain());
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -76,7 +76,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public NftGroup cacheById(Context context, Serializable id) {
-        String key = RedisPathConstant.NFT + "id::" + context.getChain();
+        String key = this.cacheByIdKey(context.getChain(), id);
 
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
@@ -93,13 +93,14 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public NftGroup getByMetaBody(Context context, String meta, String body) {
-        String key = RedisPathConstant.NFT + "meta-body::" + context.getChain();
+        String id = meta + "-" + body;
+        String key = this.cacheByIdKey(context.getChain(), id);
 
-        Object value = this.getRedisTemplate().opsForHash().get(key, meta + "-" + body);
+        Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
             Boolean result = this.getRedisTemplate().hasKey(key);
             if (Objects.nonNull(result) && !result) {
-                value = this.getAllByMetaBody(context).get(meta + "-" + body);
+                value = this.getAllByMetaBody(context).get(id);
             }
         } else {
             value = JSONObject.parseObject(JSONObject.toJSONString(value), NftGroup.class);

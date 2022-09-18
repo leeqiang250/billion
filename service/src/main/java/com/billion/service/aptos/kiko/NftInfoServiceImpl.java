@@ -3,7 +3,6 @@ package com.billion.service.aptos.kiko;
 import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftInfo;
-import com.billion.model.enums.CacheTsType;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @Override
     public NftInfo cacheById(Context context, Serializable id, Duration timeout) {
-        String key = this.cacheByIdKey(context, id);
+        String key = this.cacheByIdKey(context.getChain(), id);
 
         Object t = this.getRedisTemplate().opsForValue().get(key);
         if (Objects.isNull(t)) {

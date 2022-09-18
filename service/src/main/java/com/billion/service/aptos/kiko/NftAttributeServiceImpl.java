@@ -2,7 +2,6 @@ package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftAttributeMapper;
-import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftAttribute;
 import com.billion.model.enums.CacheTsType;
@@ -20,7 +19,7 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
 
     @Override
     public Collection getByGroupId(Context context, String groupId) {
-        String key = this.cacheByIdKey(context, groupId);
+        String key = this.cacheByIdKey(null, groupId);
 
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {

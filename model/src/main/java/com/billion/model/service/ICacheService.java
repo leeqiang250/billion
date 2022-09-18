@@ -36,12 +36,12 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      */
     Duration cacheSecond(CacheTsType cacheTsType);
 
-    default String cacheMapKey(Context context) {
-        return this.getEntityClass().toString() + context.key() + "::ids";
+    default String cacheMapKey(String groupBy) {
+        return this.getEntityClass().toString() + "::" + groupBy + "::ids";
     }
 
-    default String cacheByIdKey(Context context, Serializable id) {
-        return this.getEntityClass().toString() + context.key() + "::id::" + id.toString();
+    default String cacheByIdKey(String groupBy, Serializable id) {
+        return this.getEntityClass().toString() + "::" + groupBy + "::id::" + id.toString();
     }
 
     /**
@@ -63,7 +63,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return Map
      */
     default Map cacheMap(Context context) {
-        String key = this.cacheMapKey(context);
+        String key = this.cacheMapKey(null);
 
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -99,7 +99,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return T
      */
     default T cacheById(Context context, Serializable id, Duration timeout) {
-        String key = this.cacheByIdKey(context, id);
+        String key = this.cacheByIdKey(null, id);
 
         Object t = this.getRedisTemplate().opsForValue().get(key);
         if (Objects.isNull(t)) {

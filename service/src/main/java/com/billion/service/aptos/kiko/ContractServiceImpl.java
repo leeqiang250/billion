@@ -2,7 +2,6 @@ package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.ContractMapper;
-import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Contract;
 import com.billion.model.enums.CacheTsType;
@@ -10,7 +9,6 @@ import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +23,8 @@ public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Co
 
     @Override
     public Map cacheMap(Context context) {
-        String key = RedisPathConstant.CONTRACT + context.getChain();
+        String key = this.cacheMapKey(context.getChain());
+
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;

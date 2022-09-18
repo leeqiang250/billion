@@ -2,7 +2,6 @@ package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.LanguageMapper;
-import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
 import com.billion.model.enums.CacheTsType;
@@ -10,7 +9,6 @@ import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,7 +24,8 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
 
     @Override
     public Map cacheMap(Context context) {
-        String key = RedisPathConstant.LANGUAGE + context.getLanguage();
+        String key = this.cacheMapKey(context.getLanguage());
+
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -46,11 +45,11 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
 
     @Override
     public String getByKey(Context context, String id) {
-        String path = RedisPathConstant.LANGUAGE + context.getLanguage();
+        String key = this.cacheByIdKey(context.getLanguage(), id);
 
-        Object value = this.getRedisTemplate().opsForHash().get(path, id);
+        Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
-            Boolean result = this.getRedisTemplate().hasKey(path);
+            Boolean result = this.getRedisTemplate().hasKey(key);
             if (Objects.nonNull(result) || !result) {
                 value = this.cacheMap(context).get(id);
                 if (Objects.isNull(value)) {
