@@ -9,7 +9,6 @@ import java.io.Serializable;
 /**
  * @author liqiang
  */
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +28,11 @@ public class Context implements Serializable {
 
     public String getLanguage() {
         return Language.of(this.language).getCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Context[chain:" + this.getChain() + ", language:" + this.getLanguage() + "]";
     }
 
 }

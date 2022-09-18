@@ -29,13 +29,13 @@ public class ConfigController implements IController<IModel> {
 
     @Override
     public Response cacheGetMap(Context context) {
-        log.info("[request context] context:[{}]", context.toString());
+        log.info("[request context] {}", context.toString());
         return Response.success(configService.get(context));
     }
 
     @Override
     public Response cacheGetList(Context context) {
-        log.info("[request context] context:[{}]", context.toString());
+        log.info("[request context] {}", context.toString());
         return Response.success(configService.get(context));
     }
 

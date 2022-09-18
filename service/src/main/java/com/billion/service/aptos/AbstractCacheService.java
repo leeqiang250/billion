@@ -35,14 +35,14 @@ public abstract class AbstractCacheService<M extends BaseMapper<T>, T extends IM
     @Override
     public String cacheMapKey(String groupBy) {
         String key = ICacheService.super.cacheMapKey(groupBy);
-        log.info("this.cacheMapKey class:[{}] redis key:[{}]", this.getClass().getSimpleName(), key);
+        log.info("redis key:[{}] class:[{}]", key, this.getClass().getSimpleName());
         return key;
     }
 
     @Override
     public String cacheByIdKey(String groupBy, Serializable id) {
         String key = ICacheService.super.cacheByIdKey(groupBy, id);
-        log.info("this.cacheByIdKey class:[{}] redis key:[{}]", this.getClass().getSimpleName(), key);
+        log.info("redis key:[{}] class:[{}]", key, this.getClass().getSimpleName());
         return key;
     }
 
