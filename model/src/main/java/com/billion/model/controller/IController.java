@@ -47,7 +47,7 @@ public interface IController<T extends IModel> {
      * @param context context
      * @return Response
      */
-    @RequestMapping({SLASH, MAP})
+    @RequestMapping({EMPTY, SLASH, MAP})
     default Response cacheGetMap(@RequestHeader Context context) {
         return Objects.isNull(this.service())
                 ? Response.INVALID

@@ -47,4 +47,6 @@ public class Response<T> implements Serializable {
 
     public final static Response INVALID = Response.failure(-2, "invalid");
 
+    public final static Response FORBID = Response.failure(-3, "forbid");
+
 }

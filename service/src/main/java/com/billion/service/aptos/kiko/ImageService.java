@@ -5,6 +5,7 @@ import com.billion.model.entity.Image;
 import com.billion.service.aptos.ContextService;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
 import static com.billion.model.constant.RequestPath.SLASH;
 import static com.billion.model.constant.v1.RequestPathImageV1.IMAGE;
 
@@ -24,7 +25,7 @@ public interface ImageService extends ICacheService<Image> {
     default Image add(String uri, String desc) {
         Image image = Image.builder()
                 .uri(uri)
-                .proxy(SLASH)
+                .proxy(EMPTY)
                 .desc(desc)
                 .build();
         this.save(image);

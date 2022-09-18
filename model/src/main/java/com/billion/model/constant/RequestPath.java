@@ -7,6 +7,8 @@ public interface RequestPath {
 
     String DEFAULT_TEXT = "***";
 
+    String EMPTY = "";
+
     String SLASH = "/";
 
     String LIST = "/list";
