@@ -14,11 +14,11 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("template")
+@SuppressWarnings({"rawtypes"})
 public class TemplateController implements IController<Language> {
 
     @Resource
     LanguageService languageService;
-
 
     @Override
     public ICacheService<Language> service() {

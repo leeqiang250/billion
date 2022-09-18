@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import java.util.stream.Collectors;
-
 import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
@@ -22,6 +20,7 @@ import static com.billion.model.constant.RequestPathConstant.*;
  */
 @RestController
 @RequestMapping(V1_NFT_GROUP)
+@SuppressWarnings({"rawtypes"})
 public class NftGroupController implements IController<NftGroup> {
 
     @Resource
@@ -33,13 +32,15 @@ public class NftGroupController implements IController<NftGroup> {
     }
 
     @Override
-    public Response get(Context context) {
-        return Response.success(this.nftGroupService.getAllById(context).values().stream().collect(Collectors.toList()));
+    public Response cacheGet(Context context) {
+        return null;
+        //return Response.success(this.nftGroupService.getAllById(context).values().stream().collect(Collectors.toList()));
     }
 
     @RequestMapping("/{meta}/{body}")
-    public Response get(@RequestHeader Context context, @PathVariable String meta, @PathVariable String body) {
-        return Response.success(this.nftGroupService.getByMetaBody(context, meta, body));
+    public Response cacheGetById(@RequestHeader Context context, @PathVariable String meta, @PathVariable String body) {
+        //return Response.success(this.nftGroupService.getByMetaBody(context, meta, body));
+        return null;
     }
 
 }

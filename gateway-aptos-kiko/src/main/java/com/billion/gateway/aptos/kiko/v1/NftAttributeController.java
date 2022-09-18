@@ -19,6 +19,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_NFT_ATTRIBUTE;
  */
 @RestController
 @RequestMapping(V1_NFT_ATTRIBUTE)
+@SuppressWarnings({"rawtypes"})
 public class NftAttributeController implements IController<NftAttribute> {
 
     @Resource
@@ -30,12 +31,12 @@ public class NftAttributeController implements IController<NftAttribute> {
     }
 
     @Override
-    public Response get(Context context) {
+    public Response cacheGet(Context context) {
         return Response.failure();
     }
 
     @Override
-    public Response get(Context context, Serializable id) {
+    public Response cacheGetById(Context context, Serializable id) {
         return Response.success(this.nftAttributeService.getByGroupId(context, id.toString()));
     }
 

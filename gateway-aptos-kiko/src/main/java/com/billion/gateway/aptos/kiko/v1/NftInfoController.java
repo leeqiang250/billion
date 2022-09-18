@@ -20,6 +20,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_NFT_INFO;
  */
 @RestController
 @RequestMapping(V1_NFT_INFO)
+@SuppressWarnings({"rawtypes"})
 public class NftInfoController implements IController<NftInfo> {
 
     @Resource
@@ -31,14 +32,13 @@ public class NftInfoController implements IController<NftInfo> {
     }
 
     @Override
-    public Response get(Context context) {
-        return Response.failure();
+    public Response cacheGet(Context context) {
+        return null;
     }
 
     @Override
-    public Response get(Context context, Serializable id) {
+    public Response cacheGetById(Context context, Serializable id) {
         return null;
-        //return Response.success(this.nftInfoService.getCacheById(null, thi));
     }
 
 }

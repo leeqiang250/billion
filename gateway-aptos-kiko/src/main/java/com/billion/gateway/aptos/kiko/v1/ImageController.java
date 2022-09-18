@@ -24,6 +24,7 @@ import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
  */
 @RestController
 @RequestMapping({V1_IMAGE})
+@SuppressWarnings({"rawtypes"})
 public class ImageController {
 
     @Resource

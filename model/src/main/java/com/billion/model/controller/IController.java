@@ -1,6 +1,7 @@
 package com.billion.model.controller;
 
 import com.billion.model.dto.Context;
+import com.billion.model.model.IModel;
 import com.billion.model.response.Response;
 import com.billion.model.service.ICacheService;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import static com.billion.model.constant.RequestPathConstant.EMPTY;
 import static com.billion.model.constant.RequestPathConstant.SLASH;
@@ -15,34 +17,47 @@ import static com.billion.model.constant.RequestPathConstant.SLASH;
 /**
  * @author liqiang
  */
-public interface IController<T> {
+@SuppressWarnings({"rawtypes"})
+public interface IController<T extends IModel> {
 
     /**
      * service
      *
-     * @return
+     * @return ICacheService
      */
-    ICacheService<T> service();
-
-    /**
-     * get
-     *
-     * @return Response
-     */
-    @RequestMapping({EMPTY, SLASH})
-    default Response get(@RequestHeader Context context) {
-        return Response.success(this.service().list(context));
+    default ICacheService<T> service() {
+        return null;
     }
 
     /**
-     * get
+     * cacheGet
      *
-     * @param id id
+     * @param context context
+     * @return Response
+     */
+    @RequestMapping({EMPTY, SLASH})
+    default Response cacheGet(@RequestHeader Context context) {
+        if (Objects.isNull(this.service())) {
+            return Response.failure();
+        } else {
+            return Response.success(this.service().cacheList(context));
+        }
+    }
+
+    /**
+     * cacheGetById
+     *
+     * @param context context
+     * @param id      id
      * @return Response
      */
     @RequestMapping("/{id}")
-    default Response get(@RequestHeader Context context, @PathVariable Serializable id) {
-        return Response.success(this.service().cacheById(context, this.getClass().toString(), id));
+    default Response cacheGetById(@RequestHeader Context context, @PathVariable Serializable id) {
+        if (Objects.isNull(this.service())) {
+            return Response.failure();
+        } else {
+            return Response.success(this.service().cacheById(context, this.getClass().toString(), id));
+        }
     }
 
 }

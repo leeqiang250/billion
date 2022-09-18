@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import java.io.Serializable;
-
 import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
@@ -19,6 +17,7 @@ import static com.billion.model.constant.RequestPathConstant.*;
  */
 @RestController
 @RequestMapping(V1_CONTRACT)
+@SuppressWarnings({"rawtypes"})
 public class ContractController implements IController<Contract> {
 
     @Resource
@@ -30,13 +29,8 @@ public class ContractController implements IController<Contract> {
     }
 
     @Override
-    public Response get(Context context) {
+    public Response cacheGet(Context context) {
         return Response.success(this.contractService.getAll(context));
-    }
-
-    @Override
-    public Response get(Context context, Serializable id) {
-        return Response.failure();
     }
 
 }

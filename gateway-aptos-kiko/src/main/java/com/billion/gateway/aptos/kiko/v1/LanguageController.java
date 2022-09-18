@@ -19,6 +19,7 @@ import static com.billion.model.constant.RequestPathConstant.*;
  */
 @RestController
 @RequestMapping(V1_LANGUAGE)
+@SuppressWarnings({"rawtypes"})
 public class LanguageController implements IController<Language> {
 
     @Resource
@@ -30,12 +31,12 @@ public class LanguageController implements IController<Language> {
     }
 
     @Override
-    public Response get(Context context) {
+    public Response cacheGet(Context context) {
         return Response.success(this.languageService.getAll(context));
     }
 
     @Override
-    public Response get(Context context, Serializable id) {
+    public Response cacheGetById(Context context, Serializable id) {
         return Response.success(this.languageService.getByKey(context, id.toString()));
     }
 

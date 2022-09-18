@@ -19,17 +19,18 @@ import static com.billion.model.constant.RequestPathConstant.STC_IMAGE;
 @Slf4j
 @RestController
 @RequestMapping({STC_IMAGE})
+@SuppressWarnings({"rawtypes"})
 public class ImageStcController {
 
     @RequestMapping("/group/{id}")
-    public Response getGroupImage(HttpServletResponse response, @PathVariable Long id) throws IOException {
+    public Response getGroupImage(@PathVariable String id, HttpServletResponse response) throws IOException {
         response.sendRedirect(ContextService.getKikoStcImageGroupApi() + id);
 
         return Response.failure();
     }
 
     @RequestMapping("/info/{id}")
-    public Response getInfoImage(HttpServletResponse response, @PathVariable Long id) throws IOException {
+    public Response getInfoImage(@PathVariable String id, HttpServletResponse response) throws IOException {
         response.sendRedirect(ContextService.getKikoStcImageInfoApi() + id);
 
         return Response.failure();
