@@ -10,6 +10,7 @@ import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,11 +21,11 @@ import static com.billion.model.constant.RequestPathConstant.DEFAULT_TEXT;
  */
 @Slf4j
 @Service
+@SuppressWarnings({"rawtypes"})
 public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, Language> implements LanguageService {
 
     @Override
-    @SuppressWarnings({"rawtypes"})
-    public Map getAll(Context context) {
+    public Map<Serializable, Language> cacheMap(Context context) {
         String key = RedisPathConstant.LANGUAGE + context.getLanguage();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -34,7 +35,9 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
         QueryWrapper<Language> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Language::getLanguage, context.getLanguage());
         List<Language> list = this.getBaseMapper().selectList(wrapper);
+
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
+
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
@@ -42,27 +45,27 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
     }
 
     @Override
-    public Object getByKey(Context context, String key) {
+    public Language cacheById(Context context, String redisKeyPrefix, Serializable id) {
         String path = RedisPathConstant.LANGUAGE + context.getLanguage();
 
-        Object value = this.getRedisTemplate().opsForHash().get(path, key);
+        Object value = this.getRedisTemplate().opsForHash().get(path, id);
         if (Objects.isNull(value)) {
             if (!this.getRedisTemplate().hasKey(path)) {
-                value = this.getAll(context).get(key);
+                value = this.cacheMap(context).get(id);
                 if (Objects.isNull(value)) {
                     value = DEFAULT_TEXT;
-                    log.info("missing language:[{}] key:[{}]", context.getLanguage(), key);
+                    log.info("missing language:[{}] key:[{}]", context.getLanguage(), id);
                 }
             }
         }
 
-        return value;
+        return (Language) value;
     }
 
     @Override
     public Map getByKeys(Context context, Set keys) {
         Map values = new HashMap(keys.size());
-        Map map = this.getAll(context);
+        Map map = this.cacheMap(context);
         keys.forEach(e -> {
             Object value = map.get(e);
             if (Objects.isNull(value)) {

@@ -18,7 +18,7 @@ public interface LanguageService extends ICacheService<Language> {
      * @param context context
      * @return Map
      */
-    Map getAll(Context context);
+//    Map getAll(Context context);
 
     /**
      * getLanguageByKey
@@ -27,7 +27,7 @@ public interface LanguageService extends ICacheService<Language> {
      * @param key     key
      * @return Object
      */
-    Object getByKey(Context context, String key);
+//    Object getByKey(Context context, String key);
 
     /**
      * getByKeys

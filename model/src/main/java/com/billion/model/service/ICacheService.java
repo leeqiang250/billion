@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * @author liqiang
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"all"})
 public interface ICacheService<T extends IModel> extends IService<T> {
 
     /**

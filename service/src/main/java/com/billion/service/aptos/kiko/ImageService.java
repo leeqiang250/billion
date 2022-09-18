@@ -1,7 +1,6 @@
 package com.billion.service.aptos.kiko;
 
 import com.billion.model.constant.RequestPathConstant;
-import com.billion.model.model.IModel;
 import com.billion.model.service.ICacheService;
 import com.billion.model.entity.Image;
 import com.billion.service.aptos.ContextService;

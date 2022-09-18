@@ -31,7 +31,9 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
         QueryWrapper<NftAttribute> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftAttribute::getGroupId, key);
         List<NftAttribute> list = this.getBaseMapper().selectList(wrapper);
+
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
+
         this.getRedisTemplate().opsForHash().putAll(path, map);
         this.getRedisTemplate().expire(path, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
