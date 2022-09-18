@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import java.io.Serializable;
-
 import static com.billion.model.constant.RequestPathConstant.V1_NFT_INFO;
 
 /**
@@ -31,14 +29,13 @@ public class NftInfoController implements IController<NftInfo> {
         return this.nftInfoService;
     }
 
-    @Override
-    public Response cacheGetList(Context context) {
-        return null;
-    }
-
-    @Override
-    public Response cacheGetById(Context context, Serializable id) {
-        return null;
-    }
+//    public Response cacheGetList(Context context) {
+//        return Response.INVALID;
+//    }
+//
+//    @Override
+//    public Response cacheGetMap(Context context) {
+//        return Response.INVALID;
+//    }
 
 }

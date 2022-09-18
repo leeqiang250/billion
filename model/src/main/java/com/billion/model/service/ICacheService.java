@@ -1,5 +1,6 @@
 package com.billion.model.service;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.enums.CacheTsType;
@@ -41,7 +42,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @param context context
      * @return List
      */
-    default Collection<T> cacheList(Context context) {
+    default Collection cacheList(Context context) {
         Map collection = this.cacheMap(context);
 
         return Objects.isNull(collection) ? null : collection.values();
@@ -53,8 +54,8 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @param context context
      * @return Map
      */
-    default Map<Serializable, T> cacheMap(Context context) {
-        String key = this.getClass().toString() + context.key() + "::id";
+    default Map cacheMap(Context context) {
+        String key = this.getEntityClass().toString() + context.key() + "::ids";
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -91,15 +92,20 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return T
      */
     default T cacheById(Context context, String redisKeyPrefix, Serializable id, Duration timeout) {
-        T t = this.getRedisTemplate().opsForValue().get(redisKeyPrefix + id);
+        String key = this.getEntityClass().toString() + context.key() + "::id::" + id.toString();
+
+        Object t = this.getRedisTemplate().opsForValue().get(key);
         if (Objects.isNull(t)) {
-            t = this.getById(id);
-        }
-        if (Objects.nonNull(t)) {
-            this.getRedisTemplate().opsForValue().set(redisKeyPrefix + id, t, timeout);
+            T e = this.getById(id);
+            if (Objects.nonNull(e)) {
+                this.getRedisTemplate().opsForValue().set(key, e, timeout);
+                t = e;
+            }
+        } else {
+            t = JSONObject.parseObject(JSONObject.toJSONString(t), this.getEntityClass());
         }
 
-        return t;
+        return (T) t;
     }
 
 }

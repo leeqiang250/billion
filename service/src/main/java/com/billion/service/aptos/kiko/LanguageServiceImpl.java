@@ -25,7 +25,7 @@ import static com.billion.model.constant.RequestPathConstant.DEFAULT_TEXT;
 public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, Language> implements LanguageService {
 
     @Override
-    public Map<Serializable, Language> cacheMap(Context context) {
+    public Map cacheMap(Context context) {
         String key = RedisPathConstant.LANGUAGE + context.getLanguage();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {

@@ -31,7 +31,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     LanguageService languageService;
 
     @Override
-    public Map<Serializable, NftGroup> cacheMap(Context context) {
+    public Map cacheMap(Context context) {
         String key = RedisPathConstant.NFT + "id::" + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {

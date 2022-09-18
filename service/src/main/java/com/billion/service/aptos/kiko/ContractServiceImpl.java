@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Contract> implements ContractService {
 
     @Override
-    public Map<Serializable, Contract> cacheMap(Context context) {
+    public Map cacheMap(Context context) {
         String key = RedisPathConstant.CONTRACT + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
