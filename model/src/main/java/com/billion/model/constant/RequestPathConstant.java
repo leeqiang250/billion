@@ -13,6 +13,10 @@ public interface RequestPathConstant {
 
     String SLASH = "/";
 
+    String LIST = "/list";
+
+    String MAP = "/map";
+
     String PING = "/ping";
 
     String APTOS = "/aptos";

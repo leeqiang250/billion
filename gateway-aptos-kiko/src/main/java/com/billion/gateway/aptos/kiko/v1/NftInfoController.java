@@ -32,7 +32,7 @@ public class NftInfoController implements IController<NftInfo> {
     }
 
     @Override
-    public Response cacheGet(Context context) {
+    public Response cacheGetList(Context context) {
         return null;
     }
 

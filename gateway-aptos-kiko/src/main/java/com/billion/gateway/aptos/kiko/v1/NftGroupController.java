@@ -32,7 +32,7 @@ public class NftGroupController implements IController<NftGroup> {
     }
 
     @Override
-    public Response cacheGet(Context context) {
+    public Response cacheGetList(Context context) {
         return null;
         //return Response.success(this.nftGroupService.getAllById(context).values().stream().collect(Collectors.toList()));
     }

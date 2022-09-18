@@ -13,23 +13,6 @@ import java.util.Set;
 public interface LanguageService extends ICacheService<Language> {
 
     /**
-     * getLanguage
-     *
-     * @param context context
-     * @return Map
-     */
-//    Map getAll(Context context);
-
-    /**
-     * getLanguageByKey
-     *
-     * @param context context
-     * @param key     key
-     * @return Object
-     */
-//    Object getByKey(Context context, String key);
-
-    /**
      * getByKeys
      *
      * @param context context

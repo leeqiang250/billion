@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.Serializable;
 import java.util.Objects;
 
-import static com.billion.model.constant.RequestPathConstant.EMPTY;
-import static com.billion.model.constant.RequestPathConstant.SLASH;
+import static com.billion.model.constant.RequestPathConstant.*;
 
 /**
  * @author liqiang
@@ -35,11 +34,24 @@ public interface IController<T extends IModel> {
      * @param context context
      * @return Response
      */
-    @RequestMapping({EMPTY, SLASH})
-    default Response cacheGet(@RequestHeader Context context) {
+    @RequestMapping({LIST})
+    default Response cacheGetList(@RequestHeader Context context) {
         return Objects.isNull(this.service())
                 ? Response.failure()
                 : Response.success(this.service().cacheList(context));
+    }
+
+    /**
+     * cacheGetMap
+     *
+     * @param context context
+     * @return Response
+     */
+    @RequestMapping({EMPTY, SLASH, MAP})
+    default Response cacheGetMap(@RequestHeader Context context) {
+        return Objects.isNull(this.service())
+                ? Response.failure()
+                : Response.success(this.service().cacheMap(context));
     }
 
     /**

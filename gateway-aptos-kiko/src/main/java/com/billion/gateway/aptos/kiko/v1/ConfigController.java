@@ -26,7 +26,7 @@ public class ConfigController implements IController<IModel> {
     ConfigService configService;
 
     @Override
-    public Response cacheGet(Context context) {
+    public Response cacheGetList(Context context) {
         log.info("[request context] context:[{}]", context.toString());
         return Response.success(configService.get(context));
     }
