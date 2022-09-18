@@ -10,6 +10,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Authenticate {
 
-    AuthenticateType identify() default AuthenticateType.PROTECT;
+    AuthenticateType value() default AuthenticateType.PROTECT;
 
 }

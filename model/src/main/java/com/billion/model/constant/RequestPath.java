@@ -5,6 +5,8 @@ package com.billion.model.constant;
  */
 public interface RequestPath {
 
+    String HTTP_X_TOKEN = "X-Token";
+
     String DEFAULT_TEXT = "***";
 
     String EMPTY = "";

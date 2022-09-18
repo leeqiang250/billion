@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.billion.model.constant.RequestPath.HTTP_X_TOKEN;
 import static com.billion.model.constant.RequestPathError.FORBID;
+import static com.billion.model.constant.RequestPathError.INVALID_TOKEN;
 
 /**
  * @author liqiang
@@ -29,9 +31,17 @@ public class AuthenticateInterceptor implements HandlerInterceptor {
                 return true;
             }
 
-            switch (authenticate.identify()) {
+            switch (authenticate.value()) {
                 case PUBLIC: {
                     result = true;
+                    break;
+                }
+                case PROTECT: {
+                    String token = request.getHeader(HTTP_X_TOKEN);
+                    result = Objects.nonNull(token);
+                    if (!result) {
+                        response.sendRedirect(INVALID_TOKEN);
+                    }
                     break;
                 }
                 case PRIVATE: {

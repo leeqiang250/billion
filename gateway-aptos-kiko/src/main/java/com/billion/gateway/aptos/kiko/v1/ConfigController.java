@@ -1,6 +1,8 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.controller.IController;
+import com.billion.model.enums.Authenticate;
+import com.billion.model.enums.AuthenticateType;
 import com.billion.model.model.IModel;
 import com.billion.model.dto.Context;
 import com.billion.model.response.Response;

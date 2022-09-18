@@ -17,13 +17,18 @@ import static com.billion.model.constant.RequestPathError.*;
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
     @RequestMapping({EMPTY,SLASH, ERROR})
-    public Response error() {
+    public Response failure() {
         return Response.FAILURE;
     }
 
     @RequestMapping({INVALID})
     public Response invalid() {
         return Response.INVALID;
+    }
+
+    @RequestMapping({INVALID_TOKEN})
+    public Response INVALID_TOKEN() {
+        return Response.INVALID_TOKEN;
     }
 
     @RequestMapping({FORBID})

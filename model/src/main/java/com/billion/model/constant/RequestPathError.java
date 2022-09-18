@@ -9,6 +9,8 @@ public interface RequestPathError {
 
     String INVALID = "/invalid";
 
+    String INVALID_TOKEN = "/invalid-token";
+
     String FORBID = "/forbid";
 
 }
