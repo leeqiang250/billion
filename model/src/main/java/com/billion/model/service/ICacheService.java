@@ -42,7 +42,9 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return List
      */
     default Collection<T> cacheList(Context context) {
-        return this.cacheMap(context).values();
+        Map collection = this.cacheMap(context);
+
+        return Objects.isNull(collection) ? null : collection.values();
     }
 
     /**

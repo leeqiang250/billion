@@ -37,11 +37,9 @@ public interface IController<T extends IModel> {
      */
     @RequestMapping({EMPTY, SLASH})
     default Response cacheGet(@RequestHeader Context context) {
-        if (Objects.isNull(this.service())) {
-            return Response.failure();
-        } else {
-            return Response.success(this.service().cacheList(context));
-        }
+        return Objects.isNull(this.service())
+                ? Response.failure()
+                : Response.success(this.service().cacheList(context));
     }
 
     /**
@@ -53,11 +51,9 @@ public interface IController<T extends IModel> {
      */
     @RequestMapping("/{id}")
     default Response cacheGetById(@RequestHeader Context context, @PathVariable Serializable id) {
-        if (Objects.isNull(this.service())) {
-            return Response.failure();
-        } else {
-            return Response.success(this.service().cacheById(context, this.getClass().toString(), id));
-        }
+        return Objects.isNull(this.service())
+                ? Response.failure()
+                : Response.success(this.service().cacheById(context, this.getClass().toString(), id));
     }
 
 }

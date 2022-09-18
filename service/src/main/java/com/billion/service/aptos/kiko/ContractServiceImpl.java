@@ -10,6 +10,7 @@ import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,10 +20,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Contract> implements ContractService {
 
-    public Map getAll(Context context) {
+    @Override
+    public Map<Serializable, Contract> cacheMap(Context context) {
         String key = RedisPathConstant.CONTRACT + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {

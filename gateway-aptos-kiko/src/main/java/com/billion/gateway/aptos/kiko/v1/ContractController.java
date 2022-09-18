@@ -30,7 +30,7 @@ public class ContractController implements IController<Contract> {
 
     @Override
     public Response cacheGet(Context context) {
-        return Response.success(this.contractService.getAll(context));
+        return Response.success(this.contractService.cacheMap(context));
     }
 
 }

@@ -33,7 +33,7 @@ public class ConfigService {
                 .supportChain(Chain.getKV1())
                 .supportLanguage(Language.getKV1())
                 .supportText(languageService.getAll(context))
-                .supportContract(contractService.getAll(context))
+                .supportContract(contractService.cacheMap(context))
                 .build();
     }
 
