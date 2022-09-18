@@ -19,21 +19,22 @@ import java.util.stream.Collectors;
 public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMapper, NftAttribute> implements NftAttributeService {
 
     @Override
-    public Collection getByGroupId(Context context, String key) {
-        String path = RedisPathConstant.NFT + "attribute::" + key;
-        Map map = this.getRedisTemplate().opsForHash().entries(path);
+    public Collection getByGroupId(Context context, String groupId) {
+        String key = this.cacheByIdKey(context, groupId);
+
+        Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map.values();
         }
 
         QueryWrapper<NftAttribute> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftAttribute::getGroupId, key);
+        wrapper.lambda().eq(NftAttribute::getGroupId, groupId);
         List<NftAttribute> list = this.getBaseMapper().selectList(wrapper);
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
 
-        this.getRedisTemplate().opsForHash().putAll(path, map);
-        this.getRedisTemplate().expire(path, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
+        this.getRedisTemplate().opsForHash().putAll(key, map);
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
 
         return map.values();
     }

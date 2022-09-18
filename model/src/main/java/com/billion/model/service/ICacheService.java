@@ -36,6 +36,14 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      */
     Duration cacheSecond(CacheTsType cacheTsType);
 
+    default String cacheMapKey(Context context) {
+        return this.getEntityClass().toString() + context.key() + "::ids";
+    }
+
+    default String cacheByIdKey(Context context, Serializable id) {
+        return this.getEntityClass().toString() + context.key() + "::id::" + id.toString();
+    }
+
     /**
      * list
      *
@@ -55,7 +63,8 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return Map
      */
     default Map cacheMap(Context context) {
-        String key = this.getEntityClass().toString() + context.key() + "::ids";
+        String key = this.cacheMapKey(context);
+
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -73,26 +82,24 @@ public interface ICacheService<T extends IModel> extends IService<T> {
     /**
      * getCacheById
      *
-     * @param context        context
-     * @param redisKeyPrefix redisKeyPrefix
-     * @param id             id
+     * @param context context
+     * @param id      id
      * @return T
      */
-    default T cacheById(Context context, String redisKeyPrefix, Serializable id) {
-        return this.cacheById(context, redisKeyPrefix, id, this.cacheSecond(CacheTsType.CACHE_TS_SHORT));
+    default T cacheById(Context context, Serializable id) {
+        return this.cacheById(context, id, this.cacheSecond(CacheTsType.CACHE_TS_SHORT));
     }
 
     /**
      * getCacheById
      *
-     * @param context        context
-     * @param redisKeyPrefix redisKeyPrefix
-     * @param id             id
-     * @param timeout        timeout
+     * @param context context
+     * @param id      id
+     * @param timeout timeout
      * @return T
      */
-    default T cacheById(Context context, String redisKeyPrefix, Serializable id, Duration timeout) {
-        String key = this.getEntityClass().toString() + context.key() + "::id::" + id.toString();
+    default T cacheById(Context context, Serializable id, Duration timeout) {
+        String key = this.cacheByIdKey(context, id);
 
         Object t = this.getRedisTemplate().opsForValue().get(key);
         if (Objects.isNull(t)) {

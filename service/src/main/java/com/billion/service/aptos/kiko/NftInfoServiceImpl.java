@@ -1,7 +1,6 @@
 package com.billion.service.aptos.kiko;
 
 import com.billion.dao.aptos.kiko.NftInfoMapper;
-import com.billion.model.constant.RedisPathConstant;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.enums.CacheTsType;
@@ -20,24 +19,23 @@ import java.util.Objects;
 @Service
 public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftInfo> implements NftInfoService {
 
-//    @Override
-//    public NftInfo cacheById(Context context, String redisKeyPrefix, Serializable id, Duration timeout) {
-//        String key = RedisPathConstant.NFT + this.entityClass.toString() + "::" + context.getChain();
-//
-//        Object t = this.getRedisTemplate().opsForHash().get(key, id);
-//        if (Objects.isNull(t)) {
-//            NftInfo e = this.getById(id);
-//            if (Objects.nonNull(e)) {
-//                this.getRedisTemplate().opsForHash().put(key, e.getId(), e);
-//                this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
-//
-//                t = e;
-//            }
-//        } else {
-//            log.info(t.getClass().toString());
-//        }
-//
-//        return (NftInfo) t;
-//    }
+    @Override
+    public NftInfo cacheById(Context context, Serializable id, Duration timeout) {
+        String key = this.cacheByIdKey(context, id);
+
+        Object t = this.getRedisTemplate().opsForValue().get(key);
+        if (Objects.isNull(t)) {
+            NftInfo e = this.getById(id);
+            if (Objects.nonNull(e)) {
+                t = e;
+
+                this.getRedisTemplate().opsForValue().set(key, e, timeout);
+            }
+        } else {
+            log.info(t.getClass().toString());
+        }
+
+        return (NftInfo) t;
+    }
 
 }

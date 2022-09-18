@@ -44,7 +44,6 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
         return map;
     }
 
-
     @Override
     public String getByKey(Context context, String id) {
         String path = RedisPathConstant.LANGUAGE + context.getLanguage();

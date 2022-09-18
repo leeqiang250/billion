@@ -65,7 +65,7 @@ public interface IController<T extends IModel> {
     default Response cacheGetById(@RequestHeader Context context, @PathVariable Serializable id) {
         return Objects.isNull(this.service())
                 ? Response.INVALID
-                : Response.success(this.service().cacheById(context, this.getClass().toString(), id));
+                : Response.success(this.service().cacheById(context, id));
     }
 
 }
