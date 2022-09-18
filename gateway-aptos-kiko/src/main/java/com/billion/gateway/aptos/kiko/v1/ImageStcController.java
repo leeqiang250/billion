@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.billion.model.constant.RequestPathConstant.STC_IMAGE;
+import static com.billion.model.constant.v1.RequestPathImageV1.STC_IMAGE;
 
 /**
  * @author liqiang

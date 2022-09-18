@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.billion.model.constant.RequestPathConstant.*;
+import static com.billion.model.constant.RequestPath.SLASH;
 
 /**
  * @author liqiang
@@ -14,10 +14,10 @@ import static com.billion.model.constant.RequestPathConstant.*;
 @Slf4j
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping({SLASH, PING})
+@RequestMapping({SLASH})
 public class PingController {
 
-    @RequestMapping({EMPTY, SLASH})
+    @RequestMapping({SLASH})
     public Response ping() {
         return Response.success(ContextService.getApplicationName() + ":" + ContextService.getEnv());
     }

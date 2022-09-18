@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.V1_NFT_INFO;
+import static com.billion.model.constant.v1.RequestPathNftV1.NFT_INFO;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(V1_NFT_INFO)
+@RequestMapping(NFT_INFO)
 public class NftInfoController implements IController<NftInfo> {
 
     @Resource
@@ -28,14 +28,5 @@ public class NftInfoController implements IController<NftInfo> {
     public ICacheService<NftInfo> service() {
         return this.nftInfoService;
     }
-
-//    public Response cacheGetList(Context context) {
-//        return Response.INVALID;
-//    }
-//
-//    @Override
-//    public Response cacheGetMap(Context context) {
-//        return Response.INVALID;
-//    }
 
 }

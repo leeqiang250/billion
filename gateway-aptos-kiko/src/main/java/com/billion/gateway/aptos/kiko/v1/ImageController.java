@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
+import static com.billion.model.constant.v1.RequestPathImageV1.IMAGE;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping({V1_IMAGE})
+@RequestMapping({IMAGE})
 public class ImageController {
 
     @Resource

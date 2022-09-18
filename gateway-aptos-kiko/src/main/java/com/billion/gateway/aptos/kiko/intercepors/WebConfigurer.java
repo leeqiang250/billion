@@ -13,11 +13,15 @@ import javax.annotation.Resource;
 public class WebConfigurer implements WebMvcConfigurer {
 
     @Resource
+    AuthenticateInterceptor authenticateInterceptor;
+
+    @Resource
     LogInterceptor logInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(logInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(authenticateInterceptor).addPathPatterns("/**");
     }
 
 }

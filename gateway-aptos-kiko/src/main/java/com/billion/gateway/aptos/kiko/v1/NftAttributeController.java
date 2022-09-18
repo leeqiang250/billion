@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.io.Serializable;
 
-import static com.billion.model.constant.RequestPathConstant.V1_NFT_ATTRIBUTE;
+import static com.billion.model.constant.v1.RequestPathNftV1.NFT_ATTRIBUTE;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(V1_NFT_ATTRIBUTE)
+@RequestMapping(NFT_ATTRIBUTE)
 public class NftAttributeController implements IController<NftAttribute> {
 
     @Resource

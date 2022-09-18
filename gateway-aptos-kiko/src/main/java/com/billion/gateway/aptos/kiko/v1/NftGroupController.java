@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.*;
+import static com.billion.model.constant.v1.RequestPathNftV1.NFT_GROUP;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(V1_NFT_GROUP)
+@RequestMapping(NFT_GROUP)
 public class NftGroupController implements IController<NftGroup> {
 
     @Resource

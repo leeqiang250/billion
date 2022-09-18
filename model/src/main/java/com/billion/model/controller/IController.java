@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.Serializable;
 import java.util.Objects;
 
-import static com.billion.model.constant.RequestPathConstant.*;
+import static com.billion.model.constant.RequestPath.*;
 
 /**
  * @author liqiang
@@ -47,7 +47,7 @@ public interface IController<T extends IModel> {
      * @param context context
      * @return Response
      */
-    @RequestMapping({EMPTY, SLASH, MAP})
+    @RequestMapping({SLASH, MAP})
     default Response cacheGetMap(@RequestHeader Context context) {
         return Objects.isNull(this.service())
                 ? Response.INVALID

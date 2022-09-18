@@ -12,14 +12,14 @@ import javax.annotation.Resource;
 
 import java.io.Serializable;
 
-import static com.billion.model.constant.RequestPathConstant.*;
+import static com.billion.model.constant.v1.RequestPathLanguageV1.LANGUAGE;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(V1_LANGUAGE)
+@RequestMapping(LANGUAGE)
 public class LanguageController implements IController<Language> {
 
     @Resource

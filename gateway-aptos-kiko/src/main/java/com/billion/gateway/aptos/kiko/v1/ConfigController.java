@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.V1_CONFIG;
+import static com.billion.model.constant.v1.RequestPathConfigV1.CONFIG;
 
 /**
  * @author liqiang
@@ -19,11 +19,17 @@ import static com.billion.model.constant.RequestPathConstant.V1_CONFIG;
 @Slf4j
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(V1_CONFIG)
+@RequestMapping(CONFIG)
 public class ConfigController implements IController<IModel> {
 
     @Resource
     ConfigService configService;
+
+    @Override
+    public Response cacheGetMap(Context context) {
+        log.info("[request context] context:[{}]", context.toString());
+        return Response.success(configService.get(context));
+    }
 
     @Override
     public Response cacheGetList(Context context) {

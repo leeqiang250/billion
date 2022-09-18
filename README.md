@@ -9,3 +9,17 @@
 4.数据库链类型存储：chain varchar(16)
 
 5.数据库多语言Key存储：language varchar(36)
+
+
+
+
+
+
+
+
+# TODO
+数据库
+
+nft_info
+
+box_group(盲盒公售)

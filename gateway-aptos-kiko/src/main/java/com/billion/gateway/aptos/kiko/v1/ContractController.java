@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import static com.billion.model.constant.RequestPathConstant.*;
+import static com.billion.model.constant.v1.RequestPathContractV1.CONTRACT;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(V1_CONTRACT)
+@RequestMapping(CONTRACT)
 public class ContractController implements IController<Contract> {
 
     @Resource
