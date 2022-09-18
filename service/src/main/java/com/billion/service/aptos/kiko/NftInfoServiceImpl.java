@@ -1,7 +1,9 @@
 package com.billion.service.aptos.kiko;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.entity.NftGroup;
 import com.billion.model.entity.NftInfo;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -19,22 +22,27 @@ import java.util.Objects;
 public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftInfo> implements NftInfoService {
 
     @Override
-    public NftInfo cacheById(Context context, Serializable id, Duration timeout) {
-        String key = this.cacheByIdKey(context.getChain(), id);
+    public Map cacheMap(Context context) {
+        return null;
+    }
 
-        Object t = this.getRedisTemplate().opsForValue().get(key);
-        if (Objects.isNull(t)) {
+    @Override
+    public NftInfo cacheById(Context context, Serializable id, Duration timeout) {
+        String key = this.cacheByIdKey(null, id);
+
+        Object value = this.getRedisTemplate().opsForValue().get(key);
+        if (Objects.isNull(value)) {
             NftInfo e = this.getById(id);
             if (Objects.nonNull(e)) {
-                t = e;
+                value = e;
 
                 this.getRedisTemplate().opsForValue().set(key, e, timeout);
             }
         } else {
-            log.info(t.getClass().toString());
+            value = this.fromObject(value);
         }
 
-        return (NftInfo) t;
+        return (NftInfo) value;
     }
 
 }

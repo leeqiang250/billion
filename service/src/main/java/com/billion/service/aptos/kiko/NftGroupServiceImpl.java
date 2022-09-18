@@ -85,7 +85,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 value = this.cacheMap(context).get(id);
             }
         } else {
-            value = JSONObject.parseObject(JSONObject.toJSONString(value), NftGroup.class);
+            value = this.fromObject(value);
         }
 
         return (NftGroup) value;
@@ -103,7 +103,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 value = this.getAllByMetaBody(context).get(id);
             }
         } else {
-            value = JSONObject.parseObject(JSONObject.toJSONString(value), NftGroup.class);
+            value = this.fromObject(value);
         }
 
         return (NftGroup) value;

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.model.IModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
@@ -37,11 +38,15 @@ public interface ICacheService<T extends IModel> extends IService<T> {
     Duration cacheSecond(CacheTsType cacheTsType);
 
     default String cacheMapKey(String groupBy) {
-        return this.getEntityClass().toString() + "::" + groupBy + "::ids";
+        return Objects.isNull(groupBy)
+                ? this.getEntityClass().toString() + "::ids"
+                : this.getEntityClass().toString() + "::" + groupBy + "::ids";
     }
 
     default String cacheByIdKey(String groupBy, Serializable id) {
-        return this.getEntityClass().toString() + "::" + groupBy + "::id::" + id.toString();
+        return Objects.isNull(groupBy)
+                ? this.getEntityClass().toString() + "::id::" + id.toString()
+                : this.getEntityClass().toString() + "::" + groupBy + "::id::" + id.toString();
     }
 
     /**
@@ -101,18 +106,30 @@ public interface ICacheService<T extends IModel> extends IService<T> {
     default T cacheById(Context context, Serializable id, Duration timeout) {
         String key = this.cacheByIdKey(null, id);
 
-        Object t = this.getRedisTemplate().opsForValue().get(key);
-        if (Objects.isNull(t)) {
-            T e = this.getById(id);
-            if (Objects.nonNull(e)) {
-                this.getRedisTemplate().opsForValue().set(key, e, timeout);
-                t = e;
+        Object value = this.getRedisTemplate().opsForValue().get(key);
+        if (Objects.isNull(value)) {
+            T t = this.getById(id);
+            if (Objects.nonNull(t)) {
+                value = t;
+
+                this.getRedisTemplate().opsForValue().set(key, t, timeout);
             }
         } else {
-            t = JSONObject.parseObject(JSONObject.toJSONString(t), this.getEntityClass());
+            this.fromObject(value);
         }
 
-        return (T) t;
+        return (T) value;
+    }
+
+    /**
+     * fromObject
+     *
+     * @param value value
+     * @return T
+     */
+    default T fromObject(Object value) {
+        //TODO 将来修复
+        return JSONObject.parseObject(JSONObject.toJSONString(value), this.getEntityClass());
     }
 
 }

@@ -31,8 +31,4 @@ public class Context implements Serializable {
         return Language.of(this.language).getCode();
     }
 
-    public String key() {
-        return "::" + this.getChain() + "-" + this.getLanguage();
-    }
-
 }
