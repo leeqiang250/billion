@@ -12,6 +12,7 @@ import java.util.stream.Stream;
  */
 
 @AllArgsConstructor
+@SuppressWarnings({"all"})
 public enum AuthenticateType {
 
     PUBLIC("PUBLIC", "公开的"),

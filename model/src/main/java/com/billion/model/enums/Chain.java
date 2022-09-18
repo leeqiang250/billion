@@ -12,12 +12,9 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"all"})
 public enum Chain {
 
-    /**
-     * APTOS
-     */
     APTOS("aptos", "Aptos(我是描述,不要把我当作Key)"),
     ;
 

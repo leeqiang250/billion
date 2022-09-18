@@ -8,6 +8,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public @interface Authenticate {
 
     AuthenticateType value() default AuthenticateType.PROTECT;

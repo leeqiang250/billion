@@ -12,17 +12,11 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"all"})
 public enum Language {
 
-    /**
-     * ZH_TC
-     */
     ZH_TC("zh-TC", "繁體中文(我是描述,不要把我当作Key)"),
 
-    /**
-     * EN
-     */
     EN("en", "English(我是描述,不要把我当作Key)"),
     ;
 

@@ -27,7 +27,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     }
 
     @RequestMapping({INVALID_TOKEN})
-    public Response INVALID_TOKEN() {
+    public Response invalidToken() {
         return Response.INVALID_TOKEN;
     }
 
