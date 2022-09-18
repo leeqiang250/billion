@@ -16,8 +16,8 @@ import static com.billion.model.constant.RequestPathConstant.*;
  * @author liqiang
  */
 @RestController
-@RequestMapping(V1_CONTRACT)
 @SuppressWarnings({"rawtypes"})
+@RequestMapping(V1_CONTRACT)
 public class ContractController implements IController<Contract> {
 
     @Resource

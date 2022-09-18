@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestControllerAdvice
+@SuppressWarnings({"rawtypes"})
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({MissingServletRequestParameterException.class, HttpMessageNotReadableException.class})

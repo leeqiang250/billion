@@ -23,8 +23,8 @@ import static com.billion.model.constant.RequestPathConstant.V1_IMAGE;
  * @author liqiang
  */
 @RestController
-@RequestMapping({V1_IMAGE})
 @SuppressWarnings({"rawtypes"})
+@RequestMapping({V1_IMAGE})
 public class ImageController {
 
     @Resource

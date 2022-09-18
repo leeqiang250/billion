@@ -18,8 +18,8 @@ import static com.billion.model.constant.RequestPathConstant.V1_NFT_ATTRIBUTE;
  * @author liqiang
  */
 @RestController
-@RequestMapping(V1_NFT_ATTRIBUTE)
 @SuppressWarnings({"rawtypes"})
+@RequestMapping(V1_NFT_ATTRIBUTE)
 public class NftAttributeController implements IController<NftAttribute> {
 
     @Resource

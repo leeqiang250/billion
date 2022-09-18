@@ -19,8 +19,8 @@ import static com.billion.model.constant.RequestPathConstant.V1_NFT_INFO;
  * @author liqiang
  */
 @RestController
-@RequestMapping(V1_NFT_INFO)
 @SuppressWarnings({"rawtypes"})
+@RequestMapping(V1_NFT_INFO)
 public class NftInfoController implements IController<NftInfo> {
 
     @Resource

@@ -18,8 +18,8 @@ import static com.billion.model.constant.RequestPathConstant.STC_IMAGE;
  */
 @Slf4j
 @RestController
-@RequestMapping({STC_IMAGE})
 @SuppressWarnings({"rawtypes"})
+@RequestMapping({STC_IMAGE})
 public class ImageStcController {
 
     @RequestMapping("/group/{id}")

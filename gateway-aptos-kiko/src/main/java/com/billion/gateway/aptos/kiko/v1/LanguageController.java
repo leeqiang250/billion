@@ -18,8 +18,8 @@ import static com.billion.model.constant.RequestPathConstant.*;
  * @author liqiang
  */
 @RestController
-@RequestMapping(V1_LANGUAGE)
 @SuppressWarnings({"rawtypes"})
+@RequestMapping(V1_LANGUAGE)
 public class LanguageController implements IController<Language> {
 
     @Resource

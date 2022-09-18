@@ -10,6 +10,7 @@ import static com.billion.model.constant.RequestPathConstant.*;
  * @author liqiang
  */
 @RestController
+@SuppressWarnings({"rawtypes"})
 @RequestMapping({EMPTY, SLASH, V1_ERROR})
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 

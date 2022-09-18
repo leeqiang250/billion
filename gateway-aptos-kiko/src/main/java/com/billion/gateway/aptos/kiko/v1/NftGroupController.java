@@ -19,8 +19,8 @@ import static com.billion.model.constant.RequestPathConstant.*;
  * @author liqiang
  */
 @RestController
-@RequestMapping(V1_NFT_GROUP)
 @SuppressWarnings({"rawtypes"})
+@RequestMapping(V1_NFT_GROUP)
 public class NftGroupController implements IController<NftGroup> {
 
     @Resource

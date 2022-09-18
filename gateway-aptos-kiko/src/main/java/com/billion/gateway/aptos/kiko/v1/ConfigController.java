@@ -18,8 +18,8 @@ import static com.billion.model.constant.RequestPathConstant.V1_CONFIG;
  */
 @Slf4j
 @RestController
-@RequestMapping(V1_CONFIG)
 @SuppressWarnings({"rawtypes"})
+@RequestMapping(V1_CONFIG)
 public class ConfigController implements IController<IModel> {
 
     @Resource
