@@ -32,7 +32,12 @@ public class NftAttributeController implements IController<NftAttribute> {
 
     @Override
     public Response cacheGetList(Context context) {
-        return Response.failure();
+        return Response.INVALID;
+    }
+
+    @Override
+    public Response cacheGetMap(Context context) {
+        return Response.INVALID;
     }
 
     @Override

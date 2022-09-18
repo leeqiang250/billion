@@ -37,7 +37,7 @@ public interface IController<T extends IModel> {
     @RequestMapping({LIST})
     default Response cacheGetList(@RequestHeader Context context) {
         return Objects.isNull(this.service())
-                ? Response.failure()
+                ? Response.INVALID
                 : Response.success(this.service().cacheList(context));
     }
 
@@ -50,7 +50,7 @@ public interface IController<T extends IModel> {
     @RequestMapping({EMPTY, SLASH, MAP})
     default Response cacheGetMap(@RequestHeader Context context) {
         return Objects.isNull(this.service())
-                ? Response.failure()
+                ? Response.INVALID
                 : Response.success(this.service().cacheMap(context));
     }
 
@@ -64,7 +64,7 @@ public interface IController<T extends IModel> {
     @RequestMapping("/{id}")
     default Response cacheGetById(@RequestHeader Context context, @PathVariable Serializable id) {
         return Objects.isNull(this.service())
-                ? Response.failure()
+                ? Response.INVALID
                 : Response.success(this.service().cacheById(context, this.getClass().toString(), id));
     }
 

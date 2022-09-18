@@ -31,7 +31,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public Map getAllById(Context context) {
-        String key = RedisPathConstant.NFT + context.getChain() + "::id";
+        String key = RedisPathConstant.NFT + "id::" + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -52,7 +52,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public Map getAllByMetaBody(Context context) {
-        String key = RedisPathConstant.NFT + context.getChain() + "::meta-body";
+        String key = RedisPathConstant.NFT + "meta-body::" + context.getChain();
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -73,7 +73,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public NftGroup cacheById(Context context, String redisKeyPrefix, Serializable id) {
-        String key = RedisPathConstant.NFT + context.getChain() + "::id";
+        String key = RedisPathConstant.NFT + "id::" + context.getChain();
 
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
@@ -88,7 +88,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public Object getByMetaBody(Context context, String meta, String body) {
-        String key = RedisPathConstant.NFT + context.getChain() + "::meta-body";
+        String key = RedisPathConstant.NFT + "meta-body::" + context.getChain();
 
         Object value = this.getRedisTemplate().opsForHash().get(key, meta + "-" + body);
         if (Objects.isNull(value)) {

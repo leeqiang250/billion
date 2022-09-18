@@ -32,7 +32,7 @@ public class Context implements Serializable {
     }
 
     public String key() {
-        return "::" + this.chain + "-" + this.language;
+        return "::" + this.getChain() + "-" + this.getLanguage();
     }
 
 }

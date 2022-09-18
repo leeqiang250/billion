@@ -37,7 +37,7 @@ public class ImageController {
             response.sendRedirect(image.getUri());
         }
 
-        return Response.failure();
+        return Response.FAILURE;
     }
 
 }

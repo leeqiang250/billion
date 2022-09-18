@@ -44,8 +44,9 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
         return map;
     }
 
+
     @Override
-    public Language cacheById(Context context, String redisKeyPrefix, Serializable id) {
+    public String getByKey(Context context, String id) {
         String path = RedisPathConstant.LANGUAGE + context.getLanguage();
 
         Object value = this.getRedisTemplate().opsForHash().get(path, id);
@@ -59,7 +60,7 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
             }
         }
 
-        return (Language) value;
+        return value.toString();
     }
 
     @Override

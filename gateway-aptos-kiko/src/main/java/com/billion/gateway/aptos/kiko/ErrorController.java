@@ -16,7 +16,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
     @RequestMapping({EMPTY, SLASH, "/error"})
     public Response error() {
-        return Response.failure();
+        return Response.FAILURE;
     }
 
 }

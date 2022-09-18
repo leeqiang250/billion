@@ -20,7 +20,7 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
 
     @Override
     public Collection getByGroupId(Context context, String key) {
-        String path = RedisPathConstant.NFT + key + "::attribute";
+        String path = RedisPathConstant.NFT + "attribute::" + key;
         Map map = this.getRedisTemplate().opsForHash().entries(path);
         if (!map.isEmpty()) {
             return map.values();

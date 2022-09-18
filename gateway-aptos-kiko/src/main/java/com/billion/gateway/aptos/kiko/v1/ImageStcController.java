@@ -26,14 +26,14 @@ public class ImageStcController {
     public Response getGroupImage(@PathVariable String id, HttpServletResponse response) throws IOException {
         response.sendRedirect(ContextService.getKikoStcImageGroupApi() + id);
 
-        return Response.failure();
+        return Response.FAILURE;
     }
 
     @RequestMapping("/info/{id}")
     public Response getInfoImage(@PathVariable String id, HttpServletResponse response) throws IOException {
         response.sendRedirect(ContextService.getKikoStcImageInfoApi() + id);
 
-        return Response.failure();
+        return Response.FAILURE;
     }
 
 }
