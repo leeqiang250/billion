@@ -31,7 +31,7 @@ public class LanguageController implements IController<Language> {
     }
 
     @Override
-    public Response cacheGetById(Context context, Serializable id) {
+    public Response cacheById(Context context, Serializable id) {
         return Response.success(this.languageService.getByKey(context, id.toString()));
     }
 

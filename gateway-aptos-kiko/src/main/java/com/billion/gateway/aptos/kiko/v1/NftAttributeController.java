@@ -3,6 +3,8 @@ package com.billion.gateway.aptos.kiko.v1;
 import com.billion.model.controller.IController;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftAttribute;
+import com.billion.model.enums.Authenticate;
+import com.billion.model.enums.AuthenticateType;
 import com.billion.model.response.Response;
 import com.billion.model.service.ICacheService;
 import com.billion.service.aptos.kiko.NftAttributeService;
@@ -31,7 +33,19 @@ public class NftAttributeController implements IController<NftAttribute> {
     }
 
     @Override
-    public Response cacheGetById(Context context, Serializable id) {
+    @Authenticate(AuthenticateType.FORBID)
+    public Response cacheList(Context context) {
+        return IController.super.cacheList(context);
+    }
+
+    @Override
+    @Authenticate(AuthenticateType.FORBID)
+    public Response cacheMap(Context context) {
+        return IController.super.cacheMap(context);
+    }
+
+    @Override
+    public Response cacheById(Context context, Serializable id) {
         return Response.success(this.nftAttributeService.getByGroupId(context, id.toString()));
     }
 
