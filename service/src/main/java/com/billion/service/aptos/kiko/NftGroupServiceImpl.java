@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@SuppressWarnings({"rawtypes"})
 public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, NftGroup> implements NftGroupService {
 
     @Resource
@@ -73,12 +74,13 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     }
 
     @Override
-    public NftGroup getById(Context context, Serializable id) {
+    public NftGroup getCacheById(Context context, String redisKeyPrefix, Serializable id) {
         String key = RedisPathConstant.NFT + context.getChain() + "::id";
 
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
-            if (!this.getRedisTemplate().hasKey(key)) {
+            Boolean result = this.getRedisTemplate().hasKey(key);
+            if (Objects.nonNull(result) && result) {
                 value = this.getAllById(context).get(id);
             }
         }
@@ -92,7 +94,8 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         Object value = this.getRedisTemplate().opsForHash().get(key, meta + "-" + body);
         if (Objects.isNull(value)) {
-            if (!this.getRedisTemplate().hasKey(key)) {
+            Boolean result = this.getRedisTemplate().hasKey(key);
+            if (Objects.nonNull(result) && result) {
                 value = this.getAllByMetaBody(context).get(meta + "-" + body);
             }
         }

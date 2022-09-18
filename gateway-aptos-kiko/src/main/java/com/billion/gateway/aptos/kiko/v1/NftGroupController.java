@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.controller.IController;
-import com.billion.model.service.IService;
+import com.billion.model.service.ICacheService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 import com.billion.model.response.Response;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import java.io.Serializable;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPathConstant.*;
@@ -29,18 +28,13 @@ public class NftGroupController implements IController<NftGroup> {
     NftGroupService nftGroupService;
 
     @Override
-    public IService<NftGroup> service() {
+    public ICacheService<NftGroup> service() {
         return this.nftGroupService;
     }
 
     @Override
     public Response get(Context context) {
         return Response.success(this.nftGroupService.getAllById(context).values().stream().collect(Collectors.toList()));
-    }
-
-    @Override
-    public Response get(Context context, Serializable id) {
-        return Response.success(this.nftGroupService.getById(context, id));
     }
 
     @RequestMapping("/{meta}/{body}")

@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.controller.IController;
-import com.billion.model.service.IService;
+import com.billion.model.service.ICacheService;
 import com.billion.model.dto.Context;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.ConfigService;
@@ -27,7 +27,7 @@ public class ConfigController implements IController<Object> {
     ConfigService configService;
 
     @Override
-    public IService<Object> service() {
+    public ICacheService<Object> service() {
         return null;
     }
 

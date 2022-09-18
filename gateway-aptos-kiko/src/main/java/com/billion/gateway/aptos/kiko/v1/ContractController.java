@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.controller.IController;
-import com.billion.model.service.IService;
+import com.billion.model.service.ICacheService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Contract;
 import com.billion.model.response.Response;
@@ -25,7 +25,7 @@ public class ContractController implements IController<Contract> {
     ContractService contractService;
 
     @Override
-    public IService<Contract> service() {
+    public ICacheService<Contract> service() {
         return this.contractService;
     }
 

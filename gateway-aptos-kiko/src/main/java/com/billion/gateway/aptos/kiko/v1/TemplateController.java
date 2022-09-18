@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.v1;
 
 import com.billion.model.controller.IController;
-import com.billion.model.service.IService;
+import com.billion.model.service.ICacheService;
 import com.billion.model.entity.Language;
 import com.billion.service.aptos.kiko.LanguageService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ public class TemplateController implements IController<Language> {
 
 
     @Override
-    public IService<Language> service() {
+    public ICacheService<Language> service() {
         return this.languageService;
     }
 

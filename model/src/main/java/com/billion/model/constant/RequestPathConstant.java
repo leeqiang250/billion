@@ -1,7 +1,5 @@
 package com.billion.model.constant;
 
-import java.util.List;
-
 /**
  * @author liqiang
  */
@@ -41,7 +39,12 @@ public interface RequestPathConstant {
     /**
      * common路径下无需鉴权
      */
-    String V1_ATTRIBUTE = V1_COMMON + "/nft/attributea";
+    String V1_NFT_ATTRIBUTE = V1_COMMON + "/nft/attribute";
+
+    /**
+     * common路径下无需鉴权
+     */
+    String V1_NFT_INFO = V1_COMMON + "/nft/info";
 
     /**
      * common路径下无需鉴权
