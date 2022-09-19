@@ -33,7 +33,7 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
 
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
         return map.values();
     }

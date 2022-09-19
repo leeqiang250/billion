@@ -1,6 +1,5 @@
 package com.billion.service.aptos;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billion.model.enums.CacheTsType;

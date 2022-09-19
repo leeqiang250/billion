@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.model.IModel;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
@@ -79,7 +78,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
         return map;
     }
@@ -92,7 +91,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return T
      */
     default T cacheById(Context context, Serializable id) {
-        return this.cacheById(context, id, this.cacheSecond(CacheTsType.CACHE_TS_SHORT));
+        return this.cacheById(context, id, this.cacheSecond(CacheTsType.SHORT));
     }
 
     /**

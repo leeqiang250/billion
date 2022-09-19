@@ -1,6 +1,5 @@
 package com.billion.service.aptos.kiko;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
@@ -46,7 +45,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
         log.warn("cacheMap:{}", key);
 
@@ -69,7 +68,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "-" + e.getBody(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.CACHE_TS_MIDDLE));
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
         return map;
     }

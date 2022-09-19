@@ -17,17 +17,17 @@ public enum CacheTsType {
     /**
      *
      */
-    CACHE_TS_SHORT("cache_ts_short", "短期缓存时间"),
+    SHORT("short", "短期缓存时间"),
 
     /**
      *
      */
-    CACHE_TS_MIDDLE("cache_ts_middle", "中期缓存时间"),
+    MIDDLE("middle", "中期缓存时间"),
 
     /**
      *
      */
-    CACHE_TS_LONG("cache_ts_long", "长期缓存时间");
+    LONG("long", "长期缓存时间");
 
     final String code;
 
@@ -41,7 +41,7 @@ public enum CacheTsType {
     }
 
     public static CacheTsType of(String code) {
-        return KV.getOrDefault(code, CACHE_TS_SHORT);
+        return KV.getOrDefault(code, SHORT);
     }
 
     @Override

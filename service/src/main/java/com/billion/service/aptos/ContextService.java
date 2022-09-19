@@ -73,9 +73,9 @@ public class ContextService {
     public void init() {
         ContextService.env = this.pEnv;
         ContextService.applicationName = this.pApplicationName;
-        ContextService.cacheTsTypeDurationMap.put(CacheTsType.CACHE_TS_SHORT, Duration.ofSeconds(pCacheShort));
-        ContextService.cacheTsTypeDurationMap.put(CacheTsType.CACHE_TS_MIDDLE, Duration.ofSeconds(pCacheMiddle));
-        ContextService.cacheTsTypeDurationMap.put(CacheTsType.CACHE_TS_LONG, Duration.ofSeconds(pCacheLong));
+        ContextService.cacheTsTypeDurationMap.put(CacheTsType.SHORT, Duration.ofSeconds(pCacheShort));
+        ContextService.cacheTsTypeDurationMap.put(CacheTsType.MIDDLE, Duration.ofSeconds(pCacheMiddle));
+        ContextService.cacheTsTypeDurationMap.put(CacheTsType.LONG, Duration.ofSeconds(pCacheLong));
         Stream.of(CacheTsType.values()).forEach(e -> Assert.notNull(ContextService.cacheTsTypeDurationMap.get(e), "missing cache ts type"));
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
