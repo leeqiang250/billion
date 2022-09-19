@@ -18,8 +18,11 @@
 
 
 # TODO
-数据库
-
 nft_info
 
-box_group(盲盒公售)
+box_group(盲盒按期公售)
+
+NFT记录(铸造，开盲盒，交易)
+用户记录(盲盒购买，NFT购买，NFT出售)
+
+NFT属性/属性值()
