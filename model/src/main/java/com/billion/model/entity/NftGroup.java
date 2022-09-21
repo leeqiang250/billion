@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class NftGroup implements IModel {
 
     /**
-     * 主键id
+     * ID
      */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
@@ -57,7 +57,13 @@ public class NftGroup implements IModel {
     String displayName;
 
     /**
-     * 总供应量
+     * 当前供应量
+     */
+    @TableField("current_supply")
+    String currentSupply;
+
+    /**
+     * 总计供应量
      */
     @TableField("total_supply")
     String totalSupply;
@@ -65,8 +71,8 @@ public class NftGroup implements IModel {
     /**
      * Logo
      */
-    @TableField("logo")
-    String logo;
+    @TableField("uri")
+    String uri;
 
     /**
      * 系列描述

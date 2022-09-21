@@ -67,7 +67,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return Map
      */
     default Map cacheMap(Context context) {
-        String key = this.cacheMapKey(null);
+        String key = this.cacheMapKey(context.key());
 
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
@@ -103,7 +103,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
      * @return T
      */
     default T cacheById(Context context, Serializable id, Duration timeout) {
-        String key = this.cacheByIdKey(null, id);
+        String key = this.cacheByIdKey(context.key(), id);
 
         Object value = this.getRedisTemplate().opsForValue().get(key);
         if (Objects.isNull(value)) {

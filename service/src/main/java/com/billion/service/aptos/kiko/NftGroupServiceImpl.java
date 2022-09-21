@@ -1,20 +1,20 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.response.ResponseCollectionData;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
+import com.billion.model.enums.Chain;
 import com.billion.service.aptos.AbstractCacheService;
+import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -54,7 +54,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public Map getAllByMetaBody(Context context) {
-        String key = this.cacheMapKey("meta-body::" + context.getChain());
+        String key = this.cacheMapKey("meta-body::" + context.key());
         Map map = this.getRedisTemplate().opsForHash().entries(key);
         if (!map.isEmpty()) {
             return map;
@@ -75,7 +75,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Override
     public NftGroup cacheById(Context context, Serializable id) {
-        String key = this.cacheByIdKey(context.getChain(), id);
+        String key = this.cacheByIdKey(context.key(), id);
 
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
@@ -93,7 +93,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     @Override
     public NftGroup getByMetaBody(Context context, String meta, String body) {
         String id = meta + "-" + body;
-        String key = this.cacheByIdKey(context.getChain(), id);
+        String key = this.cacheByIdKey(context.key(), id);
 
         Object value = this.getRedisTemplate().opsForHash().get(key, id);
         if (Objects.isNull(value)) {
@@ -119,6 +119,30 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
             e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
             e.setDescription(mapDescription.get(e.getDescription()).toString());
         });
+    }
+
+    public NftGroup ss(Context context, String id) {
+        NftGroup nftGroup = this.getById(id);
+        if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
+            ResponseCollectionData responseCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
+            nftGroup.setTotalSupply(responseCollectionData.getMaximum());
+            nftGroup.setCurrentSupply(responseCollectionData.getSupply());
+
+            this.deleteCache(context, id);
+        }
+
+        return nftGroup;
+    }
+
+    /**
+     * remove Cache
+     *
+     * @param context context
+     * @param id      id
+     */
+    void deleteCache(Context context, String id) {
+        log.info("{} {}", context.toString(), id);
+        //TODO
     }
 
 }
