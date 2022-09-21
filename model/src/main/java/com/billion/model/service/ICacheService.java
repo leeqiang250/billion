@@ -9,10 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -129,6 +126,36 @@ public interface ICacheService<T extends IModel> extends IService<T> {
     default T fromObject(Object value) {
         //TODO 将来修复
         return JSONObject.parseObject(JSONObject.toJSONString(value), this.getEntityClass());
+    }
+
+    /**
+     * deleteCache
+     *
+     * @param id id
+     * @return boolean
+     */
+    default boolean deleteCache(Serializable id) {
+        Set<Serializable> keys = this.cacheKeys(id);
+        return keys.size() == this.getRedisTemplate().delete(keys);
+    }
+
+    /**
+     * cacheKeys
+     *
+     * @param id id
+     * @return Set
+     */
+    default Set<Serializable> cacheKeys(Serializable id) {
+        Set<String> keys = Context.getKeys();
+        Set<Serializable> set = new HashSet<>(keys.size() * 2);
+        keys.forEach(e -> {
+            set.add(cacheMapKey(e));
+            if (Objects.nonNull(id)) {
+                set.add(cacheByIdKey(e, id));
+            }
+        });
+
+        return set;
     }
 
 }

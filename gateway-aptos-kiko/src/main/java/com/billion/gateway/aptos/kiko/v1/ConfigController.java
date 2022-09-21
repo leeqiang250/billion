@@ -7,6 +7,7 @@ import com.billion.model.model.IModel;
 import com.billion.model.dto.Context;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.ConfigService;
+import com.billion.service.aptos.kiko.NftGroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,13 @@ public class ConfigController implements IController<IModel> {
     @Resource
     ConfigService configService;
 
+    @Resource
+    NftGroupService nftGroupService;
+
     @Override
     public Response cacheMap(Context context) {
+        nftGroupService.updateSupply("1");
+
         log.info("[request context] {}", context.toString());
         return Response.success(configService.get(context));
     }

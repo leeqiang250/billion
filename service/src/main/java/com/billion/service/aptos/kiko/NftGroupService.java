@@ -30,4 +30,12 @@ public interface NftGroupService extends ICacheService<NftGroup> {
      */
     NftGroup getByMetaBody(Context context, String meta, String body);
 
+    /**
+     * updateSupply
+     *
+     * @param id id
+     * @return NftGroup
+     */
+    NftGroup updateSupply(String id);
+
 }

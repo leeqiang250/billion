@@ -47,8 +47,6 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
-        log.warn("cacheMap:{}", key);
-
         return map;
     }
 
@@ -121,28 +119,20 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         });
     }
 
-    public NftGroup ss(Context context, String id) {
+    @Override
+    public NftGroup updateSupply(String id) {
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
             ResponseCollectionData responseCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
             nftGroup.setTotalSupply(responseCollectionData.getMaximum());
             nftGroup.setCurrentSupply(responseCollectionData.getSupply());
 
-            this.deleteCache(context, id);
+            this.updateById(nftGroup);
+
+            this.deleteCache(id);
         }
 
         return nftGroup;
-    }
-
-    /**
-     * remove Cache
-     *
-     * @param context context
-     * @param id      id
-     */
-    void deleteCache(Context context, String id) {
-        log.info("{} {}", context.toString(), id);
-        //TODO
     }
 
 }

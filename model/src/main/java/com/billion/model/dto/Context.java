@@ -42,11 +42,12 @@ public class Context implements Serializable {
         return this.getChain() + "-:" + this.getLanguage();
     }
 
-    public static Set<String> set;
+    @Getter
+    static Set<String> keys;
 
     static {
-        set = new HashSet(Chain.values().length * Language.values().length);
-        Stream.of(Chain.values()).forEach(chain -> Stream.of(Language.values()).forEach(language -> set.add(chain.getCode() + "-:" + language.getCode())));
+        keys = new HashSet(Chain.values().length * Language.values().length);
+        Stream.of(Chain.values()).forEach(chain -> Stream.of(Language.values()).forEach(language -> keys.add(chain.getCode() + "-:" + language.getCode())));
     }
 
 }
