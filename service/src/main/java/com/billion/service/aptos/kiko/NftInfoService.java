@@ -13,4 +13,5 @@ import java.util.Map;
  */
 public interface NftInfoService extends ICacheService<NftInfo> {
 
+    NftInfo updateState(String id, Integer state);
 }

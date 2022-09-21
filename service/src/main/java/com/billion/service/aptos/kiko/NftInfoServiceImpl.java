@@ -45,4 +45,22 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return (NftInfo) value;
     }
 
+    /**
+     * updateState
+     * @param id
+     * @param state
+     * @return
+     */
+    @Override
+    public NftInfo updateState(String id, Integer state) {
+        NftInfo nftInfo = this.getById(id);
+        if (!Objects.isNull(nftInfo)) {
+            nftInfo.setState(state);
+
+            this.updateById(nftInfo);
+
+            this.deleteCache(this.cacheByIdKey(null, id));
+        }
+        return nftInfo;
+    }
 }

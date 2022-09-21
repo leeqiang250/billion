@@ -81,7 +81,7 @@ public class NftInfo implements IModel {
      * 状态(0:未铸造,1,铸造中,2:已铸造,3:铸造失败)
      */
     @TableField("state")
-    Boolean state;
+    Integer state;
 
     /**
      * 修改时间
