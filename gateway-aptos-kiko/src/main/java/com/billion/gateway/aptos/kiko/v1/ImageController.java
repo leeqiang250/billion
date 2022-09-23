@@ -1,10 +1,10 @@
 package com.billion.gateway.aptos.kiko.v1;
 
+import com.aptos.utils.StringUtils;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Image;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.ImageService;
-import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,7 +1,7 @@
 package com.billion.gateway.aptos.kiko.filter;
 
 import com.alibaba.fastjson2.JSONObject;
-import io.micrometer.core.instrument.util.StringUtils;
+import com.aptos.utils.StringUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.MethodParameter;

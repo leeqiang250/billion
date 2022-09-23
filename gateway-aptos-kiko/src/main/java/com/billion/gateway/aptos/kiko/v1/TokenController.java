@@ -29,12 +29,7 @@ public class TokenController implements IController<Token> {
     @RequestMapping({"/test"})
     public Response test(Context context) {
         var list = tokenService.list();
-        list.forEach(new Consumer<Token>() {
-            @Override
-            public void accept(Token token) {
-                tokenService.initialize();
-            }
-        });
+        list.forEach(token -> tokenService.initialize(token.getId()));
 
         //        {
 //            Transaction transaction = nftGroupService.transferApt(

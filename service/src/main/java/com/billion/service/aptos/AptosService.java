@@ -3,6 +3,7 @@ package com.billion.service.aptos;
 import com.aptos.AptosClient;
 import com.aptos.request.v1.model.Node;
 import com.aptos.request.v1.model.Transaction;
+import com.aptos.utils.StringUtils;
 import com.billion.framework.util.RetryingUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,10 @@ public class AptosService {
     }
 
     public static boolean checkTransaction(String hash) {
+        if (StringUtils.isEmpty(hash)) {
+            return false;
+        }
+
         return RetryingUtils.retry(
                 () -> {
                     Transaction transaction = null;
