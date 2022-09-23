@@ -1,21 +1,32 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.AccountCollectionData;
+import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.utils.Hex;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.entity.Collections;
 import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.Language;
+import com.billion.model.enums.Mint;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
+import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -27,6 +38,9 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Resource
     LanguageService languageService;
+
+    @Resource
+    CollectionsService collectionsService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -120,9 +134,10 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     }
 
     @Override
-    public NftGroup updateSupply(String id) {
+    public NftGroup updateSupply(Serializable id) {
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
+            //TODO
             var tableCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
             nftGroup.setTotalSupply(tableCollectionData.getMaximum());
             nftGroup.setCurrentSupply(tableCollectionData.getSupply());
@@ -133,6 +148,65 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         }
 
         return nftGroup;
+    }
+
+    public boolean mint(Serializable id) {
+        QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(NftGroup::getId, id);
+        wrapper.lambda().eq(NftGroup::getInitializeHash, EMPTY);
+        wrapper.lambda().eq(NftGroup::getEnabled, true);
+
+        var nftGroup = this.getBaseMapper().selectOne(wrapper);
+        if (Objects.isNull(nftGroup)
+                || Mint.MINT_NOT != nftGroup.getMint_()
+        ) {
+            return false;
+        }
+
+        var context = Context.builder()
+                .language(Language.EN.getCode())
+                .build();
+        var displayName = languageService.getByKey(context, nftGroup.getDisplayName());
+        var description = languageService.getByKey(context, nftGroup.getDescription());
+        var uri = nftGroup.getUri();
+
+        if (StringUtils.isEmpty(displayName)
+                || StringUtils.isEmpty(description)
+                || StringUtils.isEmpty(uri)
+                || StringUtils.isEmpty(nftGroup.getTotalSupply())
+                || DEFAULT_TEXT.equals(displayName)
+                || DEFAULT_TEXT.equals(description)
+                || DEFAULT_TEXT.equals(uri)
+        ) {
+            return false;
+        }
+
+        TransactionPayload transactionPayload = TransactionPayload.builder()
+                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                .function("0x3::token::create_collection_script")
+                .arguments(List.of(
+                        Hex.encode(displayName),
+                        Hex.encode(description),
+                        Hex.encode(uri),
+                        nftGroup.getTotalSupply(),//TODO
+                        List.of(true, true, true)//TODO
+                ))
+                .typeArguments(List.of())
+                .build();
+
+        var transaction = AptosService.getAptosClient().requestSubmitTransaction(
+                nftGroup.getOwner(),
+                transactionPayload);
+        if (AptosService.checkTransaction(transaction.getHash())) {
+            nftGroup.setInitializeHash(transaction.getHash());
+            nftGroup.setMint_(Mint.MINT_SUCCESS);
+
+            this.updateById(nftGroup);
+
+            this.collectionsService.update(nftGroup.getOwner());
+        }
+
+        return false;
     }
 
 }

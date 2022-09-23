@@ -11,38 +11,39 @@ import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @author liqiang
  */
 @Slf4j
 @Service
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"all"})
 public class CollectionsServiceImpl extends AbstractCacheService<CollectionsMapper, Collections> implements CollectionsService {
 
     @Override
     public void update(String account) {
         QueryWrapper<Collections> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Collections::getOwner, account);
-        var list = this.getBaseMapper().selectList(wrapper);
-        list.forEach(collections -> {
-            if (StringUtils.isEmpty(collections.getCollectionDataHandle())
-                    || StringUtils.isEmpty(collections.getTokenDataHandle())) {
-                var accountCollectionData = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
-                collections.setCollectionDataHandle(accountCollectionData.getData().getCollectionData().getHandle());
-                collections.setTokenDataHandle(accountCollectionData.getData().getTokenData().getHandle());
+        var collections = this.getBaseMapper().selectOne(wrapper);
+        if (Objects.isNull(collections)
+                || StringUtils.isEmpty(collections.getCollectionDataHandle())
+                || StringUtils.isEmpty(collections.getTokenDataHandle())) {
 
-                getBaseMapper().updateById(collections);
-            }
-        });
-        if (list.isEmpty()) {
             var accountCollectionData = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
 
-            var collections = Collections.builder()
+            collections = Collections.builder()
                     .owner(account)
                     .collectionDataHandle(accountCollectionData.getData().getCollectionData().getHandle())
                     .tokenDataHandle(accountCollectionData.getData().getTokenData().getHandle())
                     .build();
             this.getBaseMapper().insert(collections);
+        } else {
+            var accountCollectionData = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
+            collections.setCollectionDataHandle(accountCollectionData.getData().getCollectionData().getHandle());
+            collections.setTokenDataHandle(accountCollectionData.getData().getTokenData().getHandle());
+
+            this.getBaseMapper().updateById(collections);
         }
     }
 

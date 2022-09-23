@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billion.model.model.IModel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author liqiang
@@ -18,10 +18,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("nft_group")
-public class NftGroup implements IModel {
+public class NftGroup extends Mint implements IModel {
 
     /**
-     * ID
+     * id
      */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
@@ -39,13 +39,19 @@ public class NftGroup implements IModel {
     Boolean split;
 
     /**
-     * Meta
+     * 所有者
+     */
+    @TableField("owner")
+    String owner;
+
+    /**
+     * meta
      */
     @TableField("meta")
     String meta;
 
     /**
-     * Body
+     * body
      */
     @TableField("body")
     String body;
@@ -69,7 +75,7 @@ public class NftGroup implements IModel {
     String totalSupply;
 
     /**
-     * Logo
+     * 图片
      */
     @TableField("uri")
     String uri;
@@ -87,21 +93,21 @@ public class NftGroup implements IModel {
     Long creatorId;
 
     /**
-     * 创作者地址
+     * 排序
      */
-    @TableField("creator_address")
-    String creatorAddress;
+    @TableField("sort")
+    Integer sort;
+
+    /**
+     * 铸造哈希
+     */
+    @TableField("initialize_hash")
+    String initializeHash;
 
     /**
      * 是否激活(0:不可用,1:可用)
      */
     @TableField("enabled")
     Boolean enabled;
-
-    /**
-     * 排序
-     */
-    @TableField("sort")
-    Long sort;
 
 }

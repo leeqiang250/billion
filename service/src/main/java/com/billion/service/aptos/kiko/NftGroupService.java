@@ -4,6 +4,7 @@ import com.billion.model.service.ICacheService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -36,6 +37,13 @@ public interface NftGroupService extends ICacheService<NftGroup> {
      * @param id id
      * @return NftGroup
      */
-    NftGroup updateSupply(String id);
+    NftGroup updateSupply(Serializable id);
+
+    /**
+     * 铸造系列
+     * @param id id
+     * @return boolean
+     */
+    boolean mint(Serializable id);
 
 }

@@ -8,6 +8,7 @@
         as id
         ,chain as chain
         ,split as split
+        ,owner as owner
         ,meta as meta
         ,body as body
         ,display_name as display_name
@@ -16,9 +17,10 @@
         ,uri as uri
         ,description as description
         ,creator_id as creator_id
-        ,creator_address as creator_address
-        ,enabled as enabled
         ,sort as sort
+        ,initialize_hash as initialize_hash
+        ,mint as mint
+        ,enabled as enabled
     </sql>
 
 </mapper>
