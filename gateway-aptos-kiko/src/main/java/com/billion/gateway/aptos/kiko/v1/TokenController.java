@@ -17,7 +17,7 @@ import static com.billion.model.constant.v1.RequestPathTokenV1.TOKEN;
 @RequestMapping(TOKEN)
 public class TokenController implements IController<Token> {
 
-    @RequestMapping({"test"})
+    @RequestMapping({"/test"})
     public Response test(Context context) {
 
 
