@@ -1,8 +1,8 @@
 package com.billion.service.aptos;
 
-import com.aptos.request.v1.response.ResponseNode;
-import com.aptos.request.v1.response.ResponseTransaction;
-import com.aptos.utils.AptosClient;
+import com.aptos.AptosClient;
+import com.aptos.request.v1.model.Node;
+import com.aptos.request.v1.model.Transaction;
 import com.billion.framework.util.RetryingUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class AptosService {
     public boolean checkTransaction(String hash) {
         return RetryingUtils.retry(
                 () -> {
-                    ResponseTransaction responseTransaction = null;
+                    Transaction responseTransaction = null;
                     try {
                         responseTransaction = AptosService.aptosClient.requestTransactionByHash(hash);
                     } catch (Exception exception) {
@@ -54,13 +54,13 @@ public class AptosService {
         );
     }
 
-    ResponseNode responseNode;
+    Node responseNode;
 
     long responseNodeTs;
 
-    public ResponseNode requestNodeCache() {
+    public Node requestNodeCache() {
         if (Objects.isNull(this.responseNode) || System.currentTimeMillis() > (this.responseNodeTs + this.cacheTs)) {
-            ResponseNode responseNode = AptosService.getAptosClient().requestNode();
+            Node responseNode = AptosService.getAptosClient().requestNode();
             if (Objects.nonNull(responseNode)) {
                 this.responseNodeTs = System.currentTimeMillis();
                 this.responseNode = responseNode;

@@ -1,6 +1,6 @@
 package com.billion.model.dto;
 
-import com.aptos.request.v1.response.ResponseNode;
+import com.aptos.request.v1.model.Node;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class Config implements Serializable {
 
     Context currentContext;
 
-    ResponseNode currentNode;
+    Node currentNode;
 
     Map supportChain;
 

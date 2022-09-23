@@ -1,6 +1,6 @@
 package com.billion.service.aptos.kiko;
 
-import com.aptos.request.v1.response.ResponseCollectionData;
+import com.aptos.request.v1.model.CollectionData;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
@@ -123,7 +123,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     public NftGroup updateSupply(String id) {
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
-            ResponseCollectionData responseCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
+            CollectionData responseCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
             nftGroup.setTotalSupply(responseCollectionData.getMaximum());
             nftGroup.setCurrentSupply(responseCollectionData.getSupply());
 
