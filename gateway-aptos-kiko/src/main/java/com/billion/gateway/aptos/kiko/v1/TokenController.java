@@ -1,9 +1,13 @@
 package com.billion.gateway.aptos.kiko.v1;
 
+import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.utils.Hex;
 import com.billion.model.controller.IController;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
 import com.billion.model.response.Response;
+import com.billion.service.aptos.AptosService;
+import com.billion.service.aptos.ContextService;
 import com.billion.service.aptos.kiko.TokenService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +32,34 @@ public class TokenController implements IController<Token> {
 
     @RequestMapping({"/test"})
     public Response test(Context context) {
-        var list = tokenService.list();
-        list.forEach(token -> tokenService.initialize(token.getId()));
+        {
+//            var list = tokenService.list();
+//            list.forEach(token -> tokenService.initialize(token.getId()));
+        }
+        {
+//        TransactionPayload transactionPayload = TransactionPayload.builder()
+//                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+//                .function("0x3::token::create_collection_script")
+//                .arguments(List.of(
+//                        Hex.encode("我的名称"),
+//                        Hex.encode("我是描述"),
+//                        Hex.encode("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/76360568-5c54-4342-427d-68992ded7b00/public"),
+//                        "9999999999999999999",
+//                        List.of(true, true, true)
+//                ))
+//                .typeArguments(List.of())
+//                .build();
+//
+//        var transaction = AptosService.getAptosClient().requestSubmitTransaction(
+//                ContextService.getNftOwnerAddress(),
+//                transactionPayload);
+//        System.out.println(transaction.toString());
+//        AptosService.checkTransaction(transaction.getHash());
+        }
+        {
+//            var collectionData = AptosService.getAptosClient().requestTableCollectionData("0x1081a174e44878c38fc8d278e9c329039ab27594b64c6ef77d143e0b8316d5b3", Hex.encode(Hex.encode("我的名称")));
+//            System.out.println(collectionData);
+        }
 
         //        {
 //            Transaction transaction = nftGroupService.transferApt(
