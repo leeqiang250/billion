@@ -1,19 +1,16 @@
 package com.billion.gateway.aptos.kiko.v1;
 
-import com.aptos.request.v1.model.Transaction;
-import com.billion.model.entity.Token;
-import com.billion.service.aptos.AptosService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.billion.model.constant.v1.RequestPathNftV1.NFT_INFO;
+import static com.billion.model.constant.v1.RequestPathTokenV1.TOKEN;
 
 /**
  * @author liqiang
  */
 @RestController
 @SuppressWarnings({"rawtypes"})
-@RequestMapping(NFT_INFO)
+@RequestMapping(TOKEN)
 public class TokenController {
 
 
