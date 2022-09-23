@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nft.mapper.ContractMapper">
+<mapper namespace="com.nft.mapper.TokenMapper">
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id
         as id
-        ,chain as chain
+        ,module_address as module_address
+        ,module_name as module_name
+        ,struct_name as struct_name
+        ,initialize_function as initialize_function
         ,name_ as name_
-        ,contract as contract
+        ,symbol as symbol
     </sql>
 
 </mapper>

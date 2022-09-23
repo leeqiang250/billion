@@ -50,7 +50,7 @@ public class NftInfo implements IModel {
     /**
      * 名称
      */
-    @TableField("name")
+    @TableField("name_")
     String name;
 
     /**

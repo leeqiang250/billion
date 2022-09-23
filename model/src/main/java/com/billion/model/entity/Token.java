@@ -29,13 +29,13 @@ public class Token implements IModel {
     @TableField("module_name")
     String moduleName;
 
-    @TableField("resource_name")
-    String resourceName;
+    @TableField("struct_name")
+    String structName;
 
     @TableField("initialize_function")
     String initializeFunction;
 
-    @TableField("name")
+    @TableField("name_")
     String name;
 
     @TableField("symbol")

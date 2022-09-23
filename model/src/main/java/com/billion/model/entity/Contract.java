@@ -35,7 +35,7 @@ public class Contract implements IModel {
     /**
      * 合约名称
      */
-    @TableField("name")
+    @TableField("name_")
     String name;
 
     /**

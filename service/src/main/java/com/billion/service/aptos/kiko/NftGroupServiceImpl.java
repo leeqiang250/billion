@@ -1,19 +1,14 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.CollectionData;
-import com.aptos.request.v1.model.Transaction;
-import com.aptos.request.v1.model.TransactionPayload;
-import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
-import com.billion.model.entity.Token;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
-import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -138,35 +133,6 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         }
 
         return nftGroup;
-    }
-
-    @Override
-    public Transaction initToken(Token token) {
-        com.aptos.request.v1.model.Resource resource = com.aptos.request.v1.model.Resource.builder()
-                .moduleAddress(token.getModuleAddress())
-                .moduleName(token.getModuleName())
-                .resourceName(token.getResourceName())
-                .build();
-
-        TransactionPayload transactionPayload = TransactionPayload.builder()
-                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                .function(token.getInitializeFunction())
-                .arguments(List.of(
-                        Hex.encode(token.getName()),
-                        Hex.encode(token.getSymbol())
-                ))
-                .typeArguments(List.of(resource.resourceTag()))
-                .build();
-
-
-        return AptosService.getAptosClient().requestSubmitTransaction(
-                ContextService.getTokenOwnerAddress(),
-                transactionPayload);
-    }
-
-    @Override
-    public Transaction transferApt(String from, String to, String amount) {
-        return AptosService.getAptosClient().transferApt(from, to, amount);
     }
 
 }

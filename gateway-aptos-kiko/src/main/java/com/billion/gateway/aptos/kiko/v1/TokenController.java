@@ -1,0 +1,44 @@
+package com.billion.gateway.aptos.kiko.v1;
+
+import com.aptos.request.v1.model.Transaction;
+import com.billion.model.entity.Token;
+import com.billion.service.aptos.AptosService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import static com.billion.model.constant.v1.RequestPathNftV1.NFT_INFO;
+
+/**
+ * @author liqiang
+ */
+@RestController
+@SuppressWarnings({"rawtypes"})
+@RequestMapping(NFT_INFO)
+public class TokenController {
+
+
+
+
+    //        {
+//            Transaction transaction = nftGroupService.transferApt(
+//                    "0xf7e09293bfc8a0c70a4bf9b6fecc4527da518dc4d8a60a84c293de6854dae0d8",
+//                    "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
+//                    "000000000");
+//
+//            AptosService.checkTransaction(transaction.getHash());
+//        }
+//    {
+//        Token token = Token.builder()
+//                .moduleAddress("0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104")
+//                .moduleName("box_v1")
+//                .structName("BoxV1")
+//                .initializeFunction("0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104::token_v1::initialize")
+//                .name("name")
+//                .symbol("symbol")
+//                .build();
+//
+//        Transaction transaction = nftGroupService.ini(token);
+//        AptosService.checkTransaction(transaction.getHash());
+//    }
+
+}

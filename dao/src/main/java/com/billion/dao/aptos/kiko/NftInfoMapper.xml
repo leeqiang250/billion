@@ -8,7 +8,7 @@
         ,box_group_id as box_group_id
         ,nft_group_id as nft_group_id
         ,nft_id as nft_id
-        ,name as name
+        ,name_ as name_
         ,owner as owner
         ,uri as uri
         ,score as score
