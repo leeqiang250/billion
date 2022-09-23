@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit;
  * @author liqiang
  */
 @Slf4j
-public class RetryingUtils {
+public class Retrying {
 
     public static <T> T retry(Callable<T> callable, int attempt, long delay, Class<? extends Throwable> exceptionClass) {
         try {
-            return RetryingUtils.<T>buildRetriever(attempt, delay, exceptionClass).call(callable);
+            return Retrying.<T>buildRetriever(attempt, delay, exceptionClass).call(callable);
         } catch (Exception e) {
             throw new RuntimeException(e.getCause());
         }
@@ -22,7 +22,7 @@ public class RetryingUtils {
 
     public static void retry(Runnable runnable, int attempt, long delay, Class<? extends Throwable> exceptionClass) {
         try {
-            RetryingUtils.buildRetriever(attempt, delay, exceptionClass).call(() -> {
+            Retrying.buildRetriever(attempt, delay, exceptionClass).call(() -> {
                 runnable.run();
                 return null;
             });
