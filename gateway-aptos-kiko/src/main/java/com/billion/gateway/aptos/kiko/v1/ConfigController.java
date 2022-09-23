@@ -36,17 +36,27 @@ public class ConfigController implements IController<IModel> {
 
     @Override
     public Response cacheMap(Context context) {
-        Token token = Token.builder()
-                .moduleAddress("0xf7e09293bfc8a0c70a4bf9b6fecc4527da518dc4d8a60a84c293de6854dae0d8")
-                .moduleName("kingdom_token_v1")
-                .resourceName("KingdomTokenV1")
-                .initializeFunction("0xf7e09293bfc8a0c70a4bf9b6fecc4527da518dc4d8a60a84c293de6854dae0d8::token_v1::initialize")
-                .name("name")
-                .symbol("symbol")
-                .build();
-        Transaction transaction = nftGroupService.initToken(token);
-        AptosService.checkTransaction(transaction.getHash());
+        {
+            Transaction transaction = nftGroupService.transferApt(
+                    "0xe89e92f0ea0ccb394fa3cb10a72ad866c4ad786956898fe7164731aa348ec1c5",
+                    "0x1ff00114f046e27033b9bfdcd217fcf50023b576cbd3baaafe9674961632a5bd",
+                    "1");
 
+            AptosService.checkTransaction(transaction.getHash());
+        }
+        {
+            Token token = Token.builder()
+                    .moduleAddress("0xf7e09293bfc8a0c70a4bf9b6fecc4527da518dc4d8a60a84c293de6854dae0d8")
+                    .moduleName("kingdom_token_v1")
+                    .resourceName("KingdomTokenV1")
+                    .initializeFunction("0xf7e09293bfc8a0c70a4bf9b6fecc4527da518dc4d8a60a84c293de6854dae0d8::token_v1::initialize")
+                    .name("name")
+                    .symbol("symbol")
+                    .build();
+
+            Transaction transaction = nftGroupService.initToken(token);
+            AptosService.checkTransaction(transaction.getHash());
+        }
         log.info("[request context] {}", context.toString());
         return Response.success(configService.get(context));
     }

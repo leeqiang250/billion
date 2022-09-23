@@ -42,7 +42,7 @@ public class AptosService {
                     if (Objects.isNull(transaction)) {
                         throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("result:{} transaction:{}", transaction.isSuccess(), transaction.getHash());
+                        log.info("result:{} transaction:{}, vmStatus:{}", transaction.isSuccess(), transaction.getHash(), transaction.getVmStatus());
                         return transaction.isSuccess();
                     }
                 },
@@ -51,7 +51,6 @@ public class AptosService {
                 Exception.class
         );
     }
-
 
     final static long cacheTs = 5000L;
 

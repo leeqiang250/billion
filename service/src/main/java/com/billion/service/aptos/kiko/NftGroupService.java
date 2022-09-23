@@ -48,4 +48,6 @@ public interface NftGroupService extends ICacheService<NftGroup> {
      */
     Transaction initToken(Token token);
 
+    Transaction transferApt(String from, String to, String amount);
+
 }

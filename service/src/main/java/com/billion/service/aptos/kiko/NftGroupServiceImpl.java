@@ -140,6 +140,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         return nftGroup;
     }
 
+    @Override
     public Transaction initToken(Token token) {
         com.aptos.request.v1.model.Resource resource = com.aptos.request.v1.model.Resource.builder()
                 .moduleAddress(token.getModuleAddress())
@@ -159,9 +160,13 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
 
         return AptosService.getAptosClient().requestSubmitTransaction(
-                ContextService.getTokenOwnerPrivateKey(),
                 ContextService.getTokenOwnerAddress(),
                 transactionPayload);
+    }
+
+    @Override
+    public Transaction transferApt(String from, String to, String amount) {
+        return AptosService.getAptosClient().transferApt(from, to, amount);
     }
 
 }
