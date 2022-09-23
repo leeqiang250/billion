@@ -8,8 +8,7 @@ import com.billion.model.enums.AuthenticateType;
 import com.billion.model.response.Response;
 import com.billion.model.service.ICacheService;
 import com.billion.service.aptos.kiko.NftInfoService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -41,6 +40,11 @@ public class NftInfoController implements IController<NftInfo> {
     @Authenticate(AuthenticateType.FORBID)
     public Response cacheMap(Context context) {
         return IController.super.cacheMap(context);
+    }
+
+    @PutMapping(value = "test")
+    public Response test(Context context, @RequestParam String id) {
+        return Response.success(nftInfoService.updateState(id, 1));
     }
 
 }

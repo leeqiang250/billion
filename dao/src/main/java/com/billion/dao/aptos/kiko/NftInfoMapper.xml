@@ -4,10 +4,18 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        as id
+        id as id
+        ,box_group_id as box_group_id
+        ,nft_group_id as nft_group_id
         ,nft_id as nft_id
-        ,group_id as group_id
+        ,name as name
+        ,owner as owner
+        ,uri as uri
+        ,score as score
+        ,rank as rank
+        ,state as state
+        ,mtime as mtime
+        ,ctime as ctime
     </sql>
 
 </mapper>

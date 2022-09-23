@@ -10,8 +10,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
- * @author liqiang
+ * @author jason
  */
 @Data
 @Builder
@@ -21,21 +24,75 @@ import lombok.NoArgsConstructor;
 public class NftInfo implements IModel {
 
     /**
-     * 主键id
+     * id
      */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
     /**
-     * 合约上nft的tokenId
+     * box_group_id
      */
-    @TableField("nft_id")
-    Long nftId;
+    @TableField("box_group_id")
+    Long boxGroupId;
 
     /**
-     * nft_group表主键id
+     * nft_group_id
      */
-    @TableField("group_id")
-    Long groupId;
+    @TableField("nft_group_id")
+    Long nftGroupId;
+
+    /**
+     * nft_id
+     */
+    @TableField("nft_id")
+    String nftId;
+
+    /**
+     * 名称
+     */
+    @TableField("name")
+    String name;
+
+    /**
+     * 所有者
+     */
+    @TableField("owner")
+    String owner;
+
+    /**
+     * 图片
+     */
+    @TableField("uri")
+    String uri;
+
+    /**
+     * 分数
+     */
+    @TableField("score")
+    String score;
+
+    /**
+     * 排名
+     */
+    @TableField("rank")
+    Integer rank;
+
+    /**
+     * 状态(0:未铸造,1,铸造中,2:已铸造,3:铸造失败)
+     */
+    @TableField("state")
+    Integer state;
+
+    /**
+     * 修改时间
+     */
+    @TableField("mtime")
+    LocalDateTime mtime;
+
+    /**
+     * 创建时间
+     */
+    @TableField("ctime")
+    LocalDateTime ctime;
 
 }
