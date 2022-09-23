@@ -1,5 +1,9 @@
 package com.billion.gateway.aptos.kiko.v1;
 
+import com.billion.model.controller.IController;
+import com.billion.model.dto.Context;
+import com.billion.model.entity.Token;
+import com.billion.model.response.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,12 +15,13 @@ import static com.billion.model.constant.v1.RequestPathTokenV1.TOKEN;
 @RestController
 @SuppressWarnings({"rawtypes"})
 @RequestMapping(TOKEN)
-public class TokenController {
+public class TokenController implements IController<Token> {
+
+    @RequestMapping({"test"})
+    public Response test(Context context) {
 
 
-
-
-    //        {
+        //        {
 //            Transaction transaction = nftGroupService.transferApt(
 //                    "0xf7e09293bfc8a0c70a4bf9b6fecc4527da518dc4d8a60a84c293de6854dae0d8",
 //                    "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
@@ -37,5 +42,7 @@ public class TokenController {
 //        Transaction transaction = nftGroupService.ini(token);
 //        AptosService.checkTransaction(transaction.getHash());
 //    }
+        return Response.SUCCESS;
+    }
 
 }
