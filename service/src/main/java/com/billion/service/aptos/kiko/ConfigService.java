@@ -23,19 +23,15 @@ public class ConfigService {
     @Resource
     LanguageService languageService;
 
-    @Resource
-    AptosService aptosService;
-
     public Config get(Context context) {
         return Config.builder()
                 .currentContext(context)
-                .currentNode(aptosService.requestNodeCache())
+                .currentNode(AptosService.requestNodeCache())
                 .supportChain(Chain.getKV1())
                 .supportLanguage(Language.getKV1())
                 .supportText(languageService.cacheMap(context))
                 .supportContract(contractService.cacheMap(context))
                 .build();
     }
-
 
 }

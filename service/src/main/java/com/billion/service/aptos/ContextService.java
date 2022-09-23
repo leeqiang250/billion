@@ -63,6 +63,30 @@ public class ContextService {
     @Getter
     static String kikoHost;
 
+    @Value("${kiko.account.tokenOwner.privateKey}")
+    String pTokenOwnerPrivateKey;
+
+    @Getter
+    static String tokenOwnerPrivateKey;
+
+    @Value("${kiko.account.tokenOwner.address}")
+    String pTokenOwnerAddress;
+
+    @Getter
+    static String tokenOwnerAddress;
+
+    @Value("${kiko.account.nftOwner.privateKey}")
+    String pNftOwnerPrivateKey;
+
+    @Getter
+    static String nftOwnerPrivateKey;
+
+    @Value("${kiko.account.nftOwner.address}")
+    String pNftOwnerAddress;
+
+    @Getter
+    static String nftOwnerAddress;
+
     @Value("${aptos.host}")
     String pAptosHost;
 
@@ -80,6 +104,10 @@ public class ContextService {
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
+        ContextService.tokenOwnerPrivateKey = this.pTokenOwnerPrivateKey;
+        ContextService.tokenOwnerAddress = this.pTokenOwnerAddress;
+        ContextService.nftOwnerPrivateKey = this.pNftOwnerPrivateKey;
+        ContextService.nftOwnerAddress = this.pNftOwnerAddress;
         ContextService.aptosHost = this.pAptosHost;
     }
 

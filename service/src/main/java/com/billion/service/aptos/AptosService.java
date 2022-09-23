@@ -19,8 +19,6 @@ import java.util.Objects;
 @Service
 public class AptosService {
 
-    final long cacheTs = 5000L;
-
     @Getter
     static AptosClient aptosClient;
 
@@ -33,19 +31,19 @@ public class AptosService {
         log.info("Aptos{}", AptosService.aptosClient.requestNode());
     }
 
-    public boolean checkTransaction(String hash) {
+    public static boolean checkTransaction(String hash) {
         return RetryingUtils.retry(
                 () -> {
-                    Transaction responseTransaction = null;
+                    Transaction transaction = null;
                     try {
-                        responseTransaction = AptosService.aptosClient.requestTransactionByHash(hash);
+                        transaction = AptosService.aptosClient.requestTransactionByHash(hash);
                     } catch (Exception exception) {
                     }
-                    if (Objects.isNull(responseTransaction)) {
+                    if (Objects.isNull(transaction)) {
                         throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("result:{} transaction:{}", responseTransaction.isSuccess(), responseTransaction.getHash());
-                        return responseTransaction.isSuccess();
+                        log.info("result:{} transaction:{}", transaction.isSuccess(), transaction.getHash());
+                        return transaction.isSuccess();
                     }
                 },
                 60,
@@ -54,20 +52,22 @@ public class AptosService {
         );
     }
 
-    Node responseNode;
 
-    long responseNodeTs;
+    final static long cacheTs = 5000L;
 
-    public Node requestNodeCache() {
-        if (Objects.isNull(this.responseNode) || System.currentTimeMillis() > (this.responseNodeTs + this.cacheTs)) {
-            Node responseNode = AptosService.getAptosClient().requestNode();
-            if (Objects.nonNull(responseNode)) {
-                this.responseNodeTs = System.currentTimeMillis();
-                this.responseNode = responseNode;
+    static Node node;
+
+    static long responseNodeTs;
+
+    public static Node requestNodeCache() {
+        if (Objects.isNull(node) || System.currentTimeMillis() > (responseNodeTs + cacheTs)) {
+            node = AptosService.getAptosClient().requestNode();
+            if (Objects.nonNull(node)) {
+                responseNodeTs = System.currentTimeMillis();
             }
         }
 
-        return this.responseNode;
+        return node;
     }
 
 }

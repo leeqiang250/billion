@@ -1,5 +1,7 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.Transaction;
+import com.billion.model.entity.Token;
 import com.billion.model.service.ICacheService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
@@ -37,5 +39,13 @@ public interface NftGroupService extends ICacheService<NftGroup> {
      * @return NftGroup
      */
     NftGroup updateSupply(String id);
+
+    /**
+     * initToken
+     *
+     * @param token token
+     * @return Transaction
+     */
+    Transaction initToken(Token token);
 
 }

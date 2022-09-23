@@ -1,14 +1,19 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.CollectionData;
+import com.aptos.request.v1.model.Transaction;
+import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
+import com.billion.model.entity.Token;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
+import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -123,9 +128,9 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     public NftGroup updateSupply(String id) {
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
-            CollectionData responseCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
-            nftGroup.setTotalSupply(responseCollectionData.getMaximum());
-            nftGroup.setCurrentSupply(responseCollectionData.getSupply());
+            CollectionData collectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
+            nftGroup.setTotalSupply(collectionData.getMaximum());
+            nftGroup.setCurrentSupply(collectionData.getSupply());
 
             this.updateById(nftGroup);
 
@@ -133,6 +138,30 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         }
 
         return nftGroup;
+    }
+
+    public Transaction initToken(Token token) {
+        com.aptos.request.v1.model.Resource resource = com.aptos.request.v1.model.Resource.builder()
+                .moduleAddress(token.getModuleAddress())
+                .moduleName(token.getModuleName())
+                .resourceName(token.getResourceName())
+                .build();
+
+        TransactionPayload transactionPayload = TransactionPayload.builder()
+                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                .function(token.getInitializeFunction())
+                .arguments(List.of(
+                        Hex.encode(token.getName()),
+                        Hex.encode(token.getSymbol())
+                ))
+                .typeArguments(List.of(resource.resourceTag()))
+                .build();
+
+
+        return AptosService.getAptosClient().requestSubmitTransaction(
+                ContextService.getTokenOwnerPrivateKey(),
+                ContextService.getTokenOwnerAddress(),
+                transactionPayload);
     }
 
 }
