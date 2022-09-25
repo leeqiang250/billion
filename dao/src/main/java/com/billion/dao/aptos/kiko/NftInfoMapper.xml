@@ -4,18 +4,21 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id as id
+        id
+        as id
         ,box_group_id as box_group_id
         ,nft_group_id as nft_group_id
-        ,nft_id as nft_id
-        ,name_ as name_
+        ,display_name as display_name
+        ,description as description
         ,owner as owner
         ,uri as uri
-        ,score as score
         ,rank as rank
-        ,state as state
-        ,mtime as mtime
-        ,ctime as ctime
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
+        ,is_born as is_born
+        ,nft_id as nft_id
+        ,score as score
+        ,parent_nft_id as parent_nft_id
     </sql>
 
 </mapper>

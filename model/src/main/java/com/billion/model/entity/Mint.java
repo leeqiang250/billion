@@ -13,10 +13,10 @@ import java.io.Serializable;
 public class Mint implements Serializable {
 
     /**
-     * 铸造状态
+     * 交易状态
      */
-    @TableField("mint")
-    String mint;
+    @TableField("transaction_status")
+    String transactionStatus;
 
     /**
      * 铸造状态
@@ -24,19 +24,19 @@ public class Mint implements Serializable {
     @Getter
     @Setter
     @TableField(exist = false)
-    public TransactionStatus mint_;
+    public TransactionStatus transactionStatus_;
 
-    private String getMint() {
-        return this.mint_.getCode();
+    private String getTransactionStatus() {
+        return this.transactionStatus_.getCode();
     }
 
-    private void setMint(String mint) {
-        this.mint_ = TransactionStatus.of(mint);
-        this.mint = this.getMint();
+    private void setTransactionStatus(String transactionStatus) {
+        this.transactionStatus_ = TransactionStatus.of(transactionStatus);
+        this.transactionStatus = this.getTransactionStatus();
     }
 
-    public void setMint_(TransactionStatus mint_) {
-        this.setMint(mint_.getCode());
+    public void setTransactionStatus_(TransactionStatus transactionStatus) {
+        this.setTransactionStatus(transactionStatus.getCode());
     }
 
 }

@@ -12,15 +12,14 @@
         ,meta as meta
         ,body as body
         ,display_name as display_name
+        ,description as description
         ,current_supply as current_supply
         ,total_supply as total_supply
         ,uri as uri
-        ,description as description
-        ,creator_id as creator_id
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
+        ,is_enabled as is_enabled
         ,sort as sort
-        ,initialize_hash as initialize_hash
-        ,mint as mint
-        ,enabled as enabled
     </sql>
 
 </mapper>

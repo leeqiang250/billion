@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.billion.model.model.IModel;
-import lombok.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author liqiang
@@ -63,6 +63,12 @@ public class NftGroup extends Mint implements IModel {
     String displayName;
 
     /**
+     * 系列描述
+     */
+    @TableField("description")
+    String description;
+
+    /**
      * 当前供应量
      */
     @TableField("current_supply")
@@ -81,33 +87,21 @@ public class NftGroup extends Mint implements IModel {
     String uri;
 
     /**
-     * 系列描述
+     * 铸造哈希
      */
-    @TableField("description")
-    String description;
+    @TableField("transaction_hash")
+    String transactionHash;
 
     /**
-     * 创作者ID
+     * 是否激活(0:不可用,1:可用)
      */
-    @TableField("creator_id")
-    Long creatorId;
+    @TableField("is_enabled")
+    Boolean isEnabled;
 
     /**
      * 排序
      */
     @TableField("sort")
-    Integer sort;
-
-    /**
-     * 铸造哈希
-     */
-    @TableField("initialize_hash")
-    String initializeHash;
-
-    /**
-     * 是否激活(0:不可用,1:可用)
-     */
-    @TableField("enabled")
-    Boolean enabled;
+    Long sort;
 
 }

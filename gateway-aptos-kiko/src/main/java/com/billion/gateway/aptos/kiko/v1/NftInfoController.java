@@ -42,9 +42,4 @@ public class NftInfoController implements IController<NftInfo> {
         return IController.super.cacheMap(context);
     }
 
-    @PutMapping(value = "test")
-    public Response test(Context context, @RequestParam String id) {
-        return Response.success(nftInfoService.updateState(id, 1));
-    }
-
 }

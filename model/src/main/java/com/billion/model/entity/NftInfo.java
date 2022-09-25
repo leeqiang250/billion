@@ -10,11 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 /**
- * @author jason
+ * @author liqiang
  */
 @Data
 @Builder
@@ -42,22 +39,16 @@ public class NftInfo extends Mint implements IModel {
     Long nftGroupId;
 
     /**
-     * nft_id
-     */
-    @TableField("nft_id")
-    String nftId;
-
-    /**
      * 名称
      */
-    @TableField("name_")
-    String name;
+    @TableField("display_name")
+    String displayName;
 
-    @TableField("name_")
+    /**
+     * 描述
+     */
+    @TableField("description")
     String description;
-
-    @TableField("initialize_hash")
-    String initializeHash;
 
     /**
      * 所有者
@@ -72,33 +63,36 @@ public class NftInfo extends Mint implements IModel {
     String uri;
 
     /**
+     * 排名
+     */
+    @TableField("rank")
+    Long rank;
+
+    /**
+     * 铸造哈希
+     */
+    @TableField("transaction_hash")
+    String transactionHash;
+
+    /**
+     * 销毁状态(0:未销毁;1:已销毁)
+     */
+    @TableField("is_born")
+    Boolean isBorn;
+
+    /**
+     * nft_id
+     */
+    @TableField("nft_id")
+    String nftId;
+
+    /**
      * 分数
      */
     @TableField("score")
     String score;
 
-    /**
-     * 排名
-     */
-    @TableField("rank")
-    Integer rank;
-
-    /**
-     * 状态(0:未铸造,1,铸造中,2:已铸造,3:铸造失败)
-     */
-    @TableField("state")
-    Integer state;
-
-    /**
-     * 修改时间
-     */
-    @TableField("mtime")
-    LocalDateTime mtime;
-
-    /**
-     * 创建时间
-     */
-    @TableField("ctime")
-    LocalDateTime ctime;
+    @TableField("parent_nft_id")
+    Long parentNftId;
 
 }

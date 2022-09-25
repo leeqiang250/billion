@@ -55,26 +55,6 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return (NftInfo) value;
     }
 
-    /**
-     * updateState
-     *
-     * @param id
-     * @param state
-     * @return
-     */
-    @Override
-    public NftInfo updateState(String id, Integer state) {
-        NftInfo nftInfo = this.getById(id);
-        if (!Objects.isNull(nftInfo)) {
-            nftInfo.setState(state);
-
-            this.updateById(nftInfo);
-
-            this.deleteCache(this.cacheByIdKey(null, id));
-        }
-        return nftInfo;
-    }
-
     @PostConstruct
     public void sfdfds() {
         this.mint("1");
@@ -101,13 +81,13 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
         var nftInfos = super.getBaseMapper().selectList(wrapper);
         nftInfos.forEach(nftInfo -> {
-            if (TransactionStatus.STATUS_1_READY == nftInfo.getMint_()) {
+            if (TransactionStatus.STATUS_1_READY == nftInfo.getTransactionStatus_()) {
                 TransactionPayload transactionPayload = TransactionPayload.builder()
                         .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                         .function("0x3::token::create_token_script")
                         .arguments(List.of(
                                 Hex.encode(nftGroup.getDisplayName()),
-                                Hex.encode(nftInfo.getName()),
+                                Hex.encode(nftInfo.getDisplayName()),
                                 Hex.encode(nftInfo.getDescription()),
                                 "1",
                                 "1",
@@ -128,8 +108,8 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                         nftInfo.getOwner(),
                         transactionPayload);
                 if (AptosService.checkTransaction(transaction.getHash())) {
-                    nftInfo.setInitializeHash(transaction.getHash());
-                    nftInfo.setMint_(TransactionStatus.STATUS_3_SUCCESS);
+                    nftInfo.setTransactionHash(transaction.getHash());
+                    nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
 
                     super.updateById(nftInfo);
                 }

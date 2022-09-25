@@ -48,7 +48,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         }
 
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftGroup::getEnabled, Boolean.TRUE);
+        wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
         List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
 
         changeLanguage(context, list);
@@ -69,7 +69,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         }
 
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftGroup::getEnabled, Boolean.TRUE);
+        wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
         List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
 
         changeLanguage(context, list);
@@ -149,19 +149,19 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     public boolean mint(Serializable id) {
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getId, id);
-        wrapper.lambda().eq(NftGroup::getInitializeHash, EMPTY);
-        wrapper.lambda().eq(NftGroup::getEnabled, true);
+        wrapper.lambda().eq(NftGroup::getTransactionHash, EMPTY);
+        wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
 
         var nftGroup = super.getBaseMapper().selectOne(wrapper);
         if (Objects.isNull(nftGroup)) {
             return false;
         }
 
-        if (TransactionStatus.STATUS_3_SUCCESS == nftGroup.getMint_()) {
+        if (TransactionStatus.STATUS_3_SUCCESS == nftGroup.getTransactionStatus_()) {
             return true;
         }
 
-        if (TransactionStatus.STATUS_1_READY != nftGroup.getMint_()) {
+        if (TransactionStatus.STATUS_1_READY != nftGroup.getTransactionStatus_()) {
             return false;
         }
 
@@ -200,8 +200,8 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 nftGroup.getOwner(),
                 transactionPayload);
         if (AptosService.checkTransaction(transaction.getHash())) {
-            nftGroup.setInitializeHash(transaction.getHash());
-            nftGroup.setMint_(TransactionStatus.STATUS_3_SUCCESS);
+            nftGroup.setTransactionHash(transaction.getHash());
+            nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
 
             super.updateById(nftGroup);
 
