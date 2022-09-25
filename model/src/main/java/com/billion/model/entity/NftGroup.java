@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("nft_group")
-public class NftGroup extends Mint implements IModel {
+public class NftGroup extends TransactionStatus implements IModel {
 
     /**
      * id

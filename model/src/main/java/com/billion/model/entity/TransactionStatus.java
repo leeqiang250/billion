@@ -1,7 +1,6 @@
 package com.billion.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.billion.model.enums.TransactionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,7 @@ import java.io.Serializable;
 /**
  * @author liqiang
  */
-public class Mint implements Serializable {
+public class TransactionStatus implements Serializable {
 
     /**
      * 交易状态
@@ -24,18 +23,18 @@ public class Mint implements Serializable {
     @Getter
     @Setter
     @TableField(exist = false)
-    public TransactionStatus transactionStatus_;
+    public com.billion.model.enums.TransactionStatus transactionStatus_;
 
     private String getTransactionStatus() {
         return this.transactionStatus_.getCode();
     }
 
     private void setTransactionStatus(String transactionStatus) {
-        this.transactionStatus_ = TransactionStatus.of(transactionStatus);
+        this.transactionStatus_ = com.billion.model.enums.TransactionStatus.of(transactionStatus);
         this.transactionStatus = this.getTransactionStatus();
     }
 
-    public void setTransactionStatus_(TransactionStatus transactionStatus) {
+    public void setTransactionStatus_(com.billion.model.enums.TransactionStatus transactionStatus) {
         this.setTransactionStatus(transactionStatus.getCode());
     }
 
