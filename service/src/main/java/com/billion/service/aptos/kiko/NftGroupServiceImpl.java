@@ -151,7 +151,6 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         wrapper.lambda().eq(NftGroup::getId, id);
         wrapper.lambda().eq(NftGroup::getTransactionHash, EMPTY);
         wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-
         var nftGroup = super.getBaseMapper().selectOne(wrapper);
         if (Objects.isNull(nftGroup)) {
             return false;
