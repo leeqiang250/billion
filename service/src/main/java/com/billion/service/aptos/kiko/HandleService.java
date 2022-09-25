@@ -8,4 +8,11 @@ import com.billion.model.service.ICacheService;
  */
 public interface HandleService extends ICacheService<Handle> {
 
+    /**
+     * update
+     *
+     * @param account account
+     */
+    void update(String account);
+
 }

@@ -1,13 +1,11 @@
 package com.billion.service.aptos.kiko;
 
-import com.aptos.request.v1.model.AccountCollectionData;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
-import com.billion.model.entity.Collections;
 import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
@@ -17,9 +15,7 @@ import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.*;
@@ -40,7 +36,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     LanguageService languageService;
 
     @Resource
-    CollectionsService collectionsService;
+    HandleService handleService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -203,7 +199,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
             this.updateById(nftGroup);
 
-            this.collectionsService.update(nftGroup.getOwner());
+            this.handleService.update(nftGroup.getOwner());
         }
 
         return false;
