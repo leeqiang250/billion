@@ -152,10 +152,16 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         wrapper.lambda().eq(NftGroup::getInitializeHash, EMPTY);
         wrapper.lambda().eq(NftGroup::getEnabled, true);
 
-        var nftGroup = this.getBaseMapper().selectOne(wrapper);
-        if (Objects.isNull(nftGroup)
-                || Mint.MINT_NOT != nftGroup.getMint_()
-        ) {
+        var nftGroup = super.getBaseMapper().selectOne(wrapper);
+        if (Objects.isNull(nftGroup)) {
+            return false;
+        }
+
+        if (Mint.MINT_3_SUCCESS == nftGroup.getMint_()) {
+            return true;
+        }
+
+        if (Mint.MINT_1_READY != nftGroup.getMint_()) {
             return false;
         }
 
@@ -195,11 +201,11 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 transactionPayload);
         if (AptosService.checkTransaction(transaction.getHash())) {
             nftGroup.setInitializeHash(transaction.getHash());
-            nftGroup.setMint_(Mint.MINT_SUCCESS);
+            nftGroup.setMint_(Mint.MINT_3_SUCCESS);
 
-            this.updateById(nftGroup);
+            super.updateById(nftGroup);
 
-            this.handleService.update(nftGroup.getOwner());
+            return this.handleService.update(nftGroup.getOwner());
         }
 
         return false;

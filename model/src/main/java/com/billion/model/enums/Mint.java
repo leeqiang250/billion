@@ -14,10 +14,11 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Mint {
 
-    MINT_NOT("mint_not", "未铸造"),
-    MINTING("mint_ing", "铸造中"),
-    MINT_SUCCESS("mint_success", "铸造成功"),
-    MINT_FAILURE("mint_failure", "铸造失败");
+    MINT_0_PREPARING("mint_0_preparing", "铸造准备中"),
+    MINT_1_READY("mint_1_ready", "铸造准备完成"),
+    MINT_2_ING("mint_2_ing", "铸造中"),
+    MINT_3_SUCCESS("mint_3_success", "铸造成功"),
+    MINT_4_FAILURE("mint_4_failure", "铸造失败");
 
     final String code;
 
@@ -35,7 +36,7 @@ public enum Mint {
     }
 
     public static Mint of(String code) {
-        return KV0.getOrDefault(code, Mint.MINT_NOT);
+        return KV0.getOrDefault(code, Mint.MINT_0_PREPARING);
     }
 
     @Override

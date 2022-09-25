@@ -12,7 +12,8 @@ public interface HandleService extends ICacheService<Handle> {
      * update
      *
      * @param account account
+     * @return boolean
      */
-    void update(String account);
+    boolean update(String account);
 
 }

@@ -18,9 +18,8 @@ import java.util.Objects;
 @Service
 public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle> implements HandleService {
 
-
     @Override
-    public void update(String account) {
+    public boolean update(String account) {
         var accountCollectionData = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
 
         QueryWrapper<Handle> wrapper = new QueryWrapper<>();
@@ -44,6 +43,8 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
 
             this.getBaseMapper().updateById(handle);
         }
+
+        return true;
     }
 
 }

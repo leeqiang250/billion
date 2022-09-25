@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("nft_info")
-public class NftInfo implements IModel {
+public class NftInfo extends Mint implements IModel {
 
     /**
      * id
@@ -52,6 +52,12 @@ public class NftInfo implements IModel {
      */
     @TableField("name_")
     String name;
+
+    @TableField("name_")
+    String description;
+
+    @TableField("initialize_hash")
+    String initializeHash;
 
     /**
      * 所有者

@@ -3,22 +3,28 @@ package com.billion.service.aptos.kiko;
 import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.Hex;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
 import com.billion.model.entity.NftInfo;
+import com.billion.model.enums.Mint;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Consumer;
+
+import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -26,6 +32,9 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftInfo> implements NftInfoService {
+
+    @Resource
+    NftGroupService nftGroupService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -73,63 +82,66 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @PostConstruct
     public void sfdfds() {
-        this.qewe();
-        this.qewe();
-        this.qewe();
-        this.qewe();
+        this.mint("1");
+        this.mint("1");
+        this.mint("1");
+        this.mint("1");
+        this.mint("1");
+        this.mint("1");
+        this.mint("1");
     }
 
-    public void qewe() {
-        //                .function("0x3::token::create_collection_script")
-        String ss = UUID.randomUUID().toString();
-        System.out.println("aa:" + ss);
-        TransactionPayload transactionPayload = TransactionPayload.builder()
-                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                .function("0x3::token::create_token_script")
-                .arguments(List.of(
-                        Hex.encode("我是名字34"),
-                        Hex.encode(ss),
-                        Hex.encode(ss),
-                        "1",
-                        "1",
-                        Hex.encode(ss),
-                        "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
-                        "888",
-                        "999",
-                        List.of(true, true, true, true, true),
-                        List.of(Hex.encode(ss)),
-                        List.of(Hex.encode(ss)),
-                        List.of(Hex.encode(ss))
-                ))
-                .typeArguments(List.of())
-                .build();
-
-        var transaction = AptosService.getAptosClient().requestSubmitTransaction(
-                "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
-                transactionPayload);
-        if (AptosService.checkTransaction(transaction.getHash())) {
-
-
+    public boolean mint(Serializable groupId) {
+        if (!this.nftGroupService.mint(groupId)) {
+            return false;
         }
 
+        var nftGroup = nftGroupService.getById(groupId);
+        if (Objects.isNull(nftGroup)) {
+            return false;
+        }
 
-//        public entry fun create_token_script(
-//                account: &signer,
-//                collection: String,
-//                name: String,
-//                description: String,
-//                balance: u64,
-//                maximum: u64,
-//                uri: String,
-//                royalty_payee_address: address,
-//                royalty_points_denominator: u64,
-//                royalty_points_numerator: u64,
-//                mutate_setting: vector<bool>,
-//        property_keys: vector<String>,
-//        property_values: vector<vector<u8>>,
-//        property_types: vector<String>
-//    ) acquires Collections, TokenStore {
+        QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
 
+        var nftInfos = super.getBaseMapper().selectList(wrapper);
+        nftInfos.forEach(nftInfo -> {
+            if (Mint.MINT_1_READY == nftInfo.getMint_()) {
+                TransactionPayload transactionPayload = TransactionPayload.builder()
+                        .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                        .function("0x3::token::create_token_script")
+                        .arguments(List.of(
+                                Hex.encode(nftGroup.getDisplayName()),
+                                Hex.encode(nftInfo.getName()),
+                                Hex.encode(nftInfo.getDescription()),
+                                "1",
+                                "1",
+                                Hex.encode(nftInfo.getUri()),
+                                nftInfo.getOwner(),
+                                "3",
+                                "1",
+                                List.of(true, true, true, true, true),
+                                List.of(Hex.encode(UUID.randomUUID().toString())),
+                                List.of(Hex.encode(UUID.randomUUID().toString())),
+                                List.of(Hex.encode(UUID.randomUUID().toString()))
+                        ))
+                        .typeArguments(List.of())
+                        .build();
+
+
+                var transaction = AptosService.getAptosClient().requestSubmitTransaction(
+                        nftInfo.getOwner(),
+                        transactionPayload);
+                if (AptosService.checkTransaction(transaction.getHash())) {
+                    nftInfo.setInitializeHash(transaction.getHash());
+                    nftInfo.setMint_(Mint.MINT_3_SUCCESS);
+
+                    super.updateById(nftInfo);
+                }
+            }
+        });
+
+        return false;
     }
 
 }
