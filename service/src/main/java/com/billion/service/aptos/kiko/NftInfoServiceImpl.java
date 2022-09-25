@@ -64,13 +64,6 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return (NftInfo) value;
     }
 
-    @PostConstruct
-    public void sfdfds() {
-        System.out.println(this.getTableTokenData("20000006138"));
-        System.out.println(this.getTableTokenData("20000006138"));
-        System.out.println(this.getTableTokenData("20000006138"));
-    }
-
     public boolean mint(Serializable groupId) {
         if (!this.nftGroupService.mint(groupId)) {
             return false;
