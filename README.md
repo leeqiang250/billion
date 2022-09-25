@@ -10,6 +10,7 @@
 
 5.数据库多语言Key存储：language varchar(36)
 
+6.数据库链上交易状态存储：mint varchar(16)
 
 
 
