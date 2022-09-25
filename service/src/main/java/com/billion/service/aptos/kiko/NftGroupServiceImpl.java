@@ -11,6 +11,7 @@ import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.Language;
 import com.billion.model.enums.TransactionStatus;
+import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
@@ -149,7 +150,6 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     public boolean mint(Serializable id) {
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getId, id);
-        wrapper.lambda().eq(NftGroup::getTransactionHash, EMPTY);
         wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
         var nftGroup = super.getBaseMapper().selectOne(wrapper);
         if (Objects.isNull(nftGroup)) {
@@ -175,11 +175,16 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 || StringUtils.isEmpty(description)
                 || StringUtils.isEmpty(uri)
                 || StringUtils.isEmpty(nftGroup.getTotalSupply())
+                || StringUtils.isEmpty(nftGroup.getOwner())
                 || DEFAULT_TEXT.equals(displayName)
                 || DEFAULT_TEXT.equals(description)
                 || DEFAULT_TEXT.equals(uri)
         ) {
             return false;
+        }
+
+        if (25 < displayName.length()) {
+            throw new BizException("display name too long, max 25");
         }
 
         TransactionPayload transactionPayload = TransactionPayload.builder()

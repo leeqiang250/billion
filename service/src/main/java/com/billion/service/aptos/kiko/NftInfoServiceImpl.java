@@ -9,6 +9,7 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.enums.Language;
 import com.billion.model.enums.TransactionStatus;
+import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
 
@@ -85,9 +85,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                 .language(Language.EN.getCode())
                 .build();
 
-        var nftGeoupDisplayName = languageService.getByKey(context, nftGroup.getDisplayName());
-        if (StringUtils.isEmpty(nftGeoupDisplayName)
-                || DEFAULT_TEXT.equals(nftGeoupDisplayName)
+        var nftGroupDisplayName = languageService.getByKey(context, nftGroup.getDisplayName());
+        if (StringUtils.isEmpty(nftGroupDisplayName)
+                || DEFAULT_TEXT.equals(nftGroupDisplayName)
         ) {
             return false;
         }
@@ -108,6 +108,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             if (StringUtils.isEmpty(displayName)
                     || StringUtils.isEmpty(description)
                     || StringUtils.isEmpty(uri)
+                    || StringUtils.isEmpty(nftInfo.getOwner())
                     || DEFAULT_TEXT.equals(displayName)
                     || DEFAULT_TEXT.equals(description)
                     || DEFAULT_TEXT.equals(uri)
@@ -115,11 +116,15 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                 return;
             }
 
+            if (26 < displayName.length()) {
+                throw new BizException("display name too long, max 26");
+            }
+
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                     .function("0x3::token::create_token_script")
                     .arguments(List.of(
-                            Hex.encode(nftGeoupDisplayName),
+                            Hex.encode(nftGroupDisplayName),
                             Hex.encode(displayName),
                             Hex.encode(description),
                             "1",
@@ -147,7 +152,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             }
         });
 
-        return false;
+        return true;
     }
 
 }
