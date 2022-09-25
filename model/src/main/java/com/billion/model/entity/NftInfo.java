@@ -95,4 +95,28 @@ public class NftInfo extends TransactionStatus implements IModel {
     @TableField("parent_nft_id")
     Long parentNftId;
 
+    /**
+     * table_handle
+     */
+    @TableField("table_handle")
+    String tableHandle;
+
+    /**
+     * table_collection
+     */
+    @TableField("table_collection")
+    String tableCollection;
+
+    /**
+     * table_creator
+     */
+    @TableField("table_creator")
+    String tableCreator;
+
+    /**
+     * table_name
+     */
+    @TableField("table_name")
+    String tableName;
+
 }

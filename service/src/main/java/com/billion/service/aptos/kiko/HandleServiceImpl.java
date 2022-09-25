@@ -6,11 +6,13 @@ import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.HandleMapper;
 import com.billion.model.entity.Handle;
+import com.billion.model.entity.NftInfo;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author liqiang
@@ -45,6 +47,13 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
         }
 
         return true;
+    }
+
+    @Override
+    public Handle getByAccount(String account) {
+        QueryWrapper<Handle> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(Handle::getOwner, account);
+        return super.getBaseMapper().selectOne(wrapper);
     }
 
 }

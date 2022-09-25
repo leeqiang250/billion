@@ -19,6 +19,10 @@
         ,nft_id as nft_id
         ,score as score
         ,parent_nft_id as parent_nft_id
+        ,table_handle as table_handle
+        ,table_collection as table_collection
+        ,table_creator as table_creator
+        ,table_name as table_name
     </sql>
 
 </mapper>

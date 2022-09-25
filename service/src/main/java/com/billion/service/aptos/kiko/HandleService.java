@@ -16,4 +16,12 @@ public interface HandleService extends ICacheService<Handle> {
      */
     boolean update(String account);
 
+    /**
+     * getByAccount
+     *
+     * @param account account
+     * @return Handle
+     */
+    Handle getByAccount(String account);
+
 }
