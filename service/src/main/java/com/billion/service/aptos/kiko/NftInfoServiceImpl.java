@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.TableTokenData;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
@@ -65,13 +66,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @PostConstruct
     public void sfdfds() {
-        this.mint("1");
-        this.mint("1");
-        this.mint("1");
-        this.mint("1");
-        this.mint("1");
-        this.mint("1");
-        this.mint("1");
+        System.out.println(this.getTableTokenData("20000006138"));
+        System.out.println(this.getTableTokenData("20000006138"));
+        System.out.println(this.getTableTokenData("20000006138"));
     }
 
     public boolean mint(Serializable groupId) {
@@ -169,14 +166,25 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return true;
     }
 
-//    {
-//        "key_type": "0x3::token::TokenDataId",
-//            "value_type": "0x3::token::TokenData",
-//            "key": {
-//        "creator": "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
-//                "collection": "0xe68891e698afe5908de5ad973334",
-//                "name": "0x34633361636266642d643537662d343862642d623864652d306530613730363036306131"
-//    }
-//    }
+    public TableTokenData getTableTokenData(Serializable id) {
+        var nftInfo = super.getBaseMapper().selectById(id);
+        if (Objects.isNull(nftInfo)) {
+            return null;
+        }
+        TableTokenData tableTokenData = AptosService.getAptosClient().requestTableTokenData(
+                nftInfo.getTableHandle(),
+                nftInfo.getTableCreator(),
+                nftInfo.getTableCollection(),
+                nftInfo.getTableName()
+        );
+
+        if (Objects.isNull(tableTokenData)) {
+            return null;
+        }
+
+        tableTokenData.decode();
+
+        return tableTokenData;
+    }
 
 }
