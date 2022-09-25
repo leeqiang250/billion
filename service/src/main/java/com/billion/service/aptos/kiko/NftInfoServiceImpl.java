@@ -1,14 +1,12 @@
 package com.billion.service.aptos.kiko;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
-import com.billion.model.entity.NftGroup;
 import com.billion.model.entity.NftInfo;
-import com.billion.model.enums.Mint;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
-
-import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -106,7 +101,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
         var nftInfos = super.getBaseMapper().selectList(wrapper);
         nftInfos.forEach(nftInfo -> {
-            if (Mint.MINT_1_READY == nftInfo.getMint_()) {
+            if (TransactionStatus.STATUS_1_READY == nftInfo.getMint_()) {
                 TransactionPayload transactionPayload = TransactionPayload.builder()
                         .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                         .function("0x3::token::create_token_script")
@@ -134,7 +129,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                         transactionPayload);
                 if (AptosService.checkTransaction(transaction.getHash())) {
                     nftInfo.setInitializeHash(transaction.getHash());
-                    nftInfo.setMint_(Mint.MINT_3_SUCCESS);
+                    nftInfo.setMint_(TransactionStatus.STATUS_3_SUCCESS);
 
                     super.updateById(nftInfo);
                 }

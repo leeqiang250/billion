@@ -1,6 +1,7 @@
 package com.billion.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.billion.model.enums.TransactionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,18 +24,18 @@ public class Mint implements Serializable {
     @Getter
     @Setter
     @TableField(exist = false)
-    public com.billion.model.enums.Mint mint_;
+    public TransactionStatus mint_;
 
     private String getMint() {
         return this.mint_.getCode();
     }
 
     private void setMint(String mint) {
-        this.mint_ = com.billion.model.enums.Mint.of(mint);
+        this.mint_ = TransactionStatus.of(mint);
         this.mint = this.getMint();
     }
 
-    public void setMint_(com.billion.model.enums.Mint mint_) {
+    public void setMint_(TransactionStatus mint_) {
         this.setMint(mint_.getCode());
     }
 

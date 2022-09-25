@@ -10,7 +10,7 @@ import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.Language;
-import com.billion.model.enums.Mint;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
@@ -157,11 +157,11 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
             return false;
         }
 
-        if (Mint.MINT_3_SUCCESS == nftGroup.getMint_()) {
+        if (TransactionStatus.STATUS_3_SUCCESS == nftGroup.getMint_()) {
             return true;
         }
 
-        if (Mint.MINT_1_READY != nftGroup.getMint_()) {
+        if (TransactionStatus.STATUS_1_READY != nftGroup.getMint_()) {
             return false;
         }
 
@@ -201,7 +201,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 transactionPayload);
         if (AptosService.checkTransaction(transaction.getHash())) {
             nftGroup.setInitializeHash(transaction.getHash());
-            nftGroup.setMint_(Mint.MINT_3_SUCCESS);
+            nftGroup.setMint_(TransactionStatus.STATUS_3_SUCCESS);
 
             super.updateById(nftGroup);
 
