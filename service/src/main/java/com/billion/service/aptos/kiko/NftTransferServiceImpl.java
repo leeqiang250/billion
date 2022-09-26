@@ -54,13 +54,19 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             return null;
         }
 
-//        var tableTokenData = AptosService.getAptosClient().aaaa(
-//                handle.getTokenStoreTokensHandle(),
-//                nftTransfer.getCreator(),
-//                nftTransfer.getCollection(),
-//                nftTransfer.getName()
-//        );
-        //检查资源是否存在
+        var tableTokenDataResponse = AptosService.getAptosClient().requestTableToken(
+                handle.getTokenStoreTokensHandle(),
+                nftTransfer.getCreator(),
+                nftTransfer.getCollection(),
+                nftTransfer.getName()
+        );
+
+        if (tableTokenDataResponse.isValid()) {
+            nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setDescription(tableTokenDataResponse.getErrorCode());
+            super.updateById(nftTransfer);
+            return null;
+        }
 
         nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
         super.updateById(nftTransfer);
@@ -79,23 +85,26 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
                 .typeArguments(List.of())
                 .build();
 
-        var response = AptosService.getAptosClient().requestSubmitTransaction(
+        var transactionResponse = AptosService.getAptosClient().requestSubmitTransaction(
                 nftTransfer.getFrom(),
                 transactionPayload);
-        if (response.isValid()) {
+        if (transactionResponse.isValid()) {
+            nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setDescription(transactionResponse.getErrorCode());
+            super.updateById(nftTransfer);
             return null;
         }
 
-        nftTransfer.setTransactionHash(response.getData().getHash());
+        nftTransfer.setTransactionHash(transactionResponse.getData().getHash());
 
-        response = AptosService.getTransaction(response.getData().getHash());
-        if (response.isValid()) {
+        transactionResponse = AptosService.getTransaction(transactionResponse.getData().getHash());
+        if (transactionResponse.isValid()) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
         } else {
-            if (response.getData().isSuccess()) {
+            if (transactionResponse.getData().isSuccess()) {
                 nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
             } else {
-                nftTransfer.setDescription(response.getData().getVmStatus());
+                nftTransfer.setDescription(transactionResponse.getData().getVmStatus());
                 nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             }
         }

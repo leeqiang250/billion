@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.LogChainMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,is_result as is_result
+        ,path as path
+        ,query as query
+        ,body as body
+        ,message as message
+        ,error_code as error_code
+        ,vm_error_code as vm_error_code
+    </sql>
+
+</mapper>

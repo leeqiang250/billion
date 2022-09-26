@@ -6,6 +6,7 @@ import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
 import com.billion.framework.util.Retrying;
+import com.billion.service.aptos.kiko.LogChainService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,16 @@ public class AptosService {
     @Resource
     ContextService contextService;
 
+    @Resource
+    LogChainService logChainService;
+
     @PostConstruct
     public void init() {
-        AptosService.aptosClient = new AptosClient(ContextService.getAptosHost());
-        log.info("Aptos{}", AptosService.aptosClient.requestNode());
+        AptosService.aptosClient = new AptosClient(ContextService.getAptosHost(), info -> {
+            logChainService.add(info);
+            return null;
+        });
+        log.info("Aptos Node{}", requestNodeCache());
     }
 
     public static boolean checkTransaction(String hash) {
