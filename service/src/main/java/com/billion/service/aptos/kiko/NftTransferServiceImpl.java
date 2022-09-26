@@ -25,7 +25,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
     @javax.annotation.Resource
     HandleService handleService;
 
-    @PostConstruct
+//    @PostConstruct
     public NftTransfer fds() {
         QueryWrapper<NftTransfer> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftTransfer::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
