@@ -1,6 +1,7 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.AccountCollectionData;
+import com.aptos.request.v1.model.AccountTokenStore;
 import com.aptos.request.v1.model.Resource;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,6 +11,7 @@ import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 /**
@@ -21,6 +23,7 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
     @Override
     public boolean update(String account) {
         var accountCollectionData = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
+        var accountTokenStore = AptosService.getAptosClient().requestAccountResource(account, Resource.TokenStore(), AccountTokenStore.class);
 
         QueryWrapper<Handle> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Handle::getOwner, account);
@@ -29,17 +32,18 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
                 || StringUtils.isEmpty(handle.getCollectionsCollectionDataHandle())
                 || StringUtils.isEmpty(handle.getCollectionsTokenDataHandle())) {
 
-
             handle = Handle.builder()
                     .owner(account)
                     .collectionsCollectionDataHandle(accountCollectionData.getData().getCollectionData().getHandle())
                     .collectionsTokenDataHandle(accountCollectionData.getData().getTokenData().getHandle())
+                    .tokenStoreTokensHandle(accountTokenStore.getData().getTokens().getHandle())
                     .build();
 
             this.getBaseMapper().insert(handle);
         } else {
             handle.setCollectionsCollectionDataHandle(accountCollectionData.getData().getCollectionData().getHandle());
             handle.setCollectionsTokenDataHandle(accountCollectionData.getData().getTokenData().getHandle());
+            handle.setTokenStoreTokensHandle(accountTokenStore.getData().getTokens().getHandle());
 
             this.getBaseMapper().updateById(handle);
         }
