@@ -116,8 +116,17 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             if (26 < displayName.length()) {
                 throw new BizException("display name too long, max 26");
             }
+//            public entry fun direct_transfer_script(
+//                    sender: &signer,
+//                    receiver: &signer,
+//                    creators_address: address,
+//                    collection: String,
+//                    name: String,
+//                    property_version: u64,
+//                    amount: u64,
+//    ) acquires TokenStore {
 
-            TransactionPayload transactionPayload = TransactionPayload.builder()
+                TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                     .function("0x3::token::create_token_script")
                     .arguments(List.of(

@@ -19,7 +19,7 @@
     <description>billion</description>
 
     <properties>
-        <jdk.version>18</jdk.version>
+        <jdk.version>11</jdk.version>
         <encoding.version>UTF-8</encoding.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <maven.compiler.source>${jdk.version}</maven.compiler.source>
