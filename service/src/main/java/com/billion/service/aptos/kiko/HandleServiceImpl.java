@@ -3,6 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.aptos.request.v1.model.AccountCollectionData;
 import com.aptos.request.v1.model.AccountTokenStore;
 import com.aptos.request.v1.model.Resource;
+import com.aptos.request.v1.model.Response;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.HandleMapper;
@@ -29,28 +30,24 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
         wrapper.lambda().eq(Handle::getOwner, account);
         var handle = super.getOne(wrapper, false);
 
-        try {
-            var accountCollectionData = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
-            if (Objects.nonNull(accountCollectionData)) {
-                if (Objects.isNull(handle)) {
-                    handle = Handle.builder()
-                            .owner(account)
-                            .tokenStoreTokensHandle(EMPTY)
-                            .build();
-                }
-
-                handle.setCollectionsCollectionDataHandle(accountCollectionData.getData().getCollectionData().getHandle());
-                handle.setCollectionsTokenDataHandle(accountCollectionData.getData().getTokenData().getHandle());
-
-                super.saveOrUpdate(handle);
+        var accountCollectionDataResponse = AptosService.getAptosClient().requestAccountResource(account, Resource.Collections(), AccountCollectionData.class);
+        if (!accountCollectionDataResponse.isValid()) {
+            if (Objects.isNull(handle)) {
+                handle = Handle.builder()
+                        .owner(account)
+                        .tokenStoreTokensHandle(EMPTY)
+                        .build();
             }
-        } catch (Exception e) {
-            log.error("{}", e.toString());
+
+            handle.setCollectionsCollectionDataHandle(accountCollectionDataResponse.getData().getData().getCollectionData().getHandle());
+            handle.setCollectionsTokenDataHandle(accountCollectionDataResponse.getData().getData().getTokenData().getHandle());
+
+            super.saveOrUpdate(handle);
         }
 
         handle = super.getOne(wrapper, false);
-        var accountTokenStore = this.getAccountTokenStore(account);
-        if (Objects.nonNull(accountTokenStore)) {
+        var accountTokenStoreResponse = this.getAccountTokenStore(account);
+        if (!accountTokenStoreResponse.isValid()) {
             if (Objects.isNull(handle)) {
                 handle = Handle.builder()
                         .owner(account)
@@ -58,7 +55,7 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
                         .collectionsTokenDataHandle(EMPTY)
                         .build();
             }
-            handle.setTokenStoreTokensHandle(accountTokenStore.getData().getTokens().getHandle());
+            handle.setTokenStoreTokensHandle(accountTokenStoreResponse.getData().getData().getTokens().getHandle());
 
             super.saveOrUpdate(handle);
         }
@@ -82,15 +79,8 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
     }
 
     @Override
-    public AccountTokenStore getAccountTokenStore(String account) {
-        AccountTokenStore accountTokenStore = null;
-        try {
-            accountTokenStore = AptosService.getAptosClient().requestAccountResource(account, com.aptos.request.v1.model.Resource.TokenStore(), AccountTokenStore.class);
-        } catch (Exception e) {
-            log.error("{}", e.toString());
-        }
-
-        return accountTokenStore;
+    public Response<AccountTokenStore> getAccountTokenStore(String account) {
+        return AptosService.getAptosClient().requestAccountResource(account, com.aptos.request.v1.model.Resource.TokenStore(), AccountTokenStore.class);
     }
 
 }

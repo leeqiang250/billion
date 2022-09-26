@@ -134,13 +134,15 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
             //TODO
-            var tableCollectionData = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
-            nftGroup.setTotalSupply(tableCollectionData.getMaximum());
-            nftGroup.setCurrentSupply(tableCollectionData.getSupply());
+            var response = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
+            if (!response.isValid()) {
+                nftGroup.setTotalSupply(response.getData().getMaximum());
+                nftGroup.setCurrentSupply(response.getData().getSupply());
 
-            this.updateById(nftGroup);
+                this.updateById(nftGroup);
 
-            this.deleteCache(id);
+                this.deleteCache(id);
+            }
         }
 
         return nftGroup;
@@ -200,21 +202,28 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 .typeArguments(List.of())
                 .build();
 
-        var transaction = AptosService.getAptosClient().requestSubmitTransaction(
+        var response = AptosService.getAptosClient().requestSubmitTransaction(
                 nftGroup.getOwner(),
                 transactionPayload);
-        if (AptosService.checkTransaction(transaction.getHash())) {
-            nftGroup.setTransactionHash(transaction.getHash());
-            nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-
-            super.updateById(nftGroup);
-
-            this.handleService.update(nftGroup.getOwner());
-
-            return true;
+        if (response.isValid()) {
+            return false;
         }
 
-        return false;
+        if (!AptosService.checkTransaction(response.getData().getHash())) {
+            nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            return false;
+        }
+
+        nftGroup.setTransactionHash(response.getData().getHash());
+        nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+
+        super.updateById(nftGroup);
+
+        this.handleService.update(nftGroup.getOwner());
+
+        //TODO 删除缓存
+
+        return true;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TableTokenData;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.service.ICacheService;
@@ -23,8 +24,8 @@ public interface NftInfoService extends ICacheService<NftInfo> {
      * getTableTokenData
      *
      * @param id id
-     * @return TableTokenData
+     * @return Response<TableTokenData>
      */
-    TableTokenData getTableTokenData(Serializable id);
+    Response<TableTokenData> getTableTokenData(Serializable id);
 
 }

@@ -3,9 +3,12 @@ package com.billion.service.aptos.kiko;
 import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
 import com.billion.model.constant.RequestPath;
+import com.billion.model.entity.Contract;
 import com.billion.model.entity.Token;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.sql.Wrapper;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,52 +51,60 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
     @Override
     public boolean initialize(Serializable id) {
-        var token = super.getById(id);
+        QueryWrapper<Token> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(Token::getId, id);
+        wrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        var token = super.getOne(wrapper, false);
         if (Objects.isNull(token)) {
             return false;
         }
 
-        if (StringUtils.isEmpty(token.getInitializeHash())) {
-            this.checkToken(token);
-
-            Resource resource = Resource.builder()
-                    .moduleAddress(token.getModuleAddress())
-                    .moduleName(token.getModuleName())
-                    .resourceName(token.getStructName())
-                    .build();
-
-            TransactionPayload transactionPayload = TransactionPayload.builder()
-                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(token.getInitializeFunction())
-                    .arguments(List.of(
-                            token.getName(),
-                            token.getSymbol()
-                    ))
-                    .typeArguments(List.of(resource.resourceTag()))
-                    .build();
-
-            var transaction = AptosService.getAptosClient().requestSubmitTransaction(
-                    token.getModuleAddress(),
-                    transactionPayload);
-
-            token.setInitializeHash(transaction.getHash());
+        if (!this.checkToken(token)) {
+            return false;
         }
 
-        if (!AptosService.checkTransaction(token.getInitializeHash())) {
-            token.setInitializeHash(RequestPath.EMPTY);
+        Resource resource = Resource.builder()
+                .moduleAddress(token.getModuleAddress())
+                .moduleName(token.getModuleName())
+                .resourceName(token.getStructName())
+                .build();
+
+        TransactionPayload transactionPayload = TransactionPayload.builder()
+                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                .function(token.getInitializeFunction())
+                .arguments(List.of(
+                        token.getName(),
+                        token.getSymbol()
+                ))
+                .typeArguments(List.of(resource.resourceTag()))
+                .build();
+
+        var response = AptosService.getAptosClient().requestSubmitTransaction(
+                token.getModuleAddress(),
+                transactionPayload);
+        if (response.isValid()) {
+            return false;
         }
+
+        if (!AptosService.checkTransaction(response.getData().getHash())) {
+            token.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            return false;
+        }
+
+        token.setTransactionHash(response.getData().getHash());
+        token.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
 
         super.updateById(token);
 
         //TODO 删除缓存
 
-        return StringUtils.isEmpty(token.getInitializeHash());
+        return true;
     }
 
     public boolean transferResource(String from, String to, String amount, Resource resource) {
         var transaction = AptosService.getAptosClient().transferResource(from, to, amount, resource);
 
-        return AptosService.checkTransaction(transaction.getHash());
+        return AptosService.checkTransaction(transaction.getData().getHash());
     }
 
 }

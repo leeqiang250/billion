@@ -12,7 +12,8 @@
         ,initialize_function as initialize_function
         ,name_ as name_
         ,symbol as symbol
-        ,initialize_hash as initialize_hash
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
     </sql>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TableTokenData;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.Hex;
@@ -135,47 +136,52 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                     .typeArguments(List.of())
                     .build();
 
-            var transaction = AptosService.getAptosClient().requestSubmitTransaction(
+            var response = AptosService.getAptosClient().requestSubmitTransaction(
                     nftGroup.getOwner(),
                     transactionPayload);
-            if (AptosService.checkTransaction(transaction.getHash())) {
-                nftInfo.setOwner(nftGroup.getOwner());
+            if (!response.isValid()) {
+                if (AptosService.checkTransaction(response.getData().getHash())) {
+                    nftInfo.setOwner(nftGroup.getOwner());
 
-                nftInfo.setTransactionHash(transaction.getHash());
-                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+                    nftInfo.setTransactionHash(response.getData().getHash());
+                    nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
 
-                nftInfo.setTableHandle(handle.getCollectionsTokenDataHandle());
-                nftInfo.setTableCollection(Hex.encode(nftGroupDisplayName));
-                nftInfo.setTableCreator(nftGroup.getOwner());
-                nftInfo.setTableName(Hex.encode(displayName));
+                    nftInfo.setTableHandle(handle.getCollectionsTokenDataHandle());
+                    nftInfo.setTableCollection(Hex.encode(nftGroupDisplayName));
+                    nftInfo.setTableCreator(nftGroup.getOwner());
+                    nftInfo.setTableName(Hex.encode(displayName));
+                } else {
+                    nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                }
 
                 super.updateById(nftInfo);
             }
         });
 
+        //TODO 删除缓存
+
         return true;
     }
 
     @Override
-    public TableTokenData getTableTokenData(Serializable id) {
+    public Response<TableTokenData> getTableTokenData(Serializable id) {
         var nftInfo = super.getById(id);
         if (Objects.isNull(nftInfo)) {
             return null;
         }
-        TableTokenData tableTokenData = AptosService.getAptosClient().requestTableTokenData(
+
+        var response = AptosService.getAptosClient().requestTableTokenData(
                 nftInfo.getTableHandle(),
                 nftInfo.getTableCreator(),
                 nftInfo.getTableCollection(),
                 nftInfo.getTableName()
         );
 
-        if (Objects.isNull(tableTokenData)) {
-            return null;
+        if (!response.isValid()) {
+            response.getData().decode();
         }
 
-        tableTokenData.decode();
-
-        return tableTokenData;
+        return response;
     }
 
 }

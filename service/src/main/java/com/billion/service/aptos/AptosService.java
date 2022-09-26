@@ -2,6 +2,7 @@ package com.billion.service.aptos;
 
 import com.aptos.AptosClient;
 import com.aptos.request.v1.model.Node;
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
 import com.billion.framework.util.Retrying;
@@ -39,16 +40,12 @@ public class AptosService {
 
         return Retrying.retry(
                 () -> {
-                    Transaction transaction = null;
-                    try {
-                        transaction = AptosService.aptosClient.requestTransactionByHash(hash);
-                    } catch (Exception exception) {
-                    }
-                    if (Objects.isNull(transaction)) {
+                    var response = AptosService.aptosClient.requestTransactionByHash(hash);
+                    if (response.isValid()) {
                         throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("result:{} transaction:{}, vmStatus:{}", transaction.isSuccess(), transaction.getHash(), transaction.getVmStatus());
-                        return transaction.isSuccess();
+                        log.info("result:{} transaction:{}, vmStatus:{}", response.getData().isSuccess(), response.getData().getHash(), response.getData().getVmStatus());
+                        return response.getData().isSuccess();
                     }
                 },
                 60,
@@ -57,23 +54,19 @@ public class AptosService {
         );
     }
 
-    public static Transaction getTransaction(String hash) {
+    public static Response<Transaction> getTransaction(String hash) {
         if (StringUtils.isEmpty(hash)) {
             return null;
         }
 
         return Retrying.retry(
                 () -> {
-                    Transaction transaction = null;
-                    try {
-                        transaction = AptosService.aptosClient.requestTransactionByHash(hash);
-                    } catch (Exception exception) {
-                    }
-                    if (Objects.isNull(transaction)) {
+                    var response = AptosService.aptosClient.requestTransactionByHash(hash);
+                    if (response.isValid()) {
                         throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("result:{} transaction:{}, vmStatus:{}", transaction.isSuccess(), transaction.getHash(), transaction.getVmStatus());
-                        return transaction;
+                        log.info("result:{} transaction:{}, vmStatus:{}", response.getData().isSuccess(), response.getData().getHash(), response.getData().getVmStatus());
+                        return response;
                     }
                 },
                 60,
@@ -90,9 +83,10 @@ public class AptosService {
 
     public static Node requestNodeCache() {
         if (Objects.isNull(node) || System.currentTimeMillis() > (responseNodeTs + cacheTs)) {
-            node = AptosService.getAptosClient().requestNode();
-            if (Objects.nonNull(node)) {
+            var response = AptosService.getAptosClient().requestNode();
+            if (response.isValid()) {
                 responseNodeTs = System.currentTimeMillis();
+                node = response.getData();
             }
         }
 
