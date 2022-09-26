@@ -15,10 +15,10 @@ import java.util.stream.Stream;
 public enum TransactionStatus {
 
     STATUS_0_PREPARING("status_0_preparing", "交易准备中"),
-    STATUS_1_READY("status_1_ready", "铸造准备完成"),
-    STATUS_2_ING("status_2_ing", "铸造中"),
-    STATUS_3_SUCCESS("status_3_success", "铸造成功"),
-    STATUS_4_FAILURE("status_4_failure", "铸造失败");
+    STATUS_1_READY("status_1_ready", "交易准备完成"),
+    STATUS_2_ING("status_2_ing", "交易中"),
+    STATUS_3_SUCCESS("status_3_success", "交易成功"),
+    STATUS_4_FAILURE("status_4_failure", "交易失败");
 
     final String code;
 

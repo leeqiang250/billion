@@ -12,6 +12,14 @@ import java.io.Serializable;
 public interface NftInfoService extends ICacheService<NftInfo> {
 
     /**
+     * mint
+     *
+     * @param groupId groupId
+     * @return boolean
+     */
+    boolean mint(Serializable groupId);
+
+    /**
      * getTableTokenData
      *
      * @param id id

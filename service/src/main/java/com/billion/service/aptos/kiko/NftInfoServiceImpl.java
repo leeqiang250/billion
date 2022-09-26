@@ -16,7 +16,6 @@ import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
@@ -64,6 +63,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return (NftInfo) value;
     }
 
+    @Override
     public boolean mint(Serializable groupId) {
         if (!this.nftGroupService.mint(groupId)) {
             return false;
@@ -92,12 +92,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
         QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
+        wrapper.lambda().eq(NftInfo::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var nftInfos = super.getBaseMapper().selectList(wrapper);
         nftInfos.forEach(nftInfo -> {
-            if (TransactionStatus.STATUS_1_READY != nftInfo.getTransactionStatus_()) {
-                return;
-            }
-
             var displayName = languageService.getByKey(context, nftInfo.getDisplayName());
             var description = languageService.getByKey(context, nftInfo.getDescription());
             var uri = nftInfo.getUri();
@@ -116,17 +113,8 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             if (26 < displayName.length()) {
                 throw new BizException("display name too long, max 26");
             }
-//            public entry fun direct_transfer_script(
-//                    sender: &signer,
-//                    receiver: &signer,
-//                    creators_address: address,
-//                    collection: String,
-//                    name: String,
-//                    property_version: u64,
-//                    amount: u64,
-//    ) acquires TokenStore {
 
-                TransactionPayload transactionPayload = TransactionPayload.builder()
+            TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                     .function("0x3::token::create_token_script")
                     .arguments(List.of(
@@ -168,6 +156,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return true;
     }
 
+    @Override
     public TableTokenData getTableTokenData(Serializable id) {
         var nftInfo = super.getBaseMapper().selectById(id);
         if (Objects.isNull(nftInfo)) {
