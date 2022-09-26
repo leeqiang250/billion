@@ -72,14 +72,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
 
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!-- <executions>-->
+                <!--     <execution>-->
+                <!--         <phase>package</phase>-->
+                <!--         <goals>-->
+                <!--             <goal>repackage</goal>-->
+                <!--         </goals>-->
+                <!--     </execution>-->
+                <!-- </executions>-->
 
                 <configuration>
                     <!-- 取消查找本项目下的Main方法：为了解决Unable to find main class的问题 -->
