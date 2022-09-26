@@ -93,7 +93,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
         wrapper.lambda().eq(NftInfo::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var nftInfos = super.getBaseMapper().selectList(wrapper);
+        var nftInfos = super.list(wrapper);
         nftInfos.forEach(nftInfo -> {
             var displayName = languageService.getByKey(context, nftInfo.getDisplayName());
             var description = languageService.getByKey(context, nftInfo.getDescription());
@@ -158,7 +158,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @Override
     public TableTokenData getTableTokenData(Serializable id) {
-        var nftInfo = super.getBaseMapper().selectById(id);
+        var nftInfo = super.getById(id);
         if (Objects.isNull(nftInfo)) {
             return null;
         }

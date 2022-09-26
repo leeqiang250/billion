@@ -32,7 +32,7 @@ public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Co
 
         QueryWrapper<Contract> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Contract::getChain, context.getChain());
-        List<Contract> list = this.getBaseMapper().selectList(wrapper);
+        List<Contract> list = super.list(wrapper);
 
         map = list.stream().collect(Collectors.toMap(Contract::getName, Contract::getContract, (key1, key2) -> key2));
 

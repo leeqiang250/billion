@@ -28,7 +28,7 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
 
         QueryWrapper<NftAttribute> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftAttribute::getGroupId, groupId);
-        List<NftAttribute> list = this.getBaseMapper().selectList(wrapper);
+        List<NftAttribute> list = super.list(wrapper);
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
 

@@ -1,5 +1,7 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.AccountTokenStore;
+import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftTransferMapper;
@@ -20,6 +22,9 @@ import java.util.Objects;
 @Service
 public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapper, NftTransfer> implements NftTransferService {
 
+    @javax.annotation.Resource
+    HandleService handleService;
+
     @PostConstruct
     public NftTransfer fds() {
         QueryWrapper<NftTransfer> wrapper = new QueryWrapper<>();
@@ -30,8 +35,29 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             return null;
         }
 
+        var accountTokenStore = AptosService.getAptosClient().requestAccountResource(nftTransfer.getTo(), Resource.TokenStore(), AccountTokenStore.class);
+        if (Objects.nonNull(accountTokenStore)
+                && !accountTokenStore.getData().isDirectTransfer()
+        ) {
+            nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setDescription("Account TokenStore non-existent or direct_transfer is false");
+            super.updateById(nftTransfer);
+            return null;
+        }
+
+        handleService.getByAccount(nftTransfer.getFrom());
+
+
+        AptosService.getAptosClient().aaaa(
+                "",
+                nftTransfer.getCreator(),
+                nftTransfer.getCollection(),
+                nftTransfer.getName()
+        );
+        //检查资源是否存在
+
         nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
-        super.getBaseMapper().updateById(nftTransfer);
+        super.updateById(nftTransfer);
 
         TransactionPayload transactionPayload = TransactionPayload.builder()
                 .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
@@ -57,7 +83,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
         } else {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
         }
-        super.getBaseMapper().updateById(nftTransfer);
+        super.updateById(nftTransfer);
 
         return nftTransfer;
     }

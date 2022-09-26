@@ -33,7 +33,7 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
 
         QueryWrapper<Language> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(Language::getLanguage, context.getLanguage());
-        List<Language> list = this.getBaseMapper().selectList(wrapper);
+        List<Language> list = super.list(wrapper);
 
         map = list.stream().collect(Collectors.toMap(Language::getKey, Language::getValue, (key1, key2) -> key2));
 

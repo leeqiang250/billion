@@ -50,7 +50,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-        List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
+        List<NftGroup> list = super.list(wrapper);
 
         changeLanguage(context, list);
 
@@ -71,7 +71,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-        List<NftGroup> list = this.getBaseMapper().selectList(wrapper);
+        List<NftGroup> list = super.list(wrapper);
 
         changeLanguage(context, list);
 
@@ -151,7 +151,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getId, id);
         wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-        var nftGroup = super.getBaseMapper().selectOne(wrapper);
+        var nftGroup = super.getOne(wrapper, false);
         if (Objects.isNull(nftGroup)) {
             return false;
         }
@@ -209,7 +209,9 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
             super.updateById(nftGroup);
 
-            return this.handleService.update(nftGroup.getOwner());
+            this.handleService.update(nftGroup.getOwner());
+
+            return true;
         }
 
         return false;
