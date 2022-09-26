@@ -1,7 +1,5 @@
 package com.billion.service.aptos.kiko;
 
-import com.aptos.request.v1.model.AccountTokenStore;
-import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftTransferMapper;
@@ -12,7 +10,6 @@ import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,8 +22,8 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
     @javax.annotation.Resource
     HandleService handleService;
 
-//    @PostConstruct
-    public NftTransfer fds() {
+    @Override
+    public NftTransfer dispatch() {
         QueryWrapper<NftTransfer> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftTransfer::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         wrapper.lambda().orderByAsc(NftTransfer::getId);
@@ -35,9 +32,9 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             return null;
         }
 
-        var accountTokenStore = AptosService.getAptosClient().requestAccountResource(nftTransfer.getTo(), Resource.TokenStore(), AccountTokenStore.class);
-        if (Objects.nonNull(accountTokenStore)
-                && !accountTokenStore.getData().isDirectTransfer()
+        var accountTokenStore = handleService.getAccountTokenStore(nftTransfer.getTo());
+        if (Objects.isNull(accountTokenStore)
+                || !accountTokenStore.getData().isDirectTransfer()
         ) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftTransfer.setDescription("Account TokenStore non-existent or direct_transfer is false");
@@ -48,12 +45,12 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
         handleService.getByAccount(nftTransfer.getFrom());
 
 
-        AptosService.getAptosClient().aaaa(
-                "",
-                nftTransfer.getCreator(),
-                nftTransfer.getCollection(),
-                nftTransfer.getName()
-        );
+//        AptosService.getAptosClient().aaaa(
+//                "",
+//                nftTransfer.getCreator(),
+//                nftTransfer.getCollection(),
+//                nftTransfer.getName()
+//        );
         //检查资源是否存在
 
         nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
@@ -76,12 +73,18 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
         var transaction = AptosService.getAptosClient().requestSubmitTransaction(
                 nftTransfer.getFrom(),
                 transactionPayload);
+        nftTransfer.setTransactionHash(transaction.getHash());
 
-        if (AptosService.checkTransaction(transaction.getHash())) {
-            nftTransfer.setTransactionHash(transaction.getHash());
-            nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-        } else {
+        transaction = AptosService.getTransaction(transaction.getHash());
+        if (Objects.isNull(transaction)) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+        } else {
+            if (transaction.isSuccess()) {
+                nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            } else {
+                nftTransfer.setDescription(transaction.getVmStatus());
+                nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            }
         }
         super.updateById(nftTransfer);
 

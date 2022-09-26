@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
-import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -117,7 +116,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         return (NftGroup) value;
     }
 
-    public void changeLanguage(Context context, List<NftGroup> list) {
+    private void changeLanguage(Context context, List<NftGroup> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
 
@@ -147,6 +146,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         return nftGroup;
     }
 
+    @Override
     public boolean mint(Serializable id) {
         QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftGroup::getId, id);

@@ -49,22 +49,18 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
         }
 
         handle = super.getOne(wrapper, false);
-        try {
-            var accountTokenStore = AptosService.getAptosClient().requestAccountResource(account, Resource.TokenStore(), AccountTokenStore.class);
-            if (Objects.nonNull(accountTokenStore)) {
-                if (Objects.isNull(handle)) {
-                    handle = Handle.builder()
-                            .owner(account)
-                            .collectionsCollectionDataHandle(EMPTY)
-                            .collectionsTokenDataHandle(EMPTY)
-                            .build();
-                }
-                handle.setTokenStoreTokensHandle(accountTokenStore.getData().getTokens().getHandle());
-
-                super.saveOrUpdate(handle);
+        var accountTokenStore = this.getAccountTokenStore(account);
+        if (Objects.nonNull(accountTokenStore)) {
+            if (Objects.isNull(handle)) {
+                handle = Handle.builder()
+                        .owner(account)
+                        .collectionsCollectionDataHandle(EMPTY)
+                        .collectionsTokenDataHandle(EMPTY)
+                        .build();
             }
-        } catch (Exception e) {
-            log.error("{}", e.toString());
+            handle.setTokenStoreTokensHandle(accountTokenStore.getData().getTokens().getHandle());
+
+            super.saveOrUpdate(handle);
         }
     }
 
@@ -83,6 +79,18 @@ public class HandleServiceImpl extends AbstractCacheService<HandleMapper, Handle
         }
 
         return handle;
+    }
+
+    @Override
+    public AccountTokenStore getAccountTokenStore(String account) {
+        AccountTokenStore accountTokenStore = null;
+        try {
+            accountTokenStore = AptosService.getAptosClient().requestAccountResource(account, com.aptos.request.v1.model.Resource.TokenStore(), AccountTokenStore.class);
+        } catch (Exception e) {
+            log.error("{}", e.toString());
+        }
+
+        return accountTokenStore;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.AccountTokenStore;
 import com.billion.model.entity.Handle;
 import com.billion.model.service.ICacheService;
 
@@ -22,5 +23,14 @@ public interface HandleService extends ICacheService<Handle> {
      * @return Handle
      */
     Handle getByAccount(String account);
+
+
+    /**
+     * getAccountTokenStore
+     *
+     * @param account account
+     * @return AccountTokenStore
+     */
+    AccountTokenStore getAccountTokenStore(String account);
 
 }

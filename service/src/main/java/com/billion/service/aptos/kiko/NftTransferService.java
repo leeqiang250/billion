@@ -8,4 +8,11 @@ import com.billion.model.service.ICacheService;
  */
 public interface NftTransferService extends ICacheService<NftTransfer> {
 
+    /**
+     * dispatch
+     *
+     * @return NftTransfer
+     */
+    NftTransfer dispatch();
+
 }

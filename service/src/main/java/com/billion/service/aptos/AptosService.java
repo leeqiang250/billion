@@ -57,6 +57,31 @@ public class AptosService {
         );
     }
 
+    public static Transaction getTransaction(String hash) {
+        if (StringUtils.isEmpty(hash)) {
+            return null;
+        }
+
+        return Retrying.retry(
+                () -> {
+                    Transaction transaction = null;
+                    try {
+                        transaction = AptosService.aptosClient.requestTransactionByHash(hash);
+                    } catch (Exception exception) {
+                    }
+                    if (Objects.isNull(transaction)) {
+                        throw new RuntimeException("transaction non-existent:" + hash);
+                    } else {
+                        log.info("result:{} transaction:{}, vmStatus:{}", transaction.isSuccess(), transaction.getHash(), transaction.getVmStatus());
+                        return transaction;
+                    }
+                },
+                60,
+                1000L,
+                Exception.class
+        );
+    }
+
     final static long cacheTs = 5000L;
 
     static Node node;
