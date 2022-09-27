@@ -11,7 +11,6 @@ import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,8 +24,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
     HandleService handleService;
 
     @Override
-    @PostConstruct
-    public NftTransfer dispatch() {
+    public NftTransfer transfer() {
         QueryWrapper<NftTransfer> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftTransfer::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         wrapper.lambda().orderByAsc(NftTransfer::getId);

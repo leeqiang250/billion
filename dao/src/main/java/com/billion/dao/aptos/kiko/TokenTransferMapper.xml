@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.TokenTransferMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,from_ as from_
+        ,to_ as to_
+        ,module_address as module_address
+        ,module_name as module_name
+        ,resource_name as resource_name
+        ,amount_ as amount_
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
+        ,description as description
+    </sql>
+
+</mapper>
