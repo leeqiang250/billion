@@ -6,17 +6,20 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.billion.model.entity.NftAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author jason
  */
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NFTClassDto {
+public class NftClassDto implements Serializable {
     /**
      * id
      */
