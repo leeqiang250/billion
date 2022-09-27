@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 /**
  * @author liqiang
  */
@@ -114,6 +116,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
         } else {
             if (transactionResponse.getData().isSuccess()) {
+                nftTransfer.setDescription(EMPTY);
                 nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
             } else {
                 nftTransfer.setDescription(transactionResponse.getData().getVmStatus());

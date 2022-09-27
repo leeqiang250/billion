@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 /**
  * @author liqiang
  */
@@ -104,6 +106,7 @@ public class TokenTransferServiceImpl extends AbstractCacheService<TokenTransfer
             tokenTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
         } else {
             if (transactionResponse.getData().isSuccess()) {
+                tokenTransfer.setDescription(EMPTY);
                 tokenTransfer.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
             } else {
                 tokenTransfer.setDescription(transactionResponse.getData().getVmStatus());
