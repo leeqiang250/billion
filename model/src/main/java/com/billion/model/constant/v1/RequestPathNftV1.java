@@ -15,4 +15,6 @@ public interface RequestPathNftV1 {
 
     String NFT_ATTRIBUTE = NFT + "/attribute";
 
+    String NFT_CLASS = NFT + "/class";
+
 }

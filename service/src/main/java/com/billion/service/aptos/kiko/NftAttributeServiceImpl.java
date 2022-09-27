@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftAttributeMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftAttribute;
+import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
 import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
         }
 
         QueryWrapper<NftAttribute> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftAttribute::getGroupId, groupId);
+        wrapper.lambda().eq(NftAttribute::getNftClassId, groupId);
         List<NftAttribute> list = super.list(wrapper);
 
         map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
@@ -36,6 +37,14 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
         return map.values();
+    }
+
+    @Override
+    public List<NftAttribute> getByClassId(String classId) {
+        QueryWrapper<NftAttribute> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(NftAttribute::getNftClassId, classId);
+        List<NftAttribute> list = super.list(wrapper);
+        return list;
     }
 
 }
