@@ -1,4 +1,4 @@
-package com.billion.quote.sss;
+package com.billion.quote.dispatch;
 
 import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
@@ -9,7 +9,6 @@ import com.billion.service.aptos.kiko.DistributedLockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +29,15 @@ import static com.billion.model.constant.RedisPath.SCAN_CHAIN_LOCK;
 @Component
 @Configuration
 @EnableScheduling
-public class ScanService implements Serializable {
+public class ScanDispatchService implements Serializable {
 
     @Resource
     ConfigService configService;
 
     @Resource
     DistributedLockService distributedLockService;
+
+    boolean next;
 
     @PostConstruct
     void init() {
@@ -58,16 +59,19 @@ public class ScanService implements Serializable {
         }
     }
 
-    @Scheduled(cron = "*/1 * * * * ?")
+    //@Scheduled(cron = "*/2 * * * * ?")
     void dispatch() {
-        this.distributedLockService.tryGetDistributedLock(
-                SCAN_CHAIN_LOCK,
-                UUID.randomUUID().toString(),
-                LOCK_EXPIRE_TS,
-                (Consumer<Object>) o -> {
-                    this.scan();
-                }
-        );
+        this.next = true;
+        while (this.next) {
+            this.distributedLockService.tryGetDistributedLock(
+                    SCAN_CHAIN_LOCK,
+                    UUID.randomUUID().toString(),
+                    LOCK_EXPIRE_TS,
+                    (Consumer<Object>) o -> {
+                        this.scan();
+                    }
+            );
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -77,6 +81,7 @@ public class ScanService implements Serializable {
 
         var response = AptosService.getAptosClient().requestTransaction(String.valueOf(version));
         if (response.isValid() || response.getData().isEmpty()) {
+            this.next = false;
             return;
         }
 
@@ -92,6 +97,8 @@ public class ScanService implements Serializable {
 
         log.info("{}", Config.SCAN_CHAIN_CURSOR);
         log.info("------------------------------------------------------------------------------------------------");
+
+        this.next = true;
     }
 
 }

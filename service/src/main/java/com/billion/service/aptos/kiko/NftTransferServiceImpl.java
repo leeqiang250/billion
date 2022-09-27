@@ -9,6 +9,7 @@ import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Objects;
 /**
  * @author liqiang
  */
+@Slf4j
 @Service
 public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapper, NftTransfer> implements NftTransferService {
 
@@ -40,6 +42,9 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftTransfer.setDescription("Account TokenStore non-existent or direct_transfer is false");
             super.updateById(nftTransfer);
+
+            this.log(nftTransfer);
+
             return null;
         }
 
@@ -49,6 +54,9 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftTransfer.setDescription("TokenStore Tokens Handle is null");
             super.updateById(nftTransfer);
+
+            this.log(nftTransfer);
+
             return null;
         }
 
@@ -63,6 +71,9 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftTransfer.setDescription(tableTokenDataResponse.getErrorCode());
             super.updateById(nftTransfer);
+
+            this.log(nftTransfer);
+
             return null;
         }
 
@@ -90,6 +101,9 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftTransfer.setDescription(transactionResponse.getErrorCode());
             super.updateById(nftTransfer);
+
+            this.log(nftTransfer);
+
             return null;
         }
 
@@ -108,7 +122,15 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
         }
         super.updateById(nftTransfer);
 
+        this.log(nftTransfer);
+
         return nftTransfer;
+    }
+
+    void log(NftTransfer nftTransfer) {
+        log.info("------------------------------------------------------------------------------------------------");
+        log.info("token transfer {}", nftTransfer);
+        log.info("------------------------------------------------------------------------------------------------");
     }
 
 }

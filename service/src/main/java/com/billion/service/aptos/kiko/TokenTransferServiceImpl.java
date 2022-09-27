@@ -91,6 +91,9 @@ public class TokenTransferServiceImpl extends AbstractCacheService<TokenTransfer
             tokenTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             tokenTransfer.setDescription(transactionResponse.getErrorCode());
             super.updateById(tokenTransfer);
+
+            this.log(tokenTransfer);
+
             return null;
         }
 
@@ -109,7 +112,15 @@ public class TokenTransferServiceImpl extends AbstractCacheService<TokenTransfer
         }
         super.updateById(tokenTransfer);
 
+        this.log(tokenTransfer);
+
         return tokenTransfer;
+    }
+
+    void log(TokenTransfer tokenTransfer){
+        log.info("------------------------------------------------------------------------------------------------");
+        log.info("token transfer {}", tokenTransfer);
+        log.info("------------------------------------------------------------------------------------------------");
     }
 
 }
