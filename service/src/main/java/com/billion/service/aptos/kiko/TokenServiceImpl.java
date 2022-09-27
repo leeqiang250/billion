@@ -2,11 +2,8 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.TransactionPayload;
-import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
-import com.billion.model.constant.RequestPath;
-import com.billion.model.entity.Contract;
 import com.billion.model.entity.Token;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
@@ -16,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.sql.Wrapper;
 import java.util.List;
 import java.util.Objects;
 
