@@ -1,16 +1,16 @@
-package com.billion.model.entity;
+package com.billion.model.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.billion.model.model.IModel;
+import com.billion.model.entity.NftAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author jason
@@ -19,31 +19,40 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("nft_attribute")
-public class NftAttribute implements IModel {
-
+public class NftClassDto implements Serializable {
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
     /**
-     * nft_class_id
+     * nft_group_id
      */
-    @TableField("nft_class_id")
-    Long nftClassId;
+    Long nftGroupId;
+
+    /**
+     * nft_info_id
+     */
+    Long nftInfoId;
 
     /**
      * 属性名
      */
-    @TableField("attribute")
-    String attribute;
+    String className;
 
     /**
-     * 属性值
+     * 类型(0:无属性;1:有属性)
      */
-    @TableField("value")
-    String value;
+    Long type;
+
+    /**
+     * 分数
+     */
+    String score;
+
+    /**
+     * 属性列表
+     */
+    List<NftAttribute> attributes;
 
 }

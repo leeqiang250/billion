@@ -5,6 +5,7 @@ import com.billion.model.entity.NftAttribute;
 import com.billion.model.service.ICacheService;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author liqiang
@@ -21,4 +22,5 @@ public interface NftAttributeService extends ICacheService<NftAttribute> {
      */
     Collection getByGroupId(Context context, String groupId);
 
+    List<NftAttribute> getByClassId(String classId);
 }
