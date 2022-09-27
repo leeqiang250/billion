@@ -33,10 +33,7 @@ public class AptosService {
 
     @PostConstruct
     public void init() {
-        AptosService.aptosClient = new AptosClient(ContextService.getAptosHost(), info -> {
-            logChainService.add(info);
-            return null;
-        });
+        AptosService.aptosClient = new AptosClient(ContextService.getAptosHost(), info -> this.logChainService.add(info), s -> log.info(s));
         log.info("Aptos Node{}", requestNodeCache());
     }
 
@@ -91,7 +88,7 @@ public class AptosService {
     public static Node requestNodeCache() {
         if (Objects.isNull(node) || System.currentTimeMillis() > (responseNodeTs + cacheTs)) {
             var response = AptosService.getAptosClient().requestNode();
-            if (response.isValid()) {
+            if (!response.isValid()) {
                 responseNodeTs = System.currentTimeMillis();
                 node = response.getData();
             }

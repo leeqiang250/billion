@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: billion-spring-cloud-client
+  profiles:
+    active: dev
+    #active: test
+  cloud:
+    config:
+      label: main
+      profile: ${spring.profiles.active}
+      uri: http://13.251.180.31:8888
