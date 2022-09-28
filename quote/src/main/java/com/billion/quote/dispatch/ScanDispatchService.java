@@ -1,14 +1,20 @@
 package com.billion.quote.dispatch;
 
+import com.aptos.request.v1.model.Event;
 import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
+import com.billion.model.entity.NftEvent;
+import com.billion.model.enums.Chain;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AptosService;
+import com.billion.service.aptos.ContextService;
 import com.billion.service.aptos.kiko.ConfigService;
 import com.billion.service.aptos.kiko.DistributedLockService;
+import com.billion.service.aptos.kiko.NftEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +39,9 @@ public class ScanDispatchService implements Serializable {
 
     @Resource
     ConfigService configService;
+
+    @Resource
+    NftEventService nftEventService;
 
     @Resource
     DistributedLockService distributedLockService;
@@ -90,6 +99,31 @@ public class ScanDispatchService implements Serializable {
         log.info("start {} stop {}", response.getData().get(0).getVersion(), response.getData().get(response.getData().size() - 1).getVersion());
 
         response.getData().forEach(transaction -> {
+            if (Objects.isNull(transaction.getEvents())) {
+                return;
+            }
+
+            transaction.getEvents().forEach(event -> {
+                if (ContextService.getEvent().contains(event.getType())) {
+                    String collection = event.getData().getId().getTokenDataId().getCollection();
+                    String creator = event.getData().getId().getTokenDataId().getCreator();
+                    if (this.temp(collection, creator)) {
+                        NftEvent nftEvent = NftEvent.builder()
+                                .chain(Chain.APTOS.getCode())
+                                .hash(transaction.getHash())
+                                .key(event.getKey())
+                                .account(event.getGuid().getAccountAddress())
+                                .type(event.getType())
+                                .collection(event.getData().getId().getTokenDataId().getCollection())
+                                .creator(event.getData().getId().getTokenDataId().getCreator())
+                                .name(event.getData().getId().getTokenDataId().getName())
+                                .build();
+
+                        nftEventService.save(nftEvent);
+                    }
+                }
+            });
+
             Config.SCAN_CHAIN_CURSOR.setValue(transaction.getVersion());
         });
 
@@ -100,5 +134,11 @@ public class ScanDispatchService implements Serializable {
 
         this.next = true;
     }
+
+    boolean temp(String collection, String creator) {
+        return "0x62363965316661652d366434642d346334322d613938632d65".equals(collection)
+                && "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104".equals(creator);
+    }
+
 
 }

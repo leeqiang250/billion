@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -75,6 +77,12 @@ public class ContextService {
     @Getter
     static String nftOwnerAddress;
 
+    @Value("${kiko.event}")
+    String pEvent;
+
+    @Getter
+    static Set<String> event;
+
     @Value("${aptos.host}")
     String pAptosHost;
 
@@ -94,6 +102,7 @@ public class ContextService {
         ContextService.kikoHost = this.pKikoHost;
         ContextService.tokenOwnerAddress = this.pTokenOwnerAddress;
         ContextService.nftOwnerAddress = this.pNftOwnerAddress;
+        ContextService.event = Stream.of(this.pEvent.split(",")).collect(Collectors.toSet());
         ContextService.aptosHost = this.pAptosHost;
     }
 
