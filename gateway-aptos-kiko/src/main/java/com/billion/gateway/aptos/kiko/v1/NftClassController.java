@@ -50,7 +50,7 @@ public class NftClassController implements IController<NftClass>{
 
     @RequestMapping("getByNftId/{infoId}")
     public Response getNftClassByNftId(@RequestHeader Context context, @PathVariable String infoId) {
-        return Response.success(nftClassService.getClassByGroupId(context, infoId));
+        return Response.success(nftClassService.getClassByInfoId(context, infoId));
     }
 
     @RequestMapping("test/{infoId}")

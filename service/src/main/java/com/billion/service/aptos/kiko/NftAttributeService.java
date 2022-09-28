@@ -22,5 +22,5 @@ public interface NftAttributeService extends ICacheService<NftAttribute> {
      */
     Collection getByGroupId(Context context, String groupId);
 
-    List<NftAttribute> getByClassId(String classId);
+    List<NftAttribute> getByClassId(Context context, String classId);
 }

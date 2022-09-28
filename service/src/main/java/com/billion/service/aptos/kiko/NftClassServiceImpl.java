@@ -7,15 +7,15 @@ import com.billion.model.dto.Context;
 import com.billion.model.dto.NftClassDto;
 import com.billion.model.entity.NftAttribute;
 import com.billion.model.entity.NftClass;
+import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.NftPropertyType;
 import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -23,8 +23,11 @@ import java.util.Map;
  */
 @Service
 public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, NftClass> implements NftClassService {
-    @Autowired
+    @Resource
     NftAttributeService nftAttributeService;
+
+    @Resource
+    LanguageService languageService;
 
 
     @Override
@@ -42,10 +45,14 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
         wrapper.lambda().eq(NftClass::getNftInfoId, infoId);
         List<NftClassDto> resultList = new ArrayList<>();
         List<NftClass> list = super.list(wrapper);
+
+        changeLanguage(context, list);
+
         //构建Nftattribute
         list.stream().forEach(e -> {
-            List<NftAttribute> attributes = nftAttributeService.getByClassId(e.getId().toString());
+            List<NftAttribute> attributes = nftAttributeService.getByClassId(context, e.getId().toString());
             NftClassDto nftClassDto = NftClassDto.builder().id(e.getId())
+                    .className(e.getClassName())
                     .nftGroupId(e.getNftGroupId())
                     .nftInfoId(e.getNftInfoId())
                     .score(e.getScore())
@@ -76,7 +83,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
                 types.add(Hex.encode(e.getClassName()));
             } else {
                 //有属性
-                List<NftAttribute> attributes = nftAttributeService.getByClassId(e.getId().toString());
+                List<NftAttribute> attributes = nftAttributeService.getByClassId(null, e.getId().toString());
                 if (attributes != null && attributes.size() > 0) {
                     attributes.stream().forEach(a -> {
                         keys.add(Hex.encode(a.getAttribute()));
@@ -94,5 +101,15 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
         resultMap.put(NftPropertyType.VALUES.getType(), values);
         resultMap.put(NftPropertyType.TYPES.getType(), types);
         return resultMap;
+    }
+
+    private void changeLanguage(Context context, List<NftClass> list) {
+        Set setClassName = list.stream().map(e -> e.getClassName()).collect(Collectors.toSet());
+
+        Map mapClassName = languageService.getByKeys(context, setClassName);
+
+        list.forEach(e -> {
+            e.setClassName(mapClassName.get(e.getClassName()).toString());
+        });
     }
 }
