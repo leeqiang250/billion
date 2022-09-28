@@ -18,7 +18,7 @@
         ,is_born as is_born
         ,nft_id as nft_id
         ,score as score
-        ,parent_nft_id as parent_nft_id
+        ,attribute_type as attribute_type
         ,table_handle as table_handle
         ,table_collection as table_collection
         ,table_creator as table_creator

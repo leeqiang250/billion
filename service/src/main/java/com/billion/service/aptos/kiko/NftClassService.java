@@ -8,6 +8,7 @@ import com.billion.model.service.ICacheService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author jason
@@ -24,5 +25,11 @@ public interface NftClassService extends ICacheService<NftClass> {
      */
     List<NftClassDto> getClassByInfoId(Context context, String infoId);
 
+    /**
+     * 构建铸造NFT属性数据
+     * @param infoId
+     * @return
+     */
+    Map<String, List<String>>getClassForMint(String infoId);
 
 }

@@ -50,7 +50,7 @@ public class NftClass implements IModel {
      * 类型(0:无属性;1:有属性)
      */
     @TableField("type")
-    Long type;
+    Integer type;
 
     /**
      * 分数

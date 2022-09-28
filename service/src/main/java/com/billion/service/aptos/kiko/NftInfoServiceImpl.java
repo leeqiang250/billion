@@ -10,6 +10,7 @@ import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.enums.Language;
+import com.billion.model.enums.NftPropertyType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
@@ -39,6 +40,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @Resource
     NftGroupService nftGroupService;
+
+    @Resource
+    NftClassService nftClassService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -115,6 +119,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                 throw new BizException("display name too long, max 26");
             }
 
+            Map<String, List<String>> classMap = nftClassService.getClassForMint(nftInfo.getId().toString());
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                     .function("0x3::token::create_token_script")
@@ -129,9 +134,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                             "3",
                             "1",
                             List.of(true, true, true, true, true),
-                            List.of(Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString())),
-                            List.of(Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString())),
-                            List.of(Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()), Hex.encode(UUID.randomUUID().toString()))
+                            classMap.get(NftPropertyType.KEYS.getType()),
+                            classMap.get(NftPropertyType.VALUES.getType()),
+                            classMap.get(NftPropertyType.TYPES.getType())
                     ))
                     .typeArguments(List.of())
                     .build();

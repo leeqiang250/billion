@@ -92,8 +92,8 @@ public class NftInfo extends TransactionStatus implements IModel {
     @TableField("score")
     String score;
 
-    @TableField("parent_nft_id")
-    Long parentNftId;
+    @TableField("attribute_type")
+    Integer attributeType;
 
     /**
      * table_handle

@@ -55,6 +55,6 @@ public class NftClassController implements IController<NftClass>{
 
     @RequestMapping("test/{infoId}")
     public Response teset(@RequestHeader Context context, @PathVariable String infoId) {
-        return Response.success(nftClassService.getClassByGroupId(context, infoId));
+        return Response.success(nftClassService.getClassForMint(infoId));
     }
 }
