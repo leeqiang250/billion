@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.BoxGroupMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id as id
+        ,chain as chain
+        ,split as split
+        ,token_id as token_id
+        ,meta as meta
+        ,body as body
+        ,display_name as display_name
+        ,current_supply as current_supply
+        ,total_supply as total_supply
+        ,support_token as support_token
+        ,uri as uri
+        ,description as description
+        ,rule as rule
+        ,max_amount as max_amount
+        ,creator_id as creator_id
+        ,creator_address as creator_address
+        ,enabled as enabled
+        ,sort as sort
+        ,sale_time as sale_time
+        ,end_time as end_time
+        ,mtime as mtime
+        ,ctime as ctime
+    </sql>
+
+</mapper>
