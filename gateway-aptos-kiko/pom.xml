@@ -82,6 +82,12 @@
                  </executions>
 
                 <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                     <!-- 取消查找本项目下的Main方法：为了解决Unable to find main class的问题 -->
                     <mainClass>com.billion.gateway.aptos.kiko.GatewayApplication</mainClass>
                     <!-- 为了解决依赖模块找不到此模块中的类或属性 -->
