@@ -2,8 +2,8 @@ spring:
   application:
     name: billion-spring-cloud-client
   profiles:
-    #active: dev
-    active: test
+    active: dev
+    #active: test
   cloud:
     config:
       label: main
