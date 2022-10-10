@@ -1,14 +1,16 @@
-###### config基础信息查询接口
+## 一、host
+http://11.232.2/2
 
-请求地址：（GET）http://localhost:8889/aptos/kiko/v1/config
+## 二、header
+context: {"chain":"aptos", "language":"zh-TC"}
 
-header参数：
+## 三、接口
+| 名称 | config基础信息查询接口 |
+|----|----|
+| 单元格 | GET/POST |
+| 路径 | /aptos/kiko/v1/config |
 
-chain：aptos
-
-language：中文：zh-TC；英文：en
-
-返回参数
+响应
 
 `{
 "code": 200,
@@ -51,5 +53,3 @@ language：中文：zh-TC；英文：en
 }
 }
 }`
-
-precison
