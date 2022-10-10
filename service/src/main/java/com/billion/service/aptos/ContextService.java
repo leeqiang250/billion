@@ -103,6 +103,10 @@ public class ContextService {
         ContextService.tokenOwnerAddress = this.pTokenOwnerAddress;
         ContextService.nftOwnerAddress = this.pNftOwnerAddress;
         ContextService.event = Stream.of(this.pEvent.split(",")).collect(Collectors.toSet());
+        //TODO
+        ContextService.event.clear();
+        ContextService.event.add("0xee10add3ce344e1d4b04de7246e30cc26c1b9dfeabda80324ce00cec14a8c048::box_secondary_market::BoxMakerEvent<0xee10add3ce344e1d4b04de7246e30cc26c1b9dfeabda80324ce00cec14a8c048::box::BoxV1, 0xee10add3ce344e1d4b04de7246e30cc26c1b9dfeabda80324ce00cec14a8c048::box::BoxV2>");
+        //TODO
         ContextService.aptosHost = this.pAptosHost;
     }
 
