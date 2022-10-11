@@ -1,21 +1,17 @@
 package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billion.dao.aptos.kiko.BoxGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroup;
-import com.billion.model.entity.Language;
-import com.billion.model.entity.NftGroup;
 import com.billion.model.enums.CacheTsType;
+import com.billion.model.response.Response;
 import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +50,13 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         return map;
     }
 
+    @Override
+    public List<BoxGroup> cacheList(Context context) {
+        Map map = this.cacheMap(context);
+        List<BoxGroup> list =  new ArrayList<>(map.values());
+        return list;
+    }
+
     private void changeLanguage(Context context, List<BoxGroup> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
@@ -69,4 +72,37 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             e.setRule(mapRule.get(e.getRule()).toString());
         });
     }
+
+    //售卖中的
+    //售罄的
+    //即将开售的
+
+//    /**
+//     *
+//     * @param context
+//     * @param type
+//     * @return
+//     */
+//    @Override
+//    public Response getList(Context context, String type) {
+//       List<BoxGroup> boxList = this.cacheList(context);
+//       boxList.forEach(e -> {
+//           switch (type) {
+//               case "comingSoon":
+//                   if (LocalDateTime.now().isBefore(e.getSaleTime())) {
+//
+//                   }
+//               case "onSale":
+//                   if (LocalDateTime.now().isAfter(e.getSaleTime()) && LocalDateTime.now().isBefore(e.getEndTime())) {
+//
+//                   }
+//               case "sellOut":
+//                   if (LocalDateTime.now().isAfter(e.getEndTime())) {
+//
+//                   }
+//
+//           }
+//       });
+//
+//    }
 }

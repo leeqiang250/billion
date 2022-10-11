@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -135,24 +136,24 @@ public class BoxGroup implements IModel {
      * 起售时间
      */
     @TableField("sale_time")
-    LocalDateTime saleTime;
+    Timestamp saleTime;
 
     /**
      * 截止时间
      */
     @TableField("end_time")
-    LocalDateTime endTime;
+    Timestamp endTime;
 
     /**
      * 修改时间
      */
     @TableField("mtime")
-    LocalDateTime mtime;
+    Timestamp mtime;
 
     /**
      * 创建时间
      */
     @TableField("ctime")
-    LocalDateTime ctime;
+    Timestamp ctime;
 
 }

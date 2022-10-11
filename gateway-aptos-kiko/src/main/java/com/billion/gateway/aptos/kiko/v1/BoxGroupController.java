@@ -4,10 +4,10 @@ import com.billion.model.controller.IController;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.NftGroup;
+import com.billion.model.response.Response;
 import com.billion.model.service.ICacheService;
 import com.billion.service.aptos.kiko.BoxGroupService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -31,5 +31,10 @@ public class BoxGroupController implements IController<BoxGroup> {
     }
 
 
+//
+//    @GetMapping("/getList")
+//    public Response getList(@RequestHeader Context context, @PathVariable String type) {
+//
+//    }
 
 }

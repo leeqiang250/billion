@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
 
@@ -189,4 +190,33 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return response;
     }
 
+    @Override
+    public List<NftInfo> getListByGroup(Context context, String type, String groupId) {
+
+        QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
+        if ("group".equals(type)) {
+            wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
+        }else if ("boxGroup".equals(type)) {
+            wrapper.lambda().eq(NftInfo::getBoxGroupId, groupId);
+        }
+        //TODO:是否需要状态区别
+//        wrapper.lambda().eq(NftInfo::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        var nftInfos = super.list(wrapper);
+        changeLanguage(context, nftInfos);
+
+        return nftInfos;
+    }
+
+    private void changeLanguage(Context context, List<NftInfo> list) {
+        Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
+        Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
+
+        Map mapDisplayName = languageService.getByKeys(context, setDisplayName);
+        Map mapDescription = languageService.getByKeys(context, setDescription);
+
+        list.forEach(e -> {
+            e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
+            e.setDescription(mapDescription.get(e.getDescription()).toString());
+        });
+    }
 }

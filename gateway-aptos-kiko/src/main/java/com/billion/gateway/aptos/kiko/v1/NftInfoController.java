@@ -42,4 +42,9 @@ public class NftInfoController implements IController<NftInfo> {
         return IController.super.cacheMap(context);
     }
 
+    @GetMapping("/getListByGroup/{type}/{groupId}")
+    public Response getListByGroup(@RequestHeader Context context, @PathVariable String type, @PathVariable String groupId) {
+        return Response.success(nftInfoService.getListByGroup(context, type, groupId));
+    }
+
 }
