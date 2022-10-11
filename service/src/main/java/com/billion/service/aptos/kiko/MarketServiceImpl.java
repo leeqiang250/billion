@@ -5,6 +5,7 @@ import com.aptos.request.v1.model.Transaction;
 import com.billion.dao.aptos.kiko.MarketMapper;
 import com.billion.model.entity.Market;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.TradeStatus;
 import com.billion.model.event.BoxBidEvent;
 import com.billion.model.event.BoxCancelEvent;
 import com.billion.model.event.BoxMakerEvent;
@@ -61,6 +62,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(boxMakerEvent.getDeadTs())
                 .build();
 
+        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+
         super.save(market);
 
         return market;
@@ -84,6 +87,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .ts(boxTakerEvent.getTs())
                 .deadTs("")
                 .build();
+
+        market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
 
         super.save(market);
 
@@ -109,6 +114,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(boxBidEvent.getDeadTs())
                 .build();
 
+        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+
         super.save(market);
 
         return market;
@@ -132,6 +139,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .ts(boxCancelEvent.getTs())
                 .deadTs("")
                 .build();
+
+        market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
 
         super.save(market);
 
