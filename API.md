@@ -102,3 +102,48 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | totalSupply | int |总共发售数量|
 | supportToken | string |Json数组.address:代表代币地址;name:代币名称;precision:代币精度;price:价格|
 
+###**根据group查询nftInfo列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/nft/info/getListByGroup/{type}/{groupId} |
+请求参数说明
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| type | String |group:nft系列;boxGroup:盲盒系列|
+| groupId | String |系列id|
+响应
+`{
+"code": 200,
+"ts": 1665458346095,
+"msg": "success",
+"data": [
+{
+"transactionStatus": "status_3_success",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 20000006138,
+"boxGroupId": 0,
+"nftGroupId": 1,
+"displayName": "***",
+"description": "***",
+"owner": "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
+"uri": "https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/f4c63b48-eed9-4707-3ebd-3149b7a99700/public",
+"rank": 0,
+"transactionHash": "0x289352539772d97faec8128c1dcacb432713652bdf916437e0cc8749bd575186",
+"isBorn": false,
+"nftId": "",
+"score": "",
+"attributeType": 0,
+"tableHandle": "0x38cea7aa11ed8a4bf274da7d2abec2f996a195efa22a81bc87317f63b6a69a58",
+"tableCollection": "0x62363965316661652d366434642d346334322d613938632d65",
+"tableCreator": "0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104",
+"tableName": "0x31333733613835312d393437372d346663392d393166612d345f"
+}
+]
+}`
+响应参数说明
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| attributeType | int |属性类型(0:计分;2:不计分)|
+| groupId | String |系列id|

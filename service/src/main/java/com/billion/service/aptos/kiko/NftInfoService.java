@@ -2,10 +2,12 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TableTokenData;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.service.ICacheService;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author liqiang
@@ -27,5 +29,14 @@ public interface NftInfoService extends ICacheService<NftInfo> {
      * @return Response<TableTokenData>
      */
     Response<TableTokenData> getTableTokenData(Serializable id);
+
+    /**
+     * getListByGroup
+     * @param context
+     * @param type
+     * @param groupId
+     * @return
+     */
+    List<NftInfo> getListByGroup(Context context, String type, String groupId);
 
 }
