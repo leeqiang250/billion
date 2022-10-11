@@ -84,7 +84,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
 
         TransactionPayload transactionPayload = TransactionPayload.builder()
                 .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                .function(ContextService.getTokenOwnerAddress() + "::token_v1::transfer_v2")
+                .function(ContextService.getTokenOwner() + "::token_v1::transfer_v2")
                 .arguments(List.of(
                         nftTransfer.getCreator(),
                         nftTransfer.getCollection(),

@@ -30,7 +30,10 @@ public class BoxTakerEvent implements Serializable {
 
     String ts;
 
-    String taker;
+    @JSONField(name = "dead_ts")
+    String deadTs;
+
+    String bidder;
 
     @JSONField(name = "final_price")
     String finalPrice;

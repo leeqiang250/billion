@@ -60,11 +60,14 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .bidder("")
                 .ts(boxMakerEvent.getTs())
                 .deadTs(boxMakerEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
                 .build();
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
         super.save(market);
+
+        //TODO 如有需要，交易记录
 
         return market;
     }
@@ -83,14 +86,17 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .askAmount(boxTakerEvent.getAmount())
                 .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
                 .bidAmount(boxTakerEvent.getFinalPrice())
-                .bidder(boxTakerEvent.getTaker())
+                .bidder(boxTakerEvent.getBidder())
                 .ts(boxTakerEvent.getTs())
-                .deadTs("")
+                .deadTs(boxTakerEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
                 .build();
 
         market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
 
         super.save(market);
+
+        //TODO 如有需要，交易记录
 
         return market;
     }
@@ -112,11 +118,14 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .bidder(boxBidEvent.getBidder())
                 .ts(boxBidEvent.getTs())
                 .deadTs(boxBidEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
                 .build();
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
         super.save(market);
+
+        //TODO 如有需要，交易记录
 
         return market;
     }
@@ -134,15 +143,18 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .askAmount(boxCancelEvent.getAmount())
                 .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
-                .bidAmount("")
-                .bidder("")
+                .bidAmount(boxCancelEvent.getBidPrice())
+                .bidder(boxCancelEvent.getBidder())
                 .ts(boxCancelEvent.getTs())
-                .deadTs("")
+                .deadTs(boxCancelEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
                 .build();
 
         market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
 
         super.save(market);
+
+        //TODO 如有需要，交易记录
 
         return market;
     }

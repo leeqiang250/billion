@@ -65,23 +65,32 @@ public class ContextService {
     @Getter
     static String kikoHost;
 
-    @Value("${kiko.account.tokenOwner.address}")
-    String pTokenOwnerAddress;
+    @Value("${kiko.account.commoner}")
+    String pCommoner;
 
     @Getter
-    static String tokenOwnerAddress;
+    static String commoner;
 
-    @Value("${kiko.account.nftOwner.address}")
-    String pNftOwnerAddress;
-
-    @Getter
-    static String nftOwnerAddress;
-
-    @Value("${kiko.event}")
-    String pEvent;
+    @Value("${kiko.account.token_owner}")
+    String pTokenOwner;
 
     @Getter
-    static Set<String> event;
+    static String tokenOwner;
+
+    @Value("${kiko.account.nft_owner}")
+    String pNftOwner;
+
+    @Getter
+    static String nftOwner;
+
+    @Value("${kiko.account.marketer}")
+    String pMarketer;
+
+    @Getter
+    static String marketer;
+
+    @Getter
+    static String address;
 
     @Value("${aptos.host}")
     String pAptosHost;
@@ -100,13 +109,16 @@ public class ContextService {
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
-        ContextService.tokenOwnerAddress = this.pTokenOwnerAddress;
-        ContextService.nftOwnerAddress = this.pNftOwnerAddress;
-        ContextService.event = Stream.of(this.pEvent.split(",")).collect(Collectors.toSet());
-        //TODO
-        ContextService.event.clear();
-        ContextService.event.add("0xee10add3ce344e1d4b04de7246e30cc26c1b9dfeabda80324ce00cec14a8c048::box_secondary_market::BoxMakerEvent<0xee10add3ce344e1d4b04de7246e30cc26c1b9dfeabda80324ce00cec14a8c048::box::BoxV1, 0xee10add3ce344e1d4b04de7246e30cc26c1b9dfeabda80324ce00cec14a8c048::box::BoxV2>");
-        //TODO
+        ContextService.commoner = this.pCommoner;
+        ContextService.tokenOwner = this.pTokenOwner;
+        ContextService.nftOwner = this.pNftOwner;
+        ContextService.marketer = this.pMarketer;
+        ContextService.address = ContextService.commoner + "," +
+                ContextService.tokenOwner + "," +
+                ContextService.nftOwner + "," +
+                ContextService.marketer;
+
+
         ContextService.aptosHost = this.pAptosHost;
     }
 

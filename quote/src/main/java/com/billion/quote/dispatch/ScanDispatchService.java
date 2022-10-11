@@ -77,7 +77,7 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
-    //@Scheduled(cron = "*/2 * * * * ?")
+    @Scheduled(cron = "*/2 * * * * ?")
     void dispatch() {
         this.next = true;
         while (this.next) {
@@ -113,7 +113,7 @@ public class ScanDispatchService implements Serializable {
             }
 
             transaction.getEvents().forEach(event -> {
-                if (ContextService.getEvent().contains(event.getType())) {
+                if (ContextService.getAddress().contains(event.getType().split("::")[0])) {
                     if (marketService.isBoxMakerEvent(event)) {
                         BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
                         marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);

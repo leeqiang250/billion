@@ -51,16 +51,16 @@ public class Market extends TradeStatus implements IModel {
     String type;
 
     /**
-     * maker
-     */
-    @TableField("maker")
-    String maker;
-
-    /**
      * price
      */
     @TableField("price")
     String price;
+
+    /**
+     * maker
+     */
+    @TableField("maker")
+    String maker;
 
     /**
      * 询价币种
@@ -75,6 +75,12 @@ public class Market extends TradeStatus implements IModel {
     String askAmount;
 
     /**
+     * bidder
+     */
+    @TableField("bidder")
+    String bidder;
+
+    /**
      * 报价币种
      */
     @TableField("bid_token")
@@ -87,12 +93,6 @@ public class Market extends TradeStatus implements IModel {
     String bidAmount;
 
     /**
-     * bidder
-     */
-    @TableField("bidder")
-    String bidder;
-
-    /**
      * 生成订单时间
      */
     @TableField("ts")
@@ -103,5 +103,17 @@ public class Market extends TradeStatus implements IModel {
      */
     @TableField("dead_ts")
     String deadTs;
+
+    /**
+     * 交易状态
+     */
+    @TableField("trade_status")
+    String tradeStatus;
+
+    /**
+     * 是否归档
+     */
+    @TableField("is_enabled")
+    Boolean isEnabled;
 
 }

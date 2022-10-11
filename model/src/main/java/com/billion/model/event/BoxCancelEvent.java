@@ -30,6 +30,9 @@ public class BoxCancelEvent implements Serializable {
 
     String ts;
 
+    @JSONField(name = "dead_ts")
+    String deadTs;
+
     String bidder;
 
     @JSONField(name = "bid_price")

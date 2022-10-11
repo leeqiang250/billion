@@ -30,6 +30,9 @@ public class BoxBidEvent implements Serializable {
 
     String ts;
 
+    @JSONField(name = "dead_ts")
+    String deadTs;
+
     String bidder;
 
     @JSONField(name = "bid_price")
@@ -40,9 +43,6 @@ public class BoxBidEvent implements Serializable {
 
     @JSONField(name = "prev_bid_price")
     String prevBidPrice;
-
-    @JSONField(name = "dead_ts")
-    String deadTs;
 
     public void setType(String type) {
         if (type.startsWith("0x")) {

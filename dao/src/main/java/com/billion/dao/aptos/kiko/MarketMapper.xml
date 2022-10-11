@@ -10,15 +10,17 @@
         ,version as version
         ,order_id as order_id
         ,type_ as type_
-        ,maker as maker
         ,price as price
+        ,maker as maker
         ,ask_token as ask_token
         ,ask_amount as ask_amount
+        ,bidder as bidder
         ,bid_token as bid_token
         ,bid_amount as bid_amount
-        ,bidder as bidder
         ,ts as ts
         ,dead_ts as dead_ts
+        ,trade_status as trade_status
+        ,is_enabled as is_enabled
     </sql>
 
 </mapper>
