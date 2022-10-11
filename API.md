@@ -113,6 +113,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | type | String |group:nft系列;boxGroup:盲盒系列|
 | groupId | String |系列id|
 响应
+
 `{
 "code": 200,
 "ts": 1665458346095,
@@ -141,9 +142,49 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }
 ]
 }`
+
 响应参数说明
 
 | 名称 | 类型 |描述|
 |----|----|----|
 | attributeType | int |属性类型(0:计分;2:不计分)|
 | groupId | String |系列id|
+
+###**根据nftinfo查询nft属性列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/nft/class/getByNftId/{infoId} |
+
+响应
+
+`{
+"code": 200,
+"ts": 1664357874191,
+"msg": "success",
+"data": [
+{
+"id": 1,
+"nftGroupId": 1,
+"nftInfoId": 20000006141,
+"className": "衣服",
+"type": 1,
+"score": "0",
+"attributes": [
+{
+"id": 47,
+"nftClassId": 1,
+"attribute": "颜色",
+"value": "红色"
+}
+]
+}
+]
+}`
+
+响应参数说明
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| className | String |类型名称|
+| attribute | String |属性|
+| value | String |属性值|
