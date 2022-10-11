@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.MarketMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,chain as chain
+        ,version as version
+        ,order_id as order_id
+        ,type_ as type_
+        ,maker as maker
+        ,price as price
+        ,ask_token as ask_token
+        ,bid_token as bid_token
+        ,bidder as bidder
+        ,ts as ts
+        ,dead_ts as dead_ts
+    </sql>
+
+</mapper>
