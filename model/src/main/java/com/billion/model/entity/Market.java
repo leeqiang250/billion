@@ -10,9 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 /**
  * @author liqiang
  */
@@ -72,10 +69,22 @@ public class Market implements IModel {
     String askToken;
 
     /**
+     * 询价币种数量
+     */
+    @TableField("ask_amount")
+    String askAmount;
+
+    /**
      * 报价币种
      */
     @TableField("bid_token")
     String bidToken;
+
+    /**
+     * 报价币种数量
+     */
+    @TableField("bid_amount")
+    String bidAmount;
 
     /**
      * bidder

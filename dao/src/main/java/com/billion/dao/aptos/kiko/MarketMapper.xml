@@ -13,7 +13,9 @@
         ,maker as maker
         ,price as price
         ,ask_token as ask_token
+        ,ask_amount as ask_amount
         ,bid_token as bid_token
+        ,bid_amount as bid_amount
         ,bidder as bidder
         ,ts as ts
         ,dead_ts as dead_ts

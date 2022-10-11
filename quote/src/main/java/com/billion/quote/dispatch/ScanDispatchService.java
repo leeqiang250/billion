@@ -1,16 +1,23 @@
 package com.billion.quote.dispatch;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
+import com.billion.model.entity.Market;
+import com.billion.model.enums.Chain;
+import com.billion.model.event.BoxMakerEvent;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import com.billion.service.aptos.kiko.ConfigService;
 import com.billion.service.aptos.kiko.DistributedLockService;
+import com.billion.service.aptos.kiko.MarketService;
 import com.billion.service.aptos.kiko.NftEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +42,9 @@ public class ScanDispatchService implements Serializable {
 
     @Resource
     ConfigService configService;
+
+    @Resource
+    MarketService marketService;
 
     @Resource
     NftEventService nftEventService;
@@ -101,7 +111,12 @@ public class ScanDispatchService implements Serializable {
 
             transaction.getEvents().forEach(event -> {
                 if (ContextService.getEvent().contains(event.getType())) {
-                    //BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
+                    if (marketService.isAddBoxEvent(event)) {
+                        BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
+                        boxMakerEvent.setType(Hex.decodeToString(boxMakerEvent.getType()));
+                        marketService.addBox(transaction, event, boxMakerEvent);
+                    }
+
 
                     //TokenDepositEvent
                     // String collection = event.getData().getId().getTokenDataId().getCollection();
