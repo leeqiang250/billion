@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoxMakerEvent implements Serializable {
+public class BoxCancelEvent implements Serializable {
 
     String id;
 
@@ -30,8 +30,10 @@ public class BoxMakerEvent implements Serializable {
 
     String ts;
 
-    @JSONField(name = "dead_ts")
-    String deadTs;
+    String bidder;
+
+    @JSONField(name = "bid_price")
+    String bidPrice;
 
     public void setType(String type) {
         if (type.startsWith("0x")) {
@@ -40,4 +42,5 @@ public class BoxMakerEvent implements Serializable {
             this.type = type;
         }
     }
+
 }

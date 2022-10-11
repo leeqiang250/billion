@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoxMakerEvent implements Serializable {
+public class BoxBidEvent implements Serializable {
 
     String id;
 
@@ -29,6 +29,17 @@ public class BoxMakerEvent implements Serializable {
     String amount;
 
     String ts;
+
+    String bidder;
+
+    @JSONField(name = "bid_price")
+    String bidPrice;
+
+    @JSONField(name = "prev_bidder")
+    String prevBidder;
+
+    @JSONField(name = "prev_bid_price")
+    String prevBidPrice;
 
     @JSONField(name = "dead_ts")
     String deadTs;

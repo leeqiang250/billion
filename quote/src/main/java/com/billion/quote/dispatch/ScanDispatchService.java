@@ -6,7 +6,10 @@ import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
 import com.billion.model.entity.Market;
 import com.billion.model.enums.Chain;
+import com.billion.model.event.BoxBidEvent;
+import com.billion.model.event.BoxCancelEvent;
 import com.billion.model.event.BoxMakerEvent;
+import com.billion.model.event.BoxTakerEvent;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
@@ -111,10 +114,18 @@ public class ScanDispatchService implements Serializable {
 
             transaction.getEvents().forEach(event -> {
                 if (ContextService.getEvent().contains(event.getType())) {
-                    if (marketService.isAddBoxEvent(event)) {
+                    if (marketService.isBoxMakerEvent(event)) {
                         BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
-                        boxMakerEvent.setType(Hex.decodeToString(boxMakerEvent.getType()));
-                        marketService.addBox(transaction, event, boxMakerEvent);
+                        marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);
+                    } else if (marketService.isBoxTakerEvent(event)) {
+                        BoxTakerEvent boxTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxTakerEvent.class);
+                        marketService.addBoxTakerEvent(transaction, event, boxTakerEvent);
+                    } else if (marketService.isBoxBidEvent(event)) {
+                        BoxBidEvent boxBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxBidEvent.class);
+                        marketService.addBoxBidEvent(transaction, event, boxBidEvent);
+                    } else if (marketService.isBoxCancelEvent(event)) {
+                        BoxCancelEvent boxCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxCancelEvent.class);
+                        marketService.addBoxCancelEvent(transaction, event, boxCancelEvent);
                     }
 
 
