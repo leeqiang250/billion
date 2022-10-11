@@ -87,7 +87,7 @@ public class NftGroup extends TransactionStatus implements IModel {
     String uri;
 
     /**
-     * 铸造哈希
+     * 交易哈希
      */
     @TableField("transaction_hash")
     String transactionHash;

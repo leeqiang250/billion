@@ -69,7 +69,7 @@ public class NftInfo extends TransactionStatus implements IModel {
     Long rank;
 
     /**
-     * 铸造哈希
+     * 交易哈希
      */
     @TableField("transaction_hash")
     String transactionHash;

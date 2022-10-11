@@ -20,7 +20,7 @@ public class TransactionStatus implements Serializable {
     String transactionStatus;
 
     /**
-     * 铸造状态
+     * 交易状态
      */
     @TableField(exist = false)
     com.billion.model.enums.TransactionStatus transactionStatus_;

@@ -79,8 +79,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .askAmount(boxTakerEvent.getAmount())
                 .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
-                .bidAmount("")
-                .bidder("")
+                .bidAmount(boxTakerEvent.getFinalPrice())
+                .bidder(boxTakerEvent.getTaker())
                 .ts(boxTakerEvent.getTs())
                 .deadTs("")
                 .build();
@@ -103,8 +103,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .askAmount(boxBidEvent.getAmount())
                 .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
-                .bidAmount("")
-                .bidder("")
+                .bidAmount(boxBidEvent.getBidPrice())
+                .bidder(boxBidEvent.getBidder())
                 .ts(boxBidEvent.getTs())
                 .deadTs(boxBidEvent.getDeadTs())
                 .build();
