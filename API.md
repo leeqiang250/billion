@@ -5,9 +5,11 @@ http://52.77.131.111:8890/
 context: {"chain":"aptos", "language":"zh-TC"}
 
 ## 三、接口
-| 名称 | config基础信息查询接口 |
+
+###**config基础信息查询接口** 
+
+| 方法 | GET |
 |----|----|
-| 单元格 | GET/POST |
 | 路径 | /aptos/kiko/v1/config |
 
 响应
@@ -53,3 +55,50 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }
 }
 }`
+
+
+###**查询boxGroup列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/nft/boxGroup |
+响应
+`{
+"code": 200,
+"ts": 1665454609836,
+"msg": "success",
+"data": [
+{
+"id": 1,
+"chain": "1",
+"split": false,
+"tokenId": 0,
+"meta": "",
+"body": "",
+"displayName": "***",
+"currentSupply": "10",
+"totalSupply": "100",
+"supportToken": "[{\"address\":\"0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>\",\"name\":\"APT\",\"precision\":9,\"price\":1000000}]",
+"uri": "",
+"description": "***",
+"rule": "***",
+"maxAmount": 0,
+"creatorId": 0,
+"creatorAddress": "",
+"enabled": true,
+"sort": 0,
+"saleTime": "2022-10-10T18:03:02.000+00:00",
+"endTime": "2022-10-10T18:03:02.069+00:00",
+"mtime": "2022-10-10T18:05:40.112+00:00",
+"ctime": "2022-10-08T23:29:56.105+00:00"
+}
+]
+}`
+
+响应说明
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| currentSupply | int |当前发售数量|
+| totalSupply | int |总共发售数量|
+| supportToken | string |Json数组.address:代表代币地址;name:代币名称;precision:代币精度;price:价格|
+
