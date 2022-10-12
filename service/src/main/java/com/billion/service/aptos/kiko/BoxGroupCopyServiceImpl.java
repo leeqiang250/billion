@@ -104,7 +104,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
             Context context = Context.builder()
                     .chain(Chain.APTOS.getCode())
                     .build();
-            var dd = tokenService.getListByScene(context, TokenScene.MARKET.getCode());
+            var dd = tokenService.getByScene(context, TokenScene.MARKET.getCode());
             dd.forEach(new Consumer() {
                 @Override
                 public void accept(Object o) {

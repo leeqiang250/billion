@@ -77,9 +77,9 @@ public class TokenController implements IController<Token> {
         return Response.SUCCESS;
     }
 
-    @GetMapping("/listByScene/{scene}")
-    public Response getListByScene(@RequestHeader Context context, @PathVariable String scene) {
-        return Response.success(tokenService.getListByScene(context, scene));
+    @RequestMapping("/scene/{scene}")
+    public Response getByScene(@RequestHeader Context context, @PathVariable String scene) {
+        return Response.success(tokenService.getByScene(context, scene));
     }
 
 }
