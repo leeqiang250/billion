@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum Contract {
 
-    BOX_PRIMARY_MARKET("box_primary_market", "box_primary_market"),
+    PRIMARY_MARKET("primary_market", "primary_market"),
 
     XXX("xxx", "xxx");
 
@@ -34,7 +34,7 @@ public enum Contract {
     }
 
     public static Contract of(String code) {
-        return KV0.getOrDefault(code, Contract.BOX_PRIMARY_MARKET);
+        return KV0.getOrDefault(code, Contract.PRIMARY_MARKET);
     }
 
     @Override

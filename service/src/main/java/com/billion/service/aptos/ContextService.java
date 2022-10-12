@@ -1,6 +1,7 @@
 package com.billion.service.aptos;
 
 import com.billion.model.enums.CacheTsType;
+import com.billion.model.enums.Contract;
 import com.billion.service.aptos.kiko.ContractService;
 import lombok.Getter;
 import lombok.Setter;
@@ -103,10 +104,10 @@ public class ContextService {
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
-        ContextService.commoner = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
-        ContextService.tokenOwner = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
-        ContextService.nftOwner = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
-        ContextService.marketer = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.commoner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.tokenOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.nftOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.marketer = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
 
         ContextService.address = ContextService.commoner + "," +
                 ContextService.tokenOwner + "," +

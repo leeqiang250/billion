@@ -25,22 +25,22 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
     @Override
     public boolean isBoxMakerEvent(Event event) {
-        return event.getType().contains("::box_secondary_market::BoxMakerEvent<");
+        return event.getType().contains("::secondary_market::BoxMakerEvent<");
     }
 
     @Override
     public boolean isBoxTakerEvent(Event event) {
-        return event.getType().contains("::box_secondary_market::BoxTakerEvent<");
+        return event.getType().contains("::secondary_market::BoxTakerEvent<");
     }
 
     @Override
     public boolean isBoxBidEvent(Event event) {
-        return event.getType().contains("::box_secondary_market::BoxBidEvent<");
+        return event.getType().contains("::secondary_market::BoxBidEvent<");
     }
 
     @Override
     public boolean isBoxCancelEvent(Event event) {
-        return event.getType().contains("::box_secondary_market::BoxCancelEvent<");
+        return event.getType().contains("::secondary_market::BoxCancelEvent<");
     }
 
     @Override

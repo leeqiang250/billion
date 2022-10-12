@@ -77,7 +77,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
 
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(ContextService.getMarketer() + "::box_primary_market::add_box_bid")
+                    .function(ContextService.getMarketer() + "::primary_market::add_box_bid")
                     .arguments(List.of(
                             boxGroup.getAmount(),
                             boxGroup.getTs(),
@@ -154,7 +154,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
 
                     TransactionPayload transactionPayload = TransactionPayload.builder()
                             .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                            .function(ContextService.getMarketer() + "::box_secondary_market::box_init")
+                            .function(ContextService.getMarketer() + "::secondary_market::box_init")
                             .arguments(List.of())
                             .typeArguments(List.of(askTokenResource.resourceTag(), bidTokenResource.resourceTag()))
                             .build();

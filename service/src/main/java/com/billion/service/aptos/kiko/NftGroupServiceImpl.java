@@ -268,7 +268,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
                 TransactionPayload transactionPayload = TransactionPayload.builder()
                         .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                        .function(ContextService.getMarketer() + "::nft_secondary_market::nft_init")
+                        .function(ContextService.getMarketer() + "::secondary_market::nft_init")
                         .arguments(List.of())
                         .typeArguments(List.of(bidTokenResource.resourceTag()))
                         .build();
