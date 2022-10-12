@@ -7,6 +7,7 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroupCopy;
 import com.billion.model.entity.Pair;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.Language;
 import com.billion.model.enums.TokenScene;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
@@ -115,6 +116,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
     public boolean initializeMarket() {
         Context context = Context.builder()
                 .chain(Chain.APTOS.getCode())
+                .language(Language.EN.getCode())
                 .build();
 
         QueryWrapper<BoxGroupCopy> boxGroupQueryWrapper = new QueryWrapper<>();

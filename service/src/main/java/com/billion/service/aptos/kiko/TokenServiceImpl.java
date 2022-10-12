@@ -155,6 +155,9 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         QueryWrapper<Token> tokenQueryWrapper = new QueryWrapper<>();
         tokenQueryWrapper.lambda().in(Token::getId, ids);
         tokenQueryWrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+
+        //TODO 缓存
+
         return super.list(tokenQueryWrapper);
     }
 
