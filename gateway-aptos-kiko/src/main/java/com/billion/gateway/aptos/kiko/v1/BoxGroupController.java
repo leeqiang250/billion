@@ -37,4 +37,14 @@ public class BoxGroupController implements IController<BoxGroup> {
 //
 //    }
 
+    @PostMapping("initBox")
+    public Response initBox() {
+        return Response.success("");
+    }
+
+    @PostMapping("addPay")
+    public Response addPay() {
+        return Response.success("");
+    }
+
 }
