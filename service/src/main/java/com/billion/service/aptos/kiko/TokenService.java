@@ -11,14 +11,12 @@ import java.io.Serializable;
  */
 public interface TokenService extends ICacheService<Token> {
 
-
     /**
      * initialize
      *
-     * @param id id
      * @return boolean
      */
-    boolean initialize(Serializable id);
+    boolean initialize();
 
 
     /**

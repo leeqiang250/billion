@@ -8,4 +8,11 @@ import com.billion.model.service.ICacheService;
  */
 public interface BoxGroupCopyService extends ICacheService<BoxGroupCopy> {
 
+    /**
+     * initialize
+     *
+     * @return boolean
+     */
+    boolean initialize();
+
 }

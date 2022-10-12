@@ -20,8 +20,17 @@ import lombok.NoArgsConstructor;
 @TableName("token")
 public class Token extends TransactionStatus implements IModel {
 
+    /**
+     * id
+     */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
+
+    /**
+     * 链类型
+     */
+    @TableField("chain")
+    String chain;
 
     /**
      * module_address
@@ -60,7 +69,19 @@ public class Token extends TransactionStatus implements IModel {
     String symbol;
 
     /**
-     * 初始化哈希
+     * decimals
+     */
+    @TableField("decimals")
+    Boolean decimals;
+
+    /**
+     * uri
+     */
+    @TableField("uri")
+    String uri;
+
+    /**
+     * 交易哈希
      */
     @TableField("transaction_hash")
     String transactionHash;

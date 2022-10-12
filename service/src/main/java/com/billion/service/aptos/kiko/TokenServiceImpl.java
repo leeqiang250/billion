@@ -12,9 +12,10 @@ import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+
+import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -46,51 +47,59 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     }
 
     @Override
-    public boolean initialize(Serializable id) {
+    public boolean initialize() {
         QueryWrapper<Token> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(Token::getId, id);
         wrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var token = super.getOne(wrapper, false);
-        if (Objects.isNull(token)) {
-            return false;
+        var tokens = super.list(wrapper);
+        for (int i = 0; i < tokens.size(); i++) {
+            var token = tokens.get(i);
+            if (!this.checkToken(token)) {
+                token.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                super.updateById(token);
+
+                return false;
+            }
+
+            Resource resource = Resource.builder()
+                    .moduleAddress(token.getModuleAddress())
+                    .moduleName(token.getModuleName())
+                    .resourceName(token.getStructName())
+                    .build();
+
+            TransactionPayload transactionPayload = TransactionPayload.builder()
+                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                    .function(token.getInitializeFunction())
+                    .arguments(List.of(
+                            token.getName(),
+                            token.getSymbol(),
+                            token.getDecimals()
+                    ))
+                    .typeArguments(List.of(resource.resourceTag()))
+                    .build();
+
+            var response = AptosService.getAptosClient().requestSubmitTransaction(
+                    token.getModuleAddress(),
+                    transactionPayload);
+            if (response.isValid()) {
+                token.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                super.updateById(token);
+
+                return false;
+            }
+
+            if (!AptosService.checkTransaction(response.getData().getHash())) {
+                token.setTransactionHash(Objects.isNull(response.getData().getHash()) ? EMPTY : response.getData().getHash());
+                token.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                super.updateById(token);
+
+                return false;
+            }
+
+            token.setTransactionHash(response.getData().getHash());
+            token.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+
+            super.updateById(token);
         }
-
-        if (!this.checkToken(token)) {
-            return false;
-        }
-
-        Resource resource = Resource.builder()
-                .moduleAddress(token.getModuleAddress())
-                .moduleName(token.getModuleName())
-                .resourceName(token.getStructName())
-                .build();
-
-        TransactionPayload transactionPayload = TransactionPayload.builder()
-                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                .function(token.getInitializeFunction())
-                .arguments(List.of(
-                        token.getName(),
-                        token.getSymbol()
-                ))
-                .typeArguments(List.of(resource.resourceTag()))
-                .build();
-
-        var response = AptosService.getAptosClient().requestSubmitTransaction(
-                token.getModuleAddress(),
-                transactionPayload);
-        if (response.isValid()) {
-            return false;
-        }
-
-        if (!AptosService.checkTransaction(response.getData().getHash())) {
-            token.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-            return false;
-        }
-
-        token.setTransactionHash(response.getData().getHash());
-        token.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-
-        super.updateById(token);
 
         //TODO 删除缓存
 

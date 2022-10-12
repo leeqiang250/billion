@@ -6,12 +6,15 @@
     <sql id="Base_Column_List">
         id
         as id
+        ,chain as chain
         ,module_address as module_address
         ,module_name as module_name
         ,struct_name as struct_name
         ,initialize_function as initialize_function
         ,name_ as name_
         ,symbol as symbol
+        ,decimals as decimals
+        ,uri as uri
         ,transaction_status as transaction_status
         ,transaction_hash as transaction_hash
     </sql>
