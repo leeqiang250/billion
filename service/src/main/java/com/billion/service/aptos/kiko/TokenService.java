@@ -6,6 +6,7 @@ import com.billion.model.entity.Token;
 import com.billion.model.service.ICacheService;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,6 +33,6 @@ public interface TokenService extends ICacheService<Token> {
      */
     boolean transferResource(String from, String to, String amount, Resource resource);
 
-    List<Token> getListByPurpose(Context context, String purpose);
+    Collection getListByPurpose(Context context, String purpose);
 
 }

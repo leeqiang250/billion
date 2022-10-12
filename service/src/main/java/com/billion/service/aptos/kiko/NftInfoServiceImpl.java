@@ -72,10 +72,10 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @PostConstruct
     public void dd() {
-        this.mint(1);
-        this.mint(1);
-        this.mint(1);
-        this.mint(1);
+//        this.mint(1);
+//        this.mint(1);
+//        this.mint(1);
+//        this.mint(1);
     }
 
     @Override
