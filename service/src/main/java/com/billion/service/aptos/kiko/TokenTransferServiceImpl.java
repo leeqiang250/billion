@@ -91,6 +91,7 @@ public class TokenTransferServiceImpl extends AbstractCacheService<TokenTransfer
                 transactionPayload);
         if (transactionResponse.isValid()) {
             tokenTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            tokenTransfer.setTransactionHash(EMPTY);
             tokenTransfer.setDescription(transactionResponse.getErrorCode());
             super.updateById(tokenTransfer);
 

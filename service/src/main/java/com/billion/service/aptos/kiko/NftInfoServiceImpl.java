@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
+import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -101,7 +102,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
         wrapper.lambda().eq(NftInfo::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var nftInfos = super.list(wrapper);
-        nftInfos.forEach(nftInfo -> {
+        for (int i = 0; i < nftInfos.size(); i++) {
+            var nftInfo = nftInfos.get(i);
+
             var displayName = languageService.getByKey(context, nftInfo.getDisplayName());
             var description = languageService.getByKey(context, nftInfo.getDescription());
             var uri = nftInfo.getUri();
@@ -114,10 +117,18 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                     || DEFAULT_TEXT.equals(description)
                     || DEFAULT_TEXT.equals(uri)
             ) {
-                return;
+                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftInfo.setTransactionHash(EMPTY);
+                super.updateById(nftInfo);
+
+                return false;
             }
 
             if (26 < displayName.length()) {
+                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftInfo.setTransactionHash(EMPTY);
+                super.updateById(nftInfo);
+
                 throw new BizException("display name too long, max 26");
             }
 
@@ -146,24 +157,34 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             var response = AptosService.getAptosClient().requestSubmitTransaction(
                     nftGroup.getOwner(),
                     transactionPayload);
-            if (!response.isValid()) {
-                if (AptosService.checkTransaction(response.getData().getHash())) {
-                    nftInfo.setOwner(nftGroup.getOwner());
+            if (response.isValid()) {
+                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftInfo.setTransactionHash(EMPTY);
+                super.updateById(nftInfo);
 
-                    nftInfo.setTransactionHash(response.getData().getHash());
-                    nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+                return false;
+            }
 
-                    nftInfo.setTableHandle(handle.getCollectionsTokenDataHandle());
-                    nftInfo.setTableCollection(Hex.encode(nftGroupDisplayName));
-                    nftInfo.setTableCreator(nftGroup.getOwner());
-                    nftInfo.setTableName(Hex.encode(displayName));
-                } else {
-                    nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                }
+            if (AptosService.checkTransaction(response.getData().getHash())) {
+                nftInfo.setOwner(nftGroup.getOwner());
+
+                nftInfo.setTransactionHash(response.getData().getHash());
+                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+
+                nftInfo.setTableHandle(handle.getCollectionsTokenDataHandle());
+                nftInfo.setTableCollection(Hex.encode(nftGroupDisplayName));
+                nftInfo.setTableCreator(nftGroup.getOwner());
+                nftInfo.setTableName(Hex.encode(displayName));
 
                 super.updateById(nftInfo);
+            } else {
+                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftInfo.setTransactionHash(response.getData().getHash());
+                super.updateById(nftInfo);
+
+                return false;
             }
-        });
+        }
 
         //TODO 删除缓存
 
