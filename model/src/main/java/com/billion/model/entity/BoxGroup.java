@@ -46,7 +46,7 @@ public class BoxGroup implements IModel {
      * token_id
      */
     @TableField("token_id")
-    Long tokenId;
+    String tokenId;
 
     /**
      * meta
@@ -143,6 +143,18 @@ public class BoxGroup implements IModel {
      */
     @TableField("end_time")
     Timestamp endTime;
+
+    /**
+     * 铸造状态
+     */
+    @TableField("transaction_status")
+    String transactionStatus;
+
+    /**
+     * 铸造hash
+     */
+    @TableField("transaction_hash")
+    String transactionHash;
 
     /**
      * 修改时间

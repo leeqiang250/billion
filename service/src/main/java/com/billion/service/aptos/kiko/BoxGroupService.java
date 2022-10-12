@@ -22,4 +22,8 @@ public interface BoxGroupService  extends ICacheService<BoxGroup> {
 //    Response getList(Context context, String type);
 
 //    BoxGroup getById();
+
+    void initBox(Context context, String groupId);
+
+    void addPay(String groupId);
 }

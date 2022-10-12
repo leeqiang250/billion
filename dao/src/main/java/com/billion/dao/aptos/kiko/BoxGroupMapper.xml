@@ -25,6 +25,8 @@
         ,sort as sort
         ,sale_time as sale_time
         ,end_time as end_time
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
     </sql>
 
 </mapper>
