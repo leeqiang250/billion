@@ -153,6 +153,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         tokenList.forEach(t -> {
             if (StringUtils.isEmpty(t.getSymbol()) || StringUtils.isEmpty(t.getName())) {
                 CoinInfo coinInfo = getCoinInfoFromChain(t);
+
                 t.setDecimals(coinInfo.getData().getDecimals());
                 t.setName(coinInfo.getData().getName());
                 t.setSymbol(coinInfo.getData().getSymbol());
@@ -169,7 +170,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
                 .resourceName(token.getStructName())
                 .build();
 
-        Response<CoinInfo> coinInfoResponse =  AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
+        Response<CoinInfo> coinInfoResponse =  AptosService.getAptosClient().requestCoinInfo(token.getModuleAddress(), resource);
         CoinInfo coinInfo = coinInfoResponse.getData();
         return coinInfo;
     }
