@@ -22,6 +22,13 @@ import java.util.stream.Collectors;
 public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Contract> implements ContractService {
 
     @Override
+    public Contract getByName(String name) {
+        QueryWrapper<Contract> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(Contract::getName, name);
+        return super.getOne(wrapper);
+    }
+
+    @Override
     public Map cacheMap(Context context) {
         String key = this.cacheMapKey(context.getChain());
 
@@ -34,7 +41,7 @@ public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Co
         wrapper.lambda().eq(Contract::getChain, context.getChain());
         List<Contract> list = super.list(wrapper);
 
-        map = list.stream().collect(Collectors.toMap(Contract::getName, Contract::getContract, (key1, key2) -> key2));
+        map = list.stream().collect(Collectors.toMap(Contract::getName, (e) -> e.getModuleAddress() + "::" + e.getModuleName()));
 
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));

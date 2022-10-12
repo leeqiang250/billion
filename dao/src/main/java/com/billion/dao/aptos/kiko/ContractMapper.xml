@@ -8,7 +8,8 @@
         as id
         ,chain as chain
         ,name_ as name_
-        ,contract as contract
+        ,module_address as module_address
+        ,module_name as module_name
     </sql>
 
 </mapper>

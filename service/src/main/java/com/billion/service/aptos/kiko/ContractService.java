@@ -8,4 +8,12 @@ import com.billion.model.entity.Contract;
  */
 public interface ContractService extends ICacheService<Contract> {
 
+    /**
+     * getByName
+     *
+     * @param name name
+     * @return Contract
+     */
+    Contract getByName(String name);
+
 }

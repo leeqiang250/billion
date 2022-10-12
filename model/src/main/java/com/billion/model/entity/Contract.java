@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Contract implements IModel {
 
     /**
-     * ID
+     * id
      */
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
@@ -39,9 +39,15 @@ public class Contract implements IModel {
     String name;
 
     /**
-     * 合约地址
+     * moduleAddress
      */
-    @TableField("contract")
-    String contract;
+    @TableField("module_address")
+    String moduleAddress;
+
+    /**
+     * moduleName
+     */
+    @TableField("module_name")
+    String moduleName;
 
 }

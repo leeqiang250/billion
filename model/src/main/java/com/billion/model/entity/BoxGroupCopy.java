@@ -78,7 +78,7 @@ public class BoxGroupCopy extends TransactionStatus implements IModel {
      * 起售时间
      */
     @TableField("ts")
-    Long ts;
+    String ts;
 
     /**
      * 排序

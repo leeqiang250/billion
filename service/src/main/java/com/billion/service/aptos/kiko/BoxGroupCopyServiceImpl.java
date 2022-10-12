@@ -4,12 +4,14 @@ import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupCopyMapper;
 import com.billion.model.entity.BoxGroupCopy;
+import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +27,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
     @Resource
     TokenService tokenService;
 
+    @PostConstruct
     @Override
     public boolean initialize() {
         if (!tokenService.initialize()) {
@@ -32,6 +35,8 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
         }
 
         QueryWrapper<BoxGroupCopy> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(BoxGroupCopy::getChain, Chain.APTOS.getCode());
+        wrapper.lambda().eq(BoxGroupCopy::getEnabled, Boolean.TRUE);
         wrapper.lambda().eq(BoxGroupCopy::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var boxGroups = super.list(wrapper);
 
@@ -63,7 +68,6 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
                     .moduleName(bidToken.getModuleName())
                     .resourceName(bidToken.getStructName())
                     .build();
-
 
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)

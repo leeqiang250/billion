@@ -72,7 +72,7 @@ public class Token extends TransactionStatus implements IModel {
      * decimals
      */
     @TableField("decimals")
-    Boolean decimals;
+    Integer decimals;
 
     /**
      * uri

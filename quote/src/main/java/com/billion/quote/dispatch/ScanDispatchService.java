@@ -77,7 +77,7 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
-    @Scheduled(cron = "*/2 * * * * ?")
+    //@Scheduled(cron = "*/2 * * * * ?")
     void dispatch() {
         this.next = true;
         while (this.next) {

@@ -5,10 +5,12 @@ import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
 import com.billion.model.entity.Token;
+import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
+import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     @Override
     public boolean initialize() {
         QueryWrapper<Token> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(Token::getChain, Chain.APTOS.getCode());
         wrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var tokens = super.list(wrapper);
         for (int i = 0; i < tokens.size(); i++) {
@@ -68,7 +71,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(token.getInitializeFunction())
+                    .function(ContextService.getTokenOwner() + token.getInitializeFunction())
                     .arguments(List.of(
                             token.getName(),
                             token.getSymbol(),
@@ -97,6 +100,26 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
             token.setTransactionHash(response.getData().getHash());
             token.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+
+            //TODO 删除
+            {
+                TransactionPayload transactionPayload2 = TransactionPayload.builder()
+                        .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                        .function(ContextService.getTokenOwner() + "::coin_help::mint")
+                        .arguments(List.of(
+                                ContextService.getTokenOwner(),
+                                "9999999999"
+                        ))
+                        .typeArguments(List.of(resource.resourceTag()))
+                        .build();
+
+                var response2 = AptosService.getAptosClient().requestSubmitTransaction(
+                        ContextService.getTokenOwner(),
+                        transactionPayload2);
+
+                AptosService.checkTransaction(response2.getData().getHash());
+            }
+            //TODO 删除
 
             super.updateById(token);
         }

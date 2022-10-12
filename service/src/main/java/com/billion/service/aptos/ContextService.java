@@ -1,16 +1,20 @@
 package com.billion.service.aptos;
 
 import com.billion.model.enums.CacheTsType;
+import com.billion.service.aptos.kiko.ContractService;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,6 +25,9 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class ContextService {
+
+    @Resource
+    ContractService contractService;
 
     @Value("${spring.profiles.active}")
     String pEnv;
@@ -33,7 +40,6 @@ public class ContextService {
 
     @Getter
     static String applicationName;
-
 
     @Value("${cache.long}")
     long pCacheLong;
@@ -65,26 +71,14 @@ public class ContextService {
     @Getter
     static String kikoHost;
 
-    @Value("${kiko.account.commoner}")
-    String pCommoner;
-
     @Getter
     static String commoner;
-
-    @Value("${kiko.account.token_owner}")
-    String pTokenOwner;
 
     @Getter
     static String tokenOwner;
 
-    @Value("${kiko.account.nft_owner}")
-    String pNftOwner;
-
     @Getter
     static String nftOwner;
-
-    @Value("${kiko.account.marketer}")
-    String pMarketer;
 
     @Getter
     static String marketer;
@@ -109,17 +103,18 @@ public class ContextService {
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
-        ContextService.commoner = this.pCommoner;
-        ContextService.tokenOwner = this.pTokenOwner;
-        ContextService.nftOwner = this.pNftOwner;
-        ContextService.marketer = this.pMarketer;
+        ContextService.commoner = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.tokenOwner = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.nftOwner = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.marketer = contractService.getByName(com.billion.model.enums.Contract.BOX_PRIMARY_MARKET.getCode()).getModuleAddress();
+
         ContextService.address = ContextService.commoner + "," +
                 ContextService.tokenOwner + "," +
                 ContextService.nftOwner + "," +
                 ContextService.marketer;
 
-
         ContextService.aptosHost = this.pAptosHost;
-    }
 
+
+    }
 }
