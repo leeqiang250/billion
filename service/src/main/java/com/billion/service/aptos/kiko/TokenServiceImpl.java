@@ -1,7 +1,10 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.Resource;
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
 import com.billion.dao.aptos.kiko.TokenSceneMapper;
@@ -150,13 +153,19 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         QueryWrapper<Token> tokenQueryWrapper = new QueryWrapper<>();
         tokenQueryWrapper.lambda().eq(Token::getId, scene);
         tokenQueryWrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
-        tokenQueryWrapper.lambda().in(List.of());
-        tokenQueryWrapper.lambda().in(List.of());
         return super.list(tokenQueryWrapper);
     }
 
-    private void getCoinInfoFromChain(Token token) {
+    private CoinInfo getCoinInfoFromChain(Token token) {
+        Resource resource = Resource.builder().
+                moduleAddress(token.getModuleAddress())
+                .moduleName(token.getModuleName())
+                .resourceName(token.getStructName())
+                .build();
 
+        Response<CoinInfo> coinInfoResponse = AptosService.getAptosClient().requestCoinInfo(token.getModuleAddress(), resource);
+        CoinInfo coinInfo = coinInfoResponse.getData();
+        return coinInfo;
     }
 
 }

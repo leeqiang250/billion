@@ -5,8 +5,6 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
 import com.billion.model.service.ICacheService;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,6 +30,7 @@ public interface TokenService extends ICacheService<Token> {
      * @return boolean
      */
     boolean transferResource(String from, String to, String amount, Resource resource);
+
 
     /**
      * getByScene
