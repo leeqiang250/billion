@@ -4,7 +4,6 @@ import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
-import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
 import com.billion.dao.aptos.kiko.TokenSceneMapper;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -150,8 +150,10 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         tokenSceneQueryWrapper.lambda().eq(TokenScene::getScene, scene);
         var tokenScenes = this.tokenSceneMapper.selectList(tokenSceneQueryWrapper);
 
+        var ids = tokenScenes.stream().map(TokenScene::getTokenId).collect(Collectors.toList());
+
         QueryWrapper<Token> tokenQueryWrapper = new QueryWrapper<>();
-        tokenQueryWrapper.lambda().eq(Token::getId, scene);
+        tokenQueryWrapper.lambda().in(Token::getId, ids);
         tokenQueryWrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
         return super.list(tokenQueryWrapper);
     }
