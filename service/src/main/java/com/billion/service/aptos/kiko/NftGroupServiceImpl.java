@@ -7,13 +7,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftGroup;
-import com.billion.model.enums.CacheTsType;
-import com.billion.model.enums.Chain;
-import com.billion.model.enums.Language;
-import com.billion.model.enums.TransactionStatus;
+import com.billion.model.entity.Pair;
+import com.billion.model.entity.Token;
+import com.billion.model.enums.*;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
+import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +37,12 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
     @Resource
     HandleService handleService;
+
+    @Resource
+    TokenService tokenService;
+
+    @Resource
+    PairService pairService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -149,79 +155,128 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     }
 
     @Override
-    public boolean mint(Serializable id) {
-        QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftGroup::getId, id);
-        wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-        var nftGroup = super.getOne(wrapper, false);
-        if (Objects.isNull(nftGroup)) {
-            return false;
+    public boolean initialize() {
+        QueryWrapper<NftGroup> nftGroupQueryWrapper = new QueryWrapper<>();
+        nftGroupQueryWrapper.lambda().eq(NftGroup::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        nftGroupQueryWrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
+        var nftGroups = super.list(nftGroupQueryWrapper);
+
+        for (int i = 0; i < nftGroups.size(); i++) {
+            var nftGroup = nftGroups.get(i);
+
+            var context = Context.builder()
+                    .language(Language.EN.getCode())
+                    .build();
+            var displayName = languageService.getByKey(context, nftGroup.getDisplayName());
+            var description = languageService.getByKey(context, nftGroup.getDescription());
+            var uri = nftGroup.getUri();
+
+            if (StringUtils.isEmpty(displayName)
+                    || StringUtils.isEmpty(description)
+                    || StringUtils.isEmpty(uri)
+                    || StringUtils.isEmpty(nftGroup.getTotalSupply())
+                    || StringUtils.isEmpty(nftGroup.getOwner())
+                    || DEFAULT_TEXT.equals(displayName)
+                    || DEFAULT_TEXT.equals(description)
+                    || DEFAULT_TEXT.equals(uri)
+            ) {
+                return false;
+            }
+
+            if (25 < displayName.length()) {
+                throw new BizException("display name too long, max 25");
+            }
+
+            TransactionPayload transactionPayload = TransactionPayload.builder()
+                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                    .function("0x3::token::create_collection_script")
+                    .arguments(List.of(
+                            Hex.encode(displayName),
+                            Hex.encode(description),
+                            Hex.encode(uri),
+                            nftGroup.getTotalSupply(),//TODO
+                            List.of(true, true, true)//TODO
+                    ))
+                    .typeArguments(List.of())
+                    .build();
+
+            var response = AptosService.getAptosClient().requestSubmitTransaction(
+                    nftGroup.getOwner(),
+                    transactionPayload);
+            if (response.isValid()) {
+                return false;
+            }
+
+            if (!AptosService.checkTransaction(response.getData().getHash())) {
+                nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                return false;
+            }
+
+            nftGroup.setTransactionHash(response.getData().getHash());
+            nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+
+            super.updateById(nftGroup);
+
+            this.handleService.update(nftGroup.getOwner());
+
+            //TODO 删除缓存
         }
 
-        if (TransactionStatus.STATUS_3_SUCCESS == nftGroup.getTransactionStatus_()) {
-            return true;
-        }
+        return this.initializeMarket();
+    }
 
-        if (TransactionStatus.STATUS_1_READY != nftGroup.getTransactionStatus_()) {
-            return false;
-        }
-
-        var context = Context.builder()
+    @Override
+    public boolean initializeMarket() {
+        Context context = Context.builder()
+                .chain(Chain.APTOS.getCode())
                 .language(Language.EN.getCode())
                 .build();
-        var displayName = languageService.getByKey(context, nftGroup.getDisplayName());
-        var description = languageService.getByKey(context, nftGroup.getDescription());
-        var uri = nftGroup.getUri();
 
-        if (StringUtils.isEmpty(displayName)
-                || StringUtils.isEmpty(description)
-                || StringUtils.isEmpty(uri)
-                || StringUtils.isEmpty(nftGroup.getTotalSupply())
-                || StringUtils.isEmpty(nftGroup.getOwner())
-                || DEFAULT_TEXT.equals(displayName)
-                || DEFAULT_TEXT.equals(description)
-                || DEFAULT_TEXT.equals(uri)
-        ) {
-            return false;
-        }
-
-        if (25 < displayName.length()) {
-            throw new BizException("display name too long, max 25");
-        }
-
-        TransactionPayload transactionPayload = TransactionPayload.builder()
-                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                .function("0x3::token::create_collection_script")
-                .arguments(List.of(
-                        Hex.encode(displayName),
-                        Hex.encode(description),
-                        Hex.encode(uri),
-                        nftGroup.getTotalSupply(),//TODO
-                        List.of(true, true, true)//TODO
-                ))
-                .typeArguments(List.of())
+        var askToken = Token.builder()
+                .id(0L)
                 .build();
 
-        var response = AptosService.getAptosClient().requestSubmitTransaction(
-                nftGroup.getOwner(),
-                transactionPayload);
-        if (response.isValid()) {
-            return false;
+        var tokens = tokenService.getByScene(context, TokenScene.MARKET.getCode());
+        for (int j = 0; j < tokens.size(); j++) {
+            var bidToken = tokens.get(j);
+
+            QueryWrapper<Pair> pairQueryWrapper = new QueryWrapper<>();
+            pairQueryWrapper.lambda().eq(Pair::getAskToken, askToken.getId());
+            pairQueryWrapper.lambda().eq(Pair::getBidToken, bidToken.getId());
+            var pair = pairService.getOne(pairQueryWrapper, false);
+            if (Objects.isNull(pair)) {
+                com.aptos.request.v1.model.Resource bidTokenResource = com.aptos.request.v1.model.Resource.builder()
+                        .moduleAddress(bidToken.getModuleAddress())
+                        .moduleName(bidToken.getModuleName())
+                        .resourceName(bidToken.getStructName())
+                        .build();
+
+                TransactionPayload transactionPayload = TransactionPayload.builder()
+                        .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                        .function(ContextService.getMarketer() + "::nft_secondary_market::nft_init")
+                        .arguments(List.of())
+                        .typeArguments(List.of(bidTokenResource.resourceTag()))
+                        .build();
+
+                var response = AptosService.getAptosClient().requestSubmitTransaction(
+                        ContextService.getMarketer(),
+                        transactionPayload);
+                if (response.isValid()) {
+                    return false;
+                }
+
+                if (!AptosService.checkTransaction(response.getData().getHash())) {
+                    return false;
+                }
+
+                pair = Pair.builder()
+                        .askToken(askToken.getId())
+                        .bidToken(bidToken.getId())
+                        .build();
+
+                pairService.save(pair);
+            }
         }
-
-        if (!AptosService.checkTransaction(response.getData().getHash())) {
-            nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-            return false;
-        }
-
-        nftGroup.setTransactionHash(response.getData().getHash());
-        nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-
-        super.updateById(nftGroup);
-
-        this.handleService.update(nftGroup.getOwner());
-
-        //TODO 删除缓存
 
         return true;
     }

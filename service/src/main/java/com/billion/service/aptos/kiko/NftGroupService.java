@@ -42,9 +42,15 @@ public interface NftGroupService extends ICacheService<NftGroup> {
     /**
      * 铸造系列
      *
-     * @param id id
      * @return boolean
      */
-    boolean mint(Serializable id);
+    boolean initialize();
+
+    /**
+     * initializeMarket
+     *
+     * @return boolean
+     */
+    boolean initializeMarket();
 
 }

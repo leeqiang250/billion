@@ -70,17 +70,9 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         return (NftInfo) value;
     }
 
-    @PostConstruct
-    public void dd() {
-//        this.mint(1);
-//        this.mint(1);
-//        this.mint(1);
-//        this.mint(1);
-    }
-
     @Override
     public boolean mint(Serializable groupId) {
-        if (!this.nftGroupService.mint(groupId)) {
+        if (!this.nftGroupService.initialize()) {
             return false;
         }
 
@@ -205,7 +197,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
         if ("group".equals(type)) {
             wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
-        }else if ("boxGroup".equals(type)) {
+        } else if ("boxGroup".equals(type)) {
             wrapper.lambda().eq(NftInfo::getBoxGroupId, groupId);
         }
         //TODO:是否需要状态区别
