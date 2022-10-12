@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupCopyMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroupCopy;
-import com.billion.model.entity.Handle;
 import com.billion.model.entity.Pair;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TokenScene;
@@ -111,11 +110,11 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
             super.updateById(boxGroup);
         }
 
-        return this.initializMarket();
+        return this.initializeMarket();
     }
 
     @Override
-    public boolean initializMarket() {
+    public boolean initializeMarket() {
         Context context = Context.builder()
                 .chain(Chain.APTOS.getCode())
                 .build();
