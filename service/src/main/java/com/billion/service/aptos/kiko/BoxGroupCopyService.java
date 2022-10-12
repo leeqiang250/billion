@@ -15,4 +15,11 @@ public interface BoxGroupCopyService extends ICacheService<BoxGroupCopy> {
      */
     boolean initialize();
 
+    /**
+     * initializMarket
+     *
+     * @return boolean
+     */
+    boolean initializMarket();
+
 }
