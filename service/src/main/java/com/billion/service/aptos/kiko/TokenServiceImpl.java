@@ -5,6 +5,7 @@ import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
 import com.billion.model.dto.Context;
@@ -146,26 +147,31 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     }
 
     @Override
+
     public Collection getListByScene(Context context, String scene) {
         List<Token> tokenList = tokenMapper.selectByScene(context.getChain(), scene);
-        List<CoinInfo> coinInfoList = new ArrayList<>();
         tokenList.forEach(t -> {
-            Resource resource = Resource.builder().
-                    moduleAddress(t.getModuleAddress())
-                    .moduleName(t.getModuleName())
-                    .resourceName(t.getStructName())
-                    .build();
-
-            Response<CoinInfo> coinInfoResponse = AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
-            CoinInfo coinInfo = coinInfoResponse.getData();
-            coinInfoList.add(coinInfo);
-
+            if (StringUtils.isEmpty(t.getSymbol()) || StringUtils.isEmpty(t.getName())) {
+                CoinInfo coinInfo = getCoinInfoFromChain(t);
+                t.setDecimals(coinInfo.getData().getDecimals());
+                t.setName(coinInfo.getData().getName());
+                t.setSymbol(coinInfo.getData().getSymbol());
+                this.updateById(t);
+            }
         });
-        return coinInfoList;
+        return tokenList;
     }
 
-    private void getCoinInfoFromChain(Token token) {
+    private CoinInfo getCoinInfoFromChain(Token token) {
+        Resource resource = Resource.builder().
+                moduleAddress(token.getModuleAddress())
+                .moduleName(token.getModuleName())
+                .resourceName(token.getStructName())
+                .build();
 
+        Response<CoinInfo> coinInfoResponse =  AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
+        CoinInfo coinInfo = coinInfoResponse.getData();
+        return coinInfo;
     }
 
 }
