@@ -151,6 +151,10 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     public Collection getListByScene(Context context, String scene) {
         List<Token> tokenList = tokenMapper.selectByScene(context.getChain(), scene);
         tokenList.forEach(t -> {
+            //如果代币没有准备好，则跳过
+            if (!t.getTransactionStatus().equals(TransactionStatus.STATUS_3_SUCCESS.getCode())) {
+                return;
+            }
             if (StringUtils.isEmpty(t.getSymbol()) || StringUtils.isEmpty(t.getName())) {
                 CoinInfo coinInfo = getCoinInfoFromChain(t);
 
