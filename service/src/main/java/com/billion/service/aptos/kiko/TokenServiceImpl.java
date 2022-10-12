@@ -1,9 +1,13 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.AptosClient;
+import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.Resource;
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
@@ -14,8 +18,11 @@ import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -25,6 +32,9 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Slf4j
 @Service
 public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> implements TokenService {
+
+    @javax.annotation.Resource
+    TokenMapper tokenMapper;
 
     public boolean checkToken(Token token) {
         //TODO 正则校验
@@ -133,6 +143,29 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         var transaction = AptosService.getAptosClient().transferResource(from, to, amount, resource);
 
         return AptosService.checkTransaction(transaction.getData().getHash());
+    }
+
+    @Override
+    public Collection getListByPurpose(Context context, String purpose) {
+        List<Token> tokenList = tokenMapper.selectByPurpose(context.getChain(), purpose);
+        List<CoinInfo> coinInfoList = new ArrayList<>();
+        tokenList.forEach(t -> {
+            Resource resource = Resource.builder().
+                    moduleAddress(t.getModuleAddress())
+                    .moduleName(t.getModuleName())
+                    .resourceName(t.getStructName())
+                    .build();
+
+            Response<CoinInfo> coinInfoResponse =  AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
+            CoinInfo coinInfo = coinInfoResponse.getData();
+            coinInfoList.add(coinInfo);
+
+        });
+        return coinInfoList;
+    }
+
+    private void getCoinInfoFromChain(Token token) {
+
     }
 
 }
