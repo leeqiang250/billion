@@ -33,6 +33,6 @@ public interface TokenService extends ICacheService<Token> {
      */
     boolean transferResource(String from, String to, String amount, Resource resource);
 
-    Collection getListByPurpose(Context context, String purpose);
+    Collection getListByScene(Context context, String scene);
 
 }

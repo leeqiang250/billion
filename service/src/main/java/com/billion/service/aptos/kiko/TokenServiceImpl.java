@@ -146,8 +146,8 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     }
 
     @Override
-    public Collection getListByPurpose(Context context, String purpose) {
-        List<Token> tokenList = tokenMapper.selectByPurpose(context.getChain(), purpose);
+    public Collection getListByScene(Context context, String scene) {
+        List<Token> tokenList = tokenMapper.selectByScene(context.getChain(), scene);
         List<CoinInfo> coinInfoList = new ArrayList<>();
         tokenList.forEach(t -> {
             Resource resource = Resource.builder().
@@ -156,7 +156,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
                     .resourceName(t.getStructName())
                     .build();
 
-            Response<CoinInfo> coinInfoResponse =  AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
+            Response<CoinInfo> coinInfoResponse = AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
             CoinInfo coinInfo = coinInfoResponse.getData();
             coinInfoList.add(coinInfo);
 

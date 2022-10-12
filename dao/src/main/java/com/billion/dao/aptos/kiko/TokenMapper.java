@@ -14,10 +14,11 @@ import java.util.List;
 @Mapper
 public interface TokenMapper extends BaseMapper<Token> {
     /**
-     * selectByPurpose
-     * @param purpose
-     * @return
+     * selectByScene
+     *
+     * @param scene scene
+     * @return List<Token>
      */
-    @Select("select * from token t left join token_purpose p on t.id = p.token_id where t.chain = #{chain,jdbcType=VARCHAR} and p.`purpose`= #{purpose,jdbcType=VARCHAR}")
-    List<Token> selectByPurpose(@Param("chain") String chain, @Param("purpose") String purpose);
+    @Select("select * from token t left join token_scene p on t.id = p.token_id where t.chain = #{chain,jdbcType=VARCHAR} and p.`scene`= #{scene,jdbcType=VARCHAR}")
+    List<Token> selectByScene(@Param("chain") String chain, @Param("scene") String scene);
 }

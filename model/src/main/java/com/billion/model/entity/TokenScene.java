@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.billion.model.model.IModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * @author jason
@@ -19,8 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("token_purpose")
-public class TokenPurpose implements Serializable {
+@TableName("token_scene")
+public class TokenScene implements IModel {
 
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
@@ -34,7 +32,7 @@ public class TokenPurpose implements Serializable {
     /**
      * 用途
      */
-    @TableField("purpose")
-    String purpose;
+    @TableField("scene")
+    String scene;
 
 }

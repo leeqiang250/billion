@@ -9,11 +9,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TokenPurpose {
+public enum TokenScene {
 
     ORDER("order", "交易市场挂单");
 
-    String purpose;
+    String scene;
+
     String des;
 
 }
