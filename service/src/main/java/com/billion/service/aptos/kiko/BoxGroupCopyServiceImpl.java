@@ -14,7 +14,6 @@ import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +32,6 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
     @Resource
     PairService pairService;
 
-    @PostConstruct
     @Override
     public boolean initialize() {
         if (!tokenService.initialize()) {
