@@ -10,7 +10,6 @@ import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.enums.Language;
-import com.billion.model.enums.NftPropertyType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
@@ -18,7 +17,6 @@ import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
@@ -147,9 +145,13 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                             "3",
                             "1",
                             List.of(true, true, true, true, true),
-                            classMap.get(NftPropertyType.KEYS.getType()),
-                            classMap.get(NftPropertyType.VALUES.getType()),
-                            classMap.get(NftPropertyType.TYPES.getType())
+                            List.of(),
+                            List.of(),
+                            List.of()
+                            //TODO key不能重复
+                            //classMap.get(NftPropertyType.KEYS.getType()),
+                            //classMap.get(NftPropertyType.VALUES.getType()),
+                            //classMap.get(NftPropertyType.TYPES.getType())
                     ))
                     .typeArguments(List.of())
                     .build();
@@ -168,8 +170,8 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             if (AptosService.checkTransaction(response.getData().getHash())) {
                 nftInfo.setOwner(nftGroup.getOwner());
 
-                nftInfo.setTransactionHash(response.getData().getHash());
                 nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+                nftInfo.setTransactionHash(response.getData().getHash());
 
                 nftInfo.setTableHandle(handle.getCollectionsTokenDataHandle());
                 nftInfo.setTableCollection(Hex.encode(nftGroupDisplayName));

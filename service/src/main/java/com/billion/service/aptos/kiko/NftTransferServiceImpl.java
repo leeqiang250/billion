@@ -42,6 +42,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
                 || !accountTokenStore.getData().getData().isDirectTransfer()
         ) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setTransactionHash(EMPTY);
             nftTransfer.setDescription("Account TokenStore non-existent or direct_transfer is false");
             super.updateById(nftTransfer);
 
@@ -54,6 +55,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
         if (Objects.isNull(handle)
                 || StringUtils.isEmpty(handle.getTokenStoreTokensHandle())) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setTransactionHash(EMPTY);
             nftTransfer.setDescription("TokenStore Tokens Handle is null");
             super.updateById(nftTransfer);
 
@@ -71,6 +73,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
 
         if (tableTokenDataResponse.isValid()) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setTransactionHash(EMPTY);
             nftTransfer.setDescription(tableTokenDataResponse.getErrorCode());
             super.updateById(nftTransfer);
 
@@ -101,6 +104,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
                 transactionPayload);
         if (transactionResponse.isValid()) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setTransactionHash(EMPTY);
             nftTransfer.setDescription(transactionResponse.getErrorCode());
             super.updateById(nftTransfer);
 
@@ -114,13 +118,15 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
         transactionResponse = AptosService.getTransaction(transactionResponse.getData().getHash());
         if (transactionResponse.isValid()) {
             nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftTransfer.setTransactionHash(EMPTY);
         } else {
             if (transactionResponse.getData().isSuccess()) {
-                nftTransfer.setDescription(EMPTY);
                 nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+                nftTransfer.setDescription(EMPTY);
             } else {
-                nftTransfer.setDescription(transactionResponse.getData().getVmStatus());
                 nftTransfer.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftTransfer.setTransactionHash(EMPTY);
+                nftTransfer.setDescription(transactionResponse.getData().getVmStatus());
             }
         }
         super.updateById(nftTransfer);

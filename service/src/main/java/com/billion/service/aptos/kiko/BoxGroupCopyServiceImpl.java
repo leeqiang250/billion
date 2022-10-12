@@ -57,6 +57,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
                     || TransactionStatus.STATUS_3_SUCCESS != bidToken.getTransactionStatus_()
             ) {
                 boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                boxGroup.setTransactionHash(EMPTY);
                 super.updateById(boxGroup);
 
                 return false;
@@ -90,21 +91,22 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
                     transactionPayload);
             if (response.isValid()) {
                 boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                boxGroup.setTransactionHash(EMPTY);
                 super.updateById(boxGroup);
 
                 return false;
             }
 
             if (!AptosService.checkTransaction(response.getData().getHash())) {
-                boxGroup.setTransactionHash(Objects.isNull(response.getData().getHash()) ? EMPTY : response.getData().getHash());
                 boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                boxGroup.setTransactionHash(Objects.isNull(response.getData().getHash()) ? EMPTY : response.getData().getHash());
                 super.updateById(boxGroup);
 
                 return false;
             }
 
-            boxGroup.setTransactionHash(response.getData().getHash());
             boxGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            boxGroup.setTransactionHash(response.getData().getHash());
 
             super.updateById(boxGroup);
         }

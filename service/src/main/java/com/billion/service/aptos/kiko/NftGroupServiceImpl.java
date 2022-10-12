@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
+import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang
@@ -180,10 +181,18 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                     || DEFAULT_TEXT.equals(description)
                     || DEFAULT_TEXT.equals(uri)
             ) {
+                nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftGroup.setTransactionHash(EMPTY);
+                super.updateById(nftGroup);
+
                 return false;
             }
 
             if (25 < displayName.length()) {
+                nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftGroup.setTransactionHash(EMPTY);
+                super.updateById(nftGroup);
+
                 throw new BizException("display name too long, max 25");
             }
 
@@ -204,16 +213,22 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                     nftGroup.getOwner(),
                     transactionPayload);
             if (response.isValid()) {
+                nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftGroup.setTransactionHash(EMPTY);
+                super.updateById(nftGroup);
+
                 return false;
             }
 
             if (!AptosService.checkTransaction(response.getData().getHash())) {
                 nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftGroup.setTransactionHash(response.getData().getHash());
+
                 return false;
             }
 
-            nftGroup.setTransactionHash(response.getData().getHash());
             nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            nftGroup.setTransactionHash(response.getData().getHash());
 
             super.updateById(nftGroup);
 
