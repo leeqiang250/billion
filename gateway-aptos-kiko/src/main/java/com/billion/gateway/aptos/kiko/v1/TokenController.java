@@ -5,8 +5,7 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
 import com.billion.model.response.Response;
 import com.billion.service.aptos.kiko.TokenService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -76,6 +75,11 @@ public class TokenController implements IController<Token> {
 //        AptosService.checkTransaction(transaction.getHash());
 //    }
         return Response.SUCCESS;
+    }
+
+    @GetMapping("/listByPurpose/{purpose}")
+    public Response getListByPurpose(@RequestHeader Context context, @PathVariable String purpose) {
+        return Response.success(tokenService.getListByPurpose(context, purpose));
     }
 
 }

@@ -4,6 +4,7 @@ import com.aptos.request.v1.model.Resource;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
@@ -23,6 +24,9 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Slf4j
 @Service
 public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> implements TokenService {
+
+    @javax.annotation.Resource
+    TokenMapper tokenMapper;
 
     public boolean checkToken(Token token) {
         //TODO 正则校验
@@ -110,6 +114,11 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         var transaction = AptosService.getAptosClient().transferResource(from, to, amount, resource);
 
         return AptosService.checkTransaction(transaction.getData().getHash());
+    }
+
+    @Override
+    public List<Token> getListByPurpose(Context context, String purpose) {
+        return tokenMapper.selectByPurpose(context.getChain(), purpose);
     }
 
 }
