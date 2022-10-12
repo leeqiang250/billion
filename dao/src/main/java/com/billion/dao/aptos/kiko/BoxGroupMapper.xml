@@ -4,7 +4,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id as id
+        id
+        as id
         ,chain as chain
         ,split as split
         ,token_id as token_id
@@ -24,8 +25,6 @@
         ,sort as sort
         ,sale_time as sale_time
         ,end_time as end_time
-        ,mtime as mtime
-        ,ctime as ctime
     </sql>
 
 </mapper>

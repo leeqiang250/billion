@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.BoxGroupCopyMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,chain as chain
+        ,display_name as display_name
+        ,ask_token as ask_token
+        ,amount as amount
+        ,bid_token as bid_token
+        ,price as price
+        ,description as description
+        ,rule as rule
+        ,ts as ts
+        ,sort as sort
+        ,enabled as enabled
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
+        ,x as x
+    </sql>
+
+</mapper>

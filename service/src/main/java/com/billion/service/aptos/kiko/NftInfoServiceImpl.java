@@ -18,6 +18,7 @@ import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
@@ -67,6 +68,14 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
         }
 
         return (NftInfo) value;
+    }
+
+    @PostConstruct
+    public void dd() {
+        this.mint(1);
+        this.mint(1);
+        this.mint(1);
+        this.mint(1);
     }
 
     @Override

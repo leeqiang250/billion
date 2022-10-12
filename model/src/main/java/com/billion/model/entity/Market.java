@@ -105,12 +105,6 @@ public class Market extends TradeStatus implements IModel {
     String deadTs;
 
     /**
-     * 交易状态
-     */
-    @TableField("trade_status")
-    String tradeStatus;
-
-    /**
      * 是否归档
      */
     @TableField("is_enabled")
