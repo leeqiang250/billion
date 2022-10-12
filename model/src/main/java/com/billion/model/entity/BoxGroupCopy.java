@@ -42,7 +42,7 @@ public class BoxGroupCopy extends TransactionStatus implements IModel {
      * 询价币种
      */
     @TableField("ask_token")
-    String askToken;
+    Long askToken;
 
     /**
      * 询价数量
@@ -54,7 +54,7 @@ public class BoxGroupCopy extends TransactionStatus implements IModel {
      * 计价币种
      */
     @TableField("bid_token")
-    String bidToken;
+    Long bidToken;
 
     /**
      * 计价价格
