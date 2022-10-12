@@ -3,8 +3,10 @@ package com.billion.service.aptos.kiko;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupCopyMapper;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroupCopy;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.TokenScene;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
@@ -15,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -97,6 +100,17 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
 
                 return false;
             }
+
+            Context context = Context.builder()
+                    .chain(Chain.APTOS.getCode())
+                    .build();
+            var dd = tokenService.getListByScene(context, TokenScene.MARKET.getCode());
+            dd.forEach(new Consumer() {
+                @Override
+                public void accept(Object o) {
+
+                }
+            });
 
             boxGroup.setTransactionHash(response.getData().getHash());
             boxGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);

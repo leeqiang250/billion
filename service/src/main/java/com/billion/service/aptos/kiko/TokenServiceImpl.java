@@ -1,14 +1,13 @@
 package com.billion.service.aptos.kiko;
 
-import com.aptos.AptosClient;
-import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.Resource;
-import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenMapper;
+import com.billion.dao.aptos.kiko.TokenSceneMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
+import com.billion.model.entity.TokenScene;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
@@ -18,11 +17,8 @@ import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -34,7 +30,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> implements TokenService {
 
     @javax.annotation.Resource
-    TokenMapper tokenMapper;
+    TokenSceneMapper tokenSceneMapper;
 
     public boolean checkToken(Token token) {
         //TODO 正则校验
@@ -146,22 +142,16 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     }
 
     @Override
-    public Collection getListByScene(Context context, String scene) {
-        List<Token> tokenList = tokenMapper.selectByScene(context.getChain(), scene);
-        List<CoinInfo> coinInfoList = new ArrayList<>();
-        tokenList.forEach(t -> {
-            Resource resource = Resource.builder().
-                    moduleAddress(t.getModuleAddress())
-                    .moduleName(t.getModuleName())
-                    .resourceName(t.getStructName())
-                    .build();
+    public List<Token> getByScene(Context context, String scene) {
+        QueryWrapper<TokenScene> tokenSceneQueryWrapper = new QueryWrapper<>();
+        tokenSceneQueryWrapper.lambda().eq(TokenScene::getScene, scene);
+        var tokenScenes = this.tokenSceneMapper.selectList(tokenSceneQueryWrapper);
 
-            Response<CoinInfo> coinInfoResponse = AptosService.getAptosClient().requestCoinInfo(t.getModuleAddress(), resource);
-            CoinInfo coinInfo = coinInfoResponse.getData();
-            coinInfoList.add(coinInfo);
-
-        });
-        return coinInfoList;
+        QueryWrapper<Token> tokenQueryWrapper = new QueryWrapper<>();
+        tokenQueryWrapper.lambda().eq(Token::getId, scene);
+        tokenQueryWrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        //tokenQueryWrapper.lambda().in
+        return super.list(tokenQueryWrapper);
     }
 
     private void getCoinInfoFromChain(Token token) {
