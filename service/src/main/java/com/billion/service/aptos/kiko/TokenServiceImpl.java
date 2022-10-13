@@ -114,7 +114,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
             {
                 TransactionPayload transactionPayload2 = TransactionPayload.builder()
                         .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                        .function(ContextService.getKikoOwner() + "::kiko_help::mint")
+                        .function(ContextService.getKikoOwner() + "::help::mint_coin")
                         .arguments(List.of(
                                 ContextService.getKikoOwner(),
                                 "9999999999"

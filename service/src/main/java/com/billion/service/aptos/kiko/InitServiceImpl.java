@@ -110,6 +110,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
+                    .nftGroup(1L)
                     .askToken(2L)
                     .amount(EMPTY)
                     .bidToken(1L)
@@ -138,6 +139,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
+                    .nftGroup(2L)
                     .askToken(3L)
                     .amount(EMPTY)
                     .bidToken(1L)
@@ -166,6 +168,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
+                    .nftGroup(3L)
                     .askToken(4L)
                     .amount(EMPTY)
                     .bidToken(1L)
@@ -194,6 +197,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
+                    .nftGroup(4L)
                     .askToken(5L)
                     .amount(EMPTY)
                     .bidToken(1L)
@@ -222,6 +226,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
+                    .nftGroup(5L)
                     .askToken(6L)
                     .amount(EMPTY)
                     .bidToken(7L)
@@ -288,8 +293,9 @@ public class InitServiceImpl implements InitService {
 
     void nftGroup() {
         this.nftGroupService.remove(null);
-        for (int i = 0; i < 5; i++) {
+        for (long i = 1; i < 6; i++) {
             var nftGroup = NftGroup.builder()
+                    .id(i)
                     .chain(Chain.APTOS.getCode())
                     .split(Boolean.FALSE)
                     .owner(kiko)

@@ -41,6 +41,12 @@ public class BoxGroup extends TransactionStatus implements IModel {
     /**
      * 询价币种
      */
+    @TableField("nft_group")
+    Long nftGroup;
+
+    /**
+     * 询价币种
+     */
     @TableField("ask_token")
     Long askToken;
 

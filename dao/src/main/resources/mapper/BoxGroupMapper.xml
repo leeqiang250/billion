@@ -8,6 +8,7 @@
         as id
         ,chain as chain
         ,display_name as display_name
+        ,nft_group as nft_group
         ,ask_token as ask_token
         ,amount as amount
         ,bid_token as bid_token
