@@ -4,20 +4,18 @@ import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupCopyMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.BoxGroupCopy;
 import com.billion.model.entity.Pair;
-import com.billion.model.enums.Chain;
-import com.billion.model.enums.Language;
-import com.billion.model.enums.TokenScene;
-import com.billion.model.enums.TransactionStatus;
+import com.billion.model.enums.*;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -32,6 +30,39 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
 
     @Resource
     PairService pairService;
+
+    @Resource
+    LanguageService languageService;
+
+    @Override
+    public Map cacheMap(Context context) {
+        String key = this.cacheMapKey("ids::" + context.getChain());
+
+        Map map = this.getRedisTemplate().opsForHash().entries(key);
+        if (!map.isEmpty()) {
+            return map;
+        }
+
+        QueryWrapper<BoxGroupCopy> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(BoxGroupCopy::getEnabled, Boolean.TRUE);
+        List<BoxGroupCopy> list = super.list(wrapper);
+
+        changeLanguage(context, list);
+
+        map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
+
+        this.getRedisTemplate().opsForHash().putAll(key, map);
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
+
+        return map;
+    }
+
+    @Override
+    public List<BoxGroupCopy> cacheList(Context context) {
+        Map map = this.cacheMap(context);
+        List<BoxGroupCopy> list =  new ArrayList<>(map.values());
+        return list;
+    }
 
     @Override
     public boolean initialize() {
@@ -186,6 +217,22 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
         }
 
         return true;
+    }
+
+    private void changeLanguage(Context context, List<BoxGroupCopy> list) {
+        Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
+        Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
+        Set setRule = list.stream().map(e -> e.getRule()).collect(Collectors.toSet());
+
+        Map mapDisplayName = languageService.getByKeys(context, setDisplayName);
+        Map mapDescription = languageService.getByKeys(context, setDescription);
+        Map mapRule = languageService.getByKeys(context, setRule);
+
+        list.forEach(e -> {
+            e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
+            e.setDescription(mapDescription.get(e.getDescription()).toString());
+            e.setRule(mapRule.get(e.getRule()).toString());
+        });
     }
 
 }
