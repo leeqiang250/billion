@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.billion.dao.aptos.kiko.MarketMapper;
@@ -158,27 +159,51 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
     @Override
     public boolean isNftMakerEvent(Event event) {
-        return false;
+        return event.getType().contains("::secondary_market::NftMakerEvent<");
     }
 
     @Override
     public boolean isNftTakerEvent(Event event) {
-        return false;
+        return event.getType().contains("::secondary_market::NftTakerEvent<");
     }
 
     @Override
     public boolean isNftBidEvent(Event event) {
-        return false;
+        return event.getType().contains("::secondary_market::NftBidEvent<");
     }
 
     @Override
     public boolean isNftCancelEvent(Event event) {
-        return false;
+        return event.getType().contains("::secondary_market::NftCancelEvent<");
     }
 
     @Override
     public Market addNftMakerEvent(Transaction transaction, Event event, NftMakerEvent nftMakerEvent) {
-        return null;
+        Market market = Market.builder()
+                .chain(Chain.APTOS.getCode())
+                .version(Long.parseLong(transaction.getVersion()))
+                .orderId(nftMakerEvent.getId())
+                .type(nftMakerEvent.getType())
+                .maker(nftMakerEvent.getMaker())
+                .price(nftMakerEvent.getPrice())
+                .askToken(nftMakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
+                .askAmount(nftMakerEvent.getAmount())
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .bidAmount("")
+                .bidder("")
+                .tokenId(nftMakerEvent.getTokenId().getNftTokenIdKey())
+                .ts(nftMakerEvent.getTs())
+                .deadTs(nftMakerEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
+                .build();
+
+        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+
+        super.save(market);
+
+        //TODO 如有需要，交易记录
+
+        return market;
     }
 
     @Override

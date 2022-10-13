@@ -1,5 +1,6 @@
 package com.billion.model.entity;
 
+import com.aptos.request.v1.model.TokenId;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -91,6 +92,12 @@ public class Market extends TradeStatus implements IModel {
      */
     @TableField("bid_amount")
     String bidAmount;
+
+    /**
+     * TokenId
+     */
+    @TableField("token_id")
+    String tokenId;
 
     /**
      * 生成订单时间

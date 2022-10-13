@@ -6,10 +6,7 @@ import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
 import com.billion.model.entity.Market;
 import com.billion.model.enums.Chain;
-import com.billion.model.event.BoxBidEvent;
-import com.billion.model.event.BoxCancelEvent;
-import com.billion.model.event.BoxMakerEvent;
-import com.billion.model.event.BoxTakerEvent;
+import com.billion.model.event.*;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
@@ -126,6 +123,9 @@ public class ScanDispatchService implements Serializable {
                     } else if (marketService.isBoxCancelEvent(event)) {
                         BoxCancelEvent boxCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxCancelEvent.class);
                         marketService.addBoxCancelEvent(transaction, event, boxCancelEvent);
+                    } else if (marketService.isNftMakerEvent(event)) {
+                        NftMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftMakerEvent.class);
+                        marketService.addNftMakerEvent(transaction, event, nftMakerEvent);
                     }
 
 

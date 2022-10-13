@@ -17,6 +17,7 @@
         ,bidder as bidder
         ,bid_token as bid_token
         ,bid_amount as bid_amount
+        ,token_id as token_id
         ,ts as ts
         ,dead_ts as dead_ts
         ,trade_status as trade_status
