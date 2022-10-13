@@ -15,12 +15,13 @@ import java.util.List;
 public interface NftMetaService extends ICacheService<NftMeta> {
 
     /**
-     * mint
+     * initialize
      *
-     * @param groupId groupId
+     * @param boxGroupId boxGroupId
+     * @param nftGroupId nftGroupId
      * @return boolean
      */
-    boolean mint(Serializable groupId);
+    boolean initialize(Serializable boxGroupId, Serializable nftGroupId);
 
     /**
      * getTableTokenData
@@ -32,6 +33,7 @@ public interface NftMetaService extends ICacheService<NftMeta> {
 
     /**
      * getListByGroup
+     *
      * @param context
      * @param type
      * @param groupId

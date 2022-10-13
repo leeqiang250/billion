@@ -13,6 +13,7 @@ import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         }
 
         QueryWrapper<BoxGroup> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(BoxGroup::getEnabled, Boolean.TRUE);
+        wrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
         List<BoxGroup> list = super.list(wrapper);
 
         changeLanguage(context, list);
@@ -59,87 +60,80 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     @Override
     public List<BoxGroup> cacheList(Context context) {
         Map map = this.cacheMap(context);
-        List<BoxGroup> list =  new ArrayList<>(map.values());
+        List<BoxGroup> list = new ArrayList<>(map.values());
         return list;
     }
 
     @Override
-    public boolean initialize() {
-        if (!tokenService.initialize()) {
+    public boolean initialize(Serializable id) {
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, id);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        var boxGroup = super.getOneThrowEx(boxGroupQueryWrapper);
+
+        var askToken = tokenService.getById(boxGroup.getAskToken());
+        var bidToken = tokenService.getById(boxGroup.getBidToken());
+
+        if (Objects.isNull(askToken)
+                || Objects.isNull(bidToken)
+                || TransactionStatus.STATUS_3_SUCCESS != askToken.getTransactionStatus_()
+                || TransactionStatus.STATUS_3_SUCCESS != bidToken.getTransactionStatus_()
+        ) {
+            boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            boxGroup.setTransactionHash(EMPTY);
+            super.updateById(boxGroup);
+
             return false;
         }
 
-        QueryWrapper<BoxGroup> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
-        wrapper.lambda().eq(BoxGroup::getEnabled, Boolean.TRUE);
-        wrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var boxGroups = super.list(wrapper);
+        com.aptos.request.v1.model.Resource askTokenResource = com.aptos.request.v1.model.Resource.builder()
+                .moduleAddress(askToken.getModuleAddress())
+                .moduleName(askToken.getModuleName())
+                .resourceName(askToken.getStructName())
+                .build();
 
-        for (int i = 0; i < boxGroups.size(); i++) {
-            var boxGroup = boxGroups.get(i);
+        com.aptos.request.v1.model.Resource bidTokenResource = com.aptos.request.v1.model.Resource.builder()
+                .moduleAddress(bidToken.getModuleAddress())
+                .moduleName(bidToken.getModuleName())
+                .resourceName(bidToken.getStructName())
+                .build();
 
-            var askToken = tokenService.getById(boxGroup.getAskToken());
-            var bidToken = tokenService.getById(boxGroup.getBidToken());
+        TransactionPayload transactionPayload = TransactionPayload.builder()
+                .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                .function(ContextService.getKikoOwner() + "::primary_market::add_box_bid")
+                .arguments(List.of(
+                        boxGroup.getAmount(),
+                        boxGroup.getTs(),
+                        boxGroup.getPrice()
+                ))
+                .typeArguments(List.of(askTokenResource.resourceTag(), bidTokenResource.resourceTag()))
+                .build();
 
-            if (Objects.isNull(askToken)
-                    || Objects.isNull(bidToken)
-                    || TransactionStatus.STATUS_3_SUCCESS != askToken.getTransactionStatus_()
-                    || TransactionStatus.STATUS_3_SUCCESS != bidToken.getTransactionStatus_()
-            ) {
-                boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                boxGroup.setTransactionHash(EMPTY);
-                super.updateById(boxGroup);
-
-                return false;
-            }
-
-            com.aptos.request.v1.model.Resource askTokenResource = com.aptos.request.v1.model.Resource.builder()
-                    .moduleAddress(askToken.getModuleAddress())
-                    .moduleName(askToken.getModuleName())
-                    .resourceName(askToken.getStructName())
-                    .build();
-
-            com.aptos.request.v1.model.Resource bidTokenResource = com.aptos.request.v1.model.Resource.builder()
-                    .moduleAddress(bidToken.getModuleAddress())
-                    .moduleName(bidToken.getModuleName())
-                    .resourceName(bidToken.getStructName())
-                    .build();
-
-            TransactionPayload transactionPayload = TransactionPayload.builder()
-                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(ContextService.getKikoOwner() + "::primary_market::add_box_bid")
-                    .arguments(List.of(
-                            boxGroup.getAmount(),
-                            boxGroup.getTs(),
-                            boxGroup.getPrice()
-                    ))
-                    .typeArguments(List.of(askTokenResource.resourceTag(), bidTokenResource.resourceTag()))
-                    .build();
-
-            var response = AptosService.getAptosClient().requestSubmitTransaction(
-                    ContextService.getKikoOwner(),
-                    transactionPayload);
-            if (response.isValid()) {
-                boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                boxGroup.setTransactionHash(EMPTY);
-                super.updateById(boxGroup);
-
-                return false;
-            }
-
-            if (!AptosService.checkTransaction(response.getData().getHash())) {
-                boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                boxGroup.setTransactionHash(Objects.isNull(response.getData().getHash()) ? EMPTY : response.getData().getHash());
-                super.updateById(boxGroup);
-
-                return false;
-            }
-
-            boxGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-            boxGroup.setTransactionHash(response.getData().getHash());
-
+        var response = AptosService.getAptosClient().requestSubmitTransaction(
+                ContextService.getKikoOwner(),
+                transactionPayload);
+        if (response.isValid()) {
+            boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            boxGroup.setTransactionHash(EMPTY);
             super.updateById(boxGroup);
+
+            return false;
         }
+
+        if (!AptosService.checkTransaction(response.getData().getHash())) {
+            boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            boxGroup.setTransactionHash(Objects.isNull(response.getData().getHash()) ? EMPTY : response.getData().getHash());
+            super.updateById(boxGroup);
+
+            return false;
+        }
+
+        boxGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+        boxGroup.setTransactionHash(response.getData().getHash());
+
+        super.updateById(boxGroup);
 
         return this.initializeMarket();
     }
@@ -155,7 +149,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
-        boxGroupQueryWrapper.lambda().eq(BoxGroup::getEnabled, Boolean.TRUE);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
         var boxGroups = super.list(boxGroupQueryWrapper);
 

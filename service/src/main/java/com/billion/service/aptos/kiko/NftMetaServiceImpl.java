@@ -8,12 +8,17 @@ import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMetaMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.entity.BoxGroup;
+import com.billion.model.entity.NftGroup;
 import com.billion.model.entity.NftMeta;
+import com.billion.model.entity.Token;
+import com.billion.model.enums.Chain;
 import com.billion.model.enums.Language;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
+import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +52,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     BoxGroupService boxGroupService;
 
     @Resource
+    TokenService tokenService;
+
+    @Resource
     NftClassService nftClassService;
 
     @Override
@@ -74,15 +82,32 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     }
 
     @Override
-    public boolean mint(Serializable groupId) {
-        if (!this.nftGroupService.initialize()) {
-            return false;
-        }
+    public boolean initialize(Serializable boxGroupId, Serializable nftGroupId) {
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, boxGroupId);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
+        //boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        var boxGroup = this.boxGroupService.getOneThrowEx(boxGroupQueryWrapper);
 
-        var nftGroup = nftGroupService.getById(groupId);
-        if (Objects.isNull(nftGroup)) {
-            return false;
-        }
+        QueryWrapper<Token> tokenQueryWrapper = new QueryWrapper<>();
+        tokenQueryWrapper.lambda().eq(Token::getId, boxGroup.getAskToken());
+        tokenQueryWrapper.lambda().eq(Token::getChain, Chain.APTOS.getCode());
+        tokenQueryWrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        var box = this.tokenService.getOneThrowEx(tokenQueryWrapper);
+
+        com.aptos.request.v1.model.Resource boxResource = com.aptos.request.v1.model.Resource.builder()
+                .moduleAddress(box.getModuleAddress())
+                .moduleName(box.getModuleName())
+                .resourceName(box.getStructName())
+                .build();
+
+        QueryWrapper<NftGroup> nftGroupQueryWrapper = new QueryWrapper<>();
+        nftGroupQueryWrapper.lambda().eq(NftGroup::getId, nftGroupId);
+        nftGroupQueryWrapper.lambda().eq(NftGroup::getChain, Chain.APTOS.getCode());
+        nftGroupQueryWrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
+        nftGroupQueryWrapper.lambda().eq(NftGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        var nftGroup = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
 
         var handle = handleService.getByAccount(nftGroup.getOwner());
         if (StringUtils.isEmpty(handle.getCollectionsTokenDataHandle())) {
@@ -99,9 +124,12 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             return false;
         }
 
+
         QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);
+        wrapper.lambda().eq(NftMeta::getNftGroupId, nftGroup.getId());
+        wrapper.lambda().eq(NftMeta::getIsBorn, Boolean.FALSE);
         wrapper.lambda().eq(NftMeta::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+
         var nftMetas = super.list(wrapper);
         for (int i = 0; i < nftMetas.size(); i++) {
             var nftMeta = nftMetas.get(i);
@@ -110,6 +138,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDisplayName());
             var displayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
+
             languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDescription());
@@ -142,7 +171,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             Map<String, List<String>> classMap = nftClassService.getClassForMint(nftMeta.getId().toString());
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function("0x3::token::create_token_script")
+                    .function(ContextService.getKikoOwner() + "help::mint_token_with_box")
                     .arguments(List.of(
                             Hex.encode(nftGroupDisplayName),
                             Hex.encode(displayName),
@@ -162,7 +191,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             //classMap.get(NftPropertyType.VALUES.getType()),
                             //classMap.get(NftPropertyType.TYPES.getType())
                     ))
-                    .typeArguments(List.of())
+                    .typeArguments(List.of(boxResource.resourceTag()))
                     .build();
 
             var response = AptosService.getAptosClient().requestSubmitTransaction(
@@ -225,7 +254,6 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
     @Override
     public List<NftMeta> getListByGroup(Context context, String type, String groupId) {
-
         QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
         if ("group".equals(type)) {
             wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);

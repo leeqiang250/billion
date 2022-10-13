@@ -119,16 +119,19 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
-                    .enabled(Boolean.TRUE)
+                    .isEnabled(Boolean.TRUE)
                     .transactionHash(EMPTY)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+
             this.boxGroupService.save(boxGroup);
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDisplayName())
                     .value("名称" + boxGroup.getId())
                     .build());
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDescription())
@@ -148,16 +151,19 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
-                    .enabled(Boolean.TRUE)
+                    .isEnabled(Boolean.TRUE)
                     .transactionHash(EMPTY)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+
             this.boxGroupService.save(boxGroup);
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDisplayName())
                     .value("名称" + boxGroup.getId())
                     .build());
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDescription())
@@ -177,16 +183,20 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
-                    .enabled(Boolean.TRUE)
+                    .isEnabled(Boolean.TRUE)
                     .transactionHash(EMPTY)
                     .build();
+
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+
             this.boxGroupService.save(boxGroup);
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDisplayName())
                     .value("名称" + boxGroup.getId())
                     .build());
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDescription())
@@ -206,16 +216,19 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
-                    .enabled(Boolean.TRUE)
+                    .isEnabled(Boolean.TRUE)
                     .transactionHash(EMPTY)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+
             this.boxGroupService.save(boxGroup);
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDisplayName())
                     .value("名称" + boxGroup.getId())
                     .build());
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDescription())
@@ -235,16 +248,20 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
-                    .enabled(Boolean.TRUE)
+                    .isEnabled(Boolean.TRUE)
                     .transactionHash(EMPTY)
                     .build();
+
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+
             this.boxGroupService.save(boxGroup);
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDisplayName())
                     .value("名称" + boxGroup.getId())
                     .build());
+
             this.languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(boxGroup.getDescription())
@@ -396,6 +413,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(2)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_3_SUCCESS);
 
@@ -414,6 +432,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(0)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
 
@@ -432,6 +451,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(0)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
 
@@ -450,6 +470,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(0)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
 
@@ -468,6 +489,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(0)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
 
@@ -486,6 +508,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(0)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
 
@@ -504,6 +527,7 @@ public class InitServiceImpl implements InitService {
                     .displayDecimals(2)
                     .uri(EMPTY)
                     .transactionHash(EMPTY)
+                    .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
 

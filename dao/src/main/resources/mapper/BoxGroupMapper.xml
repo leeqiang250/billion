@@ -17,7 +17,7 @@
         ,rule as rule
         ,ts as ts
         ,sort as sort
-        ,enabled as enabled
+        ,is_enabled as is_enabled
         ,transaction_status as transaction_status
         ,transaction_hash as transaction_hash
         ,x as x

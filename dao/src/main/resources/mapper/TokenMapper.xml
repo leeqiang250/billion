@@ -17,6 +17,7 @@
         ,uri as uri
         ,transaction_status as transaction_status
         ,transaction_hash as transaction_hash
+        ,is_show as is_show
     </sql>
 
 </mapper>
