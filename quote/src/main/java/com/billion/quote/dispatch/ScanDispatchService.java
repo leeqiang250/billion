@@ -110,7 +110,7 @@ public class ScanDispatchService implements Serializable {
                 for (int j = 0; j < events.size(); j++) {
                     var event = events.get(j);
 
-                    if ((nftService.isNftCreateTokenDataEvent(event) && ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress()))
+                    if (nftService.isNftCreateTokenDataEvent(event)
                             || nftService.isNftDepositEvent(event)
                             || nftService.isNftDepositEvent(event)
                     ) {
