@@ -6,10 +6,7 @@ import com.billion.dao.aptos.kiko.MarketMapper;
 import com.billion.model.entity.Market;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TradeStatus;
-import com.billion.model.event.BoxBidEvent;
-import com.billion.model.event.BoxCancelEvent;
-import com.billion.model.event.BoxMakerEvent;
-import com.billion.model.event.BoxTakerEvent;
+import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -158,5 +155,46 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         return market;
     }
+
+    @Override
+    public boolean isNftMakerEvent(Event event) {
+        return false;
+    }
+
+    @Override
+    public boolean isNftTakerEvent(Event event) {
+        return false;
+    }
+
+    @Override
+    public boolean isNftBidEvent(Event event) {
+        return false;
+    }
+
+    @Override
+    public boolean isNftCancelEvent(Event event) {
+        return false;
+    }
+
+    @Override
+    public Market addNftMakerEvent(Transaction transaction, Event event, NftMakerEvent nftMakerEvent) {
+        return null;
+    }
+
+    @Override
+    public Market addNftTakerEvent(Transaction transaction, Event event, NftTakerEvent nftTakerEvent) {
+        return null;
+    }
+
+    @Override
+    public Market addNftBidEvent(Transaction transaction, Event event, NftBidEvent nftBidEvent) {
+        return null;
+    }
+
+    @Override
+    public Market addNftCancelEvent(Transaction transaction, Event event, NftCancelEvent nftCancelEvent) {
+        return null;
+    }
+
 
 }
