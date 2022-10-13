@@ -6,6 +6,7 @@
     <sql id="Base_Column_List">
         id
         as id
+        ,contract as contract
         ,ask_token as ask_token
         ,bid_token as bid_token
     </sql>

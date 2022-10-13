@@ -76,8 +76,8 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @PostConstruct
     public void a() {
-//        boxGroupService.initialize();
-//        this.mint(1);
+        boxGroupService.initialize();
+        this.mint(1);
     }
 
     @Override

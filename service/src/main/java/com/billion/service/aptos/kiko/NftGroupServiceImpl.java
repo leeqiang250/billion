@@ -250,6 +250,8 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 .language(Language.EN.getCode())
                 .build();
 
+        var function = ContextService.getMarketer() + "::secondary_market::nft_init";
+
         var askToken = Token.builder()
                 .id(0L)
                 .build();
@@ -259,6 +261,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
             var bidToken = tokens.get(j);
 
             QueryWrapper<Pair> pairQueryWrapper = new QueryWrapper<>();
+            pairQueryWrapper.lambda().eq(Pair::getContract, function);
             pairQueryWrapper.lambda().eq(Pair::getAskToken, askToken.getId());
             pairQueryWrapper.lambda().eq(Pair::getBidToken, bidToken.getId());
             var pair = pairService.getOne(pairQueryWrapper, false);
@@ -271,7 +274,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
                 TransactionPayload transactionPayload = TransactionPayload.builder()
                         .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                        .function(ContextService.getMarketer() + "::secondary_market::nft_init")
+                        .function(function)
                         .arguments(List.of())
                         .typeArguments(List.of(bidTokenResource.resourceTag()))
                         .build();
@@ -288,6 +291,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 }
 
                 pair = Pair.builder()
+                        .contract(function)
                         .askToken(askToken.getId())
                         .bidToken(bidToken.getId())
                         .build();

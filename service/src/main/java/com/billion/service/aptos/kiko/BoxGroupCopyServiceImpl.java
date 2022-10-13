@@ -121,6 +121,8 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
                 .language(Language.EN.getCode())
                 .build();
 
+        var function = ContextService.getMarketer() + "::secondary_market::box_init";
+
         QueryWrapper<BoxGroupCopy> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroupCopy::getChain, Chain.APTOS.getCode());
         boxGroupQueryWrapper.lambda().eq(BoxGroupCopy::getEnabled, Boolean.TRUE);
@@ -136,6 +138,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
                 var bidToken = tokens.get(j);
 
                 QueryWrapper<Pair> pairQueryWrapper = new QueryWrapper<>();
+                pairQueryWrapper.lambda().eq(Pair::getContract, function);
                 pairQueryWrapper.lambda().eq(Pair::getAskToken, askToken.getId());
                 pairQueryWrapper.lambda().eq(Pair::getBidToken, bidToken.getId());
                 var pair = pairService.getOne(pairQueryWrapper, false);
@@ -154,7 +157,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
 
                     TransactionPayload transactionPayload = TransactionPayload.builder()
                             .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                            .function(ContextService.getMarketer() + "::secondary_market::box_init")
+                            .function(function)
                             .arguments(List.of())
                             .typeArguments(List.of(askTokenResource.resourceTag(), bidTokenResource.resourceTag()))
                             .build();
@@ -171,6 +174,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
                     }
 
                     pair = Pair.builder()
+                            .contract(function)
                             .askToken(askToken.getId())
                             .bidToken(bidToken.getId())
                             .build();

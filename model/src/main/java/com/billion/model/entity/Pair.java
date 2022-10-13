@@ -26,6 +26,9 @@ public class Pair implements IModel {
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
+    @TableField("contract")
+    String contract;
+
     /**
      * ask_token
      */
