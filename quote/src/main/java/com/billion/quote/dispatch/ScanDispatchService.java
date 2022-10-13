@@ -110,7 +110,7 @@ public class ScanDispatchService implements Serializable {
                 for (int j = 0; j < events.size(); j++) {
                     var event = events.get(j);
 
-                    if (nftService.isNftCreateTokenDataEvent(event)
+                    if ((nftService.isNftCreateTokenDataEvent(event) && ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress()))
                             || nftService.isNftDepositEvent(event)
                             || nftService.isNftDepositEvent(event)
                     ) {
@@ -163,11 +163,10 @@ public class ScanDispatchService implements Serializable {
         for (int j = 0; j < events.size(); j++) {
             var event = events.get(j);
 
-            if (nftService.isNftCreateTokenDataEvent(event)) {
-                if (ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress())) {
-                    NftCreateTokenDataEvent nftCreateTokenDataEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCreateTokenDataEvent.class);
-                    nftService.addNftCreateTokenDataEvent(transaction, event, nftCreateTokenDataEvent);
-                }
+            if (nftService.isNftCreateTokenDataEvent(event)
+                    && ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress())) {
+                NftCreateTokenDataEvent nftCreateTokenDataEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCreateTokenDataEvent.class);
+                nftService.addNftCreateTokenDataEvent(transaction, event, nftCreateTokenDataEvent);
             } else if (nftService.isNftWithdrawEvent(event)) {
                 NftWithdrawEvent nftWithdrawEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftWithdrawEvent.class);
                 if (ContextService.getKikoOwner().equals(nftWithdrawEvent.getId().getTokenDataId().getCreator())) {
