@@ -3,10 +3,7 @@ package com.billion.quote.dispatch;
 import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.model.entity.Config;
-import com.billion.model.entity.Nft;
-import com.billion.model.enums.Chain;
 import com.billion.model.event.*;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AptosService;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -118,9 +114,13 @@ public class ScanDispatchService implements Serializable {
                     var event = events.get(j);
 
                     if (nftService.isNftWithdrawEvent(event)) {
+                        log.info(event.getType());
+
                         valid = true;
                         break;
                     } else if (nftService.isNftDepositEvent(event)) {
+                        log.info(event.getType());
+
                         valid = true;
                         break;
                     }
@@ -134,6 +134,8 @@ public class ScanDispatchService implements Serializable {
                                 || marketService.isNftBidEvent(event)
                                 || marketService.isNftCancelEvent(event)
                         ) {
+                            log.info(event.getType());
+
                             valid = true;
                             break;
                         }
@@ -202,24 +204,6 @@ public class ScanDispatchService implements Serializable {
                     NftCancelEvent nftCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCancelEvent.class);
                     marketService.addNftCancelEvent(transaction, event, nftCancelEvent);
                 }
-
-                //TokenDepositEvent
-                // String collection = event.getData().getId().getTokenDataId().getCollection();
-                // String creator = event.getData().getId().getTokenDataId().getCreator();
-                // if (this.temp(collection, creator)) {
-                //     NftEvent nftEvent = NftEvent.builder()
-                //             .chain(Chain.APTOS.getCode())
-                //             .hash(transaction.getHash())
-                //             .key(event.getKey())
-                //             .account(event.getGuid().getAccountAddress())
-                //             .type(event.getType())
-                //             .collection(event.getData().getId().getTokenDataId().getCollection())
-                //             .creator(event.getData().getId().getTokenDataId().getCreator())
-                //             .name(event.getData().getId().getTokenDataId().getName())
-                //             .build();
-                //
-                //     nftEventService.save(nftEvent);
-                // }
             }
         }
     }
