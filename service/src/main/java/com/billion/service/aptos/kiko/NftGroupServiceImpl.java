@@ -81,7 +81,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         changeLanguage(context, list);
 
-        map = list.stream().collect(Collectors.toMap(e -> e.getMeta() + "-" + e.getBody(), (e) -> e));
+        map = list.stream().collect(Collectors.toMap(e -> e.getMeta2() + "-" + e.getBody2(), (e) -> e));
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
@@ -141,7 +141,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
             //TODO
-            var response = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta(), nftGroup.getBody());
+            var response = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta2(), nftGroup.getBody2());
             if (!response.isValid()) {
                 nftGroup.setTotalSupply(response.getData().getMaximum());
                 nftGroup.setCurrentSupply(response.getData().getSupply());
@@ -213,7 +213,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                     .build();
 
             var response = AptosService.getAptosClient().requestSubmitTransaction(
-                    ContextService.getNftOwner(),
+                    ContextService.getKikoOwner(),
                     transactionPayload);
             if (response.isValid()) {
                 nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -250,7 +250,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 .language(Language.EN.getCode())
                 .build();
 
-        var function = ContextService.getMarketer() + "::secondary_market::nft_init";
+        var function = ContextService.getKikoOwner() + "::secondary_market::nft_init";
 
         var askToken = Token.builder()
                 .id(0L)
@@ -280,7 +280,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                         .build();
 
                 var response = AptosService.getAptosClient().requestSubmitTransaction(
-                        ContextService.getMarketer(),
+                        ContextService.getKikoOwner(),
                         transactionPayload);
                 if (response.isValid()) {
                     return false;

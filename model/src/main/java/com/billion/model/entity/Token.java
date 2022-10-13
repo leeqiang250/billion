@@ -51,12 +51,6 @@ public class Token extends TransactionStatus implements IModel {
     String structName;
 
     /**
-     * initialize_function
-     */
-    @TableField("initialize_function")
-    String initializeFunction;
-
-    /**
      * name_
      */
     @TableField("name_")
@@ -73,6 +67,12 @@ public class Token extends TransactionStatus implements IModel {
      */
     @TableField("decimals")
     Integer decimals;
+
+    /**
+     * 显示精度
+     */
+    @TableField("display_decimals")
+    Integer displayDecimals;
 
     /**
      * uri

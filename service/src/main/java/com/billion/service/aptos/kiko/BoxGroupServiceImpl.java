@@ -107,7 +107,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(ContextService.getMarketer() + "::primary_market::add_box_bid")
+                    .function(ContextService.getKikoOwner() + "::primary_market::add_box_bid")
                     .arguments(List.of(
                             boxGroup.getAmount(),
                             boxGroup.getTs(),
@@ -117,7 +117,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                     .build();
 
             var response = AptosService.getAptosClient().requestSubmitTransaction(
-                    ContextService.getMarketer(),
+                    ContextService.getKikoOwner(),
                     transactionPayload);
             if (response.isValid()) {
                 boxGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -151,7 +151,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .language(Language.EN.getCode())
                 .build();
 
-        var function = ContextService.getMarketer() + "::secondary_market::box_init";
+        var function = ContextService.getKikoOwner() + "::secondary_market::box_init";
 
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
@@ -193,7 +193,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                             .build();
 
                     var response = AptosService.getAptosClient().requestSubmitTransaction(
-                            ContextService.getMarketer(),
+                            ContextService.getKikoOwner(),
                             transactionPayload);
                     if (response.isValid()) {
                         return false;

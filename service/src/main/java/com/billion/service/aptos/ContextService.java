@@ -73,19 +73,7 @@ public class ContextService {
     static String kikoHost;
 
     @Getter
-    static String commoner;
-
-    @Getter
-    static String tokenOwner;
-
-    @Getter
-    static String nftOwner;
-
-    @Getter
-    static String marketer;
-
-    @Getter
-    static String address;
+    static String kikoOwner;
 
     @Value("${aptos.host}")
     String pAptosHost;
@@ -104,15 +92,15 @@ public class ContextService {
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
-        ContextService.commoner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-        ContextService.tokenOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-        ContextService.nftOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-        ContextService.marketer = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-
-        ContextService.address = ContextService.commoner + "," +
-                ContextService.tokenOwner + "," +
-                ContextService.nftOwner + "," +
-                ContextService.marketer;
+//        ContextService.commoner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+//        ContextService.tokenOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+//        ContextService.nftOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+//        ContextService.marketer = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+//
+//        ContextService.address = ContextService.commoner + "," +
+//                ContextService.tokenOwner + "," +
+//                ContextService.nftOwner + "," +
+//                ContextService.marketer;
 
         ContextService.aptosHost = this.pAptosHost;
 

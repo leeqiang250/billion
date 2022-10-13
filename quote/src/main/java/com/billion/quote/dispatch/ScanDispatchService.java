@@ -119,7 +119,7 @@ public class ScanDispatchService implements Serializable {
                         break;
                     }
 
-                    if (ContextService.getAddress().contains(event.getType().split("::")[0])) {
+                    if (ContextService.getKikoOwner().contains(event.getType().split("::")[0])) {
                         if (marketService.isBoxMakerEvent(event)
                                 || marketService.isBoxTakerEvent(event)
                                 || marketService.isBoxBidEvent(event)
@@ -164,16 +164,16 @@ public class ScanDispatchService implements Serializable {
 
             if (nftService.isNftWithdrawEvent(event)) {
                 NftWithdrawEvent nftWithdrawEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftWithdrawEvent.class);
-                if (ContextService.getNftOwner().equals(nftWithdrawEvent.getId().getTokenDataId().getCreator())) {
+                if (ContextService.getKikoOwner().equals(nftWithdrawEvent.getId().getTokenDataId().getCreator())) {
                     nftService.addNftWithdrawEvent(transaction, event, nftWithdrawEvent);
                 }
             } else if (nftService.isNftDepositEvent(event)) {
                 NftDepositEvent nftDepositEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftDepositEvent.class);
-                if (ContextService.getNftOwner().equals(nftDepositEvent.getId().getTokenDataId().getCreator())) {
+                if (ContextService.getKikoOwner().equals(nftDepositEvent.getId().getTokenDataId().getCreator())) {
                     nftService.addNftDepositEvent(transaction, event, nftDepositEvent);
                 }
             }
-            if (ContextService.getAddress().contains(event.getType().split("::")[0])) {
+            if (ContextService.getKikoOwner().contains(event.getType().split("::")[0])) {
                 if (marketService.isBoxMakerEvent(event)) {
                     BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
                     marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);

@@ -80,7 +80,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(ContextService.getTokenOwner() + token.getInitializeFunction())
+                    .function(ContextService.getKikoOwner() + "::help::initialize_coin")
                     .arguments(List.of(
                             token.getName(),
                             token.getSymbol(),
@@ -114,16 +114,16 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
             {
                 TransactionPayload transactionPayload2 = TransactionPayload.builder()
                         .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                        .function(ContextService.getTokenOwner() + "::coin_help::mint")
+                        .function(ContextService.getKikoOwner() + "::kiko_help::mint")
                         .arguments(List.of(
-                                ContextService.getTokenOwner(),
+                                ContextService.getKikoOwner(),
                                 "9999999999"
                         ))
                         .typeArguments(List.of(resource.resourceTag()))
                         .build();
 
                 var response2 = AptosService.getAptosClient().requestSubmitTransaction(
-                        ContextService.getTokenOwner(),
+                        ContextService.getKikoOwner(),
                         transactionPayload2);
 
                 AptosService.checkTransaction(response2.getData().getHash());
