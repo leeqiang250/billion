@@ -161,8 +161,14 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         nftGroupQueryWrapper.lambda().eq(NftGroup::getId, id);
         nftGroupQueryWrapper.lambda().eq(NftGroup::getChain, Chain.APTOS.getCode());
         nftGroupQueryWrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-        nftGroupQueryWrapper.lambda().eq(NftGroup::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var nftGroup = super.getOneThrowEx(nftGroupQueryWrapper);
+        if (TransactionStatus.STATUS_3_SUCCESS == nftGroup.getTransactionStatus_()) {
+            //排查是否需要执行handleService.update
+            return this.initializeMarket();
+        }
+        if (TransactionStatus.STATUS_1_READY != nftGroup.getTransactionStatus_()) {
+            return false;
+        }
 
         QueryWrapper<com.billion.model.entity.Language> languageQueryWrapper = new QueryWrapper<>();
         languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
@@ -236,6 +242,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
         super.updateById(nftGroup);
 
+        //TODO leeqiang检查什么意思
         this.handleService.update(nftGroup.getOwner());
 
         //TODO 删除缓存

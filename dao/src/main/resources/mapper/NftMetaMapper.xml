@@ -10,7 +10,6 @@
         ,nft_group_id as nft_group_id
         ,display_name as display_name
         ,description as description
-        ,owner as owner
         ,uri as uri
         ,rank as rank
         ,transaction_status as transaction_status

@@ -51,12 +51,6 @@ public class NftMeta extends TransactionStatus implements IModel {
     String description;
 
     /**
-     * 所有者
-     */
-    @TableField("owner")
-    String owner;
-
-    /**
      * 图片
      */
     @TableField("uri")

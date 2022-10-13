@@ -87,7 +87,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, boxGroupId);
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
-        //boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        boxGroupQueryWrapper.lambda().in(BoxGroup::getTransactionStatus, List.of(TransactionStatus.STATUS_1_READY.getCode(), TransactionStatus.STATUS_3_SUCCESS.getCode()));
         var boxGroup = this.boxGroupService.getOneThrowEx(boxGroupQueryWrapper);
 
         QueryWrapper<Token> tokenQueryWrapper = new QueryWrapper<>();
@@ -109,6 +109,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         nftGroupQueryWrapper.lambda().eq(NftGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
         var nftGroup = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
 
+        //TODO leeqiang 是否需要handle 排查
         var handle = handleService.getByAccount(nftGroup.getOwner());
         if (StringUtils.isEmpty(handle.getCollectionsTokenDataHandle())) {
             return false;
@@ -148,7 +149,6 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             if (StringUtils.isEmpty(displayName)
                     || StringUtils.isEmpty(description)
                     || StringUtils.isEmpty(uri)
-                    || StringUtils.isEmpty(nftMeta.getOwner())
                     || DEFAULT_TEXT.equals(displayName)
                     || DEFAULT_TEXT.equals(description)
                     || DEFAULT_TEXT.equals(uri)
@@ -171,7 +171,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             Map<String, List<String>> classMap = nftClassService.getClassForMint(nftMeta.getId().toString());
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(ContextService.getKikoOwner() + "help::mint_token_with_box")
+                    .function(ContextService.getKikoOwner() + "::help::mint_token_with_box")
                     .arguments(List.of(
                             Hex.encode(nftGroupDisplayName),
                             Hex.encode(displayName),
@@ -212,8 +212,6 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
                 return false;
             }
-
-            nftMeta.setOwner(nftGroup.getOwner());
 
             nftMeta.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
             nftMeta.setTransactionHash(response.getData().getHash());

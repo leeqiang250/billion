@@ -70,8 +70,11 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, id);
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
-        boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        boxGroupQueryWrapper.lambda().in(BoxGroup::getTransactionStatus, List.of(TransactionStatus.STATUS_1_READY.getCode(), TransactionStatus.STATUS_3_SUCCESS.getCode()));
         var boxGroup = super.getOneThrowEx(boxGroupQueryWrapper);
+        if (TransactionStatus.STATUS_3_SUCCESS == boxGroup.getTransactionStatus_()) {
+            return this.initializeMarket();
+        }
 
         var askToken = tokenService.getById(boxGroup.getAskToken());
         var bidToken = tokenService.getById(boxGroup.getBidToken());

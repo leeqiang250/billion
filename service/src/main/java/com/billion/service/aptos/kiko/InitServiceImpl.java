@@ -112,7 +112,7 @@ public class InitServiceImpl implements InitService {
                     .displayName(UUID.randomUUID().toString())
                     .nftGroup(1L)
                     .askToken(2L)
-                    .amount(EMPTY)
+                    .amount("0")
                     .bidToken(1L)
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
@@ -144,7 +144,7 @@ public class InitServiceImpl implements InitService {
                     .displayName(UUID.randomUUID().toString())
                     .nftGroup(2L)
                     .askToken(3L)
-                    .amount(EMPTY)
+                    .amount("0")
                     .bidToken(1L)
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
@@ -176,7 +176,7 @@ public class InitServiceImpl implements InitService {
                     .displayName(UUID.randomUUID().toString())
                     .nftGroup(3L)
                     .askToken(4L)
-                    .amount(EMPTY)
+                    .amount("0")
                     .bidToken(1L)
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
@@ -209,7 +209,7 @@ public class InitServiceImpl implements InitService {
                     .displayName(UUID.randomUUID().toString())
                     .nftGroup(4L)
                     .askToken(5L)
-                    .amount(EMPTY)
+                    .amount("0")
                     .bidToken(1L)
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
@@ -241,7 +241,7 @@ public class InitServiceImpl implements InitService {
                     .displayName(UUID.randomUUID().toString())
                     .nftGroup(5L)
                     .askToken(6L)
-                    .amount(EMPTY)
+                    .amount("0")
                     .bidToken(7L)
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
@@ -321,7 +321,7 @@ public class InitServiceImpl implements InitService {
                     .displayName(UUID.randomUUID().toString())
                     .description(UUID.randomUUID().toString())
                     .currentSupply(EMPTY)
-                    .totalSupply(EMPTY)
+                    .totalSupply(String.valueOf(Long.MAX_VALUE))
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/76360568-5c54-4342-427d-68992ded7b00/public")
                     .transactionHash(EMPTY)
                     .isEnabled(Boolean.TRUE)
@@ -349,42 +349,39 @@ public class InitServiceImpl implements InitService {
         this.nftMetaService.remove(null);
 
         var nftGroups = this.nftGroupService.list();
-        nftGroups.forEach(new Consumer<NftGroup>() {
-            @Override
-            public void accept(NftGroup nftGroup) {
-                for (int i = 0; i < 10; i++) {
-                    var nftMeta = NftMeta.builder()
-                            .boxGroupId(0L)
-                            .nftGroupId(nftGroup.getId())
-                            .displayName(UUID.randomUUID().toString())
-                            .description(UUID.randomUUID().toString())
-                            .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/4031cc60-3e88-4f78-b412-5006ecf5c100/public")
-                            .rank(0L)
-                            .transactionHash(EMPTY)
-                            .isBorn(Boolean.FALSE)
-                            .nftId(EMPTY)
-                            .score(EMPTY)
-                            .attributeType(0)
-                            .tableHandle(EMPTY)
-                            .tableCollection(EMPTY)
-                            .tableCreator(EMPTY)
-                            .tableName(EMPTY)
-                            .build();
-                    nftMeta.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
-                    nftMetaService.save(nftMeta);
+        nftGroups.forEach(nftGroup -> {
+            for (int i = 0; i < 10; i++) {
+                var nftMeta = NftMeta.builder()
+                        .boxGroupId(0L)
+                        .nftGroupId(nftGroup.getId())
+                        .displayName(UUID.randomUUID().toString())
+                        .description(UUID.randomUUID().toString())
+                        .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/4031cc60-3e88-4f78-b412-5006ecf5c100/public")
+                        .rank(0L)
+                        .transactionHash(EMPTY)
+                        .isBorn(Boolean.FALSE)
+                        .nftId(EMPTY)
+                        .score(EMPTY)
+                        .attributeType(0)
+                        .tableHandle(EMPTY)
+                        .tableCollection(EMPTY)
+                        .tableCreator(EMPTY)
+                        .tableName(EMPTY)
+                        .build();
+                nftMeta.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+                nftMetaService.save(nftMeta);
 
-                    languageService.save(Language.builder()
-                            .language(com.billion.model.enums.Language.EN.getCode())
-                            .key(nftMeta.getDisplayName())
-                            .value(nftGroup.getDisplayName() + "-描述" + nftMeta.getId())
-                            .build());
+                languageService.save(Language.builder()
+                        .language(com.billion.model.enums.Language.EN.getCode())
+                        .key(nftMeta.getDisplayName())
+                        .value(nftGroup.getDisplayName().substring(0, 2) + "-描述" + nftMeta.getId())
+                        .build());
 
-                    languageService.save(Language.builder()
-                            .language(com.billion.model.enums.Language.EN.getCode())
-                            .key(nftMeta.getDescription())
-                            .value(nftGroup.getDescription() + "-描述" + nftMeta.getId())
-                            .build());
-                }
+                languageService.save(Language.builder()
+                        .language(com.billion.model.enums.Language.EN.getCode())
+                        .key(nftMeta.getDescription())
+                        .value(nftGroup.getDescription().substring(0, 2) + "-描述" + nftMeta.getId())
+                        .build());
             }
         });
     }

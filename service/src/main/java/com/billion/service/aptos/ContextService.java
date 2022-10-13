@@ -92,7 +92,7 @@ public class ContextService {
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
-//        ContextService.commoner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
 //        ContextService.tokenOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
 //        ContextService.nftOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
 //        ContextService.marketer = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
