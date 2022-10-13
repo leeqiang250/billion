@@ -113,17 +113,15 @@ public class ScanDispatchService implements Serializable {
                 for (int j = 0; j < events.size(); j++) {
                     var event = events.get(j);
 
-                    if (nftService.isNftWithdrawEvent(event)) {
-                        log.info(event.getType());
-
-                        valid = true;
-                        break;
-                    } else if (nftService.isNftDepositEvent(event)) {
+                    if (nftService.isNftWithdrawEvent(event)
+                            || nftService.isNftDepositEvent(event)
+                    ) {
                         log.info(event.getType());
 
                         valid = true;
                         break;
                     }
+
                     if (ContextService.getAddress().contains(event.getType().split("::")[0])) {
                         if (marketService.isBoxMakerEvent(event)
                                 || marketService.isBoxTakerEvent(event)
