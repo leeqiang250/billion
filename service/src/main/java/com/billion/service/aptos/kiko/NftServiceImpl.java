@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMapper;
 import com.billion.model.entity.Nft;
 import com.billion.model.enums.Chain;
-import com.billion.model.enums.TradeStatus;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.NftDepositEvent;
 import com.billion.model.event.NftWithdrawEvent;
 import com.billion.service.aptos.AbstractCacheService;
@@ -47,13 +47,14 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .event(NftWithdrawEvent.SIMPLE_NAME)
-                .owner("")
+                .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
                 .ts(transaction.getTimestamp())
+                .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
 
-        nft.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
+        nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
 
         super.save(nft);
 
@@ -67,13 +68,14 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .event(NftDepositEvent.SIMPLE_NAME)
-                .owner("")
+                .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
                 .ts(transaction.getTimestamp())
+                .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
 
-        nft.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
+        nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
 
         super.save(nft);
 

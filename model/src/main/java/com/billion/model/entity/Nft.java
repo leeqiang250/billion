@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("nft")
-public class Nft extends TradeStatus implements IModel {
+public class Nft extends TransactionStatus implements IModel {
 
     /**
      * id
@@ -61,6 +61,12 @@ public class Nft extends TradeStatus implements IModel {
      */
     @TableField("ts")
     String ts;
+
+    /**
+     * 交易hash
+     */
+    @TableField("transaction_hash")
+    String transactionHash;
 
     /**
      * 是否归档
