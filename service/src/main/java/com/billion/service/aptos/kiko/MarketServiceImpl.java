@@ -21,6 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market> implements MarketService {
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean removeGe(Long version) {
+        QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, Chain.APTOS.getCode());
+        queryWrapper.lambda().ge(Market::getVersion, version);
+        return super.remove(queryWrapper);
+    }
+
+    @Override
     public boolean isBoxMakerEvent(Event event) {
         return event.getType().contains("::secondary_market::BoxMakerEvent<");
     }
@@ -62,7 +71,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -91,7 +100,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -120,7 +129,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -149,7 +158,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -198,7 +207,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -227,7 +236,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -256,7 +265,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
@@ -286,19 +295,11 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
 
-        this.add(market);
+        super.save(market);
 
         //TODO 如有需要，交易记录
 
         return market;
-    }
-
-    void add(Market market) {
-        QueryWrapper<Market> marketQueryWrapper = new QueryWrapper<>();
-        marketQueryWrapper.lambda().eq(Market::getChain, Chain.APTOS.getCode());
-        marketQueryWrapper.lambda().ge(Market::getVersion, market.getVersion());
-        super.remove(marketQueryWrapper);
-        super.save(market);
     }
 
 }

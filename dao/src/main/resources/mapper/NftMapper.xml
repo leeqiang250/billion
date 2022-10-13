@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nft.mapper.NftMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        as id
+        ,chain as chain
+        ,version as version
+        ,event as event
+        ,owner as owner
+        ,token_id as token_id
+        ,ts as ts
+        ,trade_status as trade_status
+        ,is_enabled as is_enabled
+    </sql>
+
+</mapper>

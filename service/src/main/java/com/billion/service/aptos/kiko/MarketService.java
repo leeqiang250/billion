@@ -13,6 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 public interface MarketService extends ICacheService<Market> {
 
     /**
+     * removeGe
+     *
+     * @param version version
+     * @return boolean
+     */
+    @Transactional(rollbackFor = Exception.class)
+    boolean removeGe(Long version);
+
+    /**
      * isBoxMakerEvent
      *
      * @param event event
