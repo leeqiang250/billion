@@ -35,10 +35,10 @@ public class NftClass implements IModel {
     Long nftGroupId;
 
     /**
-     * nft_info_id
+     * nft_meta_id
      */
-    @TableField("nft_info_id")
-    Long nftInfoId;
+    @TableField("nft_meta_id")
+    Long nftMetaId;
 
     /**
      * 属性名

@@ -42,7 +42,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
     @Override
     public List<NftClassDto> getClassByInfoId(Context context, String infoId) {
         QueryWrapper<NftClass> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftClass::getNftInfoId, infoId);
+        wrapper.lambda().eq(NftClass::getNftMetaId, infoId);
         List<NftClassDto> resultList = new ArrayList<>();
         List<NftClass> list = super.list(wrapper);
 
@@ -54,7 +54,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
             NftClassDto nftClassDto = NftClassDto.builder().id(e.getId())
                     .className(e.getClassName())
                     .nftGroupId(e.getNftGroupId())
-                    .nftInfoId(e.getNftInfoId())
+                    .nftMetaId(e.getNftMetaId())
                     .score(e.getScore())
                     .type(e.getType())
                     .attributes(attributes).build();
@@ -66,7 +66,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
     @Override
     public Map<String, List<String>> getClassForMint(String infoId) {
         QueryWrapper<NftClass> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftClass::getNftInfoId, infoId);
+        wrapper.lambda().eq(NftClass::getNftMetaId, infoId);
 
         List<NftClass> list = super.list(wrapper);
 

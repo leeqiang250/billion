@@ -13,7 +13,7 @@ public interface RequestPathNftV1 {
 
     String BOX_GROUP = NFT + "/boxGroup";
 
-    String NFT_INFO = NFT + "/info";
+    String NFT_META = NFT + "/meta";
 
     String NFT_ATTRIBUTE = NFT + "/attribute";
 

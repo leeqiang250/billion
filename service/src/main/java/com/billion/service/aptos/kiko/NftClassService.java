@@ -18,7 +18,7 @@ public interface NftClassService extends ICacheService<NftClass> {
     List getClassByGroupId(Context context, String groupId);
 
     /**
-     * 根据nftInfoId查询
+     * 根据NftMetaId查询
      * @param context
      * @param infoId
      * @return

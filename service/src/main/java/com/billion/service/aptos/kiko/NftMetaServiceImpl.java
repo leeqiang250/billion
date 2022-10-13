@@ -6,9 +6,9 @@ import com.aptos.request.v1.model.TransactionPayload;
 import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.billion.dao.aptos.kiko.NftInfoMapper;
+import com.billion.dao.aptos.kiko.NftMetaMapper;
 import com.billion.model.dto.Context;
-import com.billion.model.entity.NftInfo;
+import com.billion.model.entity.NftMeta;
 import com.billion.model.enums.Language;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
@@ -32,7 +32,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
  */
 @Slf4j
 @Service
-public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftInfo> implements NftInfoService {
+public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftMeta> implements NftMetaService {
 
     @Resource
     LanguageService languageService;
@@ -55,12 +55,12 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
     }
 
     @Override
-    public NftInfo cacheById(Context context, Serializable id, Duration timeout) {
+    public NftMeta cacheById(Context context, Serializable id, Duration timeout) {
         String key = this.cacheByIdKey(null, id);
 
         Object value = this.getRedisTemplate().opsForValue().get(key);
         if (Objects.isNull(value)) {
-            NftInfo e = this.getById(id);
+            NftMeta e = this.getById(id);
             if (Objects.nonNull(e)) {
                 value = e;
 
@@ -70,13 +70,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             value = this.fromObject(value);
         }
 
-        return (NftInfo) value;
-    }
-
-    @PostConstruct
-    public void a() {
-//        boxGroupService.initialize();
-//        this.mint(1);
+        return (NftMeta) value;
     }
 
     @Override
@@ -105,47 +99,47 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
             return false;
         }
 
-        QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
-        wrapper.lambda().eq(NftInfo::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var nftInfos = super.list(wrapper);
-        for (int i = 0; i < nftInfos.size(); i++) {
-            var nftInfo = nftInfos.get(i);
+        QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);
+        wrapper.lambda().eq(NftMeta::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        var nftMetas = super.list(wrapper);
+        for (int i = 0; i < nftMetas.size(); i++) {
+            var nftMeta = nftMetas.get(i);
 
             languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
-            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftInfo.getDisplayName());
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDisplayName());
             var displayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
             languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
-            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftInfo.getDescription());
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDescription());
             var description = languageService.getOneThrowEx(languageQueryWrapper).getValue();
-            var uri = nftInfo.getUri();
+            var uri = nftMeta.getUri();
 
             if (StringUtils.isEmpty(displayName)
                     || StringUtils.isEmpty(description)
                     || StringUtils.isEmpty(uri)
-                    || StringUtils.isEmpty(nftInfo.getOwner())
+                    || StringUtils.isEmpty(nftMeta.getOwner())
                     || DEFAULT_TEXT.equals(displayName)
                     || DEFAULT_TEXT.equals(description)
                     || DEFAULT_TEXT.equals(uri)
             ) {
-                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                nftInfo.setTransactionHash(EMPTY);
-                super.updateById(nftInfo);
+                nftMeta.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta.setTransactionHash(EMPTY);
+                super.updateById(nftMeta);
 
                 return false;
             }
 
             if (26 < displayName.length()) {
-                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                nftInfo.setTransactionHash(EMPTY);
-                super.updateById(nftInfo);
+                nftMeta.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta.setTransactionHash(EMPTY);
+                super.updateById(nftMeta);
 
                 throw new BizException("display name too long, max 26");
             }
 
-            Map<String, List<String>> classMap = nftClassService.getClassForMint(nftInfo.getId().toString());
+            Map<String, List<String>> classMap = nftClassService.getClassForMint(nftMeta.getId().toString());
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                     .function("0x3::token::create_token_script")
@@ -155,7 +149,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                             Hex.encode(description),
                             "1",
                             "1",
-                            Hex.encode(nftInfo.getUri()),
+                            Hex.encode(nftMeta.getUri()),
                             nftGroup.getOwner(),
                             "3",
                             "1",
@@ -175,32 +169,32 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
                     nftGroup.getOwner(),
                     transactionPayload);
             if (response.isValid()) {
-                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                nftInfo.setTransactionHash(EMPTY);
-                super.updateById(nftInfo);
+                nftMeta.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta.setTransactionHash(EMPTY);
+                super.updateById(nftMeta);
 
                 return false;
             }
 
             if (!AptosService.checkTransaction(response.getData().getHash())) {
-                nftInfo.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-                nftInfo.setTransactionHash(response.getData().getHash());
-                super.updateById(nftInfo);
+                nftMeta.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta.setTransactionHash(response.getData().getHash());
+                super.updateById(nftMeta);
 
                 return false;
             }
 
-            nftInfo.setOwner(nftGroup.getOwner());
+            nftMeta.setOwner(nftGroup.getOwner());
 
-            nftInfo.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-            nftInfo.setTransactionHash(response.getData().getHash());
+            nftMeta.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            nftMeta.setTransactionHash(response.getData().getHash());
 
-            nftInfo.setTableHandle(handle.getCollectionsTokenDataHandle());
-            nftInfo.setTableCollection(Hex.encode(nftGroupDisplayName));
-            nftInfo.setTableCreator(nftGroup.getOwner());
-            nftInfo.setTableName(Hex.encode(displayName));
+            nftMeta.setTableHandle(handle.getCollectionsTokenDataHandle());
+            nftMeta.setTableCollection(Hex.encode(nftGroupDisplayName));
+            nftMeta.setTableCreator(nftGroup.getOwner());
+            nftMeta.setTableName(Hex.encode(displayName));
 
-            super.updateById(nftInfo);
+            super.updateById(nftMeta);
         }
 
         //TODO 删除缓存
@@ -210,16 +204,16 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
 
     @Override
     public Response<TableTokenData> getTableTokenData(Serializable id) {
-        var nftInfo = super.getById(id);
-        if (Objects.isNull(nftInfo)) {
+        var nftMeta = super.getById(id);
+        if (Objects.isNull(nftMeta)) {
             return null;
         }
 
         var response = AptosService.getAptosClient().requestTableTokenData(
-                nftInfo.getTableHandle(),
-                nftInfo.getTableCreator(),
-                nftInfo.getTableCollection(),
-                nftInfo.getTableName()
+                nftMeta.getTableHandle(),
+                nftMeta.getTableCreator(),
+                nftMeta.getTableCollection(),
+                nftMeta.getTableName()
         );
 
         if (!response.isValid()) {
@@ -230,23 +224,23 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
     }
 
     @Override
-    public List<NftInfo> getListByGroup(Context context, String type, String groupId) {
+    public List<NftMeta> getListByGroup(Context context, String type, String groupId) {
 
-        QueryWrapper<NftInfo> wrapper = new QueryWrapper<>();
+        QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
         if ("group".equals(type)) {
-            wrapper.lambda().eq(NftInfo::getNftGroupId, groupId);
+            wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);
         } else if ("boxGroup".equals(type)) {
-            wrapper.lambda().eq(NftInfo::getBoxGroupId, groupId);
+            wrapper.lambda().eq(NftMeta::getBoxGroupId, groupId);
         }
         //TODO:是否需要状态区别
-//        wrapper.lambda().eq(NftInfo::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var nftInfos = super.list(wrapper);
-        changeLanguage(context, nftInfos);
+//        wrapper.lambda().eq(nftMeta::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        var nftMetas = super.list(wrapper);
+        changeLanguage(context, nftMetas);
 
-        return nftInfos;
+        return nftMetas;
     }
 
-    private void changeLanguage(Context context, List<NftInfo> list) {
+    private void changeLanguage(Context context, List<NftMeta> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
 

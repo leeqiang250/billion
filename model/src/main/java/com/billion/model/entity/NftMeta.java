@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("nft_info")
-public class NftInfo extends TransactionStatus implements IModel {
+@TableName("nft_meta")
+public class NftMeta extends TransactionStatus implements IModel {
 
     /**
      * id

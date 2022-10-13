@@ -31,9 +31,9 @@ public class NftClassDto implements Serializable {
     Long nftGroupId;
 
     /**
-     * nft_info_id
+     * nft_meta_id
      */
-    Long nftInfoId;
+    Long nftMetaId;
 
     /**
      * 属性名
