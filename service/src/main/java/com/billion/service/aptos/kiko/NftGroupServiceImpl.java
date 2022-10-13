@@ -165,11 +165,14 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         for (int i = 0; i < nftGroups.size(); i++) {
             var nftGroup = nftGroups.get(i);
 
-            var context = Context.builder()
-                    .language(Language.EN.getCode())
-                    .build();
-            var displayName = languageService.getByKey(context, nftGroup.getDisplayName());
-            var description = languageService.getByKey(context, nftGroup.getDescription());
+            QueryWrapper<com.billion.model.entity.Language> languageQueryWrapper = new QueryWrapper<>();
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftGroup.getDisplayName());
+            var displayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
+            languageQueryWrapper = new QueryWrapper<>();
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftGroup.getDescription());
+            var description = languageService.getOneThrowEx(languageQueryWrapper).getValue();
             var uri = nftGroup.getUri();
 
             if (StringUtils.isEmpty(displayName)
@@ -210,7 +213,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                     .build();
 
             var response = AptosService.getAptosClient().requestSubmitTransaction(
-                    nftGroup.getOwner(),
+                    ContextService.getNftOwner(),
                     transactionPayload);
             if (response.isValid()) {
                 nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);

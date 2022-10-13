@@ -1,9 +1,12 @@
 package com.billion.model.service;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.dto.Context;
 import com.billion.model.enums.CacheTsType;
+import com.billion.model.exception.BizException;
 import com.billion.model.model.IModel;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -156,6 +159,15 @@ public interface ICacheService<T extends IModel> extends IService<T> {
         });
 
         return set;
+    }
+
+    default T getOneThrowEx(QueryWrapper<T> wrapper) {
+        T t = this.getOne(wrapper);
+        if (Objects.isNull(t)) {
+            throw new BizException("class[" + this.getEntityClass().getSimpleName() + "] wrapper[" + JSONObject.toJSONString(wrapper.getParamNameValuePairs().values()) + "]");
+        }
+
+        return t;
     }
 
 }
