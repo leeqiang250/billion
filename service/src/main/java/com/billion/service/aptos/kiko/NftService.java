@@ -3,6 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.billion.model.entity.Nft;
+import com.billion.model.event.NftCreateTokenDataEvent;
 import com.billion.model.event.NftDepositEvent;
 import com.billion.model.event.NftWithdrawEvent;
 import com.billion.model.service.ICacheService;
@@ -23,6 +24,14 @@ public interface NftService extends ICacheService<Nft> {
     boolean removeGe(Long version);
 
     /**
+     * isNftCreateTokenDataEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    boolean isNftCreateTokenDataEvent(Event event);
+
+    /**
      * isWithdrawEvent
      *
      * @param event event
@@ -37,6 +46,17 @@ public interface NftService extends ICacheService<Nft> {
      * @return boolean
      */
     boolean isNftDepositEvent(Event event);
+
+    /**
+     * addNftCreateTokenDataEvent
+     *
+     * @param transaction             transaction
+     * @param event                   event
+     * @param nftCreateTokenDataEvent nftCreateTokenDataEvent
+     * @return Nft
+     */
+    @Transactional(rollbackFor = Exception.class)
+    Nft addNftCreateTokenDataEvent(Transaction transaction, Event event, NftCreateTokenDataEvent nftCreateTokenDataEvent);
 
     /**
      * addNftWithdrawEvent

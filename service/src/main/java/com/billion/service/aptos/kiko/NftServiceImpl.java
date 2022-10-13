@@ -7,6 +7,7 @@ import com.billion.dao.aptos.kiko.NftMapper;
 import com.billion.model.entity.Nft;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
+import com.billion.model.event.NftCreateTokenDataEvent;
 import com.billion.model.event.NftDepositEvent;
 import com.billion.model.event.NftWithdrawEvent;
 import com.billion.service.aptos.AbstractCacheService;
@@ -31,6 +32,11 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
     }
 
     @Override
+    public boolean isNftCreateTokenDataEvent(Event event) {
+        return NftCreateTokenDataEvent.EVENT_NAME.equals(event.getType());
+    }
+
+    @Override
     public boolean isNftWithdrawEvent(Event event) {
         return NftWithdrawEvent.EVENT_NAME.equals(event.getType());
     }
@@ -38,6 +44,27 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
     @Override
     public boolean isNftDepositEvent(Event event) {
         return NftDepositEvent.EVENT_NAME.equals(event.getType());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Nft addNftCreateTokenDataEvent(Transaction transaction, Event event, NftCreateTokenDataEvent nftCreateTokenDataEvent) {
+        Nft nft = Nft.builder()
+                .chain(Chain.APTOS.getCode())
+                .version(Long.parseLong(transaction.getVersion()))
+                .event(event.getType())
+                .owner(event.getGuid().getAccountAddress())
+                .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
+                .ts(transaction.getTimestampMillisecond())
+                .transactionHash(transaction.getHash())
+                .isEnabled(Boolean.TRUE)
+                .build();
+
+        nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
+
+        super.save(nft);
+
+        return nft;
     }
 
     @Override
