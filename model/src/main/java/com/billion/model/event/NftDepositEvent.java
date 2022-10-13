@@ -17,7 +17,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class NftDepositEvent implements Serializable {
 
-    public static String SIMPLE_NAME = NftDepositEvent.class.getSimpleName();
+    public static String EVENT_NAME = "0x3::token::DepositEvent";
 
     String amount;
 

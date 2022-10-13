@@ -32,12 +32,12 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
 
     @Override
     public boolean isNftWithdrawEvent(Event event) {
-        return event.getType().equals("0x3::token::WithdrawEvent");
+        return NftWithdrawEvent.EVENT_NAME.equals(event.getType());
     }
 
     @Override
     public boolean isNftDepositEvent(Event event) {
-        return event.getType().equals("0x3::token::DepositEvent");
+        return NftDepositEvent.EVENT_NAME.equals(event.getType());
     }
 
     @Override
@@ -46,10 +46,10 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         Nft nft = Nft.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
-                .event(NftWithdrawEvent.SIMPLE_NAME)
+                .event(event.getType())
                 .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
-                .ts(transaction.getTimestamp())
+                .ts(transaction.getTimestampMillisecond())
                 .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
@@ -67,10 +67,10 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         Nft nft = Nft.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
-                .event(NftDepositEvent.SIMPLE_NAME)
+                .event(event.getType())
                 .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
-                .ts(transaction.getTimestamp())
+                .ts(transaction.getTimestampMillisecond())
                 .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
