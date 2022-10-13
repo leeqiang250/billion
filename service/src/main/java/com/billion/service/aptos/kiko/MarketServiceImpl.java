@@ -1,8 +1,8 @@
 package com.billion.service.aptos.kiko;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.MarketMapper;
 import com.billion.model.entity.Market;
 import com.billion.model.enums.Chain;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author liqiang
  */
-
 @Slf4j
 @Service
 public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market> implements MarketService {
@@ -63,7 +62,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        super.save(market);
+        this.add(market);
 
         //TODO 如有需要，交易记录
 
@@ -92,7 +91,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
 
-        super.save(market);
+        this.add(market);
 
         //TODO 如有需要，交易记录
 
@@ -121,7 +120,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        super.save(market);
+        this.add(market);
 
         //TODO 如有需要，交易记录
 
@@ -150,7 +149,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
 
-        super.save(market);
+        this.add(market);
 
         //TODO 如有需要，交易记录
 
@@ -199,7 +198,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
 
-        super.save(market);
+        this.add(market);
 
         //TODO 如有需要，交易记录
 
@@ -221,5 +220,12 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         return null;
     }
 
+    void add(Market market) {
+        QueryWrapper<Market> marketQueryWrapper = new QueryWrapper<>();
+        marketQueryWrapper.lambda().eq(Market::getChain, Chain.APTOS.getCode());
+        marketQueryWrapper.lambda().ge(Market::getVersion, market.getVersion());
+        super.remove(marketQueryWrapper);
+        super.save(market);
+    }
 
 }

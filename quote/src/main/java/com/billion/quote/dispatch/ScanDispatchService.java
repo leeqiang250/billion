@@ -1,11 +1,8 @@
 package com.billion.quote.dispatch;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
-import com.billion.model.entity.Market;
-import com.billion.model.enums.Chain;
 import com.billion.model.event.*;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AptosService;
@@ -17,7 +14,6 @@ import com.billion.service.aptos.kiko.NftEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
