@@ -45,9 +45,6 @@ public class ScanDispatchService implements Serializable {
     NftService nftService;
 
     @Resource
-    NftEventService nftEventService;
-
-    @Resource
     DistributedLockService distributedLockService;
 
     boolean next;
