@@ -14,6 +14,7 @@ import com.billion.service.aptos.kiko.NftEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,6 +123,15 @@ public class ScanDispatchService implements Serializable {
                     } else if (marketService.isNftMakerEvent(event)) {
                         NftMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftMakerEvent.class);
                         marketService.addNftMakerEvent(transaction, event, nftMakerEvent);
+                    } else if (marketService.isNftTakerEvent(event)) {
+                        NftTakerEvent nftTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftTakerEvent.class);
+                        marketService.addNftTakerEvent(transaction, event, nftTakerEvent);
+                    } else if (marketService.isNftBidEvent(event)) {
+                        NftBidEvent nftBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftBidEvent.class);
+                        marketService.addNftBidEvent(transaction, event, nftBidEvent);
+                    } else if (marketService.isNftCancelEvent(event)) {
+                        NftCancelEvent nftCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCancelEvent.class);
+                        marketService.addNftCancelEvent(transaction, event, nftCancelEvent);
                     }
 
 
