@@ -8,7 +8,6 @@ import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftInfoMapper;
 import com.billion.model.dto.Context;
-import com.billion.model.entity.Contract;
 import com.billion.model.entity.NftInfo;
 import com.billion.model.enums.Language;
 import com.billion.model.enums.TransactionStatus;
@@ -45,7 +44,7 @@ public class NftInfoServiceImpl extends AbstractCacheService<NftInfoMapper, NftI
     NftGroupService nftGroupService;
 
     @Resource
-    BoxGroupCopyService boxGroupService;
+    BoxGroupService boxGroupService;
 
     @Resource
     NftClassService nftClassService;

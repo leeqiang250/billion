@@ -2,10 +2,9 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.billion.dao.aptos.kiko.BoxGroupCopyMapper;
+import com.billion.dao.aptos.kiko.BoxGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroup;
-import com.billion.model.entity.BoxGroupCopy;
 import com.billion.model.entity.Pair;
 import com.billion.model.enums.*;
 import com.billion.service.aptos.AbstractCacheService;
@@ -23,7 +22,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
  * @author liqiang
  */
 @Service
-public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMapper, BoxGroupCopy> implements BoxGroupCopyService {
+public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, BoxGroup> implements BoxGroupService {
 
     @Resource
     TokenService tokenService;
@@ -43,9 +42,9 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
             return map;
         }
 
-        QueryWrapper<BoxGroupCopy> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(BoxGroupCopy::getEnabled, Boolean.TRUE);
-        List<BoxGroupCopy> list = super.list(wrapper);
+        QueryWrapper<BoxGroup> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(BoxGroup::getEnabled, Boolean.TRUE);
+        List<BoxGroup> list = super.list(wrapper);
 
         changeLanguage(context, list);
 
@@ -58,9 +57,9 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
     }
 
     @Override
-    public List<BoxGroupCopy> cacheList(Context context) {
+    public List<BoxGroup> cacheList(Context context) {
         Map map = this.cacheMap(context);
-        List<BoxGroupCopy> list =  new ArrayList<>(map.values());
+        List<BoxGroup> list =  new ArrayList<>(map.values());
         return list;
     }
 
@@ -70,10 +69,10 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
             return false;
         }
 
-        QueryWrapper<BoxGroupCopy> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(BoxGroupCopy::getChain, Chain.APTOS.getCode());
-        wrapper.lambda().eq(BoxGroupCopy::getEnabled, Boolean.TRUE);
-        wrapper.lambda().eq(BoxGroupCopy::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
+        QueryWrapper<BoxGroup> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
+        wrapper.lambda().eq(BoxGroup::getEnabled, Boolean.TRUE);
+        wrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var boxGroups = super.list(wrapper);
 
         for (int i = 0; i < boxGroups.size(); i++) {
@@ -154,10 +153,10 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
 
         var function = ContextService.getMarketer() + "::secondary_market::box_init";
 
-        QueryWrapper<BoxGroupCopy> boxGroupQueryWrapper = new QueryWrapper<>();
-        boxGroupQueryWrapper.lambda().eq(BoxGroupCopy::getChain, Chain.APTOS.getCode());
-        boxGroupQueryWrapper.lambda().eq(BoxGroupCopy::getEnabled, Boolean.TRUE);
-        boxGroupQueryWrapper.lambda().eq(BoxGroupCopy::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, Chain.APTOS.getCode());
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getEnabled, Boolean.TRUE);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
         var boxGroups = super.list(boxGroupQueryWrapper);
 
         var tokens = tokenService.getByScene(context, TokenScene.MARKET.getCode());
@@ -219,7 +218,7 @@ public class BoxGroupCopyServiceImpl extends AbstractCacheService<BoxGroupCopyMa
         return true;
     }
 
-    private void changeLanguage(Context context, List<BoxGroupCopy> list) {
+    private void changeLanguage(Context context, List<BoxGroup> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
         Set setRule = list.stream().map(e -> e.getRule()).collect(Collectors.toSet());

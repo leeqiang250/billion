@@ -5,7 +5,7 @@ import com.billion.model.entity.BoxGroup;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author jason
+ * @author liqiang
  */
 @Mapper
 public interface BoxGroupMapper extends BaseMapper<BoxGroup> {

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author liqiang
  */
 @RestController
-@RequestMapping("/box-group-copy")
-public class BoxGroupCopyController {
+@RequestMapping("/box-group")
+public class BoxGroupController {
 
 }

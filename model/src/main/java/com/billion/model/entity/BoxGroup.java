@@ -10,19 +10,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 /**
- * @author jason
+ * @author liqiang
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("box_group")
-public class BoxGroup implements IModel {
+public class BoxGroup extends TransactionStatus implements IModel {
 
     /**
      * 主键Id
@@ -37,58 +33,34 @@ public class BoxGroup implements IModel {
     String chain;
 
     /**
-     * 可拆性(0:不可拆卸,1:可拆卸)
-     */
-    @TableField("split")
-    Boolean split;
-
-    /**
-     * token_id
-     */
-    @TableField("token_id")
-    String tokenId;
-
-    /**
-     * meta
-     */
-    @TableField("meta")
-    String meta;
-
-    /**
-     * body
-     */
-    @TableField("body")
-    String body;
-
-    /**
-     * 系列名称
+     * 显示名称
      */
     @TableField("display_name")
     String displayName;
 
     /**
-     * 当前供应量
+     * 询价币种
      */
-    @TableField("current_supply")
-    String currentSupply;
+    @TableField("ask_token")
+    Long askToken;
 
     /**
-     * 总计供应量
+     * 询价数量
      */
-    @TableField("total_supply")
-    String totalSupply;
+    @TableField("amount")
+    String amount;
 
     /**
-     * 支付币种，格式:
+     * 计价币种
      */
-    @TableField("support_token")
-    String supportToken;
+    @TableField("bid_token")
+    Long bidToken;
 
     /**
-     * 图片
+     * 计价价格
      */
-    @TableField("uri")
-    String uri;
+    @TableField("price")
+    String price;
 
     /**
      * 描述
@@ -103,28 +75,10 @@ public class BoxGroup implements IModel {
     String rule;
 
     /**
-     * 单账号购买限制
+     * 起售时间
      */
-    @TableField("max_amount")
-    Long maxAmount;
-
-    /**
-     * 创作者ID
-     */
-    @TableField("creator_id")
-    Long creatorId;
-
-    /**
-     * 创作者地址
-     */
-    @TableField("creator_address")
-    String creatorAddress;
-
-    /**
-     * 是否激活(0:不可用,1:可用)
-     */
-    @TableField("enabled")
-    Boolean enabled;
+    @TableField("ts")
+    String ts;
 
     /**
      * 排序
@@ -133,39 +87,18 @@ public class BoxGroup implements IModel {
     Integer sort;
 
     /**
-     * 起售时间
+     * 是否激活(0:不可用,1:可用)
      */
-    @TableField("sale_time")
-    Timestamp saleTime;
+    @TableField("enabled")
+    Boolean enabled;
 
     /**
-     * 截止时间
-     */
-    @TableField("end_time")
-    Timestamp endTime;
-
-    /**
-     * 铸造状态
-     */
-    @TableField("transaction_status")
-    String transactionStatus;
-
-    /**
-     * 铸造hash
+     * 交易hash
      */
     @TableField("transaction_hash")
     String transactionHash;
 
-    /**
-     * 修改时间
-     */
-    @TableField("mtime")
-    Timestamp mtime;
-
-    /**
-     * 创建时间
-     */
-    @TableField("ctime")
-    Timestamp ctime;
+    @TableField("x")
+    String x;
 
 }
