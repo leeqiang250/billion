@@ -207,17 +207,90 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
     @Override
     public Market addNftTakerEvent(Transaction transaction, Event event, NftTakerEvent nftTakerEvent) {
-        return null;
+        Market market = Market.builder()
+                .chain(Chain.APTOS.getCode())
+                .version(Long.parseLong(transaction.getVersion()))
+                .orderId(nftTakerEvent.getId())
+                .type(nftTakerEvent.getType())
+                .maker(nftTakerEvent.getMaker())
+                .price(nftTakerEvent.getPrice())
+                .askToken(nftTakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
+                .askAmount(nftTakerEvent.getAmount())
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .bidAmount(nftTakerEvent.getFinalPrice())
+                .bidder(nftTakerEvent.getBidder())
+                .tokenId(nftTakerEvent.getTokenId().getNftTokenIdKey())
+                .ts(nftTakerEvent.getTs())
+                .deadTs(nftTakerEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
+                .build();
+
+        market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
+
+        this.add(market);
+
+        //TODO 如有需要，交易记录
+
+        return market;
     }
 
     @Override
     public Market addNftBidEvent(Transaction transaction, Event event, NftBidEvent nftBidEvent) {
-        return null;
+        Market market = Market.builder()
+                .chain(Chain.APTOS.getCode())
+                .version(Long.parseLong(transaction.getVersion()))
+                .orderId(nftBidEvent.getId())
+                .type(nftBidEvent.getType())
+                .maker(nftBidEvent.getMaker())
+                .price(nftBidEvent.getPrice())
+                .askToken(nftTakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
+                .askAmount(nftBidEvent.getAmount())
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .bidAmount(nftBidEvent.getBidPrice())
+                .bidder(nftBidEvent.getBidder())
+                .tokenId(nftBidEvent.getTokenId().getNftTokenIdKey())
+                .ts(nftBidEvent.getTs())
+                .deadTs(nftBidEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
+                .build();
+
+        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+
+        this.add(market);
+
+        //TODO 如有需要，交易记录
+
+        return market;
+
     }
 
     @Override
     public Market addNftCancelEvent(Transaction transaction, Event event, NftCancelEvent nftCancelEvent) {
-        return null;
+        Market market = Market.builder()
+                .chain(Chain.APTOS.getCode())
+                .version(Long.parseLong(transaction.getVersion()))
+                .orderId(nftCancelEvent.getId())
+                .type(nftCancelEvent.getType())
+                .maker(nftCancelEvent.getMaker())
+                .price(nftCancelEvent.getPrice())
+                .askToken(nftCancelEvent.getTokenId().getTokenDataId().getNftGroupKey())
+                .askAmount(nftCancelEvent.getAmount())
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .bidAmount(nftCancelEvent.getBidPrice())
+                .bidder(nftCancelEvent.getBidder())
+                .tokenId(nftBidEvent.getTokenId().getNftTokenIdKey())
+                .ts(nftCancelEvent.getTs())
+                .deadTs(nftCancelEvent.getDeadTs())
+                .isEnabled(Boolean.TRUE)
+                .build();
+
+        market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
+
+        this.add(market);
+
+        //TODO 如有需要，交易记录
+
+        return market;
     }
 
     void add(Market market) {
