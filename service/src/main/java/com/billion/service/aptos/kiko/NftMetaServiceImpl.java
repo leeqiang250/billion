@@ -272,7 +272,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         List<String> tokenIdList = nftList.stream().map(Nft::getTokenId).collect(Collectors.toList());
 
         QueryWrapper<NftMeta> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(NftMeta::getNftId, tokenIdList);
+        queryWrapper.lambda().in(NftMeta::getTokenId, tokenIdList);
 
         return this.list(queryWrapper);
     }
