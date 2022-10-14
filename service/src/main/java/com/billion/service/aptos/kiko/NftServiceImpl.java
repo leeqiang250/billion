@@ -4,6 +4,7 @@ import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMapper;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.Nft;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
@@ -14,6 +15,11 @@ import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author liqiang
@@ -107,6 +113,30 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         super.save(nft);
 
         return nft;
+    }
+
+    @Override
+    public List<Nft> getListByAccount(Context context, String account) {
+        QueryWrapper<Nft> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Nft::getChain, context.getChain());
+        queryWrapper.lambda().eq(Nft::getOwner, account);
+
+        queryWrapper.lambda().eq(Nft::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().eq(Nft::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        queryWrapper.lambda().orderByAsc(Nft::getId);
+        var nftList = this.list(queryWrapper);
+
+        Map<String, Nft> map = new HashMap<>(nftList.size());
+        nftList.forEach(n -> {
+            if (NftDepositEvent.EVENT_NAME.equals(n.getEvent())) {
+                map.put(n.getTokenId(),n);
+            }
+            if (NftWithdrawEvent.EVENT_NAME.equals(n.getEvent())) {
+                map.remove(n.getTokenId());
+            }
+
+        });
+        return map.values().stream().collect(Collectors.toList());
     }
 
 }

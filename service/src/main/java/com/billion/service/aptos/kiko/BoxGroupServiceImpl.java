@@ -1,11 +1,14 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.CoinInfo;
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.Pair;
+import com.billion.model.entity.Token;
 import com.billion.model.enums.*;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
@@ -213,6 +216,33 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         }
 
         return true;
+    }
+
+
+    @Override
+    public List<Token> getMyBox(Context context, String account) {
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, context.getChain());
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        var boxGroups = super.list(boxGroupQueryWrapper);
+
+        List<Token> boxs = new ArrayList<>();
+
+        boxGroups.forEach(b -> {
+            Token token = tokenService.getById(b.getAskToken());
+            com.aptos.request.v1.model.Resource resource = com.aptos.request.v1.model.Resource.builder().
+                    moduleAddress(token.getModuleAddress())
+                    .moduleName(token.getModuleName())
+                    .resourceName(token.getStructName())
+                    .build();
+
+            Response<CoinInfo> coinInfoResponse = AptosService.getAptosClient().requestCoinInfo(account, resource);
+            if (!Objects.isNull(coinInfoResponse.getData())) {
+                boxs.add(token);
+            }
+        });
+        return boxs;
     }
 
     private void changeLanguage(Context context, List<BoxGroup> list) {

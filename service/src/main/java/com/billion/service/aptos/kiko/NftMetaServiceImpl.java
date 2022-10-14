@@ -8,10 +8,7 @@ import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMetaMapper;
 import com.billion.model.dto.Context;
-import com.billion.model.entity.BoxGroup;
-import com.billion.model.entity.NftGroup;
-import com.billion.model.entity.NftMeta;
-import com.billion.model.entity.Token;
+import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.Language;
 import com.billion.model.enums.TransactionStatus;
@@ -56,6 +53,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
     @Resource
     NftClassService nftClassService;
+
+    @Resource
+    NftService nftService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -264,6 +264,23 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         changeLanguage(context, nftMetas);
 
         return nftMetas;
+    }
+
+    @Override
+    public List<NftMeta> getMyNfts(Context context, String account) {
+        List<NftMeta> myNftList = new ArrayList();
+        List<Nft> nftList = nftService.getListByAccount(context, account);
+
+        //TODO:优化查询
+        nftList.forEach(nft -> {
+            String[] tokenItems = nft.getTokenId().split("@");
+            QueryWrapper<NftMeta> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(NftMeta::getTableCreator, tokenItems[0]);
+            queryWrapper.lambda().eq(NftMeta::getTableCollection, tokenItems[1]);
+            queryWrapper.lambda().eq(NftMeta::getTableName, tokenItems[2]);
+            myNftList.addAll(this.list(queryWrapper));
+        });
+        return myNftList;
     }
 
     private void changeLanguage(Context context, List<NftMeta> list) {

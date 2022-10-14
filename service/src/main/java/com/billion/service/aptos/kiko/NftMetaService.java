@@ -41,4 +41,6 @@ public interface NftMetaService extends ICacheService<NftMeta> {
      */
     List<NftMeta> getListByGroup(Context context, String type, String groupId);
 
+
+    List<NftMeta> getMyNfts(Context context, String account);
 }

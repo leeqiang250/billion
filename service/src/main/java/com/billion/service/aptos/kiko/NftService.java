@@ -2,12 +2,15 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
+import com.billion.model.dto.Context;
 import com.billion.model.entity.Nft;
 import com.billion.model.event.NftCreateTokenDataEvent;
 import com.billion.model.event.NftDepositEvent;
 import com.billion.model.event.NftWithdrawEvent;
 import com.billion.model.service.ICacheService;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author liqiang
@@ -80,4 +83,11 @@ public interface NftService extends ICacheService<Nft> {
     @Transactional(rollbackFor = Exception.class)
     Nft addNftDepositEvent(Transaction transaction, Event event, NftDepositEvent nftDepositEvent);
 
+    /**
+     * getTokenIdsByAccount 根据地址查询当前拥有的NFT列表
+     * @param context
+     * @param account
+     * @return
+     */
+    List<Nft> getListByAccount(Context context, String account);
 }
