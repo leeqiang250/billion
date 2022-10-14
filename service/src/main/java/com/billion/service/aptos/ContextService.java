@@ -1,5 +1,6 @@
 package com.billion.service.aptos;
 
+import com.aptos.AptosClient;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Contract;
 import com.billion.service.aptos.kiko.ContractService;
@@ -81,6 +82,9 @@ public class ContextService {
     @Resource
     InitService initService;
 
+    @Resource
+    AptosService aptosService;
+
     @PostConstruct
     public void init() {
         ContextService.env = this.pEnv;
@@ -97,6 +101,7 @@ public class ContextService {
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
         ContextService.aptosHost = this.pAptosHost;
+        aptosService.initialize();
     }
 
 }

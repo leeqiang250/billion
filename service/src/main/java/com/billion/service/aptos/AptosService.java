@@ -6,6 +6,7 @@ import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
 import com.billion.framework.util.Retrying;
+import com.billion.model.exception.BizException;
 import com.billion.service.aptos.kiko.LogChainService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,10 @@ public class AptosService {
     @Resource
     LogChainService logChainService;
 
-    @PostConstruct
-    public void init() {
+    public void initialize() {
+        if (Objects.isNull(ContextService.getAptosHost())) {
+            throw new BizException("aptos host is null");
+        }
         AptosService.aptosClient = new AptosClient(ContextService.getAptosHost(), info -> this.logChainService.add(info), s -> log.info(s));
         log.info("Aptos Node{}", requestNodeCache());
     }
