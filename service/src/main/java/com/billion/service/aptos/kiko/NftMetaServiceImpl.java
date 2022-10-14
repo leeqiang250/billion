@@ -183,9 +183,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             "3",
                             "1",
                             List.of(true, true, true, true, true),
-                            List.of(),
-                            List.of(),
-                            List.of()
+                            List.of("1-A", "1-B", "1-C", "1-D", "1-E", "1-F"),
+                            List.of(Hex.encode("11a"), Hex.encode("12e"), Hex.encode("13d"), Hex.encode("14c"), Hex.encode("15b"), Hex.encode("16a")),
+                            List.of("A-A", "A-B", "A-C", "A-D", "A-E", "A-F")
                             //TODO key不能重复
                             //classMap.get(NftPropertyType.KEYS.getType()),
                             //classMap.get(NftPropertyType.VALUES.getType()),

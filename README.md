@@ -46,12 +46,7 @@ NFT二级市场交易
 
 
 
-
-
-
-token.move
-create_collection_script
-
+开盲盒，客户端通过hash，查询开盲盒的NFT信息
 
 
 
