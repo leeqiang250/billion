@@ -26,9 +26,6 @@ public class AptosService {
     static AptosClient aptosClient;
 
     @Resource
-    ContextService contextService;
-
-    @Resource
     LogChainService logChainService;
 
     @PostConstruct

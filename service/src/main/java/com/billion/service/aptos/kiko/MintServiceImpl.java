@@ -33,15 +33,7 @@ public class MintServiceImpl implements MintService {
     @Resource
     BoxGroupService boxGroupService;
 
-    @PostConstruct
-    void test() {
-        //this.initialize("24");
-        //this.initialize("25");
-        //this.initialize("26");
-        //this.initialize("27");
-        //this.initialize("28");
-    }
-
+    @Override
     public boolean initialize(Serializable boxGroupId) {
         if (!this.tokenService.initialize()) {
             return false;
