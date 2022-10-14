@@ -65,12 +65,6 @@ public class TokenTransfer extends TransactionStatus implements IModel {
     String amount;
 
     /**
-     * 交易哈希
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
-
-    /**
      * 备注
      */
     @TableField("description")

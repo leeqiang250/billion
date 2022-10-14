@@ -98,12 +98,6 @@ public class BoxGroup extends TransactionStatus implements IModel {
     @TableField("is_enabled")
     Boolean isEnabled;
 
-    /**
-     * 交易hash
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
-
     @TableField("x")
     String x;
 

@@ -20,6 +20,12 @@ public class TransactionStatus implements Serializable {
     String transactionStatus;
 
     /**
+     * 交易哈希
+     */
+    @TableField("transaction_hash")
+    String transactionHash;
+
+    /**
      * 交易状态
      */
     @TableField(exist = false)

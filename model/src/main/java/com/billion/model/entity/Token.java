@@ -81,12 +81,6 @@ public class Token extends TransactionStatus implements IModel {
     String uri;
 
     /**
-     * 交易哈希
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
-
-    /**
      * 是否显示
      */
     @TableField("is_show")

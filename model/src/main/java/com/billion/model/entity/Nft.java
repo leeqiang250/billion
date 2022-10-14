@@ -63,12 +63,6 @@ public class Nft extends TransactionStatus implements IModel {
     String ts;
 
     /**
-     * 交易hash
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
-
-    /**
      * 是否归档
      */
     @TableField("is_enabled")

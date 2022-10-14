@@ -68,11 +68,10 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
                 .ts(transaction.getTimestampMillisecond())
-                .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
         nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
+        nft.setTransactionHash(transaction.getHash());
 
         super.save(nft);
 
@@ -89,11 +88,10 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
                 .ts(transaction.getTimestampMillisecond())
-                .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
         nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
+        nft.setTransactionHash(transaction.getHash());
 
         super.save(nft);
 
@@ -110,11 +108,10 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .owner(event.getGuid().getAccountAddress())
                 .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
                 .ts(transaction.getTimestampMillisecond())
-                .transactionHash(transaction.getHash())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
         nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
+        nft.setTransactionHash(transaction.getHash());
 
         super.save(nft);
 
@@ -135,7 +132,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         Map<String, Nft> map = new HashMap<>(nftList.size());
         nftList.forEach(n -> {
             if (NftDepositEvent.EVENT_NAME.equals(n.getEvent())) {
-                map.put(n.getTokenId(),n);
+                map.put(n.getTokenId(), n);
             }
             if (NftWithdrawEvent.EVENT_NAME.equals(n.getEvent())) {
                 map.remove(n.getTokenId());

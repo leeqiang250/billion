@@ -57,12 +57,6 @@ public class NftMeta extends TransactionStatus implements IModel {
     Long rank;
 
     /**
-     * 交易哈希
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
-
-    /**
      * 销毁状态(0:未销毁;1:已销毁)
      */
     @TableField("is_born")

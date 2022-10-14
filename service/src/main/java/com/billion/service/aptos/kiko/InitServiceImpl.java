@@ -124,9 +124,9 @@ public class InitServiceImpl implements InitService {
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
-                    .transactionHash(EMPTY)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            boxGroup.setTransactionHash(EMPTY);
 
             this.boxGroupService.save(boxGroup);
 
@@ -156,9 +156,9 @@ public class InitServiceImpl implements InitService {
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
-                    .transactionHash(EMPTY)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            boxGroup.setTransactionHash(EMPTY);
 
             this.boxGroupService.save(boxGroup);
 
@@ -188,10 +188,9 @@ public class InitServiceImpl implements InitService {
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
-                    .transactionHash(EMPTY)
                     .build();
-
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            boxGroup.setTransactionHash(EMPTY);
 
             this.boxGroupService.save(boxGroup);
 
@@ -221,9 +220,9 @@ public class InitServiceImpl implements InitService {
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
-                    .transactionHash(EMPTY)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            boxGroup.setTransactionHash(EMPTY);
 
             this.boxGroupService.save(boxGroup);
 
@@ -253,10 +252,9 @@ public class InitServiceImpl implements InitService {
                     .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
-                    .transactionHash(EMPTY)
                     .build();
-
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            boxGroup.setTransactionHash(EMPTY);
 
             this.boxGroupService.save(boxGroup);
 
@@ -327,11 +325,11 @@ public class InitServiceImpl implements InitService {
                     .currentSupply(EMPTY)
                     .totalSupply(String.valueOf(Long.MAX_VALUE))
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/76360568-5c54-4342-427d-68992ded7b00/public")
-                    .transactionHash(EMPTY)
                     .isEnabled(Boolean.TRUE)
                     .sort(0L)
                     .build();
             nftGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            nftGroup.setTransactionHash(EMPTY);
 
             this.nftGroupService.save(nftGroup);
 
@@ -361,7 +359,6 @@ public class InitServiceImpl implements InitService {
                         .description(UUID.randomUUID().toString())
                         .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/4031cc60-3e88-4f78-b412-5006ecf5c100/public")
                         .rank(0L)
-                        .transactionHash(EMPTY)
                         .isBorn(Boolean.FALSE)
                         .tokenId(EMPTY)
                         .score(EMPTY)
@@ -372,6 +369,7 @@ public class InitServiceImpl implements InitService {
                         .tableName(EMPTY)
                         .build();
                 nftMeta.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+                nftMeta.setTransactionHash(EMPTY);
 
                 nftMetaService.save(nftMeta);
 
@@ -436,10 +434,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(8)
                     .displayDecimals(2)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_3_SUCCESS);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
@@ -455,10 +453,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(0)
                     .displayDecimals(0)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
@@ -474,10 +472,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(0)
                     .displayDecimals(0)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
@@ -493,10 +491,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(0)
                     .displayDecimals(0)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
@@ -512,10 +510,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(0)
                     .displayDecimals(0)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
@@ -531,10 +529,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(0)
                     .displayDecimals(0)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
@@ -550,10 +548,10 @@ public class InitServiceImpl implements InitService {
                     .decimals(8)
                     .displayDecimals(2)
                     .uri(EMPTY)
-                    .transactionHash(EMPTY)
                     .isShow(Boolean.TRUE)
                     .build();
             token.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            token.setTransactionHash(EMPTY);
 
             this.tokenService.save(token);
         }
