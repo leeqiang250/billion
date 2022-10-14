@@ -105,7 +105,9 @@ public class ScanDispatchService implements Serializable {
         var transactions = response.getData();
         for (int i = 0; i < transactions.size(); i++) {
             var transaction = transactions.get(i);
-            if (!Objects.isNull(transaction.getEvents())) {
+
+            if (Transaction.USER_TRANSACTION.equals(transaction.getType())
+                    && !Objects.isNull(transaction.getEvents())) {
                 valid = false;
 
                 var events = transaction.getEvents();
