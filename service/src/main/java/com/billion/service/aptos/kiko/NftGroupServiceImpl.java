@@ -238,7 +238,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
             return false;
         }
 
-        nftGroup.setUri(image.getUri());
+        nftGroup.setUri(image.getProxy());
 
         nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         nftGroup.setTransactionHash(response.getData().getHash());

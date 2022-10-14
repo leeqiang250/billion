@@ -41,7 +41,7 @@ public class Image implements IModel {
     /**
      * 描述
      */
-    @TableField("desc")
+    @TableField("desc_")
     String desc;
 
 }

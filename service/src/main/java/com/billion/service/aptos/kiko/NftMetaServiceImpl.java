@@ -185,8 +185,11 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             "3",
                             "1",
                             List.of(true, true, true, true, true),
-                            List.of("1-A", "1-B", "1-C", "1-D", "1-E", "1-F"),
-                            List.of(Hex.encode("11a"), Hex.encode("12e"), Hex.encode("13d"), Hex.encode("14c"), Hex.encode("15b"), Hex.encode("16a")),
+                            //key
+                            List.of("3-A", "2-B", "2-C", "2-D", "1-E", "1-F"),
+                            //value
+                            List.of(Hex.encode("1011a"), Hex.encode("912e"), Hex.encode("913d"), Hex.encode("914c"), Hex.encode("15b"), Hex.encode("16a")),
+                            //type
                             List.of("A-A", "A-B", "A-C", "A-D", "A-E", "A-F")
                             //TODO key不能重复
                             //classMap.get(NftPropertyType.KEYS.getType()),
@@ -215,7 +218,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                 return false;
             }
 
-            nftMeta.setUri(image.getUri());
+            nftMeta.setUri(image.getProxy());
 
             nftMeta.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
             nftMeta.setTransactionHash(response.getData().getHash());

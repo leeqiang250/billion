@@ -8,7 +8,7 @@
         as id
         ,uri as uri
         ,proxy as proxy
-        ,desc as desc
+        ,desc_ as desc_
     </sql>
 
 </mapper>
