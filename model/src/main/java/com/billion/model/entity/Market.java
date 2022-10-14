@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("market")
-public class Market extends TradeStatus implements IModel {
+public class Market extends TransactionStatus implements IModel {
 
     /**
      * id

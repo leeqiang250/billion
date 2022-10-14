@@ -20,7 +20,8 @@
         ,token_id as token_id
         ,ts as ts
         ,dead_ts as dead_ts
-        ,trade_status as trade_status
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
         ,is_enabled as is_enabled
     </sql>
 

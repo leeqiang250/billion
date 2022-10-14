@@ -91,8 +91,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(boxMakerEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -120,8 +120,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(boxTakerEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -149,8 +149,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(boxBidEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -178,8 +178,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(boxCancelEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -227,8 +227,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(nftMakerEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -256,8 +256,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(nftTakerEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_1_COMPLETE);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -285,8 +285,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(nftBidEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_0_BIDDING);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -315,8 +315,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .deadTs(nftCancelEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
                 .build();
-
-        market.setTradeStatus_(TradeStatus.STATUS_2_CANCEL);
+        market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
+        market.setTransactionHash(transaction.getHash());
 
         super.save(market);
 
@@ -335,23 +335,22 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
 
-
     public List<Market> getMarketList(Context context, String id, String type) {
         String tokenId = "";
         if ("box".equals(type)) {
             BoxGroup boxGroup = boxGroupService.getById(id);
             Token token = tokenService.getById(boxGroup.getAskToken());
-            tokenId = token.getModuleAddress() + "::" + token.getModuleName() + "::" +  token.getStructName();
-        }else if ("nft".equals(type)) {
+            tokenId = token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName();
+        } else if ("nft".equals(type)) {
             NftMeta nftMeta = nftMetaService.cacheById(context, id);
             QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
             languageQueryWrapper.lambda().eq(Language::getKey, nftMeta.getDisplayName());
             var displayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
             //通过链上查询tokenId
-            Response<TableTokenData> tableTokenDataResponse =  AptosService.getAptosClient().requestTableTokenData(nftMeta.getTableHandle(), nftMeta.getTableCreator(),
+            Response<TableTokenData> tableTokenDataResponse = AptosService.getAptosClient().requestTableTokenData(nftMeta.getTableHandle(), nftMeta.getTableCreator(),
                     nftMeta.getTableCollection(), displayName);
-            tokenId = (String)List.of(nftMeta.getTableCreator(), nftMeta.getTableCollection(), displayName,
+            tokenId = (String) List.of(nftMeta.getTableCreator(), nftMeta.getTableCollection(), displayName,
                     tableTokenDataResponse.getData().getLargestPropertyVersion()).stream().collect(Collectors.joining("@"));
 
         }
@@ -359,13 +358,12 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
     }
 
-
     public List<Market> getMarketListById(Context context, String tokenId, String type) {
         QueryWrapper<Market> marketQueryWrapper = new QueryWrapper<>();
         marketQueryWrapper.lambda().eq(Market::getChain, context.getChain());
         if ("box".equals(type)) {
             marketQueryWrapper.lambda().eq(Market::getAskToken, tokenId);
-        }else if ("nft".equals(type)) {
+        } else if ("nft".equals(type)) {
             marketQueryWrapper.lambda().eq(Market::getTokenId, tokenId);
         }
         return this.list(marketQueryWrapper);
