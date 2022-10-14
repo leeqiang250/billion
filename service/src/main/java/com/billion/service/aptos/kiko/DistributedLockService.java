@@ -25,15 +25,15 @@ public class DistributedLockService {
 
     public void tryGetDistributedLock(String lockKey, String requestId, long expireTime, Consumer consumer) {
         try {
-            //if (this.tryGetDistributedLock(lockKey, requestId, expireTime)) {
+            if (this.tryGetDistributedLock(lockKey, requestId, expireTime)) {
                 log.info("Get Distributed Lock {} {}", lockKey, requestId);
                 consumer.accept(null);
-            //}
+            }
         } catch (Exception e) {
             log.error("{}", e);
             throw new BizException(e.getMessage());
         } finally {
-            //this.releaseDistributedLock(lockKey, requestId);
+            this.releaseDistributedLock(lockKey, requestId);
         }
     }
 
