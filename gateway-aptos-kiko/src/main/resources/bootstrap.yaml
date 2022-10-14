@@ -8,4 +8,4 @@ spring:
     config:
       label: main
       profile: ${spring.profiles.active}
-      uri: http://13.251.180.31:8888
+      uri: http://52.77.131.111:8888
