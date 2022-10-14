@@ -75,10 +75,10 @@ public class NftMeta extends TransactionStatus implements IModel {
     Boolean isBorn;
 
     /**
-     * nft_id
+     * token_id
      */
-    @TableField("nft_id")
-    String nftId;
+    @TableField("token_id")
+    String tokenId;
 
     /**
      * 分数

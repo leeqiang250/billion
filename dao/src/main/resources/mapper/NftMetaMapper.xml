@@ -15,7 +15,7 @@
         ,transaction_status as transaction_status
         ,transaction_hash as transaction_hash
         ,is_born as is_born
-        ,nft_id as nft_id
+        ,token_id as token_id
         ,score as score
         ,attribute_type as attribute_type
         ,table_handle as table_handle

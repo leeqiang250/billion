@@ -1,5 +1,9 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.request.v1.model.TokenDataId;
+import com.aptos.request.v1.model.TokenId;
+import com.aptos.utils.Hex;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.TokenSceneMapper;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
@@ -360,7 +364,7 @@ public class InitServiceImpl implements InitService {
                         .rank(0L)
                         .transactionHash(EMPTY)
                         .isBorn(Boolean.FALSE)
-                        .nftId(EMPTY)
+                        .tokenId(EMPTY)
                         .score(EMPTY)
                         .attributeType(0)
                         .tableHandle(EMPTY)
@@ -369,6 +373,7 @@ public class InitServiceImpl implements InitService {
                         .tableName(EMPTY)
                         .build();
                 nftMeta.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+
                 nftMetaService.save(nftMeta);
 
                 languageService.save(Language.builder()
@@ -382,6 +387,29 @@ public class InitServiceImpl implements InitService {
                         .key(nftMeta.getDescription())
                         .value(nftGroup.getDescription().substring(0, 2) + "-描述" + nftMeta.getId())
                         .build());
+
+
+                QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
+                languageQueryWrapper.lambda().eq(Language::getKey, nftMeta.getDisplayName());
+                languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+                var languageNftMeta = languageService.getOneThrowEx(languageQueryWrapper);
+
+                languageQueryWrapper = new QueryWrapper<>();
+                languageQueryWrapper.lambda().eq(Language::getKey, nftGroup.getDisplayName());
+                languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+                var languageNftGroup = languageService.getOneThrowEx(languageQueryWrapper);
+
+                var tokenId = TokenId.builder()
+                        .tokenDataId(TokenDataId.builder()
+                                .creator(nftGroup.getOwner())
+                                .collection(Hex.encode(languageNftGroup.getValue()))
+                                .name(Hex.encode(languageNftMeta.getValue()))
+                                .build())
+                        .propertyVersion("0")
+                        .build();
+                nftMeta.setTokenId(tokenId.getNftTokenIdKey());
+
+                nftMetaService.updateById(nftMeta);
             }
         });
     }
