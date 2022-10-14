@@ -42,5 +42,18 @@ public interface NftMetaService extends ICacheService<NftMeta> {
     List<NftMeta> getListByGroup(Context context, String type, String groupId);
 
 
+    /**
+     * getMyNfts 我的NFT
+     * @param context
+     * @param account
+     * @return
+     */
     List<NftMeta> getMyNfts(Context context, String account);
+
+    /**
+     * getListByTokenIds
+     * @param tokenIds
+     * @return
+     */
+    List<NftMeta> getListByTokenIds(List<String> tokenIds);
 }

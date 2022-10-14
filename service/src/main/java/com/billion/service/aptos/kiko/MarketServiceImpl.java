@@ -14,6 +14,7 @@ import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -322,6 +323,15 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //TODO 如有需要，交易记录
 
         return market;
+    }
+
+    @Override
+    public List<Market> getMarketList(Context context) {
+        QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, context.getChain());
+        //TODO:没写完
+//        queryWrapper.lambda().in()
+        return this.list(queryWrapper);
     }
 
 
