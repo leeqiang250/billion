@@ -7,10 +7,8 @@ import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -21,7 +19,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Service
 public class InitServiceImpl implements InitService {
 
-    final String kiko = "0xb1ddfbcb10bfd108577a49d84f59b1eea2bdec252b4b58616345c8a7e12e7392";
+    final String kiko = "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11";
 
     @Resource
     BoxGroupService boxGroupService;
@@ -77,10 +75,10 @@ public class InitServiceImpl implements InitService {
     @Resource
     TokenTransferService tokenTransferService;
 
-    //@PostConstruct
-    void init() {
+    @Override
+    public boolean initialize() {
         if (!ContextService.getEnv().equalsIgnoreCase("dev")) {
-            return;
+            return false;
         }
 
         this.boxGroup();
@@ -101,6 +99,8 @@ public class InitServiceImpl implements InitService {
         this.token();
         this.tokenScene();
         this.tokenTransfer();
+
+        return true;
     }
 
     void boxGroup() {

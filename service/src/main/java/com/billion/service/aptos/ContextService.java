@@ -3,6 +3,7 @@ package com.billion.service.aptos;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Contract;
 import com.billion.service.aptos.kiko.ContractService;
+import com.billion.service.aptos.kiko.InitService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -81,9 +82,15 @@ public class ContextService {
     @Getter
     static String aptosHost;
 
+    @Resource
+    InitService initService;
+
     @PostConstruct
     public void init() {
         ContextService.env = this.pEnv;
+
+        //initService.initialize();
+
         ContextService.applicationName = this.pApplicationName;
         ContextService.cacheTsTypeDurationMap.put(CacheTsType.SHORT, Duration.ofSeconds(pCacheShort));
         ContextService.cacheTsTypeDurationMap.put(CacheTsType.MIDDLE, Duration.ofSeconds(pCacheMiddle));
@@ -93,17 +100,7 @@ public class ContextService {
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-//        ContextService.tokenOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-//        ContextService.nftOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-//        ContextService.marketer = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
-//
-//        ContextService.address = ContextService.commoner + "," +
-//                ContextService.tokenOwner + "," +
-//                ContextService.nftOwner + "," +
-//                ContextService.marketer;
-
         ContextService.aptosHost = this.pAptosHost;
-
-
     }
+
 }
