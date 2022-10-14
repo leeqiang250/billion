@@ -253,11 +253,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     @Override
     public List<NftMeta> getListByGroup(Context context, String type, String groupId) {
         QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
-        if ("group".equals(type)) {
-            wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);
-        } else if ("boxGroup".equals(type)) {
-            wrapper.lambda().eq(NftMeta::getBoxGroupId, groupId);
-        }
+        wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);
         //TODO:是否需要状态区别
 //        wrapper.lambda().eq(nftMeta::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var nftMetas = super.list(wrapper);

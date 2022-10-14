@@ -27,12 +27,6 @@ public class NftMeta extends TransactionStatus implements IModel {
     Long id;
 
     /**
-     * box_group_id
-     */
-    @TableField("box_group_id")
-    Long boxGroupId;
-
-    /**
      * nft_group_id
      */
     @TableField("nft_group_id")
