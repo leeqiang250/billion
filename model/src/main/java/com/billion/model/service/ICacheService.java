@@ -113,7 +113,7 @@ public interface ICacheService<T extends IModel> extends IService<T> {
                 this.getRedisTemplate().opsForValue().set(key, t, timeout);
             }
         } else {
-            this.fromObject(value);
+            value = this.fromObject(value);
         }
 
         return (T) value;
