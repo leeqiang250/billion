@@ -47,4 +47,9 @@ public class NftMetaController implements IController<NftMeta> {
         return Response.success(nftMetaService.getListByGroup(context, type, groupId));
     }
 
+    @GetMapping("myNfts")
+    public Response getMyNfts(@RequestHeader Context context, @PathVariable String account) {
+        return Response.success("1");
+    }
+
 }
