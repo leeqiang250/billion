@@ -18,7 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class NftCreateTokenDataEvent implements Serializable {
 
-    public static String EVENT_NAME = "0x3::token::CreateTokenDataEvent";
+    public static final String EVENT_NAME = "0x3::token::CreateTokenDataEvent";
 
     TokenDataId id;
 

@@ -51,6 +51,14 @@ public interface NftService extends ICacheService<Nft> {
     boolean isNftDepositEvent(Event event);
 
     /**
+     * isOpenBoxEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    boolean isOpenBoxEvent(Event event);
+
+    /**
      * addNftCreateTokenDataEvent
      *
      * @param transaction             transaction
@@ -85,6 +93,7 @@ public interface NftService extends ICacheService<Nft> {
 
     /**
      * getTokenIdsByAccount 根据地址查询当前拥有的NFT列表
+     *
      * @param context
      * @param account
      * @return

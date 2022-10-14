@@ -17,7 +17,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class NftWithdrawEvent implements Serializable {
 
-    public static String EVENT_NAME = "0x3::token::WithdrawEvent";
+    public static final String EVENT_NAME = "0x3::token::WithdrawEvent";
 
     String amount;
 

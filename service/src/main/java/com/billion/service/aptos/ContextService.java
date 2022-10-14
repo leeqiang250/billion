@@ -3,6 +3,7 @@ package com.billion.service.aptos;
 import com.aptos.AptosClient;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Contract;
+import com.billion.model.event.OpenBoxEvent;
 import com.billion.service.aptos.kiko.ContractService;
 import com.billion.service.aptos.kiko.InitService;
 import lombok.Getter;
@@ -101,6 +102,7 @@ public class ContextService {
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
         ContextService.aptosHost = this.pAptosHost;
+        OpenBoxEvent.EVENT_NAME = ContextService.kikoOwner + OpenBoxEvent.EVENT_NAME;
         aptosService.initialize();
     }
 

@@ -1,5 +1,6 @@
 package com.billion.model.event;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.aptos.request.v1.model.TokenId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +16,15 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NftDepositEvent implements Serializable {
+public class OpenBoxEvent implements Serializable {
 
-    public static final String EVENT_NAME = "0x3::token::DepositEvent";
+    public static String EVENT_NAME = "::open_box::OpenBoxEvent";
 
-    String amount;
+    @JSONField(name = "token_id")
+    TokenId tokenId;
 
-    TokenId id;
+    String owner;
+
+    String ts;
 
 }

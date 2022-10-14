@@ -90,7 +90,9 @@ public class ScanDispatchService implements Serializable {
         version++;
 
         var response = AptosService.getAptosClient().requestTransaction(String.valueOf(version));
-        if (response.isValid() || response.getData().isEmpty()) {
+        if (response.isValid()
+                || Objects.isNull(response.getData())
+                || response.getData().isEmpty()) {
             this.next = false;
             return;
         }
@@ -111,6 +113,7 @@ public class ScanDispatchService implements Serializable {
                     var event = events.get(j);
 
                     if (nftService.isNftCreateTokenDataEvent(event)
+                            || nftService.isOpenBoxEvent(event)
                             || nftService.isNftDepositEvent(event)
                             || nftService.isNftDepositEvent(event)
                     ) {
@@ -177,6 +180,10 @@ public class ScanDispatchService implements Serializable {
                 if (ContextService.getKikoOwner().equals(nftDepositEvent.getId().getTokenDataId().getCreator())) {
                     nftService.addNftDepositEvent(transaction, event, nftDepositEvent);
                 }
+            } else if (nftService.isOpenBoxEvent(event)) {
+                OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
+                log.info(event.getType());
+                log.info(openBoxEvent.toString());
             }
             if (ContextService.getKikoOwner().contains(event.getType().split("::")[0])) {
                 if (marketService.isBoxMakerEvent(event)) {

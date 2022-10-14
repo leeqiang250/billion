@@ -11,6 +11,7 @@ import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.NftCreateTokenDataEvent;
 import com.billion.model.event.NftDepositEvent;
 import com.billion.model.event.NftWithdrawEvent;
+import com.billion.model.event.OpenBoxEvent;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,11 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
     @Override
     public boolean isNftDepositEvent(Event event) {
         return NftDepositEvent.EVENT_NAME.equals(event.getType());
+    }
+
+    @Override
+    public boolean isOpenBoxEvent(Event event) {
+        return OpenBoxEvent.EVENT_NAME.equals(event.getType());
     }
 
     @Override
