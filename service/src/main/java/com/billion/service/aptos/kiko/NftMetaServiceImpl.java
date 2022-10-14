@@ -268,19 +268,13 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
     @Override
     public List<NftMeta> getMyNfts(Context context, String account) {
-        List<NftMeta> myNftList = new ArrayList();
         List<Nft> nftList = nftService.getListByAccount(context, account);
+        List<String> tokenIdList = nftList.stream().map(Nft::getTokenId).collect(Collectors.toList());
 
-        //TODO:优化查询
-        nftList.forEach(nft -> {
-            String[] tokenItems = nft.getTokenId().split("@");
-            QueryWrapper<NftMeta> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().eq(NftMeta::getTableCreator, tokenItems[0]);
-            queryWrapper.lambda().eq(NftMeta::getTableCollection, tokenItems[1]);
-            queryWrapper.lambda().eq(NftMeta::getTableName, tokenItems[2]);
-            myNftList.addAll(this.list(queryWrapper));
-        });
-        return myNftList;
+        QueryWrapper<NftMeta> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(NftMeta::getNftId, tokenIdList);
+
+        return this.list(queryWrapper);
     }
 
     private void changeLanguage(Context context, List<NftMeta> list) {
