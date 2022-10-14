@@ -40,6 +40,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     LanguageService languageService;
 
     @Resource
+    ImageService imageService;
+
+    @Resource
     HandleService handleService;
 
     @Resource
@@ -144,14 +147,11 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDescription());
             var description = languageService.getOneThrowEx(languageQueryWrapper).getValue();
-            var uri = nftMeta.getUri();
 
             if (StringUtils.isEmpty(displayName)
                     || StringUtils.isEmpty(description)
-                    || StringUtils.isEmpty(uri)
                     || DEFAULT_TEXT.equals(displayName)
                     || DEFAULT_TEXT.equals(description)
-                    || DEFAULT_TEXT.equals(uri)
             ) {
                 nftMeta.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
                 nftMeta.setTransactionHash(EMPTY);
@@ -168,6 +168,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                 throw new BizException("display name too long, max 26");
             }
 
+            var image = imageService.add(nftMeta.getUri(), nftMeta.getClass().getSimpleName() + ":" + nftMeta.getId());
+
             Map<String, List<String>> classMap = nftClassService.getClassForMint(nftMeta.getId().toString());
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
@@ -178,7 +180,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             Hex.encode(description),
                             "1",
                             "1",
-                            Hex.encode(nftMeta.getUri()),
+                            Hex.encode(image.getProxy()),
                             nftGroup.getOwner(),
                             "3",
                             "1",
@@ -212,6 +214,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
                 return false;
             }
+
+            nftMeta.setUri(image.getUri());
 
             nftMeta.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
             nftMeta.setTransactionHash(response.getData().getHash());

@@ -34,6 +34,9 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, NftGroup> implements NftGroupService {
 
     @Resource
+    ImageService imageService;
+
+    @Resource
     LanguageService languageService;
 
     @Resource
@@ -180,16 +183,12 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
         languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftGroup.getDescription());
         var description = languageService.getOneThrowEx(languageQueryWrapper).getValue();
 
-        var uri = nftGroup.getUri();
-
         if (StringUtils.isEmpty(displayName)
                 || StringUtils.isEmpty(description)
-                || StringUtils.isEmpty(uri)
                 || StringUtils.isEmpty(nftGroup.getTotalSupply())
                 || StringUtils.isEmpty(nftGroup.getOwner())
                 || DEFAULT_TEXT.equals(displayName)
                 || DEFAULT_TEXT.equals(description)
-                || DEFAULT_TEXT.equals(uri)
         ) {
             nftGroup.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftGroup.setTransactionHash(EMPTY);
@@ -206,13 +205,15 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
             throw new BizException("display name too long, max 25");
         }
 
+        var image = this.imageService.add(nftGroup.getUri(), nftGroup.getClass().getSimpleName() + ":" + nftGroup.getId());
+
         TransactionPayload transactionPayload = TransactionPayload.builder()
                 .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                 .function("0x3::token::create_collection_script")
                 .arguments(List.of(
                         Hex.encode(displayName),
                         Hex.encode(description),
-                        Hex.encode(uri),
+                        Hex.encode(image.getProxy()),
                         nftGroup.getTotalSupply(),//TODO
                         List.of(true, true, true)//TODO
                 ))
@@ -236,6 +237,8 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
 
             return false;
         }
+
+        nftGroup.setUri(image.getUri());
 
         nftGroup.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         nftGroup.setTransactionHash(response.getData().getHash());
