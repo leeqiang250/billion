@@ -245,6 +245,11 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         return boxs;
     }
 
+    @Override
+    public List<Token> getListByTokenIds(Context context) {
+        return null;
+    }
+
     private void changeLanguage(Context context, List<BoxGroup> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());

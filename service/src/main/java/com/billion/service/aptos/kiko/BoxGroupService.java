@@ -37,4 +37,5 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      */
     List<Token> getMyBox(Context context, String account);
 
+    List<Token> getListByTokenIds(Context context);
 }
