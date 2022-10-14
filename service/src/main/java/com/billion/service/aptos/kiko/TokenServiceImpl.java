@@ -10,6 +10,7 @@ import com.billion.dao.aptos.kiko.TokenSceneMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Token;
 import com.billion.model.entity.TokenScene;
+import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,26 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
     @javax.annotation.Resource
     TokenSceneMapper tokenSceneMapper;
+
+    @Override
+    public Map cacheMap(Context context) {
+        String key = this.cacheMapKey("ids::" + context.getChain());
+
+        Map map = this.getRedisTemplate().opsForHash().entries(key);
+        if (!map.isEmpty()) {
+            return map;
+        }
+
+        QueryWrapper<Token> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(Token::getChain, context.getChain());
+        List<Token> list = super.list(wrapper);
+
+        map = list.stream().collect(Collectors.toMap(e -> e.getId().toString(), (e) -> e));
+        this.getRedisTemplate().opsForHash().putAll(key, map);
+        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
+
+        return map;
+    }
 
     public boolean checkToken(Token token) {
         //TODO 正则校验

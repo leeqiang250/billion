@@ -5,6 +5,7 @@ import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupMapper;
+import com.billion.model.dto.BoxGroupDto;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.Pair;
@@ -47,6 +48,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         }
 
         QueryWrapper<BoxGroup> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(BoxGroup::getChain, context.getChain());
         wrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
         List<BoxGroup> list = super.list(wrapper);
 
@@ -246,8 +248,47 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     }
 
     @Override
-    public List<Token> getListByTokenIds(Context context) {
+    public List<Token> getListByTokenIds(Context context, List<String> tokenIdList) {
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, context.getChain());
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
+        boxGroupQueryWrapper.lambda().in(BoxGroup::getAskToken, tokenIdList);
+        //TODO：补充完整
         return null;
+    }
+
+    @Override
+    public List<BoxGroupDto> getSaleList(Context context) {
+        var boxGroups = this.cacheList(context);
+
+        Map tokenMap = tokenService.cacheMap(context);
+
+        List<BoxGroupDto> resultList = new ArrayList();
+        boxGroups.forEach(boxGroup -> {
+            if (!boxGroup.getTransactionStatus().equals(TransactionStatus.STATUS_3_SUCCESS.getCode())) {
+                return;
+            }
+            Token askToken = (Token) tokenMap.get(boxGroup.getAskToken());
+            Token bitToken = (Token) tokenMap.get(boxGroup.getBidToken());
+            BoxGroupDto boxGroupDto = BoxGroupDto.builder()
+                    .id(boxGroup.getId())
+                    .chain(boxGroup.getChain())
+                    .displayName(boxGroup.getDisplayName())
+                    .nftGroup(boxGroup.getNftGroup())
+                    .askToken(askToken)
+                    .amount(boxGroup.getAmount())
+                    .bidToken(bitToken)
+                    .price(boxGroup.getPrice())
+                    .description(boxGroup.getDescription())
+                    .rule(boxGroup.getRule())
+                    .ts(boxGroup.getTs())
+                    .sort(boxGroup.getSort())
+                    .build();
+            resultList.add(boxGroupDto);
+
+        });
+        //TODO:根据前端设计是否需要其他过滤条件
+        return resultList;
     }
 
     private void changeLanguage(Context context, List<BoxGroup> list) {

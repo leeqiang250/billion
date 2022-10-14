@@ -1,110 +1,81 @@
-package com.billion.model.entity;
+package com.billion.model.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.billion.model.model.IModel;
+import com.billion.model.entity.Token;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
- * @author liqiang
+ * @author jason
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("box_group")
-public class BoxGroup extends TransactionStatus implements IModel {
-
+public class BoxGroupDto implements Serializable {
     /**
      * 主键Id
      */
-    @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
     /**
      * 链类型
      */
-    @TableField("chain")
     String chain;
 
     /**
      * 显示名称
      */
-    @TableField("display_name")
     String displayName;
 
     /**
      * nft_group
      */
-    @TableField("nft_group")
     Long nftGroup;
 
     /**
      * 询价币种
      */
-    @TableField("ask_token")
-    Long askToken;
+    Token askToken;
 
     /**
      * 询价数量
      */
-    @TableField("amount")
     String amount;
 
     /**
      * 计价币种
      */
-    @TableField("bid_token")
-    Long bidToken;
+    Token bidToken;
 
     /**
      * 计价价格
      */
-    @TableField("price")
     String price;
 
     /**
      * 描述
      */
-    @TableField("description")
     String description;
 
     /**
      * 规则
      */
-    @TableField("rule")
     String rule;
 
     /**
      * 起售时间
      */
-    @TableField("ts")
     String ts;
 
     /**
      * 排序
      */
-    @TableField("sort")
     Integer sort;
-
-    /**
-     * 是否激活(0:不可用,1:可用)
-     */
-    @TableField("is_enabled")
-    Boolean isEnabled;
-
-    /**
-     * 交易hash
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
-
-    @TableField("x")
-    String x;
-
 }
