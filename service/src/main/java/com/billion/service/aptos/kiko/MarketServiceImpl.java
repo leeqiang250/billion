@@ -4,9 +4,12 @@ import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TableTokenData;
 import com.aptos.request.v1.model.Transaction;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billion.dao.aptos.kiko.MarketMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.MarketDto;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
 import com.billion.model.event.*;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -324,12 +328,58 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public List<Market> getMarketList(Context context) {
+    public MarketDto getMarketList(Context context, Integer pageStart, Integer pageLimt) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-        //TODO:没写完
-//        queryWrapper.lambda().in()
-        return this.list(queryWrapper);
+        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(),com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+        queryWrapper.lambda().orderByAsc(Market::getId);
+        Page<Market> page = Page.of(pageLimt, pageLimt);
+        var pageResult = this.page(page, queryWrapper);
+
+        var marketList = pageResult.getRecords();
+        List<String> nftTokenIdList = marketList.stream().filter(market -> StringUtils.isNotEmpty(market.getTokenId())).map(market -> market.getTokenId()).collect(Collectors.toList());
+        List<String> coinIdList = marketList.stream().filter(market -> StringUtils.isEmpty(market.getTokenId())).map(market -> market.getAskToken()).collect(Collectors.toList());
+
+        var nftTokenList = nftMetaService.getListByTokenIds(nftTokenIdList);
+        var coinList = tokenService.getByCoinIdList(context, coinIdList);
+
+        var nftMap = nftTokenList.stream().collect(Collectors.toMap(e ->e.getTokenId(), (e) -> e));
+        var coinMap = coinList.stream().collect(Collectors.toMap(e -> e.getModuleAddress() + "::"
+                + e.getModuleName() + "::" + e.getStructName(), (e) -> e));
+
+        List<MarketDto.MarketInfo> resultList = new ArrayList<>();
+        marketList.forEach(e -> {
+            MarketDto.MarketInfo marketDto = MarketDto.MarketInfo.builder()
+                    .id(e.getId())
+                    .chain(e.getChain())
+                    .orderId(e.getOrderId())
+                    .type(e.getType())
+                    .price(e.getPrice())
+                    .maker(e.getMaker())
+                    .askAmount(e.getAskAmount())
+                    .bidder(e.getBidder())
+                    .bidToken(e.getBidToken())
+                    .bidAmount(e.getBidAmount())
+                    .ts(e.getTs())
+                    .deadTs(e.getDeadTs()).build();
+
+            if (StringUtils.isEmpty(e.getTokenId())) {
+                marketDto.setAskToken(coinMap.get(e.getAskToken()));
+                marketDto.setOrderType(0);
+            }else {
+                marketDto.setAskToken(nftMap.get(e.getTokenId()));
+                marketDto.setOrderType(1);
+            }
+            resultList.add(marketDto);
+        });
+        MarketDto marketDto = MarketDto.builder()
+                .pages(pageResult.getPages())
+                .total(pageResult.getTotal())
+                .currentPage(pageResult.getCurrent())
+                .marketList(resultList)
+                .build();
+        return marketDto;
     }
 
 

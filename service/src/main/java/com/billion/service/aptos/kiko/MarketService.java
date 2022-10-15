@@ -3,6 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.MarketDto;
 import com.billion.model.entity.Market;
 import com.billion.model.event.*;
 import com.billion.model.service.ICacheService;
@@ -178,6 +179,10 @@ public interface MarketService extends ICacheService<Market> {
     @Transactional(rollbackFor = Exception.class)
     Market addNftCancelEvent(Transaction transaction, Event event, NftCancelEvent nftCancelEvent);
 
-
-    List<Market> getMarketList(Context context);
+    /**
+     * getMarketList
+     * @param context
+     * @return
+     */
+    MarketDto getMarketList(Context context, Integer pageStart, Integer pageLimit);
 }

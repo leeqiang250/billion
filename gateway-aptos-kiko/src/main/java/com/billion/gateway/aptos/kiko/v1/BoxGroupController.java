@@ -21,4 +21,9 @@ public class BoxGroupController {
         return Response.success(boxGroupService.getMyBox(context, account));
     }
 
+    @GetMapping("getSaleList")
+    public Response getSaleList(@RequestHeader Context context) {
+        return Response.success(boxGroupService.getSaleList(context));
+    }
+
 }

@@ -20,6 +20,7 @@ import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -181,6 +182,23 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         //TODO 缓存
 
         return super.list(tokenQueryWrapper);
+    }
+
+    @Override
+    public List<Token> getByCoinIdList(Context context, List<String> coinIdList) {
+        if (Objects.isNull(coinIdList) || coinIdList.size() == 0){
+            return new ArrayList<>();
+        }
+        List<Token> resultList = new ArrayList<>();
+        coinIdList.forEach(id -> {
+            QueryWrapper<Token> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(Token::getChain, context.getChain());
+            queryWrapper.lambda().eq(Token::getModuleAddress, id.split("::")[0]);
+            queryWrapper.lambda().eq(Token::getModuleName, id.split("::")[1]);
+            queryWrapper.lambda().eq(Token::getStructName, id.split("::")[2]);
+            resultList.add(this.getOne(queryWrapper));
+        });
+        return resultList;
     }
 
     private CoinInfo getCoinInfoFromChain(Token token) {

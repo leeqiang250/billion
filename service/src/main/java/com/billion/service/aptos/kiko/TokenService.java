@@ -41,4 +41,11 @@ public interface TokenService extends ICacheService<Token> {
      */
     List<Token> getByScene(Context context, String scene);
 
+    /**
+     * getByCoinIdList
+     * @param context
+     * @param coinIdList
+     * @return
+     */
+    public List<Token> getByCoinIdList(Context context, List<String> coinIdList);
 }
