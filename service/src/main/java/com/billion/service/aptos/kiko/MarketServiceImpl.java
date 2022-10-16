@@ -334,7 +334,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(),com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
         queryWrapper.lambda().orderByAsc(Market::getId);
-        Page<Market> page = Page.of(pageLimt, pageLimt);
+
+        Page<Market> page = Page.of(pageStart, pageLimt);
         var pageResult = this.page(page, queryWrapper);
 
         var marketList = pageResult.getRecords();
