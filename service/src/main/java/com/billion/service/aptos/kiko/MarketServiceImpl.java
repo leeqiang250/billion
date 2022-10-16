@@ -383,38 +383,4 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
 
-    public List<Market> getMarketList(Context context, String id, String type) {
-        String tokenId = "";
-        if ("box".equals(type)) {
-            BoxGroup boxGroup = boxGroupService.getById(id);
-            Token token = tokenService.getById(boxGroup.getAskToken());
-            tokenId = token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName();
-        } else if ("nft".equals(type)) {
-            NftMeta nftMeta = nftMetaService.cacheById(context, id);
-            QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
-            languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
-            languageQueryWrapper.lambda().eq(Language::getKey, nftMeta.getDisplayName());
-            var displayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
-            //通过链上查询tokenId
-            Response<TableTokenData> tableTokenDataResponse = AptosService.getAptosClient().requestTableTokenData(nftMeta.getTableHandle(), nftMeta.getTableCreator(),
-                    nftMeta.getTableCollection(), displayName);
-            tokenId = (String) List.of(nftMeta.getTableCreator(), nftMeta.getTableCollection(), displayName,
-                    tableTokenDataResponse.getData().getLargestPropertyVersion()).stream().collect(Collectors.joining("@"));
-
-        }
-        return this.getMarketListById(context, tokenId, type);
-
-    }
-
-    public List<Market> getMarketListById(Context context, String tokenId, String type) {
-        QueryWrapper<Market> marketQueryWrapper = new QueryWrapper<>();
-        marketQueryWrapper.lambda().eq(Market::getChain, context.getChain());
-        if ("box".equals(type)) {
-            marketQueryWrapper.lambda().eq(Market::getAskToken, tokenId);
-        } else if ("nft".equals(type)) {
-            marketQueryWrapper.lambda().eq(Market::getTokenId, tokenId);
-        }
-        return this.list(marketQueryWrapper);
-    }
-
 }
