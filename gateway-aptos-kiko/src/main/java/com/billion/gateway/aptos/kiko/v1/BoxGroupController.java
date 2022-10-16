@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import static com.billion.model.constant.v1.RequestPathNftV1.BOX_GROUP;
+
 /**
  * @author liqiang
  */
 @RestController
-@RequestMapping("/box-group")
+@RequestMapping(BOX_GROUP)
 public class BoxGroupController {
     @Resource
     BoxGroupService boxGroupService;

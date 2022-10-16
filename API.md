@@ -188,3 +188,171 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | className | String |类型名称|
 | attribute | String |属性|
 | value | String |属性值|
+
+###**盲盒公售列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/nft/boxGroup/getSaleList |
+
+响应
+
+`{
+"code": 200,
+"ts": 1665921067059,
+"msg": "success",
+"data": [
+{
+"id": 43,
+"chain": "aptos",
+"displayName": "名称43",
+"nftGroup": 5,
+"askToken": {
+"transactionStatus": "status_3_success",
+"transactionHash": "0xd89288406cda2649cb322afca1ca092bc35b349204a8e41975ed7e8d64366650",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 6,
+"chain": "aptos",
+"moduleAddress": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
+"moduleName": "box",
+"structName": "BoxV5",
+"name": "BoxV5",
+"symbol": "BoxV5",
+"decimals": 0,
+"displayDecimals": 0,
+"uri": "",
+"isShow": true
+},
+"amount": "0",
+"bidToken": {
+"transactionStatus": "status_3_success",
+"transactionHash": "0xf01a5ac0260bb031068d28b57143a2ab6d76fd9908975203373222d14eda73d4",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 7,
+"chain": "aptos",
+"moduleAddress": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
+"moduleName": "box",
+"structName": "Win",
+"name": "Win",
+"symbol": "WIN",
+"decimals": 8,
+"displayDecimals": 2,
+"uri": "",
+"isShow": true
+},
+"price": "574",
+"description": "描述43",
+"rule": "***",
+"ts": "1665729608198",
+"sort": 0
+}
+]
+}`
+
+###**我的NFT列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 |/aptos/kiko/v1/nft/meta/myNfts/{account}} |
+
+响应
+
+`{
+"code": 200,
+"ts": 1665921749869,
+"msg": "success",
+"data": [
+{
+"transactionStatus": "status_3_success",
+"transactionHash": "0x14075727132f19b8dfd13de74aea60e41b3c4a0bff51f5e9856835d19d5752fb",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 20000006595,
+"nftGroupId": 1,
+"displayName": "213a20f4-2c9e-42b9-947e-8f5ecccf8037",
+"description": "12fc1185-81a0-422f-a842-c19253415090",
+"uri": "https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/4031cc60-3e88-4f78-b412-5006ecf5c100/public",
+"rank": 0,
+"isBorn": false,
+"tokenId": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11@0xe5908de7a7b031@0x33302de68f8fe8bfb03230303030303036353935@0",
+"score": "",
+"attributeType": 0,
+"tableHandle": "0xec4d7086e662c621c5011deb383abe67c9f04ffab889b52ddb0e8008363e4503",
+"tableCollection": "0xe5908de7a7b031",
+"tableCreator": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
+"tableName": "0x33302de68f8fe8bfb03230303030303036353935"
+}
+]
+}`
+
+###**我的盲盒列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 |/aptos/kiko/v1/nft/boxGroup/getMyBox/{account}} |
+
+响应
+`{
+"code": 200,
+"ts": 1665888505470,
+"msg": "success",
+"data": [
+{
+"id": 2,
+"chain": "aptos",
+"coinId": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11::box::BoxV1",
+"name": "BoxV1",
+"symbol": "BoxV1",
+"decimals": 0,
+"displayDecimals": null,
+"uri": ""
+}
+]
+}`
+
+###**二级市场列表接口**
+| 方法 | GET |
+|----|----|
+| 路径 |/aptos/kiko/v1/market/getMarketList/{pageStart}/{pageLimit}} |
+
+响应
+
+`{
+"code": 200,
+"ts": 1665921494066,
+"msg": "success",
+"data": {
+"pages": 1,
+"total": 1,
+"currentPage": 1,
+"marketList": [
+{
+"id": 57,
+"chain": "aptos",
+"orderId": "16",
+"type": "fix_price",
+"price": "999",
+"maker": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
+"askToken": {
+"transactionStatus": "status_3_success",
+"transactionHash": "0xd1de62fd5d67b05d61be44f63cd7ae242e2766ae288f92aa3c82aa2d533459c7",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 2,
+"chain": "aptos",
+"moduleAddress": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
+"moduleName": "box",
+"structName": "BoxV1",
+"name": "BoxV1",
+"symbol": "BoxV1",
+"decimals": 0,
+"displayDecimals": 0,
+"uri": "",
+"isShow": true
+},
+"askAmount": "1",
+"bidder": "",
+"bidToken": "0x1::aptos_coin::AptosCoin",
+"bidAmount": "",
+"ts": "7200",
+"deadTs": "0",
+"orderType": 0
+}
+]
+}
+}`
