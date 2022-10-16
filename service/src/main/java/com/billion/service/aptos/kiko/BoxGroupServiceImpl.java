@@ -1,12 +1,14 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.CoinInfo;
+import com.aptos.request.v1.model.CoinStore;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.BoxGroupMapper;
 import com.billion.model.dto.BoxGroupDto;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.MyBoxDto;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.Pair;
 import com.billion.model.entity.Token;
@@ -222,26 +224,41 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
 
     @Override
-    public List<Token> getMyBox(Context context, String account) {
+    public List<MyBoxDto> getMyBox(Context context, String account) {
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, context.getChain());
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
         var boxGroups = super.list(boxGroupQueryWrapper);
 
-        List<Token> boxs = new ArrayList<>();
+        List<MyBoxDto> boxs = new ArrayList<>();
 
         boxGroups.forEach(b -> {
             Token token = tokenService.getById(b.getAskToken());
+           //从链上查询余额
             com.aptos.request.v1.model.Resource resource = com.aptos.request.v1.model.Resource.builder().
                     moduleAddress(token.getModuleAddress())
                     .moduleName(token.getModuleName())
                     .resourceName(token.getStructName())
                     .build();
 
-            Response<CoinInfo> coinInfoResponse = AptosService.getAptosClient().requestCoinInfo(account, resource);
-            if (!Objects.isNull(coinInfoResponse.getData())) {
-                boxs.add(token);
+            Response<CoinStore> coinStoreResponse = AptosService.getAptosClient().requestCoinStore(account, resource);
+            CoinStore coinStore = coinStoreResponse.getData();
+            if (!Objects.isNull(coinStore)) {
+                Long num = Long.valueOf(coinStore.getData().getCoin().getValue());
+                if (num > 0) {
+                    MyBoxDto myBoxDto = MyBoxDto.builder()
+                            .id(token.getId())
+                            .chain(token.getChain())
+                            .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
+                            .name(token.getName())
+                            .symbol(token.getSymbol())
+                            .decimals(token.getDecimals())
+                            .uri(token.getUri())
+                            .build();
+                    boxs.add(myBoxDto);
+                }
+
             }
         });
         return boxs;

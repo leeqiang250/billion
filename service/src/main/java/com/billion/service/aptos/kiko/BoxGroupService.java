@@ -2,6 +2,7 @@ package com.billion.service.aptos.kiko;
 
 import com.billion.model.dto.BoxGroupDto;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.MyBoxDto;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.Token;
 import com.billion.model.service.ICacheService;
@@ -36,7 +37,7 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      * @param account
      * @return
      */
-    List<Token> getMyBox(Context context, String account);
+    List<MyBoxDto> getMyBox(Context context, String account);
 
     /**
      * getListByTokenIds
