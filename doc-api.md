@@ -58,6 +58,32 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }
 }`
 
+### 查询代币余额接口
+
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/aptos/resource/getBalance/{account}/{coinType}|
+
+举例：查询0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104账户下0x1::aptos_coin::AptosCoin代币的余额
+
+http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104/0x1::aptos_coin::AptosCoin
+
+响应
+`{
+"code": 200,
+"ts": 1665998324267,
+"msg": "success",
+"data": {
+"type": "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>",
+"data": {
+"coin": {
+"value": "50000"
+},
+"frozen": false
+}
+}
+}`
+
 ### 查询boxGroup列表接口
 
 | 方法 | GET |
