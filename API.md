@@ -1,12 +1,14 @@
 ## 一、host
+
 http://52.77.131.111:8890/
 
 ## 二、header
+
 context: {"chain":"aptos", "language":"zh-TC"}
 
 ## 三、接口
 
-###**config基础信息查询接口** 
+###**config基础信息查询接口**
 
 | 方法 | GET |
 |----|----|
@@ -56,12 +58,12 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }
 }`
 
-
 ###**查询boxGroup列表接口**
 
 | 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/nft/boxGroup |
+
 响应
 `{
 "code": 200,
@@ -108,12 +110,14 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/nft/info/getListByGroup/{type}/{groupId} |
+
 请求参数说明
 
 | 名称 | 类型 |描述|
 |----|----|----|
 | type | String |group:nft系列;boxGroup:盲盒系列|
 | groupId | String |系列id|
+
 响应
 
 `{
