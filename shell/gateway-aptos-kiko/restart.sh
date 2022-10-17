@@ -9,9 +9,9 @@ errorlogs_dir=${base_home}/logs
 gclog_file=${base_home}/logs/${app_name}-gc.log
 dump_dir=${base_home}/heapdump
 
-kill -9 `ps -ef | grep ${app_name} | grep -v grep | grep -v restart | awk 'BEGIN{ORS=" "}{print$2}'`
+kill `ps -ef | grep ${app_name} | grep -v grep | grep -v restart | awk 'BEGIN{ORS=" "}{print$2}'`
 
-sleep 10
+sleep 5
 
 java -Dspring.profiles.active=${enviroment} -jar ./${app_name}.jar &
 
