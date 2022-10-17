@@ -8,7 +8,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 
 ## 三、接口
 
-### **config基础信息查询接口**
+### config基础信息查询接口
 
 | 方法 | GET |
 |----|----|
@@ -58,7 +58,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }
 }`
 
-### **查询boxGroup列表接口**
+### 查询boxGroup列表接口
 
 | 方法 | GET |
 |----|----|
@@ -106,7 +106,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | totalSupply | int |总共发售数量|
 | supportToken | string |Json数组.address:代表代币地址;name:代币名称;precision:代币精度;price:价格|
 
-### **根据group查询nftInfo列表接口**
+### 根据group查询nftInfo列表接口
 
 | 方法 | GET |
 |----|----|
@@ -157,7 +157,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | attributeType | int |属性类型(0:计分;2:不计分)|
 | groupId | String |系列id|
 
-### **根据nftinfo查询nft属性列表接口**
+### 根据nftinfo查询nft属性列表接口
 
 | 方法 | GET |
 |----|----|
@@ -197,7 +197,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | attribute | String |属性|
 | value | String |属性值|
 
-### **盲盒公售列表接口**
+### 盲盒公售列表接口
 
 | 方法 | GET |
 |----|----|
@@ -257,7 +257,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 ]
 }`
 
-### **我的NFT列表接口**
+### 我的NFT列表接口
 
 | 方法 | GET |
 |----|----|
@@ -292,7 +292,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 ]
 }`
 
-### **我的盲盒列表接口**
+### 我的盲盒列表接口
 
 | 方法 | GET |
 |----|----|
@@ -318,7 +318,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 ]
 }`
 
-### **二级市场列表接口**
+### 二级市场列表接口
 
 | 方法 | GET |
 |----|----|
