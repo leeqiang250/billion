@@ -9,8 +9,6 @@ import com.billion.model.event.*;
 import com.billion.model.service.ICacheService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
  * @author liqiang
  */
@@ -144,7 +142,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftMakerEvent(Transaction transaction, Event event, NftMakerEvent nftMakerEvent);
+    Market addNftMakerEvent(Transaction transaction, Event event, MarketMakerEvent nftMakerEvent);
 
     /**
      * addNftTakerEvent
@@ -155,7 +153,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftTakerEvent(Transaction transaction, Event event, NftTakerEvent nftTakerEvent);
+    Market addNftTakerEvent(Transaction transaction, Event event, MarketTakerEvent nftTakerEvent);
 
     /**
      * addNftBidEvent
@@ -166,7 +164,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftBidEvent(Transaction transaction, Event event, NftBidEvent nftBidEvent);
+    Market addNftBidEvent(Transaction transaction, Event event, MarketBidEvent nftBidEvent);
 
     /**
      * addNftCancelEvent
@@ -177,7 +175,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftCancelEvent(Transaction transaction, Event event, NftCancelEvent nftCancelEvent);
+    Market addNftCancelEvent(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent);
 
     /**
      * getMarketList

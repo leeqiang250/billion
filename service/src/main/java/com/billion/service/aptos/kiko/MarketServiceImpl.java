@@ -1,8 +1,6 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
-import com.aptos.request.v1.model.Response;
-import com.aptos.request.v1.model.TableTokenData;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -211,7 +209,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public Market addNftMakerEvent(Transaction transaction, Event event, NftMakerEvent nftMakerEvent) {
+    public Market addNftMakerEvent(Transaction transaction, Event event, MarketMakerEvent nftMakerEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
@@ -240,7 +238,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public Market addNftTakerEvent(Transaction transaction, Event event, NftTakerEvent nftTakerEvent) {
+    public Market addNftTakerEvent(Transaction transaction, Event event, MarketTakerEvent nftTakerEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
@@ -269,7 +267,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public Market addNftBidEvent(Transaction transaction, Event event, NftBidEvent nftBidEvent) {
+    public Market addNftBidEvent(Transaction transaction, Event event, MarketBidEvent nftBidEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
@@ -299,7 +297,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public Market addNftCancelEvent(Transaction transaction, Event event, NftCancelEvent nftCancelEvent) {
+    public Market addNftCancelEvent(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))

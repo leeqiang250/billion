@@ -12,7 +12,6 @@ import com.billion.service.aptos.kiko.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -201,16 +200,16 @@ public class ScanDispatchService implements Serializable {
                     BoxCancelEvent boxCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxCancelEvent.class);
                     marketService.addBoxCancelEvent(transaction, event, boxCancelEvent);
                 } else if (marketService.isNftMakerEvent(event)) {
-                    NftMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftMakerEvent.class);
+                    MarketMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketMakerEvent.class);
                     marketService.addNftMakerEvent(transaction, event, nftMakerEvent);
                 } else if (marketService.isNftTakerEvent(event)) {
-                    NftTakerEvent nftTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftTakerEvent.class);
+                    MarketTakerEvent nftTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketTakerEvent.class);
                     marketService.addNftTakerEvent(transaction, event, nftTakerEvent);
                 } else if (marketService.isNftBidEvent(event)) {
-                    NftBidEvent nftBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftBidEvent.class);
+                    MarketBidEvent nftBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketBidEvent.class);
                     marketService.addNftBidEvent(transaction, event, nftBidEvent);
                 } else if (marketService.isNftCancelEvent(event)) {
-                    NftCancelEvent nftCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCancelEvent.class);
+                    MarketCancelEvent nftCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketCancelEvent.class);
                     marketService.addNftCancelEvent(transaction, event, nftCancelEvent);
                 }
             }

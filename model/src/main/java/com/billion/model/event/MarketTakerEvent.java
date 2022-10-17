@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NftTakerEvent implements Serializable {
+public class MarketTakerEvent implements Serializable {
 
     String id;
 
