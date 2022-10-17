@@ -11,6 +11,7 @@ import com.billion.model.dto.Context;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.Language;
+import com.billion.model.enums.NftPropertyType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
@@ -186,15 +187,15 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             "1",
                             List.of(true, true, true, true, true),
                             //key
-                            List.of("3-A", "2-B", "2-C", "2-D", "1-E", "1-F"),
-                            //value
-                            List.of(Hex.encode("1011a"), Hex.encode("912e"), Hex.encode("913d"), Hex.encode("914c"), Hex.encode("15b"), Hex.encode("16a")),
-                            //type
-                            List.of("A-A", "A-B", "A-C", "A-D", "A-E", "A-F")
+//                            List.of("3-A", "2-B", "2-C", "2-D", "1-E", "1-F"),
+//                            //value
+//                            List.of(Hex.encode("1011a"), Hex.encode("912e"), Hex.encode("913d"), Hex.encode("914c"), Hex.encode("15b"), Hex.encode("16a")),
+//                            //type
+//                            List.of("A-A", "A-B", "A-C", "A-D", "A-E", "A-F")
                             //TODO key不能重复
-                            //classMap.get(NftPropertyType.KEYS.getType()),
-                            //classMap.get(NftPropertyType.VALUES.getType()),
-                            //classMap.get(NftPropertyType.TYPES.getType())
+                            classMap.get(NftPropertyType.KEYS.getType()),
+                            classMap.get(NftPropertyType.VALUES.getType()),
+                            classMap.get(NftPropertyType.TYPES.getType())
                     ))
                     .typeArguments(List.of(boxResource.resourceTag()))
                     .build();
