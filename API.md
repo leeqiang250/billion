@@ -58,6 +58,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 
 
 ###**查询boxGroup列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/nft/boxGroup |
@@ -103,6 +104,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | supportToken | string |Json数组.address:代表代币地址;name:代币名称;precision:代币精度;price:价格|
 
 ###**根据group查询nftInfo列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/nft/info/getListByGroup/{type}/{groupId} |
@@ -151,6 +153,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | groupId | String |系列id|
 
 ###**根据nftinfo查询nft属性列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/nft/class/getByNftId/{infoId} |
@@ -190,6 +193,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | value | String |属性值|
 
 ###**盲盒公售列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/nft/boxGroup/getSaleList |
@@ -249,6 +253,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }`
 
 ###**我的NFT列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 |/aptos/kiko/v1/nft/meta/myNfts/{account}} |
@@ -283,6 +288,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }`
 
 ###**我的盲盒列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 |/aptos/kiko/v1/nft/boxGroup/getMyBox/{account}} |
@@ -307,6 +313,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 }`
 
 ###**二级市场列表接口**
+
 | 方法 | GET |
 |----|----|
 | 路径 |/aptos/kiko/v1/market/getMarketList/{pageStart}/{pageLimit}} |
