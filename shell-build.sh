@@ -14,12 +14,12 @@ cd billion
 mvn clean -DskipTests=true package
 
 
-app_name='gateway-aptos-kiko'
+gateway-aptos-kiko='gateway-aptos-kiko'
 
-mkdir -p /home/ubuntu/$app_name/config
-mkdir -p /home/ubuntu/$app_name/logs
-mkdir -p /home/ubuntu/$app_name/shell
-mkdir -p /home/ubuntu/$app_name/target
+mkdir -p /home/ubuntu/$gateway-aptos-kiko/config
+mkdir -p /home/ubuntu/$gateway-aptos-kiko/logs
+mkdir -p /home/ubuntu/$gateway-aptos-kiko/shell
+mkdir -p /home/ubuntu/$gateway-aptos-kiko/target
 
-rm -rf /home/ubuntu/$app_name/target/$app_name.jar
-cp /home/ubuntu/source-code/billion/gateway-aptos-kiko/target/gateway-aptos-kiko-0.0.1-SNAPSHOT.jar /home/ubuntu/$app_name/target/$app_name.jar
+rm -rf /home/ubuntu/$gateway-aptos-kiko/target/$gateway-aptos-kiko.jar
+cp /home/ubuntu/source-code/billion/gateway-aptos-kiko/target/gateway-aptos-kiko-0.0.1-SNAPSHOT.jar /home/ubuntu/$gateway-aptos-kiko/target/$gateway-aptos-kiko.jar
