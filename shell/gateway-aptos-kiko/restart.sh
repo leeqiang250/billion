@@ -13,7 +13,7 @@ kill `ps -ef | grep ${app_name} | grep -v grep | grep -v restart | awk 'BEGIN{OR
 
 sleep 5
 
-cd base_home
+cd ${base_home}
 java -Dspring.profiles.active=${enviroment} -jar ./${app_name}.jar &
 
 #java -Xmx${app_mem} -Xms${app_mem} -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+PrintGCDetails -Xloggc:${gclog_file} -XX:HeapDumpPath=${dump_dir} -XX:+HeapDumpOnOutOfMemoryError  -XX:ErrorFile=${errorlogs_dir}/hs_err_%p.log  -Dfile.encoding=UTF-8 -Duser.timezone="Asia/Singapore" -jar ${base_home}/target/${app_name}.jar >${base_home}/logs/${app_name}-info.log 2>&1 spring.profiles.active=${enviroment} &
