@@ -15,12 +15,16 @@ import static com.billion.model.constant.v1.RequestPathAptosResourceV1.APTOS_RES
  */
 @RestController
 @RequestMapping(APTOS_RESOURCE)
-public class AptosResourceController {
+public class ResourceController {
 
     @GetMapping("getBalance/{account}/{coinType}")
     public Response getBalance(@RequestHeader Context context, @PathVariable String account, @PathVariable String coinType) {
         var resource = Resource.ofStruct(coinType);
-        return Response.success(AptosService.getAptosClient().requestCoinStore(account, resource).getData());
+        try {
+            return Response.success(AptosService.getAptosClient().requestCoinStore(account, resource).getData());
+        } catch (Exception e) {
+            return Response.success("0");
+        }
     }
 
 }
