@@ -1,6 +1,6 @@
 spring:
   application:
-    name: billion-spring-cloud-client
+    name: gateway-aptos-kiko
   profiles:
     active: dev
     #active: test
