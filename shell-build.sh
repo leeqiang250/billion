@@ -15,10 +15,8 @@ mvn clean -DskipTests=true package
 
 gateway_aptos_kiko=gateway-aptos-kiko
 
-mkdir -p /home/ubuntu/${gateway_aptos_kiko}/config
 mkdir -p /home/ubuntu/${gateway_aptos_kiko}/logs
-mkdir -p /home/ubuntu/${gateway_aptos_kiko}/target
 
-rm -rf /home/ubuntu/${gateway_aptos_kiko}/target/${gateway_aptos_kiko}.jar
-cp /home/ubuntu/source-code/billion/${gateway_aptos_kiko}/target/${gateway_aptos_kiko}-0.0.1-SNAPSHOT.jar /home/ubuntu/${gateway_aptos_kiko}/target/${gateway_aptos_kiko}.jar
+rm -rf /home/ubuntu/${gateway_aptos_kiko}/${gateway_aptos_kiko}.jar
+cp /home/ubuntu/source-code/billion/${gateway_aptos_kiko}/target/${gateway_aptos_kiko}-0.0.1-SNAPSHOT.jar /home/ubuntu/${gateway_aptos_kiko}/${gateway_aptos_kiko}.jar
 cp /home/ubuntu/source-code/billion/shell-${gateway_aptos_kiko}.sh /home/ubuntu/${gateway_aptos_kiko}/restart.sh
