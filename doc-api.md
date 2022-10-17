@@ -60,7 +60,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 
 ### 查询代币余额接口
 
-| 方法 | GET |
+| 方法 | GET |add
 |----|----|
 | 路径 | /aptos/kiko/v1/aptos/resource/getBalance/{account}/{coinType}|
 
@@ -69,6 +69,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104/0x1::aptos_coin::AptosCoin
 
 响应
+
 `{
 "code": 200,
 "ts": 1665998324267,
