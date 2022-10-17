@@ -65,6 +65,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | 路径 | /aptos/kiko/v1/nft/boxGroup |
 
 响应
+
 `{
 "code": 200,
 "ts": 1665454609836,
@@ -298,6 +299,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 | 路径 |/aptos/kiko/v1/nft/boxGroup/getMyBox/{account}} |
 
 响应
+
 `{
 "code": 200,
 "ts": 1665888505470,
