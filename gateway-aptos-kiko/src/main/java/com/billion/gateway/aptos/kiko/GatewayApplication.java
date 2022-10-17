@@ -14,6 +14,10 @@ import org.springframework.context.annotation.ComponentScan;
 public class GatewayApplication {
 
     public static void main(String[] args) {
+        System.out.println(args.length);
+        for (String arg : args) {
+            System.out.println(arg);
+        }
         SpringApplication.run(GatewayApplication.class, args);
     }
 

@@ -136,9 +136,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         wrapper.lambda().eq(NftMeta::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
 
         var nftMetas = super.list(wrapper);
-        for (int i = 0; i < nftMetas.size(); i++) {
-            var nftMeta = nftMetas.get(i);
-
+        for (NftMeta nftMeta : nftMetas) {
             languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDisplayName());

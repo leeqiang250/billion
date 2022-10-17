@@ -1,6 +1,7 @@
 package com.billion.quote.dispatch;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
 import com.billion.model.entity.Config;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -102,17 +104,13 @@ public class ScanDispatchService implements Serializable {
 
         boolean valid = false;
         var transactions = response.getData();
-        for (int i = 0; i < transactions.size(); i++) {
-            var transaction = transactions.get(i);
-
+        for (Transaction transaction : transactions) {
             if (Transaction.USER_TRANSACTION.equals(transaction.getType())
                     && !Objects.isNull(transaction.getEvents())) {
                 valid = false;
 
                 var events = transaction.getEvents();
-                for (int j = 0; j < events.size(); j++) {
-                    var event = events.get(j);
-
+                for (Event<Map> event : events) {
                     if (nftService.isNftCreateTokenDataEvent(event)
                             || nftService.isOpenBoxEvent(event)
                             || nftService.isNftDepositEvent(event)
@@ -164,9 +162,7 @@ public class ScanDispatchService implements Serializable {
 
     void process(Transaction transaction) {
         var events = transaction.getEvents();
-        for (int j = 0; j < events.size(); j++) {
-            var event = events.get(j);
-
+        for (Event<Map> event : events) {
             if (nftService.isNftCreateTokenDataEvent(event)
                     && ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress())) {
                 NftCreateTokenDataEvent nftCreateTokenDataEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCreateTokenDataEvent.class);

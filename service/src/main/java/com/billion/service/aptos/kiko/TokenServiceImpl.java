@@ -86,8 +86,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
         wrapper.lambda().eq(Token::getChain, Chain.APTOS.getCode());
         wrapper.lambda().eq(Token::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
         var tokens = super.list(wrapper);
-        for (int i = 0; i < tokens.size(); i++) {
-            var token = tokens.get(i);
+        for (Token token : tokens) {
             if (!this.checkToken(token)) {
                 token.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
                 super.updateById(token);
@@ -186,7 +185,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
     @Override
     public List<Token> getByCoinIdList(Context context, List<String> coinIdList) {
-        if (Objects.isNull(coinIdList) || coinIdList.size() == 0){
+        if (Objects.isNull(coinIdList) || coinIdList.size() == 0) {
             return new ArrayList<>();
         }
         List<Token> resultList = new ArrayList<>();

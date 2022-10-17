@@ -267,9 +267,7 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
                 .build();
 
         var tokens = tokenService.getByScene(context, TokenScene.MARKET.getCode());
-        for (int j = 0; j < tokens.size(); j++) {
-            var bidToken = tokens.get(j);
-
+        for (Token bidToken : tokens) {
             QueryWrapper<Pair> pairQueryWrapper = new QueryWrapper<>();
             pairQueryWrapper.lambda().eq(Pair::getContract, function);
             pairQueryWrapper.lambda().eq(Pair::getAskToken, askToken.getId());

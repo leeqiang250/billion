@@ -165,12 +165,10 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
         var tokens = tokenService.getByScene(context, TokenScene.MARKET.getCode());
 
-        for (int i = 0; i < boxGroups.size(); i++) {
-            var askToken = tokenService.getById(boxGroups.get(i).getAskToken());
+        for (BoxGroup boxGroup : boxGroups) {
+            var askToken = tokenService.getById(boxGroup.getAskToken());
 
-            for (int j = 0; j < tokens.size(); j++) {
-                var bidToken = tokens.get(j);
-
+            for (Token bidToken : tokens) {
                 QueryWrapper<Pair> pairQueryWrapper = new QueryWrapper<>();
                 pairQueryWrapper.lambda().eq(Pair::getContract, function);
                 pairQueryWrapper.lambda().eq(Pair::getAskToken, askToken.getId());
@@ -235,7 +233,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
         boxGroups.forEach(b -> {
             Token token = tokenService.getById(b.getAskToken());
-           //从链上查询余额
+            //从链上查询余额
             com.aptos.request.v1.model.Resource resource = com.aptos.request.v1.model.Resource.builder().
                     moduleAddress(token.getModuleAddress())
                     .moduleName(token.getModuleName())
