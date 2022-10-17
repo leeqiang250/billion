@@ -9,7 +9,7 @@ errorlogs_dir=${base_home}/logs
 gclog_file=${base_home}/logs/${app_name}-gc.log
 dump_dir=${base_home}/heapdump
 
-kill -9 `ps -ef | grep ${app_name} | grep -v grep | awk '{print $2}'`
+kill -9 `ps -ef | grep ${app_name} | grep -v grep | grep -v restart | awk 'BEGIN{ORS=" "}{print$2}'`
 
 sleep 10
 
