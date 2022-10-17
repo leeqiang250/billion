@@ -125,7 +125,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         queryWrapper.lambda().eq(Nft::getOwner, account);
 
         queryWrapper.lambda().eq(Nft::getIsEnabled, Boolean.TRUE);
-        queryWrapper.lambda().eq(Nft::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        queryWrapper.lambda().eq(Nft::getTransactionStatus, TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().orderByAsc(Nft::getId);
         var nftList = this.list(queryWrapper);
 
