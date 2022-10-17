@@ -10,6 +10,8 @@ import com.billion.model.dto.Context;
 import com.billion.model.dto.MarketDto;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.OperationType;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
@@ -28,8 +30,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market> implements MarketService {
-    @Resource
-    BoxGroupService boxGroupService;
 
     @Resource
     NftMetaService nftMetaService;
@@ -38,10 +38,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     TokenService tokenService;
 
     @Resource
-    LanguageService languageService;
+    OperationService operationService;
 
-    @Resource
-    AptosService aptosService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -96,7 +94,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(boxMakerEvent.getMaker())
+                .type(OperationType.BOX_MAKER_EVENT.getType())
+                .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .tokenAmount(0L)
+                .bidToken("")
+                .price(0L)
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
     }
@@ -125,7 +135,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(boxTakerEvent.getMaker())//TODO:确认
+                .type(OperationType.BOX_TAKER_EVENT.getType())
+                .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .tokenAmount(Long.valueOf(boxTakerEvent.getAmount()))
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
+                .price(Long.valueOf(boxTakerEvent.getFinalPrice()))
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
     }
@@ -154,7 +176,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(boxBidEvent.getBidder())
+                .type(OperationType.BOX_BID_EVENT.getType())
+                .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .tokenAmount(Long.valueOf(boxBidEvent.getAmount()))
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
+                .price(Long.valueOf(boxBidEvent.getBidPrice()))
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
     }
@@ -183,7 +217,20 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(boxCancelEvent.getMaker())
+                .type(OperationType.BOX_CANCLE_EVENT.getType())
+                .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .tokenAmount(Long.valueOf(boxCancelEvent.getAmount()))
+//                .bidToken()
+//                .price()
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
+
 
         return market;
     }
