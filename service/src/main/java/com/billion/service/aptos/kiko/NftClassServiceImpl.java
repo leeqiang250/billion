@@ -71,29 +71,33 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
         List<NftClass> list = super.list(wrapper);
 
         Map<String, List<String>> resultMap = new HashMap<>(3);
+        List<String> types = new ArrayList<>();
         List<String> keys = new ArrayList<>();
         List<String> values = new ArrayList<>();
-        List<String> types = new ArrayList<>();
+
 
         list.stream().forEach(e -> {
             if (e.getType() == 0) {
                 //无属性
-                keys.add(new String());
+                keys.add(Hex.encode(e.getClassName()));
                 values.add(new String());
-                types.add(Hex.encode(e.getClassName()));
+                types.add(new String());
             } else {
                 //有属性
                 List<NftAttribute> attributes = nftAttributeService.getByClassId(null, e.getId().toString());
                 if (attributes != null && attributes.size() > 0) {
                     attributes.stream().forEach(a -> {
-                        keys.add(Hex.encode(a.getAttribute()));
+                        if (keys.contains(Hex.encode(e.getClassName()))) {
+                            return;
+                        }
+                        keys.add(Hex.encode(e.getClassName()));
                         values.add(Hex.encode(a.getValue()));
-                        types.add(Hex.encode(e.getClassName()));
+                        types.add(Hex.encode(a.getAttribute()));
                     });
-                } else {
-                    keys.add(new String());
+//                } else {
+                    keys.add(e.getClassName());
                     values.add(new String());
-                    types.add(Hex.encode(e.getClassName()));
+                    types.add(Hex.encode(new String()));
                 }
             }
         });

@@ -52,4 +52,9 @@ public class NftMetaController implements IController<NftMeta> {
         return Response.success(nftMetaService.getMyNfts(context, account));
     }
 
+    @GetMapping("/testMint")
+    public void testMint() {
+        nftMetaService.initialize(43, 5);
+    }
+
 }
