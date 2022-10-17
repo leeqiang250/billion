@@ -329,7 +329,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     public MarketDto getMarketList(Context context, Integer pageStart, Integer pageLimt) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(),com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
         queryWrapper.lambda().orderByAsc(Market::getId);
 
@@ -343,7 +343,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         var nftTokenList = nftMetaService.getListByTokenIds(nftTokenIdList);
         var coinList = tokenService.getByCoinIdList(context, coinIdList);
 
-        var nftMap = nftTokenList.stream().collect(Collectors.toMap(e ->e.getTokenId(), (e) -> e));
+        var nftMap = nftTokenList.stream().collect(Collectors.toMap(e -> e.getTokenId(), (e) -> e));
         var coinMap = coinList.stream().collect(Collectors.toMap(e -> e.getModuleAddress() + "::"
                 + e.getModuleName() + "::" + e.getStructName(), (e) -> e));
 
@@ -366,7 +366,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
             if (StringUtils.isEmpty(e.getTokenId())) {
                 marketDto.setAskToken(coinMap.get(e.getAskToken()));
                 marketDto.setOrderType(0);
-            }else {
+            } else {
                 marketDto.setAskToken(nftMap.get(e.getTokenId()));
                 marketDto.setOrderType(1);
             }
