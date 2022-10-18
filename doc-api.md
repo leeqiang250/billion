@@ -62,7 +62,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 
 | 方法 | GET |add
 |----|----|
-| 路径 | /aptos/kiko/v1/aptos/resource/getBalance/{account}/{coinType}|
+| 路径 | /aptos/kiko/v1/resource/getBalance/{account}/{coinType}|
 
 举例：查询0x4cd5040c25c069143f22995f0deaae6bfb674949302b008678455174b8ea8104账户下0x1::aptos_coin::AptosCoin代币的余额
 
