@@ -100,9 +100,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .account(boxMakerEvent.getMaker())
                 .type(OperationType.BOX_MAKER_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
-                .tokenAmount(0L)
-                .bidToken("")
-                .price(0L)
+                .tokenAmount(Long.valueOf(boxMakerEvent.getAmount()))
                 .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
                 .transactionHash(transaction.getHash())
                 .build();
@@ -138,7 +136,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(boxTakerEvent.getMaker())//TODO:确认
+                .account(boxTakerEvent.getBidder())
                 .type(OperationType.BOX_TAKER_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxTakerEvent.getAmount()))
@@ -224,8 +222,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.BOX_CANCLE_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxCancelEvent.getAmount()))
-//                .bidToken()
-//                .price()
                 .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
                 .transactionHash(transaction.getHash())
                 .build();
@@ -279,7 +275,17 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(nftMakerEvent.getMaker())
+                .type(OperationType.NFT_MAKER_EVENT.getType())
+                .tokenId(nftMakerEvent.getTokenId().getNftTokenIdKey())
+                .tokenAmount(1L)
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
     }
@@ -308,7 +314,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(nftTakerEvent.getBidder())
+                .type(OperationType.NFT_TAKER_EVENT.getType())
+                .tokenId(nftTakerEvent.getTokenId().getNftTokenIdKey())
+                .tokenAmount(Long.valueOf(nftTakerEvent.getAmount()))
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .price(Long.valueOf(nftTakerEvent.getFinalPrice()))
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
     }
@@ -337,7 +355,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(nftBidEvent.getMaker())
+                .type(OperationType.NFT_BID_EVENT.getType())
+                .tokenId(nftBidEvent.getTokenId().getNftTokenIdKey())
+                .tokenAmount(Long.valueOf(nftBidEvent.getAmount()))
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .price(Long.valueOf(nftBidEvent.getBidPrice()))
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
 
@@ -367,7 +397,17 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         super.save(market);
 
-        //TODO 如有需要，交易记录
+        //交易记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(nftCancelEvent.getMaker())
+                .type(OperationType.NFT_CANCLE_EVENT.getType())
+                .tokenId(nftCancelEvent.getTokenId().getNftTokenIdKey())
+                .tokenAmount(Long.valueOf(nftCancelEvent.getAmount()))
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return market;
     }
