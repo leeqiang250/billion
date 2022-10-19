@@ -60,7 +60,7 @@ context: {"chain":"aptos", "language":"zh-TC"}
 
 ### 查询代币余额接口
 
-| 方法 | GET |add
+| 方法 | GET |
 |----|----|
 | 路径 | /aptos/kiko/v1/resource/getBalance/{account}/{coinType}|
 
@@ -84,6 +84,24 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 }
 }
 }`
+
+### 查询合约列表接口
+
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/contract|
+
+响应
+`{
+"code": 200,
+"ts": 1666166013222,
+"msg": "success",
+"data": {
+"secondary_market": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11::secondary_market",
+"primary_market": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11::primary_market"
+}
+}`
+
 
 ### 查询boxGroup列表接口
 
