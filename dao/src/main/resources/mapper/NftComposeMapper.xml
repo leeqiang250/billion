@@ -11,6 +11,8 @@
         ,owner as owner
         ,name as name
         ,description as description
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
     </sql>
 
 </mapper>

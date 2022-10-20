@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("nft_split")
-public class NftSplit implements IModel {
+public class NftSplit extends TransactionStatus implements IModel {
 
     /**
      * id

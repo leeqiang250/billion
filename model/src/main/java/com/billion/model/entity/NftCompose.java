@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("nft_compose")
-public class NftCompose implements IModel {
+public class NftCompose extends TransactionStatus implements IModel {
 
     /**
      * id

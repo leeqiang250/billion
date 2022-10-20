@@ -10,6 +10,8 @@
         ,is_execute as is_execute
         ,owner as owner
         ,source_uri as source_uri
+        ,transaction_status as transaction_status
+        ,transaction_hash as transaction_hash
     </sql>
 
 </mapper>

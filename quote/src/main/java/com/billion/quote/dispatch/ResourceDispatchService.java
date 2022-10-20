@@ -2,6 +2,7 @@ package com.billion.quote.dispatch;
 
 import com.billion.model.entity.NftTransfer;
 import com.billion.model.entity.TokenTransfer;
+import com.billion.service.aptos.kiko.NftOpService;
 import com.billion.service.aptos.kiko.NftTransferService;
 import com.billion.service.aptos.kiko.TokenTransferService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,9 @@ public class ResourceDispatchService implements Serializable {
     @Resource
     NftTransferService nftTransferService;
 
+    @Resource
+    NftOpService nftOpService;
+
     //@Scheduled(cron = "*/3 * * * * ?")
     void dispatch() {
         TokenTransfer tokenTransfer = TokenTransfer.builder().build();
@@ -38,6 +42,7 @@ public class ResourceDispatchService implements Serializable {
         ) {
             tokenTransfer = tokenTransferService.transfer();
             nftTransfer = nftTransferService.transfer();
+            nftOpService.execute();
         }
     }
 

@@ -24,4 +24,11 @@ public interface NftOpService {
      */
     boolean addNftComposeEvent(NftComposeEvent nftComposeEvent);
 
+    /**
+     * execute
+     *
+     * @return boolean
+     */
+    boolean execute();
+
 }
