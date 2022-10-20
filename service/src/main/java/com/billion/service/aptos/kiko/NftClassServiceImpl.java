@@ -49,7 +49,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
         changeLanguage(context, list);
 
         //构建Nftattribute
-        list.stream().forEach(e -> {
+        list.forEach(e -> {
             List<NftAttribute> attributes = nftAttributeService.getByClassId(context, e.getId().toString());
             NftClassDto nftClassDto = NftClassDto.builder().id(e.getId())
                     .className(e.getClassName())
@@ -75,8 +75,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
         List<String> keys = new ArrayList<>();
         List<String> values = new ArrayList<>();
 
-
-        list.stream().forEach(e -> {
+        list.forEach(e -> {
             if (e.getType() == 0) {
                 //无属性
                 keys.add(Hex.encode(e.getClassName()));
@@ -86,7 +85,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
                 //有属性
                 List<NftAttribute> attributes = nftAttributeService.getByClassId(null, e.getId().toString());
                 if (attributes != null && attributes.size() > 0) {
-                    attributes.stream().forEach(a -> {
+                    attributes.forEach(a -> {
                         if (keys.contains(Hex.encode(e.getClassName()))) {
                             return;
                         }
