@@ -27,38 +27,6 @@ public interface NftService extends ICacheService<Nft> {
     boolean removeGe(Long version);
 
     /**
-     * isNftCreateTokenDataEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftCreateTokenDataEvent(Event event);
-
-    /**
-     * isWithdrawEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftWithdrawEvent(Event event);
-
-    /**
-     * isDepositEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftDepositEvent(Event event);
-
-    /**
-     * isOpenBoxEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isOpenBoxEvent(Event event);
-
-    /**
      * addNftCreateTokenDataEvent
      *
      * @param transaction             transaction

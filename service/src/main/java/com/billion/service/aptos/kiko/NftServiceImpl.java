@@ -44,26 +44,6 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
     }
 
     @Override
-    public boolean isNftCreateTokenDataEvent(Event event) {
-        return NftCreateTokenDataEvent.EVENT_NAME.equals(event.getType());
-    }
-
-    @Override
-    public boolean isNftWithdrawEvent(Event event) {
-        return NftWithdrawEvent.EVENT_NAME.equals(event.getType());
-    }
-
-    @Override
-    public boolean isNftDepositEvent(Event event) {
-        return NftDepositEvent.EVENT_NAME.equals(event.getType());
-    }
-
-    @Override
-    public boolean isOpenBoxEvent(Event event) {
-        return OpenBoxEvent.EVENT_NAME.equals(event.getType());
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public Nft addNftCreateTokenDataEvent(Transaction transaction, Event event, NftCreateTokenDataEvent nftCreateTokenDataEvent) {
         Nft nft = Nft.builder()

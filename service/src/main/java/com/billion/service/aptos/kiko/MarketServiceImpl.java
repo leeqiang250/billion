@@ -51,26 +51,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public boolean isBoxMakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxMakerEvent<");
-    }
-
-    @Override
-    public boolean isBoxTakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxTakerEvent<");
-    }
-
-    @Override
-    public boolean isBoxBidEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxBidEvent<");
-    }
-
-    @Override
-    public boolean isBoxCancelEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxCancelEvent<");
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public Market addBoxMakerEvent(Transaction transaction, Event event, BoxMakerEvent boxMakerEvent) {
         Market market = Market.builder()
@@ -229,26 +209,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
 
         return market;
-    }
-
-    @Override
-    public boolean isNftMakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftMakerEvent<");
-    }
-
-    @Override
-    public boolean isNftTakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftTakerEvent<");
-    }
-
-    @Override
-    public boolean isNftBidEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftBidEvent<");
-    }
-
-    @Override
-    public boolean isNftCancelEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftCancelEvent<");
     }
 
     @Override

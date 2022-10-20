@@ -24,38 +24,6 @@ public interface MarketService extends ICacheService<Market> {
     boolean removeGe(Long version);
 
     /**
-     * isBoxMakerEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isBoxMakerEvent(Event event);
-
-    /**
-     * isBoxTakerEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isBoxTakerEvent(Event event);
-
-    /**
-     * isBoxBidEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isBoxBidEvent(Event event);
-
-    /**
-     * isBoxCancelEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isBoxCancelEvent(Event event);
-
-    /**
      * addBoxMakerEvent
      *
      * @param transaction   transaction
@@ -100,38 +68,6 @@ public interface MarketService extends ICacheService<Market> {
     Market addBoxCancelEvent(Transaction transaction, Event event, BoxCancelEvent boxCancelEvent);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * isNftMakerEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftMakerEvent(Event event);
-
-    /**
-     * isNftTakerEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftTakerEvent(Event event);
-
-    /**
-     * isNftBidEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftBidEvent(Event event);
-
-    /**
-     * isNftCancelEvent
-     *
-     * @param event event
-     * @return boolean
-     */
-    boolean isNftCancelEvent(Event event);
 
     /**
      * addNftMakerEvent
@@ -179,6 +115,7 @@ public interface MarketService extends ICacheService<Market> {
 
     /**
      * getMarketList
+     *
      * @param context
      * @return
      */
