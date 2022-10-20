@@ -231,27 +231,6 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             nftMeta.setTableName(Hex.encode(displayName));
 
             super.updateById(nftMeta);
-            //补充tokenId
-            var tokenId = TokenId.builder()
-                    .tokenDataId(TokenDataId.builder()
-                            .creator(nftGroup.getOwner())
-                            .collection(Hex.encode(nftGroupDisplayName))
-                            .name(Hex.encode(displayName))
-                            .build())
-                    .propertyVersion("0")
-                    .build();
-            nftMeta.setTokenId(tokenId.getNftTokenIdKey());
-            //交易记录
-            Operation operation = Operation.builder()
-                    .chain(Chain.APTOS.getCode())
-                    .account(nftGroup.getOwner())
-                    .type(OperationType.NFT_MINT_EVENT.getType())
-                    .tokenId(tokenId.getNftTokenIdKey())
-                    .tokenAmount(1L)
-                    .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
-                    .transactionHash(response.getData().getHash())
-                    .build();
-            operationService.save(operation);
         }
 
         //TODO 删除缓存

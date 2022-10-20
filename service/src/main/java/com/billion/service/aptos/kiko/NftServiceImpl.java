@@ -1,12 +1,17 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
+import com.aptos.request.v1.model.TokenDataId;
+import com.aptos.request.v1.model.TokenId;
 import com.aptos.request.v1.model.Transaction;
+import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Nft;
+import com.billion.model.entity.Operation;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.OperationType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.NftCreateTokenDataEvent;
 import com.billion.model.event.NftDepositEvent;
@@ -74,6 +79,30 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         nft.setTransactionHash(transaction.getHash());
 
         super.save(nft);
+
+        //TODO renjian
+        //铸造NFT记录
+        //补充tokenId
+        //var tokenId = TokenId.builder()
+        //        .tokenDataId(TokenDataId.builder()
+        //                .creator(nftGroup.getOwner())
+        //                .collection(Hex.encode(nftGroupDisplayName))
+        //                .name(Hex.encode(displayName))
+        //                .build())
+        //        .propertyVersion("0")
+        //        .build();
+        //nftMeta.setTokenId(tokenId.getNftTokenIdKey());
+        ////交易记录
+        //Operation operation = Operation.builder()
+        //        .chain(Chain.APTOS.getCode())
+        //        .account(nftGroup.getOwner())
+        //        .type(OperationType.NFT_MINT_EVENT.getType())
+        //        .tokenId(tokenId.getNftTokenIdKey())
+        //        .tokenAmount(1L)
+        //        .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+        //        .transactionHash(response.getData().getHash())
+        //        .build();
+        //operationService.save(operation);
 
         return nft;
     }
