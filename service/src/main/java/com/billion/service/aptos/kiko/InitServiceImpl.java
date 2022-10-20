@@ -12,7 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -73,6 +74,15 @@ public class InitServiceImpl implements InitService {
     @Resource
     TokenTransferService tokenTransferService;
 
+    @Resource
+    NftAttributeTypeService nftAttributeTypeService;
+
+    @Resource
+    NftAttributeMetaService nftAttributeMetaService;
+
+    @Resource
+    NftAttributeValueService nftAttributeValueService;
+
     @Override
     public boolean initialize() {
         if (!ContextService.getEnv().equalsIgnoreCase("dev")) {
@@ -92,6 +102,7 @@ public class InitServiceImpl implements InitService {
         //nftClassService
         this.nftGroup();
         this.nftMeta();
+        this.nftAttribute();
         this.nftTransfer();
         this.pair();
         this.token();
@@ -402,6 +413,230 @@ public class InitServiceImpl implements InitService {
 
                 nftMetaService.updateById(nftMeta);
             }
+        });
+    }
+
+    void nftAttribute() {
+        this.nftAttributeTypeService.remove(null);
+        this.nftAttributeMetaService.remove(null);
+        this.nftAttributeValueService.remove(null);
+        Map<NftAttributeType, List<NftAttributeMeta>> typeMap = new HashMap<>();
+        List<NftAttributeMeta> attributeMetaList  = new ArrayList<>();
+        List<NftAttributeMeta> attributeMetaList1  = new ArrayList<>();
+        List<NftAttributeMeta> attributeMetaList2  = new ArrayList<>();
+        var nftGroups = this.nftGroupService.list();
+        nftGroups.forEach(nftGroup -> {
+            typeMap.clear();
+            attributeMetaList.clear();
+            attributeMetaList1.clear();
+            attributeMetaList2.clear();
+            //衣服
+            NftAttributeType nftAttributeType = NftAttributeType.builder()
+                    .nftGroupId(nftGroup.getId())
+                    .className(EMPTY)
+                    .build();
+            this.nftAttributeTypeService.save(nftAttributeType);
+
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_clothes_" + nftAttributeType.getId())
+                    .value("衣服")
+                    .build());
+
+            nftAttributeType.setClassName("nft_attribute_clothes_" + nftAttributeType.getId());
+            this.nftAttributeTypeService.updateById(nftAttributeType);
+            //nftAttributeMeta数据
+            NftAttributeMeta nftAttributeMeta = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType.getId())
+                    .attribute(EMPTY)
+                    .value("10")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_clothes_blue" + nftAttributeMeta.getId())
+                    .value("蓝色")
+                    .build());
+            nftAttributeMeta.setAttribute("nft_attribute_clothes_blue" + nftAttributeMeta.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta);
+            attributeMetaList.add(nftAttributeMeta);
+
+            NftAttributeMeta nftAttributeMeta2 = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType.getId())
+                    .attribute(EMPTY)
+                    .value("20")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta2);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_clothes_red" + nftAttributeMeta2.getId())
+                    .value("红色")
+                    .build());
+            nftAttributeMeta2.setAttribute("nft_attribute_clothes_red" + nftAttributeMeta2.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta2);
+            attributeMetaList.add(nftAttributeMeta2);
+
+            NftAttributeMeta nftAttributeMeta3 = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType.getId())
+                    .attribute(EMPTY)
+                    .value("30")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta3);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_clothes_yellow" + nftAttributeMeta3.getId())
+                    .value("黄色")
+                    .build());
+            nftAttributeMeta3.setAttribute("nft_attribute_clothes_yellow" + nftAttributeMeta3.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta3);
+            attributeMetaList.add(nftAttributeMeta3);
+            typeMap.put(nftAttributeType, attributeMetaList);
+
+
+            //性别
+            NftAttributeType nftAttributeType2 = NftAttributeType.builder()
+                    .nftGroupId(nftGroup.getId())
+                    .className(EMPTY)
+                    .build();
+            this.nftAttributeTypeService.save(nftAttributeType2);
+
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_sexs_" + nftAttributeType2.getId())
+                    .value("性别")
+                    .build());
+
+            nftAttributeType2.setClassName("nft_attribute_sexs_" + nftAttributeType2.getId());
+            this.nftAttributeTypeService.updateById(nftAttributeType2);
+            //nftAttributeMeta数据
+            NftAttributeMeta nftAttributeMeta4 = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType2.getId())
+                    .attribute(EMPTY)
+                    .value("20")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta4);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_sexs_boy" + nftAttributeMeta4.getId())
+                    .value("男")
+                    .build());
+            nftAttributeMeta4.setAttribute("nft_attribute_sexs_boy" + nftAttributeMeta4.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta4);
+            attributeMetaList1.add(nftAttributeMeta4);
+
+            NftAttributeMeta nftAttributeMeta5 = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType2.getId())
+                    .attribute(EMPTY)
+                    .value("10")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta5);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_sexs_girl" + nftAttributeMeta5.getId())
+                    .value("女")
+                    .build());
+            nftAttributeMeta5.setAttribute("nft_attribute_sexs_girl" + nftAttributeMeta5.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta5);
+            attributeMetaList1.add(nftAttributeMeta5);
+            typeMap.put(nftAttributeType2, attributeMetaList1);
+
+            //肤色
+            NftAttributeType nftAttributeType3 = NftAttributeType.builder()
+                    .nftGroupId(nftGroup.getId())
+                    .className(EMPTY)
+                    .build();
+            this.nftAttributeTypeService.save(nftAttributeType3);
+
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_skins_" + nftAttributeType3.getId())
+                    .value("肤色")
+                    .build());
+
+            nftAttributeType3.setClassName("nft_attribute_skins_" + nftAttributeType3.getId());
+            this.nftAttributeTypeService.updateById(nftAttributeType3);
+
+            NftAttributeMeta nftAttributeMeta6 = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType3.getId())
+                    .attribute(EMPTY)
+                    .value("20")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta6);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_skins_yellow" + nftAttributeMeta6.getId())
+                    .value("黄色")
+                    .build());
+            nftAttributeMeta6.setAttribute("nft_attribute_skins_yellow" + nftAttributeMeta6.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta6);
+            attributeMetaList2.add(nftAttributeMeta6);
+
+            NftAttributeMeta nftAttributeMeta7 = NftAttributeMeta.builder()
+                    .nftAttributeTypeId(nftAttributeType3.getId())
+                    .attribute(EMPTY)
+                    .value("10")
+                    .uri(EMPTY)
+                    .sort(EMPTY)
+                    .build();
+            this.nftAttributeMetaService.save(nftAttributeMeta7);
+            languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key("nft_attribute_skins_white" + nftAttributeMeta7.getId())
+                    .value("白色")
+                    .build());
+            nftAttributeMeta7.setAttribute("nft_attribute_skins_white" + nftAttributeMeta7.getId());
+            this.nftAttributeMetaService.updateById(nftAttributeMeta7);
+            attributeMetaList2.add(nftAttributeMeta7);
+            typeMap.put(nftAttributeType3, attributeMetaList2);
+
+            //构造nftmet属性
+            QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
+            nftMetaQueryWrapper.lambda().eq(NftMeta::getNftGroupId, nftGroup.getId());
+
+            var nftMetas = this.nftMetaService.list(nftMetaQueryWrapper);
+            List<List<NftAttributeMeta>> metaList = typeMap.values().stream().collect(Collectors.toList());
+            nftMetas.forEach(nftMeta -> {
+                Set<Integer> randomSet = new HashSet(3);
+                int typeNum =  new Random().nextInt(3);
+                for (int i = 0; i <= typeNum; i++) {
+                    Integer random = new Random().nextInt(metaList.size());
+
+
+                    if (randomSet.contains(random)) {
+                        while (true) {
+                            random = new Random().nextInt(metaList.size());
+                            if (!randomSet.contains(random)) {
+                                break;
+                            }
+                        }
+//                        random = random == 2 ? (randomSet.contains(1) ? 3 : 1) : (randomSet.contains(1) ? (randomSet.contains(2) ? 3: 2): 1);
+                    }
+                    randomSet.add(random);
+                    var metas = metaList.get(random);//随机取某个类型的属性list
+                    //nftAttributeValue
+                    NftAttributeValue nftAttributeValue = NftAttributeValue.builder()
+                            .nftAttributeMetaId(metas.get(new Random().nextInt(metas.size())).getId())
+                            .nftMetaId(nftMeta.getId())
+                            .build();
+                    this.nftAttributeValueService.save(nftAttributeValue);
+                }
+            });
+
+
+
+
         });
     }
 
