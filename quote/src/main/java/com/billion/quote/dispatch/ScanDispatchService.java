@@ -181,23 +181,28 @@ public class ScanDispatchService implements Serializable {
                 }
             } else if (EventType.isOpenBoxEvent(event)) {
                 OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
+                //TODO leeqiang
                 log.info(event.getType());
                 log.info(openBoxEvent.toString());
+            } else if (EventType.isNftSplitEvent(event)) {
+                
+            } else if (EventType.isNftComposeEvent(event)) {
+
+            } else if (EventType.isBoxMakerEvent(event)) {
+                BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
+                marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);
+            } else if (EventType.isBoxTakerEvent(event)) {
+                BoxTakerEvent boxTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxTakerEvent.class);
+                marketService.addBoxTakerEvent(transaction, event, boxTakerEvent);
+            } else if (EventType.isBoxBidEvent(event)) {
+                BoxBidEvent boxBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxBidEvent.class);
+                marketService.addBoxBidEvent(transaction, event, boxBidEvent);
+            } else if (EventType.isBoxCancelEvent(event)) {
+                BoxCancelEvent boxCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxCancelEvent.class);
+                marketService.addBoxCancelEvent(transaction, event, boxCancelEvent);
             }
             if (ContextService.getKikoOwner().contains(event.getType().split("::")[0])) {
-                if (EventType.isBoxMakerEvent(event)) {
-                    BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
-                    marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);
-                } else if (EventType.isBoxTakerEvent(event)) {
-                    BoxTakerEvent boxTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxTakerEvent.class);
-                    marketService.addBoxTakerEvent(transaction, event, boxTakerEvent);
-                } else if (EventType.isBoxBidEvent(event)) {
-                    BoxBidEvent boxBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxBidEvent.class);
-                    marketService.addBoxBidEvent(transaction, event, boxBidEvent);
-                } else if (EventType.isBoxCancelEvent(event)) {
-                    BoxCancelEvent boxCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxCancelEvent.class);
-                    marketService.addBoxCancelEvent(transaction, event, boxCancelEvent);
-                } else if (EventType.isNftMakerEvent(event)) {
+                if (EventType.isNftMakerEvent(event)) {
                     MarketMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketMakerEvent.class);
                     marketService.addNftMakerEvent(transaction, event, nftMakerEvent);
                 } else if (EventType.isNftTakerEvent(event)) {
