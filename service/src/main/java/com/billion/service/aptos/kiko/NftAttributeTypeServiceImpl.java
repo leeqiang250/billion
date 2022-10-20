@@ -29,12 +29,10 @@ public class NftAttributeTypeServiceImpl extends ServiceImpl<NftAttributeTypeMap
         nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getId, attributeMeta.getNftAttributeTypeId());
         var attributeType = this.getOne(nftAttributeTypeQueryWrapper);
 
-        NftAttribute nftAttribute = NftAttribute.builder()
+        return NftAttribute.builder()
                 .type(attributeType.getClassName())
                 .key(attributeMeta.getAttribute())
                 .value(attributeMeta.getValue())
                 .build();
-
-        return nftAttribute;
     }
 }

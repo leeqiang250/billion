@@ -11,8 +11,10 @@ public interface NftAttributeTypeService extends IService<NftAttributeType> {
 
     /**
      * getNftAttributeInfobyMetaId
+     *
      * @param metaId
      * @return
      */
     public NftAttribute getNftAttributeInfoByMetaId(Long metaId);
+
 }

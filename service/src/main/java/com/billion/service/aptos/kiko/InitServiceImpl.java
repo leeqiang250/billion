@@ -53,12 +53,6 @@ public class InitServiceImpl implements InitService {
     NftService nftService;
 
     @Resource
-    NftAttributeService nftAttributeService;
-
-    @Resource
-    NftClassService nftClassService;
-
-    @Resource
     NftGroupService nftGroupService;
 
     @Resource

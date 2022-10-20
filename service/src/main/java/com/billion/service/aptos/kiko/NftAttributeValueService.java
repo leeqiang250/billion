@@ -13,10 +13,10 @@ public interface NftAttributeValueService extends IService<NftAttributeValue> {
 
     /**
      * getNftAttributeForMint
+     *
      * @param nftMetaId
      * @return
      */
     public List<NftAttribute> getNftAttributeForMint(Long nftMetaId);
-
 
 }

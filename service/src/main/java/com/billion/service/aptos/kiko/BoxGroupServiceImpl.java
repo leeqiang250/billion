@@ -290,7 +290,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
         Map tokenMap = tokenService.cacheMap(context);
 
-        List<BoxGroupDto.BoxGroupInfo> resultList = new ArrayList();
+        List<BoxGroupDto.BoxGroupInfo> resultList = new ArrayList<>();
         boxGroups.forEach(boxGroup -> {
             if (!boxGroup.getTransactionStatus().equals(TransactionStatus.STATUS_3_SUCCESS.getCode())) {
                 return;

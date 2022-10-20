@@ -52,7 +52,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     TokenService tokenService;
 
     @Resource
-    NftClassService nftClassService;
+    NftAttributeValueService nftAttributeValueService;
 
     @Resource
     NftService nftService;
@@ -168,7 +168,24 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
             var image = imageService.add(nftMeta.getUri(), nftMeta.getClass().getSimpleName() + ":" + nftMeta.getId());
 
-            Map<String, List<String>> classMap = nftClassService.getClassForMint(nftMeta.getId().toString());
+            var nftAttributeList = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
+            var nftAttributeMap = nftAttributeList.stream().collect(Collectors.toMap(e -> e.getKey(), (e) -> e));
+            if (nftAttributeList.size() != nftAttributeMap.size()) {
+                nftMeta.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta.setTransactionHash(EMPTY);
+                super.updateById(nftMeta);
+
+                throw new BizException("nft attribute error");
+            }
+            List<String> propertyTypes = new ArrayList<>();
+            List<String> propertyKeys = new ArrayList<>();
+            List<String> propertyValues = new ArrayList<>();
+            nftAttributeList.forEach(nftAttribute -> {
+                propertyTypes.add(nftAttribute.getType());
+                propertyKeys.add(nftAttribute.getKey());
+                propertyValues.add(nftAttribute.getValue());
+            });
+
             TransactionPayload transactionPayload = TransactionPayload.builder()
                     .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                     .function(ContextService.getKikoOwner() + "::help::mint_token_with_box")
@@ -177,10 +194,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             Hex.encode(displayName),
                             Hex.encode(description),
                             Hex.encode(image.getProxy()),
-                            nftGroup.getOwner(),
-                            classMap.get(NftPropertyType.KEYS.getType()),
-                            classMap.get(NftPropertyType.VALUES.getType()),
-                            classMap.get(NftPropertyType.TYPES.getType())
+                            propertyKeys,
+                            propertyValues,
+                            propertyTypes
                     ))
                     .typeArguments(List.of(boxResource.resourceTag()))
                     .build();

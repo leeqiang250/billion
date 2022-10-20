@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billion.dao.aptos.kiko.NftAttributeValueMapper;
 import com.billion.model.dto.NftAttribute;
 import com.billion.model.entity.NftAttributeValue;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,11 +24,7 @@ public class NftAttributeValueServiceImpl extends ServiceImpl<NftAttributeValueM
     public List<NftAttribute> getNftAttributeForMint(Long nftMetaId) {
         QueryWrapper<NftAttributeValue> queryWrapper = new QueryWrapper();
         queryWrapper.lambda().eq(NftAttributeValue::getNftMetaId, nftMetaId);
-        var attributeValue = this.list(queryWrapper);
-
-        if (attributeValue.size() == 0) {
-            return new ArrayList<>();
-        }
+        var attributeValue = super.list(queryWrapper);
 
         List<NftAttribute> resultList = new ArrayList<>();
         attributeValue.forEach(v -> {
