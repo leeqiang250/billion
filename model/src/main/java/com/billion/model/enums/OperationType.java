@@ -3,26 +3,29 @@ package com.billion.model.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * @author liqiang
+ */
+
 @Getter
 @AllArgsConstructor
 public enum OperationType {
 
-    NFT_MINT_EVENT("NFTMintEvent", "NFT铸造事件"),
-    NFT_MAKER_EVENT("NFTMakerEvent", "NFT铸造事件"),
-    NFT_TAKER_EVENT("NFTtakerEvent", "NFT铸造事件"),
-    NFT_BID_EVENT("NFTBidEvent", "NFT铸造事件"),
-    NFT_CANCLE_EVENT("NFTCancleEvent", "NFT铸造事件"),
-    NFT_ACCEPT_BID_EVENT("NFTAcceptBidEvent", "NFT铸造事件"),
-    NFT_OFFLINE_EVENT("NFTOfflineEvent", "NFT铸造事件"),
-    NFT_CHANGE_PRICE_EVENT("NFTChangePriceEvent", "NFT铸造事件"),
-    BOX_MAKER_EVENT("BoxMakerEvent", "NFT铸造事件"),
-    BOX_TAKER_EVENT("BoxTakerEvent", "NFT铸造事件"),
-    BOX_BID_EVENT("BoxBidEvent", "NFT铸造事件"),
-    BOX_CANCLE_EVENT("BoxCancleEvent", "NFT铸造事件"),
-
+    NFT_MINT_EVENT("NFTMintEvent", ""),
+    NFT_MAKER_EVENT("NFTMakerEvent", ""),
+    NFT_TAKER_EVENT("NFTTakerEvent", ""),
+    NFT_BID_EVENT("NFTBidEvent", ""),
+    NFT_CANCLE_EVENT("NFTCancelEvent", ""),
+    NFT_ACCEPT_BID_EVENT("NFTAcceptBidEvent", ""),
+    NFT_OFFLINE_EVENT("NFTOfflineEvent", ""),
+    NFT_CHANGE_PRICE_EVENT("NFTChangePriceEvent", ""),
+    BOX_MAKER_EVENT("BoxMakerEvent", ""),
+    BOX_TAKER_EVENT("BoxTakerEvent", ""),
+    BOX_BID_EVENT("BoxBidEvent", ""),
+    BOX_CANCLE_EVENT("BoxCancelEvent", ""),
     ;
 
-    private String type;
-    private String desc;
+    String type;
+    String desc;
 
 }

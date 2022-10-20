@@ -112,9 +112,11 @@ public class ScanDispatchService implements Serializable {
                 var events = transaction.getEvents();
                 for (Event<Map> event : events) {
                     if (EventType.isNftCreateTokenDataEvent(event)
+                            || EventType.isNftDepositEvent(event)
+                            || EventType.isNftDepositEvent(event)
                             || EventType.isOpenBoxEvent(event)
-                            || EventType.isNftDepositEvent(event)
-                            || EventType.isNftDepositEvent(event)
+                            || EventType.isNftComposeEvent(event)
+                            || EventType.isNftSplitEvent(event)
                     ) {
                         log.info(event.getType());
 
