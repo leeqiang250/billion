@@ -18,6 +18,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class BoxCancelEvent implements Serializable {
 
+    public static String EVENT_NAME = "::secondary_market::BoxCancelEvent<";
+
     String id;
 
     String type;

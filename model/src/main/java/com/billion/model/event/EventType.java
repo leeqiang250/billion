@@ -51,6 +51,14 @@ public class EventType {
         return OpenBoxEvent.EVENT_NAME.equals(event.getType());
     }
 
+    public static boolean isNftComposeEvent(Event event) {
+        return NftComposeEvent.EVENT_NAME.equals(event.getType());
+    }
+
+    public static boolean isNftSplitEvent(Event event) {
+        return NftSplitEvent.EVENT_NAME.equals(event.getType());
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -60,7 +68,7 @@ public class EventType {
      * @return boolean
      */
     public static boolean isBoxMakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxMakerEvent<");
+        return event.getType().contains(BoxMakerEvent.EVENT_NAME);
     }
 
     /**
@@ -70,7 +78,7 @@ public class EventType {
      * @return boolean
      */
     public static boolean isBoxTakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxTakerEvent<");
+        return event.getType().contains(BoxTakerEvent.EVENT_NAME);
     }
 
     /**
@@ -80,7 +88,7 @@ public class EventType {
      * @return boolean
      */
     public static boolean isBoxBidEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxBidEvent<");
+        return event.getType().contains(BoxBidEvent.EVENT_NAME);
     }
 
     /**
@@ -90,7 +98,7 @@ public class EventType {
      * @return boolean
      */
     public static boolean isBoxCancelEvent(Event event) {
-        return event.getType().contains("::secondary_market::BoxCancelEvent<");
+        return event.getType().contains(BoxCancelEvent.EVENT_NAME);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

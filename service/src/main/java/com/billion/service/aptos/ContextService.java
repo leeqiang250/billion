@@ -1,8 +1,9 @@
 package com.billion.service.aptos;
 
-import com.aptos.AptosClient;
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Contract;
+import com.billion.model.event.NftComposeEvent;
+import com.billion.model.event.NftSplitEvent;
 import com.billion.model.event.OpenBoxEvent;
 import com.billion.service.aptos.kiko.ContractService;
 import com.billion.service.aptos.kiko.InitService;
@@ -102,6 +103,8 @@ public class ContextService {
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
         ContextService.aptosHost = this.pAptosHost;
+        NftComposeEvent.EVENT_NAME = ContextService.kikoOwner + NftComposeEvent.EVENT_NAME;
+        NftSplitEvent.EVENT_NAME = ContextService.kikoOwner + NftSplitEvent.EVENT_NAME;
         OpenBoxEvent.EVENT_NAME = ContextService.kikoOwner + OpenBoxEvent.EVENT_NAME;
         aptosService.initialize();
     }

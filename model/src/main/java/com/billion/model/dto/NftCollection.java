@@ -1,6 +1,5 @@
-package com.billion.model.event;
+package com.billion.model.dto;
 
-import com.aptos.request.v1.model.TokenId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,10 +14,10 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NftBurnTokenEvent implements Serializable {
+public class NftCollection implements Serializable {
 
-    TokenId id;
+    String creator;
 
-    String amount;
+    String collection;
 
 }
