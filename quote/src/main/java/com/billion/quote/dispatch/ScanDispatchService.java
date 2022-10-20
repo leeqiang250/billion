@@ -185,9 +185,11 @@ public class ScanDispatchService implements Serializable {
                 log.info(event.getType());
                 log.info(openBoxEvent.toString());
             } else if (EventType.isNftSplitEvent(event)) {
-                
-            } else if (EventType.isNftComposeEvent(event)) {
+                NftSplitEvent nftSplitEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftSplitEvent.class);
 
+            } else if (EventType.isNftComposeEvent(event)) {
+                NftComposeEvent nftComposeEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftComposeEvent.class);
+                
             } else if (EventType.isBoxMakerEvent(event)) {
                 BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
                 marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);

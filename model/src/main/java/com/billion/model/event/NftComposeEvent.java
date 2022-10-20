@@ -20,7 +20,8 @@ public class NftComposeEvent implements Serializable {
 
     public static String EVENT_NAME = "::op_nft::NftComposeEvent";
 
-    String id;
+    @JSONField(name = "order_id")
+    String orderId;
 
     String execute;
 

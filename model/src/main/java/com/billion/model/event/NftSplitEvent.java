@@ -21,7 +21,8 @@ public class NftSplitEvent implements Serializable {
 
     public static String EVENT_NAME = "::op_nft::NftSplitEvent";
 
-    String id;
+    @JSONField(name = "order_id")
+    String orderId;
 
     boolean execute;
 
