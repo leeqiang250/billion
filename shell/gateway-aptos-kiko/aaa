@@ -1,0 +1,2 @@
+sudo /usr/local/openresty/nginx/sbin/nginx -s reload
+sudo /usr/local/openresty/nginx/sbin/nginx -t
