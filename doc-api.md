@@ -319,7 +319,7 @@ pageLimit：分页条数
 | askToken | object |盲盒token信息|
 | amount | int |数量|
 | bidToken | object |支付token信息|
-| bidToken | int |价格|
+| price | int |价格|
 | ts | int |起售时间戳|
 
 ### 我的NFT列表接口
