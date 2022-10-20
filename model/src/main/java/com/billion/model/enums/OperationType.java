@@ -12,6 +12,8 @@ import lombok.Getter;
 public enum OperationType {
 
     NFT_MINT_EVENT("NFTMintEvent", ""),
+    NFT_WITHDRAW_EVENT("NFTWithDrawEvent", ""),
+    NFT_DEPOSIT_EVENT("NFTDepositEvent", ""),
     NFT_MAKER_EVENT("NFTMakerEvent", ""),
     NFT_TAKER_EVENT("NFTTakerEvent", ""),
     NFT_BID_EVENT("NFTBidEvent", ""),
