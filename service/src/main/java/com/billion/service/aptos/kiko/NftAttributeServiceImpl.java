@@ -52,18 +52,19 @@ public class NftAttributeServiceImpl extends AbstractCacheService<NftAttributeMa
         if (!Objects.isNull(context)) {
             changeLanguage(context, list);
         }
+
         return list;
     }
 
     private void changeLanguage(Context context, List<NftAttribute> list) {
-        Set setAttrubute = list.stream().map(e -> e.getAttribute()).collect(Collectors.toSet());
+        Set setAttribute = list.stream().map(e -> e.getAttribute()).collect(Collectors.toSet());
         Set setValue = list.stream().map(e -> e.getValue()).collect(Collectors.toSet());
 
-        Map mapAttrubute = languageService.getByKeys(context, setAttrubute);
+        Map mapAttribute = languageService.getByKeys(context, setAttribute);
         Map mapValue = languageService.getByKeys(context, setValue);
 
         list.forEach(e -> {
-            e.setAttribute(mapAttrubute.get(e.getAttribute()).toString());
+            e.setAttribute(mapAttribute.get(e.getAttribute()).toString());
             e.setValue(mapValue.get(e.getValue()).toString());
         });
     }
