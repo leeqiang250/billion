@@ -26,7 +26,7 @@ public class NftAttributeTypeServiceImpl extends ServiceImpl<NftAttributeTypeMap
         var attributeMeta = nftAttributeMetaService.getOne(nftAttributeMetaQueryWrapper);
 
         QueryWrapper<NftAttributeType> nftAttributeTypeQueryWrapper = new QueryWrapper<>();
-        nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getId, attributeMeta.getNftAttributeType());
+        nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getId, attributeMeta.getNftAttributeTypeId());
         var attributeType = this.getOne(nftAttributeTypeQueryWrapper);
 
         NftAttribute nftAttribute = NftAttribute.builder()

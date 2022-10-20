@@ -33,7 +33,7 @@ public class NftAttributeValueServiceImpl extends ServiceImpl<NftAttributeValueM
 
         List<NftAttribute> resultList = new ArrayList<>();
         attributeValue.forEach(v -> {
-            var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMeta());
+            var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMetaId());
             resultList.add(attributeType);
         });
 
