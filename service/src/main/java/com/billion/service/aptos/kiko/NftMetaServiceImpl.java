@@ -1,17 +1,14 @@
 package com.billion.service.aptos.kiko;
 
-import com.aptos.request.v1.model.Response;
-import com.aptos.request.v1.model.TableTokenData;
-import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.request.v1.model.*;
 import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMetaMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.*;
-import com.billion.model.enums.Chain;
+import com.billion.model.enums.*;
 import com.billion.model.enums.Language;
-import com.billion.model.enums.NftPropertyType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.exception.BizException;
 import com.billion.service.aptos.AbstractCacheService;
@@ -20,7 +17,6 @@ import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.Duration;
@@ -60,6 +56,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
     @Resource
     NftService nftService;
+
+    @Resource
+    OperationService operationService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -179,13 +178,6 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             Hex.encode(description),
                             Hex.encode(image.getProxy()),
                             nftGroup.getOwner(),
-                            //key
-//                            List.of("3-A", "2-B", "2-C", "2-D", "1-E", "1-F"),
-//                            //value
-//                            List.of(Hex.encode("1011a"), Hex.encode("912e"), Hex.encode("913d"), Hex.encode("914c"), Hex.encode("15b"), Hex.encode("16a")),
-//                            //type
-//                            List.of("A-A", "A-B", "A-C", "A-D", "A-E", "A-F")
-                            //TODO key不能重复
                             classMap.get(NftPropertyType.KEYS.getType()),
                             classMap.get(NftPropertyType.VALUES.getType()),
                             classMap.get(NftPropertyType.TYPES.getType())
@@ -223,6 +215,27 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             nftMeta.setTableName(Hex.encode(displayName));
 
             super.updateById(nftMeta);
+            //补充tokenId
+            var tokenId = TokenId.builder()
+                    .tokenDataId(TokenDataId.builder()
+                            .creator(nftGroup.getOwner())
+                            .collection(Hex.encode(nftGroupDisplayName))
+                            .name(Hex.encode(displayName))
+                            .build())
+                    .propertyVersion("0")
+                    .build();
+            nftMeta.setTokenId(tokenId.getNftTokenIdKey());
+            //交易记录
+            Operation operation = Operation.builder()
+                    .chain(Chain.APTOS.getCode())
+                    .account(nftGroup.getOwner())
+                    .type(OperationType.NFT_MINT_EVENT.getType())
+                    .tokenId(tokenId.getNftTokenIdKey())
+                    .tokenAmount(1L)
+                    .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                    .transactionHash(response.getData().getHash())
+                    .build();
+            operationService.save(operation);
         }
 
         //TODO 删除缓存

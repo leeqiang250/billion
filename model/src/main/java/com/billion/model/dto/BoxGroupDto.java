@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author jason
@@ -19,63 +20,77 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoxGroupDto implements Serializable {
-    /**
-     * 主键Id
-     */
-    Long id;
 
-    /**
-     * 链类型
-     */
-    String chain;
+    Long pages;
+    Long total;
+    Long currentPage;
+    List<BoxGroupDto.BoxGroupInfo> boxGroupList;
 
-    /**
-     * 显示名称
-     */
-    String displayName;
 
-    /**
-     * nft_group
-     */
-    Long nftGroup;
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BoxGroupInfo {
+        /**
+         * 主键Id
+         */
+        Long id;
 
-    /**
-     * 询价币种
-     */
-    Token askToken;
+        /**
+         * 链类型
+         */
+        String chain;
 
-    /**
-     * 询价数量
-     */
-    String amount;
+        /**
+         * 显示名称
+         */
+        String displayName;
 
-    /**
-     * 计价币种
-     */
-    Token bidToken;
+        /**
+         * nft_group
+         */
+        Long nftGroup;
 
-    /**
-     * 计价价格
-     */
-    String price;
+        /**
+         * 询价币种
+         */
+        Token askToken;
 
-    /**
-     * 描述
-     */
-    String description;
+        /**
+         * 询价数量
+         */
+        String amount;
 
-    /**
-     * 规则
-     */
-    String rule;
+        /**
+         * 计价币种
+         */
+        Token bidToken;
 
-    /**
-     * 起售时间
-     */
-    String ts;
+        /**
+         * 计价价格
+         */
+        String price;
 
-    /**
-     * 排序
-     */
-    Integer sort;
+        /**
+         * 描述
+         */
+        String description;
+
+        /**
+         * 规则
+         */
+        String rule;
+
+        /**
+         * 起售时间
+         */
+        String ts;
+
+        /**
+         * 排序
+         */
+        Integer sort;
+    }
+
 }

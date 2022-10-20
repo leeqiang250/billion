@@ -5,11 +5,13 @@ import com.aptos.request.v1.model.CoinStore;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billion.dao.aptos.kiko.BoxGroupMapper;
 import com.billion.model.dto.BoxGroupDto;
 import com.billion.model.dto.Context;
 import com.billion.model.dto.MyBoxDto;
 import com.billion.model.entity.BoxGroup;
+import com.billion.model.entity.Market;
 import com.billion.model.entity.Pair;
 import com.billion.model.entity.Token;
 import com.billion.model.enums.*;
@@ -273,19 +275,29 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     }
 
     @Override
-    public List<BoxGroupDto> getSaleList(Context context) {
-        var boxGroups = this.cacheList(context);
+    public BoxGroupDto getSaleList(Context context, Integer pageStart, Integer pageLimt) {
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, context.getChain());
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS);
+        if (Objects.isNull(pageStart) || Objects.isNull(pageLimt)) {
+            pageStart = 1;
+            pageLimt = Integer.MAX_VALUE;
+        }
+        Page<BoxGroup> page = Page.of(pageStart, pageLimt);
+        var pageResult = this.page(page, boxGroupQueryWrapper);
+        var boxGroups = pageResult.getRecords();
 
         Map tokenMap = tokenService.cacheMap(context);
 
-        List<BoxGroupDto> resultList = new ArrayList();
+        List<BoxGroupDto.BoxGroupInfo> resultList = new ArrayList();
         boxGroups.forEach(boxGroup -> {
             if (!boxGroup.getTransactionStatus().equals(TransactionStatus.STATUS_3_SUCCESS.getCode())) {
                 return;
             }
             Token askToken = (Token) tokenMap.get(String.valueOf(boxGroup.getAskToken()));
             Token bitToken = (Token) tokenMap.get(String.valueOf(boxGroup.getBidToken()));
-            BoxGroupDto boxGroupDto = BoxGroupDto.builder()
+            BoxGroupDto.BoxGroupInfo boxGroupInfo = BoxGroupDto.BoxGroupInfo.builder()
                     .id(boxGroup.getId())
                     .chain(boxGroup.getChain())
                     .displayName(boxGroup.getDisplayName())
@@ -299,11 +311,18 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                     .ts(boxGroup.getTs())
                     .sort(boxGroup.getSort())
                     .build();
-            resultList.add(boxGroupDto);
+            resultList.add(boxGroupInfo);
 
         });
+
+        BoxGroupDto boxGroupDto = BoxGroupDto.builder()
+                .pages(pageResult.getPages())
+                .total(pageResult.getTotal())
+                .currentPage(pageResult.getCurrent())
+                .boxGroupList(resultList)
+                .build();
         //TODO:根据前端设计是否需要其他过滤条件
-        return resultList;
+        return boxGroupDto;
     }
 
     private void changeLanguage(Context context, List<BoxGroup> list) {
