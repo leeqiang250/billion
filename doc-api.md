@@ -301,6 +301,15 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 }
 ]
 }`
+响应参数说明
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| askToken | object |盲盒token信息|
+| amount | int |数量|
+| bidToken | object |支付token信息|
+| bidToken | int |价格|
+| ts | int |起售时间戳|
 
 ### 我的NFT列表接口
 
