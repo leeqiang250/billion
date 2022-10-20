@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 铸造时：通过NFT ID查询nft_attribute_value的全部数据
+ * 铸造时：通过NFT ID查询nft_attribute_value的全部数据，返回List<NftAttribute>
  *
  * @author liqiang
  */
