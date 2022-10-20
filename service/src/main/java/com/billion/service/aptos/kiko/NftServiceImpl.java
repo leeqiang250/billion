@@ -96,6 +96,18 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
 
         super.save(nft);
 
+        //NFT转出记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(event.getGuid().getAccountAddress())
+                .type(OperationType.NFT_WITHDRAW_EVENT.getType())
+                .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
+                .tokenAmount(1L)
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
+
         return nft;
     }
 
@@ -115,6 +127,18 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         nft.setTransactionHash(transaction.getHash());
 
         super.save(nft);
+
+        //NFT转入记录
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(event.getGuid().getAccountAddress())
+                .type(OperationType.NFT_DEPOSIT_EVENT.getType())
+                .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
+                .tokenAmount(1L)
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return nft;
     }
