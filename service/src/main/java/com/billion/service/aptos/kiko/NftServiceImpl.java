@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> implements NftService {
+
+    @Resource
+    OperationService operationService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -60,29 +64,17 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
 
         super.save(nft);
 
-        //TODO renjian
         //铸造NFT记录
-        //补充tokenId
-        //var tokenId = TokenId.builder()
-        //        .tokenDataId(TokenDataId.builder()
-        //                .creator(nftGroup.getOwner())
-        //                .collection(Hex.encode(nftGroupDisplayName))
-        //                .name(Hex.encode(displayName))
-        //                .build())
-        //        .propertyVersion("0")
-        //        .build();
-        //nftMeta.setTokenId(tokenId.getNftTokenIdKey());
-        ////交易记录
-        //Operation operation = Operation.builder()
-        //        .chain(Chain.APTOS.getCode())
-        //        .account(nftGroup.getOwner())
-        //        .type(OperationType.NFT_MINT_EVENT.getType())
-        //        .tokenId(tokenId.getNftTokenIdKey())
-        //        .tokenAmount(1L)
-        //        .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
-        //        .transactionHash(response.getData().getHash())
-        //        .build();
-        //operationService.save(operation);
+        Operation operation = Operation.builder()
+                .chain(Chain.APTOS.getCode())
+                .account(event.getGuid().getAccountAddress())
+                .type(OperationType.NFT_MINT_EVENT.getType())
+                .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
+                .tokenAmount(1L)
+                .transactionStatus(TransactionStatus.STATUS_3_SUCCESS.getCode())
+                .transactionHash(transaction.getHash())
+                .build();
+        operationService.save(operation);
 
         return nft;
     }
