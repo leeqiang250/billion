@@ -58,7 +58,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
                     .nftGroupId(e.getNftGroupId())
                     .nftMetaId(e.getNftMetaId())
                     .score(e.getScore())
-                    .type(e.getType())
+                    .isAttribute(e.getIsAttribute())
                     .attributes(attributes).build();
             resultList.add(nftClassDto);
         });
@@ -78,13 +78,7 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
         List<String> values = new ArrayList<>();
 
         list.forEach(e -> {
-            if (e.getType() == 0) {
-                //无属性
-                keys.add(Hex.encode(e.getClassName()));
-                values.add(EMPTY);
-                types.add(EMPTY);
-            } else {
-                //有属性
+            if (e.getIsAttribute()) {
                 List<NftAttribute> attributes = nftAttributeService.getByClassId(null, e.getId().toString());
                 if (attributes != null && attributes.size() > 0) {
                     attributes.forEach(a -> {
@@ -99,6 +93,10 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
                     values.add(EMPTY);
                     types.add(Hex.encode(EMPTY));
                 }
+            } else {
+                keys.add(Hex.encode(e.getClassName()));
+                values.add(EMPTY);
+                types.add(EMPTY);
             }
         });
         resultMap.put(NftPropertyType.KEYS.getType(), keys);

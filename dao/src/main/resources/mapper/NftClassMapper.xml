@@ -4,11 +4,12 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id as id
+        id
+        as id
         ,nft_group_id as nft_group_id
         ,nft_info_id as nft_info_id
         ,class_name as class_name
-        ,type as type
+        ,is_attribute as is_attribute
         ,score as score
     </sql>
 

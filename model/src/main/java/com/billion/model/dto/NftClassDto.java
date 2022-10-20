@@ -43,7 +43,7 @@ public class NftClassDto implements Serializable {
     /**
      * 类型(0:无属性;1:有属性)
      */
-    Integer type;
+    Boolean isAttribute;
 
     /**
      * 分数

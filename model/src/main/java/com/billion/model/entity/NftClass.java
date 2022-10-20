@@ -49,8 +49,8 @@ public class NftClass implements IModel {
     /**
      * 类型(0:无属性;1:有属性)
      */
-    @TableField("type")
-    Integer type;
+    @TableField("is_attribute")
+    Boolean isAttribute;
 
     /**
      * 分数
