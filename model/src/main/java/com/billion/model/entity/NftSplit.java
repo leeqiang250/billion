@@ -27,10 +27,10 @@ public class NftSplit implements IModel {
     Long id;
 
     @TableField("order_id")
-    Long orderId;
+    String orderId;
 
-    @TableField("execute_")
-    String execute;
+    @TableField("is_execute")
+    Boolean isExecute;
 
     @TableField("owner")
     String owner;
