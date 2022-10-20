@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nft.mapper.NftAttributeValueMapper">
+<mapper namespace="com.nft.mapper.NftSplitMapper">
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id as id
-        ,nft_attribute_meta as nft_attribute_meta
-        ,nft_meta_id as nft_meta_id
+        id
+        as id
+        ,order_id as order_id
+        ,execute_ as execute_
+        ,owner as owner
+        ,source_uri as source_uri
     </sql>
 
 </mapper>
