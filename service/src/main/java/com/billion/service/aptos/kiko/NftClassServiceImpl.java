@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 
 /**
  * @author jason
@@ -79,8 +81,8 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
             if (e.getType() == 0) {
                 //无属性
                 keys.add(Hex.encode(e.getClassName()));
-                values.add(new String());
-                types.add(new String());
+                values.add(EMPTY);
+                types.add(EMPTY);
             } else {
                 //有属性
                 List<NftAttribute> attributes = nftAttributeService.getByClassId(null, e.getId().toString());
@@ -95,8 +97,8 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
                     });
 //                } else {
                     keys.add(e.getClassName());
-                    values.add(new String());
-                    types.add(Hex.encode(new String()));
+                    values.add(EMPTY);
+                    types.add(Hex.encode(EMPTY));
                 }
             }
         });
