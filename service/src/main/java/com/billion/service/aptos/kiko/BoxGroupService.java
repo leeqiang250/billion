@@ -52,5 +52,5 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      * @param context
      * @return
      */
-    List<BoxGroupDto> getSaleList(Context context);
+    BoxGroupDto getSaleList(Context context, Integer pageStart, Integer pageLimit);
 }

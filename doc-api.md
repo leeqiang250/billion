@@ -246,31 +246,38 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 
 | 方法 | GET |
 |----|----|
-| 路径 | /aptos/kiko/v1/nft/boxGroup/getSaleList |
+| 路径 | /aptos/kiko/v1/nft/boxGroup/getSaleList/{pageStart}/{pageLimit} |
+说明：
+pageStart：起始页
+pageLimit：分页条数
 
 响应
 
 `{
 "code": 200,
-"ts": 1665921067059,
+"ts": 1666238749588,
 "msg": "success",
-"data": [
+"data": {
+"pages": 1,
+"total": 5,
+"currentPage": 1,
+"boxGroupList": [
 {
-"id": 43,
+"id": 39,
 "chain": "aptos",
-"displayName": "名称43",
-"nftGroup": 5,
+"displayName": "345f4153-7cca-41ef-b3fb-b120f7a36023",
+"nftGroup": 1,
 "askToken": {
 "transactionStatus": "status_3_success",
-"transactionHash": "0xd89288406cda2649cb322afca1ca092bc35b349204a8e41975ed7e8d64366650",
+"transactionHash": "0xd1de62fd5d67b05d61be44f63cd7ae242e2766ae288f92aa3c82aa2d533459c7",
 "transactionStatus_": "STATUS_3_SUCCESS",
-"id": 6,
+"id": 2,
 "chain": "aptos",
 "moduleAddress": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
 "moduleName": "box",
-"structName": "BoxV5",
-"name": "BoxV5",
-"symbol": "BoxV5",
+"structName": "BoxV1",
+"name": "BoxV1",
+"symbol": "BoxV1",
 "decimals": 0,
 "displayDecimals": 0,
 "uri": "",
@@ -279,32 +286,36 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 "amount": "0",
 "bidToken": {
 "transactionStatus": "status_3_success",
-"transactionHash": "0xf01a5ac0260bb031068d28b57143a2ab6d76fd9908975203373222d14eda73d4",
+"transactionHash": "",
 "transactionStatus_": "STATUS_3_SUCCESS",
-"id": 7,
+"id": 1,
 "chain": "aptos",
-"moduleAddress": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
-"moduleName": "box",
-"structName": "Win",
-"name": "Win",
-"symbol": "WIN",
+"moduleAddress": "0x1",
+"moduleName": "aptos_coin",
+"structName": "AptosCoin",
+"name": "AptosCoin",
+"symbol": "AptosCoin",
 "decimals": 8,
 "displayDecimals": 2,
 "uri": "",
 "isShow": true
 },
-"price": "574",
-"description": "描述43",
-"rule": "***",
-"ts": "1665729608198",
+"price": "1000",
+"description": "90f6ca41-5a27-4589-a210-ddec6b97c07d",
+"rule": "",
+"ts": "1665729602488",
 "sort": 0
 }
 ]
+}
 }`
 响应参数说明
 
 | 名称 | 类型 |描述|
 |----|----|----|
+| pages | int |总页数|
+| total | int |总条数|
+| currentPage | int |当前页数|
 | askToken | object |盲盒token信息|
 | amount | int |数量|
 | bidToken | object |支付token信息|
