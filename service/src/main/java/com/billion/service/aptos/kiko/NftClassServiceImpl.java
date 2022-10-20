@@ -95,7 +95,6 @@ public class NftClassServiceImpl extends AbstractCacheService<NftClassMapper, Nf
                         values.add(Hex.encode(a.getValue()));
                         types.add(Hex.encode(a.getAttribute()));
                     });
-//                } else {
                     keys.add(e.getClassName());
                     values.add(EMPTY);
                     types.add(Hex.encode(EMPTY));
