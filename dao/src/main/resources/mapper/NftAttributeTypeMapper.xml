@@ -4,7 +4,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id as id
+        id
+        as id
         ,nft_group_id as nft_group_id
         ,class_name as class_name
     </sql>
