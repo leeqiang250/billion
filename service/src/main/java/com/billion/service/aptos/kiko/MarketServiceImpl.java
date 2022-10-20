@@ -14,7 +14,6 @@ import com.billion.model.enums.OperationType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
-import com.billion.service.aptos.AptosService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

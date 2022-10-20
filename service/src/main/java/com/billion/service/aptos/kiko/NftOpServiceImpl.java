@@ -1,7 +1,9 @@
 package com.billion.service.aptos.kiko;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftComposeMapper;
 import com.billion.dao.aptos.kiko.NftSplitMapper;
+import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.NftCompose;
 import com.billion.model.entity.NftSplit;
 import com.billion.model.event.NftComposeEvent;
@@ -9,6 +11,7 @@ import com.billion.model.event.NftSplitEvent;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author liqiang
@@ -59,6 +62,16 @@ public class NftOpServiceImpl implements NftOpService {
         } else {
 
         }
+
+        return true;
+    }
+
+
+    boolean fadsf() {
+        QueryWrapper<NftSplit> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(NftSplit::getIsExecute, Boolean.FALSE);
+        var list = nftSplitMapper.selectOne(wrapper);
+
 
         return true;
     }

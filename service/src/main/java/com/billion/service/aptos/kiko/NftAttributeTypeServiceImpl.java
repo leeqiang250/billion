@@ -2,10 +2,12 @@ package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billion.dao.aptos.kiko.NftAttributeMetaMapper;
 import com.billion.dao.aptos.kiko.NftAttributeTypeMapper;
 import com.billion.model.dto.NftAttribute;
 import com.billion.model.entity.NftAttributeMeta;
 import com.billion.model.entity.NftAttributeType;
+import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,7 +16,7 @@ import javax.annotation.Resource;
  * @author jason
  */
 @Service
-public class NftAttributeTypeServiceImpl extends ServiceImpl<NftAttributeTypeMapper, NftAttributeType> implements NftAttributeTypeService {
+public class NftAttributeTypeServiceImpl extends AbstractCacheService<NftAttributeTypeMapper, NftAttributeType> implements NftAttributeTypeService {
 
     @Resource
     NftAttributeMetaService nftAttributeMetaService;
@@ -23,11 +25,11 @@ public class NftAttributeTypeServiceImpl extends ServiceImpl<NftAttributeTypeMap
     public NftAttribute getNftAttributeInfoByMetaId(Long metaId) {
         QueryWrapper<NftAttributeMeta> nftAttributeMetaQueryWrapper = new QueryWrapper<>();
         nftAttributeMetaQueryWrapper.lambda().eq(NftAttributeMeta::getId, metaId);
-        var attributeMeta = nftAttributeMetaService.getOne(nftAttributeMetaQueryWrapper);
+        var attributeMeta = nftAttributeMetaService.getOneThrowEx(nftAttributeMetaQueryWrapper);
 
         QueryWrapper<NftAttributeType> nftAttributeTypeQueryWrapper = new QueryWrapper<>();
         nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getId, attributeMeta.getNftAttributeTypeId());
-        var attributeType = this.getOne(nftAttributeTypeQueryWrapper);
+        var attributeType = this.getOneThrowEx(nftAttributeTypeQueryWrapper);
 
         return NftAttribute.builder()
                 .type(attributeType.getClassName())
@@ -35,4 +37,5 @@ public class NftAttributeTypeServiceImpl extends ServiceImpl<NftAttributeTypeMap
                 .value(attributeMeta.getValue())
                 .build();
     }
+
 }

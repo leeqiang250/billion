@@ -2,9 +2,12 @@ package com.billion.service.aptos.kiko;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.billion.dao.aptos.kiko.NftAttributeTypeMapper;
 import com.billion.dao.aptos.kiko.NftAttributeValueMapper;
 import com.billion.model.dto.NftAttribute;
+import com.billion.model.entity.NftAttributeType;
 import com.billion.model.entity.NftAttributeValue;
+import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +18,7 @@ import java.util.List;
  * @author jason
  */
 @Service
-public class NftAttributeValueServiceImpl extends ServiceImpl<NftAttributeValueMapper, NftAttributeValue> implements NftAttributeValueService {
+public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttributeValueMapper, NftAttributeValue> implements NftAttributeValueService {
 
     @Resource
     NftAttributeTypeService nftAttributeTypeService;
@@ -34,4 +37,5 @@ public class NftAttributeValueServiceImpl extends ServiceImpl<NftAttributeValueM
 
         return resultList;
     }
+
 }
