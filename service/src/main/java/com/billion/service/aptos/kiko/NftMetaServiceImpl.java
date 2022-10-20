@@ -177,13 +177,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                             Hex.encode(nftGroupDisplayName),
                             Hex.encode(displayName),
                             Hex.encode(description),
-                            "1",
-                            "1",
                             Hex.encode(image.getProxy()),
                             nftGroup.getOwner(),
-                            "3",
-                            "1",
-                            List.of(true, true, true, true, true),
                             //key
 //                            List.of("3-A", "2-B", "2-C", "2-D", "1-E", "1-F"),
 //                            //value

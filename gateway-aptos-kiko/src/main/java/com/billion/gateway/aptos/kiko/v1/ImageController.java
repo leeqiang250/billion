@@ -30,7 +30,17 @@ public class ImageController {
     ImageService imageService;
 
     @RequestMapping("/{id}")
-    public Response get(@RequestHeader Context context, @PathVariable Long id, HttpServletResponse response) throws IOException {
+    public Response get_v1(@RequestHeader Context context, @PathVariable Long id, HttpServletResponse response) throws IOException {
+        Image image = this.imageService.cacheById(context, id);
+        if (!Objects.isNull(image) && StringUtils.isNotEmpty(image.getUri())) {
+            response.sendRedirect(image.getUri());
+        }
+
+        return Response.FAILURE;
+    }
+
+    @RequestMapping("/{id}/{property_type}/{property_key}")
+    public Response get_v2(@RequestHeader Context context, @PathVariable Long id, HttpServletResponse response) throws IOException {
         Image image = this.imageService.cacheById(context, id);
         if (!Objects.isNull(image) && StringUtils.isNotEmpty(image.getUri())) {
             response.sendRedirect(image.getUri());
