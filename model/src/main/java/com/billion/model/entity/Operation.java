@@ -35,8 +35,8 @@ public class Operation extends TransactionStatus implements IModel {
     /**
      * 操作用户地址
      */
-    @TableField("account")
-    String account;
+    @TableField("owner")
+    String owner;
 
     /**
      * 操作类型

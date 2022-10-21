@@ -4,9 +4,10 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id as id
+        id
+        as id
         ,chain as chain
-        ,account as account
+        ,owner as owner
         ,type as type
         ,token_id as token_id
         ,token_amount as token_amount
