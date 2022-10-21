@@ -47,19 +47,19 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         resultList.add(NftAttribute.builder()
                 .type("bool")
                 .key(TOKEN_BURNABLE_BY_CREATOR)
-                .value(Hex.decodeToString("true"))
+                .value(Hex.encode("true"))
                 .build());
 
         resultList.add(NftAttribute.builder()
                 .type("bool")
                 .key(TOKEN_BURNABLE_BY_OWNER)
-                .value(Hex.decodeToString("true"))
+                .value(Hex.encode("true"))
                 .build());
 
         resultList.add(NftAttribute.builder()
                 .type("bool")
                 .key(TOKEN_PROPERTY_MUTATBLE)
-                .value(Hex.decodeToString("true"))
+                .value(Hex.encode("true"))
                 .build());
 
         return resultList;
