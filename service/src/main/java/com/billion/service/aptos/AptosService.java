@@ -34,7 +34,7 @@ public class AptosService {
             throw new BizException("aptos host is null");
         }
         AptosService.aptosClient = new AptosClient(ContextService.getAptosHost(), info -> this.logChainService.add(info), s -> log.info(s));
-        log.info("Aptos Node{}", requestNodeCache());
+        log.info("Aptos Node[{}]", requestNodeCache());
     }
 
     public static boolean checkTransaction(String hash) {
@@ -48,7 +48,7 @@ public class AptosService {
                     if (response.isValid()) {
                         throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("result:{} transaction:{}, vmStatus:{}", response.getData().isSuccess(), response.getData().getHash(), response.getData().getVmStatus());
+                        log.info("result[{}] transaction[{}] vmStatus[{}]", response.getData().isSuccess(), response.getData().getHash(), response.getData().getVmStatus());
                         return response.getData().isSuccess();
                     }
                 },
@@ -69,7 +69,7 @@ public class AptosService {
                     if (response.isValid()) {
                         throw new RuntimeException("transaction non-existent:" + hash);
                     } else {
-                        log.info("result:{} transaction:{}, vmStatus:{}", response.getData().isSuccess(), response.getData().getHash(), response.getData().getVmStatus());
+                        log.info("result[{}] transaction[{}] vmStatus[{}]", response.getData().isSuccess(), response.getData().getHash(), response.getData().getVmStatus());
                         return response;
                     }
                 },

@@ -138,7 +138,7 @@ public class NftTransferServiceImpl extends AbstractCacheService<NftTransferMapp
 
     void log(NftTransfer nftTransfer) {
         log.info("------------------------------------------------------------------------------------------------");
-        log.info("token transfer {}", nftTransfer);
+        log.info("token transfer[{}]", nftTransfer);
         log.info("------------------------------------------------------------------------------------------------");
     }
 

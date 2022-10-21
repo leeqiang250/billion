@@ -123,7 +123,7 @@ public class TokenTransferServiceImpl extends AbstractCacheService<TokenTransfer
 
     void log(TokenTransfer tokenTransfer){
         log.info("------------------------------------------------------------------------------------------------");
-        log.info("token transfer {}", tokenTransfer);
+        log.info("token transfer[{}]", tokenTransfer);
         log.info("------------------------------------------------------------------------------------------------");
     }
 

@@ -58,7 +58,7 @@ public class PrivateRedisServiceImpl implements PrivateRedisService {
                     }
                     default: {
                         value = dataType.code();
-                        log.info("{} {}", key, dataType.code());
+                        log.info("[{}] [{}]", key, dataType.code());
                         break;
                     }
                 }
