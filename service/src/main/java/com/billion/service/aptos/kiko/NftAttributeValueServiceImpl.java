@@ -57,6 +57,7 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
             var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMetaId());
             attributeType.setKey(Hex.encode(attributeType.getKey()));
             attributeType.setType(Hex.encode(attributeType.getType()));
+            attributeType.setValue(Hex.encode(attributeType.getValue()));
             resultList.add(attributeType);
         });
 
