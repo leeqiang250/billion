@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 @Service
 public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttributeValueMapper, NftAttributeValue> implements NftAttributeValueService {
 
-    final String TOKEN_BURNABLE_BY_CREATOR = Hex.decodeToString("TOKEN_BURNABLE_BY_CREATOR");
-    final String TOKEN_BURNABLE_BY_OWNER = Hex.decodeToString("TOKEN_BURNABLE_BY_OWNER");
-    final String TOKEN_PROPERTY_MUTATBLE = Hex.decodeToString("TOKEN_PROPERTY_MUTATBLE");
+    final String TOKEN_BURNABLE_BY_CREATOR = Hex.encode("TOKEN_BURNABLE_BY_CREATOR");
+    final String TOKEN_BURNABLE_BY_OWNER = Hex.encode("TOKEN_BURNABLE_BY_OWNER");
+    final String TOKEN_PROPERTY_MUTATBLE = Hex.encode("TOKEN_PROPERTY_MUTATBLE");
 
     @Resource
     NftAttributeTypeService nftAttributeTypeService;
