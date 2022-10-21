@@ -358,7 +358,12 @@ public class InitServiceImpl implements InitService {
 
         var nftGroups = this.nftGroupService.list();
         nftGroups.forEach(nftGroup -> {
-            for (int i = 0; i < 10; i++) {
+            int total = 10;
+            if (0 == nftGroup.getId() % 2) {
+                total = 1;
+            }
+
+            for (int i = 0; i < total; i++) {
                 var nftMeta = NftMeta.builder()
                         .nftGroupId(nftGroup.getId())
                         .displayName(UUID.randomUUID().toString())
