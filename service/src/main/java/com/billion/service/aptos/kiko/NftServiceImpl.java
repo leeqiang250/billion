@@ -71,6 +71,8 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .type(OperationType.NFT_MINT_EVENT.getType())
                 .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(1L)
+                .bidToken("")
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
@@ -103,6 +105,8 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .type(OperationType.NFT_WITHDRAW_EVENT.getType())
                 .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
                 .tokenAmount(1L)
+                .bidToken("")
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
@@ -135,6 +139,8 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .type(OperationType.NFT_DEPOSIT_EVENT.getType())
                 .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
                 .tokenAmount(1L)
+                .bidToken("")
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());

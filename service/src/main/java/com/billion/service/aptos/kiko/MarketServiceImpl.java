@@ -81,6 +81,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.BOX_MAKER_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxMakerEvent.getAmount()))
+                .bidToken("")
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
@@ -199,6 +201,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.BOX_CANCLE_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxCancelEvent.getAmount()))
+                .bidToken("")
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
@@ -237,6 +241,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.NFT_MAKER_EVENT.getType())
                 .tokenId(nftMakerEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(1L)
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
@@ -356,6 +362,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.NFT_CANCLE_EVENT.getType())
                 .tokenId(nftCancelEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(Long.valueOf(nftCancelEvent.getAmount()))
+                .bidToken("")
+                .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
