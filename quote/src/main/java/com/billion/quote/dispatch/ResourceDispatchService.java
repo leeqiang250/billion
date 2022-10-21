@@ -33,6 +33,7 @@ public class ResourceDispatchService implements Serializable {
     NftOpService nftOpService;
 
     //@Scheduled(cron = "*/3 * * * * ?")
+    //@Scheduled(fixedDelay = 3000)
     void dispatch() {
         TokenTransfer tokenTransfer = TokenTransfer.builder().build();
         NftTransfer nftTransfer = NftTransfer.builder().build();

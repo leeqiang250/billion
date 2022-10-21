@@ -13,6 +13,7 @@ import com.billion.service.aptos.kiko.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +75,7 @@ public class ScanDispatchService implements Serializable {
     }
 
     //@Scheduled(cron = "*/2 * * * * ?")
+    //@Scheduled(fixedDelay = 3000)
     void dispatch() {
         this.next = true;
         while (this.next) {
