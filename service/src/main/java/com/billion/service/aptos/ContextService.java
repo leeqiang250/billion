@@ -75,7 +75,7 @@ public class ContextService {
     @Getter
     static String kikoOwner;
 
-    @Value("${nft.compose_fee}")
+    @Value("${kiko.nft.compose_fee}")
     String pNftComposeFee;
 
     @Getter
