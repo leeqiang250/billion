@@ -29,7 +29,7 @@ public class ConfigServiceImpl extends AbstractCacheService<ConfigMapper, Config
         return com.billion.model.dto.Config.builder()
                 .currentContext(context)
                 .currentNode(AptosService.requestNodeCache())
-                .supportChain(Chain.getKV1())
+                .supportChain(Chain.getKV2())
                 .supportLanguage(Language.getKV1())
                 .supportText(languageService.cacheMap(context))
                 .supportContract(contractService.cacheMap(context))
