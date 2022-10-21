@@ -46,7 +46,7 @@ public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Co
             if (Objects.isNull(e.getModuleName())) {
                 return e.getModuleAddress();
             } else {
-                return e.getModuleAddress() + "::" + e.getModuleName()
+                return e.getModuleAddress() + "::" + e.getModuleName();
             }
         }));
 
