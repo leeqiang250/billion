@@ -24,7 +24,7 @@ public class Config implements Serializable {
 
     Node currentNode;
 
-    List supportChain;
+    Map supportChain;
 
     Map supportLanguage;
 
