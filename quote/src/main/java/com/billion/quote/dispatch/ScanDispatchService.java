@@ -103,8 +103,8 @@ public class ScanDispatchService implements Serializable {
         }
 
         log.info("------------------------------------------------------------------------------------------------");
-        log.info("transaction size {}", response.getData().size());
-        log.info("start {} stop {}", response.getData().get(0).getVersion(), response.getData().get(response.getData().size() - 1).getVersion());
+        log.info("transaction size[{}]", response.getData().size());
+        log.info("start[{}] stop[{}]", response.getData().get(0).getVersion(), response.getData().get(response.getData().size() - 1).getVersion());
 
         boolean valid = false;
         var transactions = response.getData();
