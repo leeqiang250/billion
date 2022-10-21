@@ -48,13 +48,13 @@ public class NftGroup extends TransactionStatus implements IModel {
      * meta
      */
     @TableField("meta")
-    String meta;
+    String metaQiyong;
 
     /**
      * body
      */
     @TableField("body")
-    String body;
+    String bodyQiyong;
 
     /**
      * 系列名称

@@ -332,6 +332,8 @@ public class InitServiceImpl implements InitService {
                     .isEnabled(Boolean.TRUE)
                     .isInitializeNftOp(Boolean.FALSE)
                     .sort(0L)
+                    .bodyQiyong(UUID.randomUUID().toString())
+                    .metaQiyong(UUID.randomUUID().toString())
                     .build();
             nftGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
             nftGroup.setTransactionHash(EMPTY);
@@ -362,6 +364,8 @@ public class InitServiceImpl implements InitService {
                     .isEnabled(Boolean.TRUE)
                     .isInitializeNftOp(Boolean.FALSE)
                     .sort(0L)
+                    .bodyQiyong(UUID.randomUUID().toString())
+                    .metaQiyong(UUID.randomUUID().toString())
                     .build();
             nftGroup2.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
             nftGroup2.setTransactionHash(EMPTY);
