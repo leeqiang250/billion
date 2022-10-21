@@ -34,7 +34,7 @@ public enum Chain {
     static final Map KV1 = new HashMap<>(values().length);
 
     @Getter
-    static final Map KV2 = new HashMap<>(values().length);
+    static final List KV2 = new ArrayList(values().length);
 
     static {
         Stream.of(values()).forEach(e -> KV0.put(e.code, e));
@@ -44,7 +44,7 @@ public enum Chain {
             map.put("code", e.code);
             map.put("chainId", e.chainId);
             map.put("desc", e.desc);
-            KV2.put(e.code, map);
+            KV2.add(map);
         });
     }
 
