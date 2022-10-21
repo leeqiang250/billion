@@ -6,6 +6,7 @@ import com.billion.model.dto.MyBoxDto;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.Token;
 import com.billion.model.service.ICacheService;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +31,14 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      * @return boolean
      */
     boolean initializeMarket();
+
+    /**
+     * getBoxById
+     * @param context
+     * @param boxId
+     * @return
+     */
+    BoxGroupDto.BoxGroupInfo getBoxById(Context context, String boxId);
 
     /**
      * getMyBox 我的盲盒

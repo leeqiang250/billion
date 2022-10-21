@@ -242,6 +242,63 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 | attribute | String |属性|
 | value | String |属性值|
 
+### 查询单个盲盒信息接口
+
+| 方法 | GET |
+|----|----|
+| 路径 | /aptos/kiko/v1/nft/boxGroup/getBoxById/{boxId} |
+响应
+`{
+"code": 200,
+"ts": 1666318786591,
+"msg": "success",
+"data": {
+"id": 39,
+"chain": "aptos",
+"displayName": "345f4153-7cca-41ef-b3fb-b120f7a36023",
+"nftGroup": 1,
+"askToken": {
+"transactionStatus": "status_3_success",
+"transactionHash": "0xd1de62fd5d67b05d61be44f63cd7ae242e2766ae288f92aa3c82aa2d533459c7",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 2,
+"chain": "aptos",
+"moduleAddress": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
+"moduleName": "box",
+"structName": "BoxV1",
+"name": "BoxV1",
+"symbol": "BoxV1",
+"decimals": 0,
+"displayDecimals": 0,
+"uri": "",
+"isShow": true
+},
+"amount": "0",
+"bidToken": {
+"transactionStatus": "status_3_success",
+"transactionHash": "",
+"transactionStatus_": "STATUS_3_SUCCESS",
+"id": 1,
+"chain": "aptos",
+"moduleAddress": "0x1",
+"moduleName": "aptos_coin",
+"structName": "AptosCoin",
+"name": "AptosCoin",
+"symbol": "AptosCoin",
+"decimals": 8,
+"displayDecimals": 2,
+"uri": "",
+"isShow": true
+},
+"price": "1000",
+"description": "90f6ca41-5a27-4589-a210-ddec6b97c07d",
+"rule": "",
+"ts": "1665729602488",
+"sort": 0
+}
+}`
+
+
 ### 盲盒公售列表接口
 
 | 方法 | GET |

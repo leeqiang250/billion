@@ -18,6 +18,12 @@ public class BoxGroupController {
     @Resource
     BoxGroupService boxGroupService;
 
+
+    @GetMapping("getBoxById/{boxId}")
+    public Response getBoxById(@RequestHeader Context context, @PathVariable String boxId) {
+        return Response.success(boxGroupService.getBoxById(context, boxId));
+    }
+
     @GetMapping("getMyBox/{account}")
     public Response getMyBox(@RequestHeader Context context, @PathVariable String account) {
         return Response.success(boxGroupService.getMyBox(context, account));
@@ -27,5 +33,6 @@ public class BoxGroupController {
     public Response getSaleList(@RequestHeader Context context, @PathVariable(required = false) Integer pageStart, @PathVariable(required = false) Integer pageLimit) {
         return Response.success(boxGroupService.getSaleList(context, pageStart, pageLimit));
     }
+
 
 }

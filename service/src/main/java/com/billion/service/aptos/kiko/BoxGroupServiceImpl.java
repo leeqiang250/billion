@@ -222,6 +222,32 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         return true;
     }
 
+    @Override
+    public BoxGroupDto.BoxGroupInfo getBoxById(Context context, String boxId) {
+        QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
+        boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, boxId);
+        var boxGroup = this.getOne(boxGroupQueryWrapper);
+
+        Map tokenMap = tokenService.cacheMap(context);
+        Token askToken = (Token) tokenMap.get(String.valueOf(boxGroup.getAskToken()));
+        Token bitToken = (Token) tokenMap.get(String.valueOf(boxGroup.getBidToken()));
+        BoxGroupDto.BoxGroupInfo boxGroupInfo = BoxGroupDto.BoxGroupInfo.builder()
+                .id(boxGroup.getId())
+                .chain(boxGroup.getChain())
+                .displayName(boxGroup.getDisplayName())
+                .nftGroup(boxGroup.getNftGroup())
+                .askToken(askToken)
+                .amount(boxGroup.getAmount())
+                .bidToken(bitToken)
+                .price(boxGroup.getPrice())
+                .description(boxGroup.getDescription())
+                .rule(boxGroup.getRule())
+                .ts(boxGroup.getTs())
+                .sort(boxGroup.getSort())
+                .build();
+        return boxGroupInfo;
+    }
+
 
     @Override
     public List<MyBoxDto> getMyBox(Context context, String account) {
