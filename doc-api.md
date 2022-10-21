@@ -206,30 +206,29 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 
 | 方法 | GET |
 |----|----|
-| 路径 | /aptos/kiko/v1/nft/class/getByNftId/{infoId} |
+| 路径 | /aptos/kiko/v1/nft/meta/getAttributeValue/{nftMetaId} |
 
 响应
 
 `{
 "code": 200,
-"ts": 1664357874191,
+"ts": 1666320352246,
 "msg": "success",
 "data": [
 {
-"id": 1,
-"nftGroupId": 1,
-"nftInfoId": 20000006141,
-"className": "衣服",
-"type": 1,
-"score": "0",
-"attributes": [
+"type": "衣服",
+"key": "蓝色",
+"value": "10"
+},
 {
-"id": 47,
-"nftClassId": 1,
-"attribute": "颜色",
-"value": "红色"
-}
-]
+"type": "性别",
+"key": "女",
+"value": "10"
+},
+{
+"type": "肤色",
+"key": "黄色",
+"value": "20"
 }
 ]
 }`
@@ -238,9 +237,9 @@ http://localhost:8889/aptos/kiko/v1/aptos/resource/getBalance/0x4cd5040c25c06914
 
 | 名称 | 类型 |描述|
 |----|----|----|
-| className | String |类型名称|
-| attribute | String |属性|
-| value | String |属性值|
+| type | String |属性类型名称|
+| key | String |属性值|
+| value | String |分值|
 
 ### 查询单个盲盒信息接口
 
