@@ -24,7 +24,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Service
 public class InitServiceImpl implements InitService {
 
-    final String kiko = "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11";
+    final String kiko = "0x3fccd08ccac071ee2d241344e6909068c1a152d3051ad22553abd2b8c4a2e3b8";
 
     @Resource
     BoxGroupService boxGroupService;
@@ -421,9 +421,9 @@ public class InitServiceImpl implements InitService {
         this.nftAttributeMetaService.remove(null);
         this.nftAttributeValueService.remove(null);
         Map<NftAttributeType, List<NftAttributeMeta>> typeMap = new HashMap<>();
-        List<NftAttributeMeta> attributeMetaList  = new ArrayList<>();
-        List<NftAttributeMeta> attributeMetaList1  = new ArrayList<>();
-        List<NftAttributeMeta> attributeMetaList2  = new ArrayList<>();
+        List<NftAttributeMeta> attributeMetaList = new ArrayList<>();
+        List<NftAttributeMeta> attributeMetaList1 = new ArrayList<>();
+        List<NftAttributeMeta> attributeMetaList2 = new ArrayList<>();
         var nftGroups = this.nftGroupService.list();
         nftGroups.forEach(nftGroup -> {
             typeMap.clear();
@@ -498,7 +498,6 @@ public class InitServiceImpl implements InitService {
             attributeMetaList.add(nftAttributeMeta3);
             typeMap.put(nftAttributeType, attributeMetaList);
 
-
             //性别
             NftAttributeType nftAttributeType2 = NftAttributeType.builder()
                     .nftGroupId(nftGroup.getId())
@@ -508,11 +507,11 @@ public class InitServiceImpl implements InitService {
 
             languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
-                    .key("nft_attribute_sexs_" + nftAttributeType2.getId())
+                    .key("nft_attribute_sex_" + nftAttributeType2.getId())
                     .value("性别")
                     .build());
 
-            nftAttributeType2.setClassName("nft_attribute_sexs_" + nftAttributeType2.getId());
+            nftAttributeType2.setClassName("nft_attribute_sex_" + nftAttributeType2.getId());
             this.nftAttributeTypeService.updateById(nftAttributeType2);
             //nftAttributeMeta数据
             NftAttributeMeta nftAttributeMeta4 = NftAttributeMeta.builder()
@@ -525,10 +524,10 @@ public class InitServiceImpl implements InitService {
             this.nftAttributeMetaService.save(nftAttributeMeta4);
             languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
-                    .key("nft_attribute_sexs_boy" + nftAttributeMeta4.getId())
+                    .key("nft_attribute_sex_boy" + nftAttributeMeta4.getId())
                     .value("男")
                     .build());
-            nftAttributeMeta4.setAttribute("nft_attribute_sexs_boy" + nftAttributeMeta4.getId());
+            nftAttributeMeta4.setAttribute("nft_attribute_sex_boy" + nftAttributeMeta4.getId());
             this.nftAttributeMetaService.updateById(nftAttributeMeta4);
             attributeMetaList1.add(nftAttributeMeta4);
 
@@ -542,10 +541,10 @@ public class InitServiceImpl implements InitService {
             this.nftAttributeMetaService.save(nftAttributeMeta5);
             languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
-                    .key("nft_attribute_sexs_girl" + nftAttributeMeta5.getId())
+                    .key("nft_attribute_sex_girl" + nftAttributeMeta5.getId())
                     .value("女")
                     .build());
-            nftAttributeMeta5.setAttribute("nft_attribute_sexs_girl" + nftAttributeMeta5.getId());
+            nftAttributeMeta5.setAttribute("nft_attribute_sex_girl" + nftAttributeMeta5.getId());
             this.nftAttributeMetaService.updateById(nftAttributeMeta5);
             attributeMetaList1.add(nftAttributeMeta5);
             typeMap.put(nftAttributeType2, attributeMetaList1);
@@ -559,11 +558,11 @@ public class InitServiceImpl implements InitService {
 
             languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
-                    .key("nft_attribute_skins_" + nftAttributeType3.getId())
+                    .key("nft_attribute_skin_" + nftAttributeType3.getId())
                     .value("肤色")
                     .build());
 
-            nftAttributeType3.setClassName("nft_attribute_skins_" + nftAttributeType3.getId());
+            nftAttributeType3.setClassName("nft_attribute_skin_" + nftAttributeType3.getId());
             this.nftAttributeTypeService.updateById(nftAttributeType3);
 
             NftAttributeMeta nftAttributeMeta6 = NftAttributeMeta.builder()
@@ -576,10 +575,10 @@ public class InitServiceImpl implements InitService {
             this.nftAttributeMetaService.save(nftAttributeMeta6);
             languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
-                    .key("nft_attribute_skins_yellow" + nftAttributeMeta6.getId())
+                    .key("nft_attribute_skin_yellow" + nftAttributeMeta6.getId())
                     .value("黄色")
                     .build());
-            nftAttributeMeta6.setAttribute("nft_attribute_skins_yellow" + nftAttributeMeta6.getId());
+            nftAttributeMeta6.setAttribute("nft_attribute_skin_yellow" + nftAttributeMeta6.getId());
             this.nftAttributeMetaService.updateById(nftAttributeMeta6);
             attributeMetaList2.add(nftAttributeMeta6);
 
@@ -593,10 +592,10 @@ public class InitServiceImpl implements InitService {
             this.nftAttributeMetaService.save(nftAttributeMeta7);
             languageService.save(Language.builder()
                     .language(com.billion.model.enums.Language.EN.getCode())
-                    .key("nft_attribute_skins_white" + nftAttributeMeta7.getId())
+                    .key("nft_attribute_skin_white" + nftAttributeMeta7.getId())
                     .value("白色")
                     .build());
-            nftAttributeMeta7.setAttribute("nft_attribute_skins_white" + nftAttributeMeta7.getId());
+            nftAttributeMeta7.setAttribute("nft_attribute_skin_white" + nftAttributeMeta7.getId());
             this.nftAttributeMetaService.updateById(nftAttributeMeta7);
             attributeMetaList2.add(nftAttributeMeta7);
             typeMap.put(nftAttributeType3, attributeMetaList2);
@@ -609,7 +608,7 @@ public class InitServiceImpl implements InitService {
             List<List<NftAttributeMeta>> metaList = typeMap.values().stream().collect(Collectors.toList());
             nftMetas.forEach(nftMeta -> {
                 Set<Integer> randomSet = new HashSet(3);
-                int typeNum =  new Random().nextInt(3);
+                int typeNum = new Random().nextInt(3);
                 for (int i = 0; i <= typeNum; i++) {
                     Integer random = new Random().nextInt(metaList.size());
 
@@ -621,7 +620,6 @@ public class InitServiceImpl implements InitService {
                                 break;
                             }
                         }
-//                        random = random == 2 ? (randomSet.contains(1) ? 3 : 1) : (randomSet.contains(1) ? (randomSet.contains(2) ? 3: 2): 1);
                     }
                     randomSet.add(random);
                     var metas = metaList.get(random);//随机取某个类型的属性list
@@ -633,10 +631,6 @@ public class InitServiceImpl implements InitService {
                     this.nftAttributeValueService.save(nftAttributeValue);
                 }
             });
-
-
-
-
         });
     }
 
