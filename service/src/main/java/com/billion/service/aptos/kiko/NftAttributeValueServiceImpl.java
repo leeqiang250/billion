@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.billion.dao.aptos.kiko.NftAttributeTypeMapper;
@@ -25,6 +26,10 @@ import java.util.stream.Collectors;
 @Service
 public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttributeValueMapper, NftAttributeValue> implements NftAttributeValueService {
 
+    final String TOKEN_BURNABLE_BY_CREATOR = Hex.decodeToString("TOKEN_BURNABLE_BY_CREATOR");
+    final String TOKEN_BURNABLE_BY_OWNER = Hex.decodeToString("TOKEN_BURNABLE_BY_OWNER");
+    final String TOKEN_PROPERTY_MUTATBLE = Hex.decodeToString("TOKEN_PROPERTY_MUTATBLE");
+
     @Resource
     NftAttributeTypeService nftAttributeTypeService;
 
@@ -37,11 +42,29 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         queryWrapper.lambda().eq(NftAttributeValue::getNftMetaId, nftMetaId);
         var attributeValue = super.list(queryWrapper);
 
-        List<NftAttribute> resultList = new ArrayList<>();
+        List<NftAttribute> resultList = new ArrayList<>(attributeValue.size() + 3);
         attributeValue.forEach(v -> {
             var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMetaId());
             resultList.add(attributeType);
         });
+
+        resultList.add(NftAttribute.builder()
+                .type("bool")
+                .key(TOKEN_BURNABLE_BY_CREATOR)
+                .value(Hex.decodeToString("true"))
+                .build());
+
+        resultList.add(NftAttribute.builder()
+                .type("bool")
+                .key(TOKEN_BURNABLE_BY_OWNER)
+                .value(Hex.decodeToString("true"))
+                .build());
+
+        resultList.add(NftAttribute.builder()
+                .type("bool")
+                .key(TOKEN_PROPERTY_MUTATBLE)
+                .value(Hex.decodeToString("true"))
+                .build());
 
         return resultList;
     }
@@ -52,13 +75,31 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         queryWrapper.lambda().eq(NftAttributeValue::getNftMetaId, nftMetaId);
         var attributeValue = super.list(queryWrapper);
 
-        List<NftAttribute> resultList = new ArrayList<>();
+        List<NftAttribute> resultList = new ArrayList<>(attributeValue.size() + 3);
         attributeValue.forEach(v -> {
             var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMetaId());
             resultList.add(attributeType);
         });
 
         changeLanguage(context, resultList);
+
+        resultList.add(NftAttribute.builder()
+                .type("bool")
+                .key(TOKEN_BURNABLE_BY_CREATOR)
+                .value(Hex.decodeToString("true"))
+                .build());
+
+        resultList.add(NftAttribute.builder()
+                .type("bool")
+                .key(TOKEN_BURNABLE_BY_OWNER)
+                .value(Hex.decodeToString("true"))
+                .build());
+
+        resultList.add(NftAttribute.builder()
+                .type("bool")
+                .key(TOKEN_PROPERTY_MUTATBLE)
+                .value(Hex.decodeToString("true"))
+                .build());
 
         return resultList;
     }
