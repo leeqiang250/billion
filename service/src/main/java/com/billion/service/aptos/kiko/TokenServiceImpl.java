@@ -132,25 +132,30 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
             token.setTransactionHash(response.getData().getHash());
             token.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
 
-            //TODO 删除
-            {
-                TransactionPayload transactionPayload2 = TransactionPayload.builder()
-                        .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                        .function(ContextService.getKikoOwner() + "::help::mint_coin")
-                        .arguments(List.of(
-                                ContextService.getKikoOwner(),
-                                "9999999999"
-                        ))
-                        .typeArguments(List.of(resource.resourceTag()))
-                        .build();
+            var coinStore = AptosService.getAptosClient().requestCoinStore(ContextService.getKikoOwner(), resource);
+            if (coinStore.isValid()
+                    || 9999999999L > Long.parseLong(coinStore.getData().getData().getCoin().getValue())
+            ) {
+                //TODO 删除
+                {
+                    TransactionPayload transactionPayload2 = TransactionPayload.builder()
+                            .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                            .function(ContextService.getKikoOwner() + "::help::mint_coin")
+                            .arguments(List.of(
+                                    ContextService.getKikoOwner(),
+                                    "9999999999"
+                            ))
+                            .typeArguments(List.of(resource.resourceTag()))
+                            .build();
 
-                var response2 = AptosService.getAptosClient().requestSubmitTransaction(
-                        ContextService.getKikoOwner(),
-                        transactionPayload2);
+                    var response2 = AptosService.getAptosClient().requestSubmitTransaction(
+                            ContextService.getKikoOwner(),
+                            transactionPayload2);
 
-                AptosService.checkTransaction(response2.getData().getHash());
+                    AptosService.checkTransaction(response2.getData().getHash());
+                }
+                //TODO 删除
             }
-            //TODO 删除
 
             super.updateById(token);
         }

@@ -74,7 +74,7 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
-    @Scheduled(fixedDelay = 3000)
+    //@Scheduled(fixedDelay = 3000)
     void dispatch() {
         this.next = true;
         while (this.next) {

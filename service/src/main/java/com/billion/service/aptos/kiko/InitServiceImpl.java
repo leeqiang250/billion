@@ -89,6 +89,7 @@ public class InitServiceImpl implements InitService {
             return false;
         }
 
+        this.nftGroup();
         this.boxGroup();
         this.config();
         this.contract();
@@ -100,7 +101,6 @@ public class InitServiceImpl implements InitService {
         this.nft();
         //nftAttributeService
         //nftClassService
-        this.nftGroup();
         this.nftMeta();
         this.nftAttribute();
         this.nftTransfer();
@@ -115,11 +115,13 @@ public class InitServiceImpl implements InitService {
     void boxGroup() {
         this.boxGroupService.remove(null);
 
+        var list = nftGroupService.list();
+
         {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
-                    .nftGroup(1L)
+                    .nftGroup(list.get(0).getId())
                     .askToken(2L)
                     .amount("0")
                     .bidToken(1L)
@@ -151,7 +153,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
-                    .nftGroup(2L)
+                    .nftGroup(list.get(1).getId())
                     .askToken(3L)
                     .amount("0")
                     .bidToken(1L)
@@ -183,7 +185,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
-                    .nftGroup(3L)
+                    .nftGroup(list.get(2).getId())
                     .askToken(4L)
                     .amount("0")
                     .bidToken(1L)
@@ -215,7 +217,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
-                    .nftGroup(4L)
+                    .nftGroup(list.get(3).getId())
                     .askToken(5L)
                     .amount("0")
                     .bidToken(1L)
@@ -247,7 +249,7 @@ public class InitServiceImpl implements InitService {
             var boxGroup = BoxGroup.builder()
                     .chain(Chain.APTOS.getCode())
                     .displayName(UUID.randomUUID().toString())
-                    .nftGroup(5L)
+                    .nftGroup(list.get(4).getId())
                     .askToken(6L)
                     .amount("0")
                     .bidToken(7L)
@@ -319,7 +321,6 @@ public class InitServiceImpl implements InitService {
         this.nftGroupService.remove(null);
         for (long i = 1; i < 6; i++) {
             var nftGroup = NftGroup.builder()
-                    .id(i)
                     .chain(Chain.APTOS.getCode())
                     .split(Boolean.FALSE)
                     .owner(kiko)
