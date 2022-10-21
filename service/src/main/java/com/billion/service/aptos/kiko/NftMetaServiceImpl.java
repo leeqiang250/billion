@@ -184,7 +184,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             nftAttributeList.forEach(nftAttribute -> {
                 propertyTypes.add(nftAttribute.getType());
                 propertyKeys.add(nftAttribute.getKey());
-                propertyValues.add(nftAttribute.getValue());
+                propertyValues.add(Hex.encode(nftAttribute.getValue()));
             });
 
             TransactionPayload transactionPayload = TransactionPayload.builder()

@@ -109,12 +109,16 @@ public class NftOpServiceImpl implements NftOpService {
     public boolean initialize() {
         var list = this.nftGroupService.list();
         for (NftGroup nftGroup : list) {
+            if (nftGroup.getIsInitializeNftOp()) {
+                continue;
+            }
+
             if (0L == nftGroup.getSplit()) {
                 nftGroup.setIsInitializeNftOp(Boolean.TRUE);
                 this.nftGroupService.updateById(nftGroup);
             } else {
                 QueryWrapper<NftGroup> nftGroupQueryWrapper = new QueryWrapper<>();
-                nftGroupQueryWrapper.lambda().eq(NftGroup::getSplit, nftGroup.getId());
+                nftGroupQueryWrapper.lambda().eq(NftGroup::getId, nftGroup.getSplit());
                 var nftGroupSplit = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
 
                 QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
