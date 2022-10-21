@@ -58,7 +58,7 @@ public class MintServiceImpl implements MintService {
             return false;
         }
 
-        if (!nftOpService.initialize()) {
+        if (!this.nftOpService.initialize()) {
             return false;
         }
 

@@ -22,24 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttributeValueMapper, NftAttributeValue> implements NftAttributeValueService {
 
-    final NftAttribute TOKEN_BURNABLE_BY_CREATOR = NftAttribute.builder()
-            .type("bool")
-            .key("TOKEN_BURNABLE_BY_CREATOR")
-            .value(Hex.encodeBoolean(Boolean.TRUE))
-            .build();
-
-    final NftAttribute TOKEN_BURNABLE_BY_OWNER = NftAttribute.builder()
-            .type("bool")
-            .key("TOKEN_BURNABLE_BY_OWNER")
-            .value(Hex.encodeBoolean(Boolean.TRUE))
-            .build();
-
-    final NftAttribute TOKEN_PROPERTY_MUTATBLE = NftAttribute.builder()
-            .type("bool")
-            .key("TOKEN_PROPERTY_MUTATBLE")
-            .value(Hex.encodeBoolean(Boolean.TRUE))
-            .build();
-
     @Resource
     NftAttributeTypeService nftAttributeTypeService;
 
@@ -61,10 +43,6 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
             resultList.add(attributeType);
         });
 
-        resultList.add(TOKEN_BURNABLE_BY_CREATOR);
-        resultList.add(TOKEN_BURNABLE_BY_OWNER);
-        resultList.add(TOKEN_PROPERTY_MUTATBLE);
-
         return resultList;
     }
 
@@ -81,10 +59,6 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         });
 
         changeLanguage(context, resultList);
-
-        resultList.add(TOKEN_BURNABLE_BY_CREATOR);
-        resultList.add(TOKEN_BURNABLE_BY_OWNER);
-        resultList.add(TOKEN_PROPERTY_MUTATBLE);
 
         return resultList;
     }
