@@ -76,7 +76,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(boxMakerEvent.getMaker())
+                .owner(boxMakerEvent.getMaker())
                 .type(OperationType.BOX_MAKER_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxMakerEvent.getAmount()))
@@ -115,7 +115,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(boxTakerEvent.getBidder())
+                .owner(boxTakerEvent.getBidder())
                 .type(OperationType.BOX_TAKER_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxTakerEvent.getAmount()))
@@ -156,7 +156,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(boxBidEvent.getBidder())
+                .owner(boxBidEvent.getBidder())
                 .type(OperationType.BOX_BID_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxBidEvent.getAmount()))
@@ -197,7 +197,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(boxCancelEvent.getMaker())
+                .owner(boxCancelEvent.getMaker())
                 .type(OperationType.BOX_CANCLE_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxCancelEvent.getAmount()))
@@ -236,7 +236,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(nftMakerEvent.getMaker())
+                .owner(nftMakerEvent.getMaker())
                 .type(OperationType.NFT_MAKER_EVENT.getType())
                 .tokenId(nftMakerEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(1L)
@@ -275,7 +275,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(nftTakerEvent.getBidder())
+                .owner(nftTakerEvent.getBidder())
                 .type(OperationType.NFT_TAKER_EVENT.getType())
                 .tokenId(nftTakerEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(Long.valueOf(nftTakerEvent.getAmount()))
@@ -316,7 +316,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(nftBidEvent.getMaker())
+                .owner(nftBidEvent.getMaker())
                 .type(OperationType.NFT_BID_EVENT.getType())
                 .tokenId(nftBidEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(Long.valueOf(nftBidEvent.getAmount()))
@@ -358,7 +358,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         //交易记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(nftCancelEvent.getMaker())
+                .owner(nftCancelEvent.getMaker())
                 .type(OperationType.NFT_CANCLE_EVENT.getType())
                 .tokenId(nftCancelEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(Long.valueOf(nftCancelEvent.getAmount()))

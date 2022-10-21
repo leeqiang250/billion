@@ -67,7 +67,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         //铸造NFT记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(event.getGuid().getAccountAddress())
+                .owner(event.getGuid().getAccountAddress())
                 .type(OperationType.NFT_MINT_EVENT.getType())
                 .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(1L)
@@ -99,7 +99,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         //NFT转出记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(event.getGuid().getAccountAddress())
+                .owner(event.getGuid().getAccountAddress())
                 .type(OperationType.NFT_WITHDRAW_EVENT.getType())
                 .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
                 .tokenAmount(1L)
@@ -131,7 +131,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         //NFT转入记录
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
-                .account(event.getGuid().getAccountAddress())
+                .owner(event.getGuid().getAccountAddress())
                 .type(OperationType.NFT_DEPOSIT_EVENT.getType())
                 .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
                 .tokenAmount(1L)
