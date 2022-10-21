@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 /**
  * @author liqiang
  */
@@ -38,7 +40,7 @@ public class Config implements IModel {
     public static Config SCAN_CHAIN_CURSOR = Config.builder()
             .id(1L)
             .key("scan_chain_cursor")
-            .value("")
+            .value(EMPTY)
             .build();
 
 }

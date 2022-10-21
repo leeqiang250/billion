@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 /**
  * @author liqiang
  */
@@ -64,8 +66,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .askAmount(boxMakerEvent.getAmount())
                 .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
-                .bidAmount("")
-                .bidder("")
+                .bidAmount(EMPTY)
+                .bidder(EMPTY)
                 .ts(boxMakerEvent.getTs())
                 .deadTs(boxMakerEvent.getDeadTs())
                 .isEnabled(Boolean.TRUE)
@@ -81,7 +83,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.BOX_MAKER_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxMakerEvent.getAmount()))
-                .bidToken("")
+                .bidToken(EMPTY)
                 .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
@@ -201,7 +203,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.BOX_CANCLE_EVENT.getType())
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(Long.valueOf(boxCancelEvent.getAmount()))
-                .bidToken("")
+                .bidToken(EMPTY)
                 .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
@@ -223,8 +225,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .askToken(nftMakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
                 .askAmount(nftMakerEvent.getAmount())
                 .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
-                .bidAmount("")
-                .bidder("")
+                .bidAmount(EMPTY)
+                .bidder(EMPTY)
                 .tokenId(nftMakerEvent.getTokenId().getNftTokenIdKey())
                 .ts(nftMakerEvent.getTs())
                 .deadTs(nftMakerEvent.getDeadTs())
@@ -362,7 +364,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .type(OperationType.NFT_CANCLE_EVENT.getType())
                 .tokenId(nftCancelEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(Long.valueOf(nftCancelEvent.getAmount()))
-                .bidToken("")
+                .bidToken(EMPTY)
                 .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
@@ -380,9 +382,9 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
 
         if (MarketTokenType.NFT.getType().equals(condition)) {
-            queryWrapper.lambda().ne(Market::getTokenId, "");
+            queryWrapper.lambda().ne(Market::getTokenId, EMPTY);
         }else if (MarketTokenType.BOX.getType().equals(condition)) {
-            queryWrapper.lambda().eq(Market::getTokenId, "");
+            queryWrapper.lambda().eq(Market::getTokenId, EMPTY);
         }
 
         Page<Market> page = Page.of(pageStart, pageLimt);

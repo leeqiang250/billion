@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 /**
  * @author liqiang
  */
@@ -71,7 +73,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .type(OperationType.NFT_MINT_EVENT.getType())
                 .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
                 .tokenAmount(1L)
-                .bidToken("")
+                .bidToken(EMPTY)
                 .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
@@ -105,7 +107,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .type(OperationType.NFT_WITHDRAW_EVENT.getType())
                 .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
                 .tokenAmount(1L)
-                .bidToken("")
+                .bidToken(EMPTY)
                 .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
@@ -139,7 +141,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
                 .type(OperationType.NFT_DEPOSIT_EVENT.getType())
                 .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
                 .tokenAmount(1L)
-                .bidToken("")
+                .bidToken(EMPTY)
                 .price(0L)
                 .build();
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
