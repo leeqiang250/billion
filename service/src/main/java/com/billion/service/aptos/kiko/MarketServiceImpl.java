@@ -70,7 +70,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -109,7 +108,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -150,7 +148,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -191,7 +188,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -230,7 +226,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -269,7 +264,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -310,7 +304,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
@@ -352,7 +345,6 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         market.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_2_ING);
         market.setTransactionHash(transaction.getHash());
-
         super.save(market);
 
         //交易记录
