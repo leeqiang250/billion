@@ -2,14 +2,10 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.billion.dao.aptos.kiko.NftAttributeTypeMapper;
 import com.billion.dao.aptos.kiko.NftAttributeValueMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.dto.NftAttribute;
-import com.billion.model.entity.NftAttributeType;
 import com.billion.model.entity.NftAttributeValue;
-import com.billion.model.entity.NftGroup;
 import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.stereotype.Service;
 
