@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +42,13 @@ public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Co
         wrapper.lambda().eq(Contract::getChain, context.getChain());
         List<Contract> list = super.list(wrapper);
 
-        map = list.stream().collect(Collectors.toMap(Contract::getName, (e) -> e.getModuleAddress() + "::" + e.getModuleName()));
+        map = list.stream().collect(Collectors.toMap(Contract::getName, (e) -> {
+            if (Objects.isNull(e.getModuleName())) {
+                return e.getModuleAddress();
+            } else {
+                return e.getModuleAddress() + "::" + e.getModuleName()
+            }
+        }));
 
         this.getRedisTemplate().opsForHash().putAll(key, map);
         this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));

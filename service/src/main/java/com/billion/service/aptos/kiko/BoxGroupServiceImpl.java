@@ -347,7 +347,9 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .currentPage(pageResult.getCurrent())
                 .boxGroupList(resultList)
                 .build();
+
         //TODO:根据前端设计是否需要其他过滤条件
+
         return boxGroupDto;
     }
 

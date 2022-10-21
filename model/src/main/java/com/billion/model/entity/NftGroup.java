@@ -98,4 +98,9 @@ public class NftGroup extends TransactionStatus implements IModel {
     @TableField("sort")
     Long sort;
 
+    //TODO renjain 需要国际化
+    public String getNftContract() {
+        return this.owner + "::" + this.displayName;
+    }
+
 }
