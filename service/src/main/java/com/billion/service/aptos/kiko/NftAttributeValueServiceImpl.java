@@ -25,19 +25,19 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
     final NftAttribute TOKEN_BURNABLE_BY_CREATOR = NftAttribute.builder()
             .type("bool")
             .key("TOKEN_BURNABLE_BY_CREATOR")
-            .value("true")
+            .value(Hex.encodeBoolean(Boolean.TRUE))
             .build();
 
     final NftAttribute TOKEN_BURNABLE_BY_OWNER = NftAttribute.builder()
             .type("bool")
             .key("TOKEN_BURNABLE_BY_OWNER")
-            .value("true")
+            .value(Hex.encodeBoolean(Boolean.TRUE))
             .build();
 
     final NftAttribute TOKEN_PROPERTY_MUTATBLE = NftAttribute.builder()
             .type("bool")
             .key("TOKEN_PROPERTY_MUTATBLE")
-            .value("true")
+            .value(Hex.encodeBoolean(Boolean.TRUE))
             .build();
 
     @Resource
@@ -55,6 +55,8 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         List<NftAttribute> resultList = new ArrayList<>(attributeValue.size() + 3);
         attributeValue.forEach(v -> {
             var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMetaId());
+            attributeType.setKey(Hex.encode(attributeType.getKey()));
+            attributeType.setType(Hex.encode(attributeType.getType()));
             resultList.add(attributeType);
         });
 

@@ -391,7 +391,7 @@ public class InitServiceImpl implements InitService {
 
         var nftGroups = this.nftGroupService.list();
         nftGroups.forEach(nftGroup -> {
-            int total = 10;
+            int total = 2;
             if (0 == nftGroup.getId() % 2) {
                 total = 1;
             }
