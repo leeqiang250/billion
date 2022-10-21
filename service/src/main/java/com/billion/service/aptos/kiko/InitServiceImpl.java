@@ -319,19 +319,18 @@ public class InitServiceImpl implements InitService {
 
     void nftGroup() {
         this.nftGroupService.remove(null);
-        for (long i = 1; i < 6; i++) {
+        for (long i = 1; i < 4; i++) {
             var nftGroup = NftGroup.builder()
                     .chain(Chain.APTOS.getCode())
-                    .split(Boolean.FALSE)
+                    .split(0L)
                     .owner(kiko)
-                    .meta2(UUID.randomUUID().toString())
-                    .body2(UUID.randomUUID().toString())
                     .displayName(UUID.randomUUID().toString())
                     .description(UUID.randomUUID().toString())
                     .currentSupply(EMPTY)
                     .totalSupply(String.valueOf(Long.MAX_VALUE))
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/76360568-5c54-4342-427d-68992ded7b00/public")
                     .isEnabled(Boolean.TRUE)
+                    .isInitializeNftOp(Boolean.FALSE)
                     .sort(0L)
                     .build();
             nftGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
@@ -349,6 +348,36 @@ public class InitServiceImpl implements InitService {
                     .language(com.billion.model.enums.Language.EN.getCode())
                     .key(nftGroup.getDescription())
                     .value("描述" + nftGroup.getId())
+                    .build());
+
+            var nftGroup2 = NftGroup.builder()
+                    .chain(Chain.APTOS.getCode())
+                    .split(nftGroup.getId())
+                    .owner(kiko)
+                    .displayName(UUID.randomUUID().toString())
+                    .description(UUID.randomUUID().toString())
+                    .currentSupply(EMPTY)
+                    .totalSupply(String.valueOf(Long.MAX_VALUE))
+                    .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/76360568-5c54-4342-427d-68992ded7b00/public")
+                    .isEnabled(Boolean.TRUE)
+                    .isInitializeNftOp(Boolean.FALSE)
+                    .sort(0L)
+                    .build();
+            nftGroup2.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
+            nftGroup2.setTransactionHash(EMPTY);
+
+            this.nftGroupService.save(nftGroup2);
+
+            this.languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key(nftGroup2.getDisplayName())
+                    .value("名称" + nftGroup2.getId())
+                    .build());
+
+            this.languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key(nftGroup2.getDescription())
+                    .value("描述" + nftGroup2.getId())
                     .build());
         }
     }

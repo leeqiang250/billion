@@ -78,15 +78,16 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
             return map;
         }
 
-        QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
-        List<NftGroup> list = super.list(wrapper);
-
-        changeLanguage(context, list);
-
-        map = list.stream().collect(Collectors.toMap(e -> e.getMeta2() + "-" + e.getBody2(), (e) -> e));
-        this.getRedisTemplate().opsForHash().putAll(key, map);
-        this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
+        //TODO leeqiang 以下是我注释，待确认是否需要
+        //QueryWrapper<NftGroup> wrapper = new QueryWrapper<>();
+        //wrapper.lambda().eq(NftGroup::getIsEnabled, Boolean.TRUE);
+        //List<NftGroup> list = super.list(wrapper);
+        //
+        //changeLanguage(context, list);
+        //
+        //map = list.stream().collect(Collectors.toMap(e -> e.getMeta2() + "-" + e.getBody2(), (e) -> e));
+        //this.getRedisTemplate().opsForHash().putAll(key, map);
+        //this.getRedisTemplate().expire(key, this.cacheSecond(CacheTsType.MIDDLE));
 
         return map;
     }
@@ -143,16 +144,16 @@ public class NftGroupServiceImpl extends AbstractCacheService<NftGroupMapper, Nf
     public NftGroup updateSupply(Serializable id) {
         NftGroup nftGroup = this.getById(id);
         if (Chain.APTOS.getCode().equals(nftGroup.getChain())) {
-            //TODO
-            var response = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta2(), nftGroup.getBody2());
-            if (!response.isValid()) {
-                nftGroup.setTotalSupply(response.getData().getMaximum());
-                nftGroup.setCurrentSupply(response.getData().getSupply());
-
-                this.updateById(nftGroup);
-
-                this.deleteCache(id);
-            }
+            //TODO leeqing 以下是我注释，待确认是否需要
+            //var response = AptosService.getAptosClient().requestTableCollectionData(nftGroup.getMeta2(), nftGroup.getBody2());
+            //if (!response.isValid()) {
+            //    nftGroup.setTotalSupply(response.getData().getMaximum());
+            //    nftGroup.setCurrentSupply(response.getData().getSupply());
+            //
+            //    this.updateById(nftGroup);
+            //
+            //    this.deleteCache(id);
+            //}
         }
 
         return nftGroup;

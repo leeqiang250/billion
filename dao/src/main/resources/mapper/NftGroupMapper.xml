@@ -19,6 +19,7 @@
         ,transaction_status as transaction_status
         ,transaction_hash as transaction_hash
         ,is_enabled as is_enabled
+        ,is_initialize_nft_op as is_initialize_nft_op
         ,sort as sort
     </sql>
 

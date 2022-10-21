@@ -33,10 +33,10 @@ public class NftGroup extends TransactionStatus implements IModel {
     String chain;
 
     /**
-     * 可拆性(0:不可拆卸,1:可拆卸)
+     * 子系列
      */
     @TableField("split")
-    Boolean split;
+    Long split;
 
     /**
      * 所有者
@@ -48,13 +48,13 @@ public class NftGroup extends TransactionStatus implements IModel {
      * meta
      */
     @TableField("meta")
-    String meta2;
+    String meta;
 
     /**
      * body
      */
     @TableField("body")
-    String body2;
+    String body;
 
     /**
      * 系列名称
@@ -93,14 +93,15 @@ public class NftGroup extends TransactionStatus implements IModel {
     Boolean isEnabled;
 
     /**
+     * 是否初始化nft_op
+     */
+    @TableField("is_initialize_nft_op")
+    Boolean isInitializeNftOp;
+
+    /**
      * 排序
      */
     @TableField("sort")
     Long sort;
-
-    //TODO renjain 需要国际化
-    public String getNftContract() {
-        return this.owner + "::" + this.displayName;
-    }
 
 }

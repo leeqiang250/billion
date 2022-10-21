@@ -31,4 +31,11 @@ public interface NftOpService {
      */
     boolean execute();
 
+    /**
+     * initialize
+     *
+     * @return boolean
+     */
+    boolean initialize();
+
 }

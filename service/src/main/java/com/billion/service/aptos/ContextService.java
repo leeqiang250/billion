@@ -75,6 +75,12 @@ public class ContextService {
     @Getter
     static String kikoOwner;
 
+    @Value("${nft.compose_fee}")
+    String pNftComposeFee;
+
+    @Getter
+    static String nftComposeFee;
+
     @Value("${aptos.host}")
     String pAptosHost;
 
@@ -102,6 +108,7 @@ public class ContextService {
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
+        ContextService.nftComposeFee = this.pNftComposeFee;
         ContextService.aptosHost = this.pAptosHost;
         NftComposeEvent.EVENT_NAME = ContextService.kikoOwner + NftComposeEvent.EVENT_NAME;
         NftSplitEvent.EVENT_NAME = ContextService.kikoOwner + NftSplitEvent.EVENT_NAME;
