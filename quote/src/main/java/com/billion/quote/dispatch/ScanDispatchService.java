@@ -74,8 +74,7 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
-    //@Scheduled(cron = "*/2 * * * * ?")
-    //@Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 3000)
     void dispatch() {
         this.next = true;
         while (this.next) {
@@ -110,6 +109,8 @@ public class ScanDispatchService implements Serializable {
         boolean valid = false;
         var transactions = response.getData();
         for (Transaction transaction : transactions) {
+            log.info("scan version[{}] hash[{}]", transaction.getVersion(), transaction.getHash());
+
             if (Transaction.USER_TRANSACTION.equals(transaction.getType())
                     && !Objects.isNull(transaction.getEvents())) {
                 valid = false;

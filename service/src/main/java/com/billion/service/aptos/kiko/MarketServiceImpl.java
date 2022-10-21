@@ -425,5 +425,5 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .build();
         return marketDto;
     }
-    
+
 }
