@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.billion.model.constant.RequestPath.EMPTY;
+
 /**
  * @author liqiang
  */
@@ -43,7 +45,7 @@ public class ContractServiceImpl extends AbstractCacheService<ContractMapper, Co
         List<Contract> list = super.list(wrapper);
 
         map = list.stream().collect(Collectors.toMap(Contract::getName, (e) -> {
-            if (Objects.isNull(e.getModuleName())) {
+            if (EMPTY.equals(e.getModuleName())) {
                 return e.getModuleAddress();
             } else {
                 return e.getModuleAddress() + "::" + e.getModuleName();
