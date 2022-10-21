@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.billion.model.model.IModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * @author jason
@@ -20,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("operation")
-public class Operation implements Serializable {
+public class Operation extends TransactionStatus implements IModel {
 
     /**
      * id
@@ -69,18 +67,6 @@ public class Operation implements Serializable {
      */
     @TableField("price")
     Long price;
-
-    /**
-     * 交易状态
-     */
-    @TableField("transaction_status")
-    String transactionStatus;
-
-    /**
-     * 交易哈希
-     */
-    @TableField("transaction_hash")
-    String transactionHash;
 
     /**
      * 发生时间
