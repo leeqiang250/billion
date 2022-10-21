@@ -3,6 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TableTokenData;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.NftMetaDto;
 import com.billion.model.entity.NftMeta;
 import com.billion.model.service.ICacheService;
 
@@ -31,8 +32,8 @@ public interface NftMetaService extends ICacheService<NftMeta> {
      */
     Response<TableTokenData> getTableTokenData(Serializable id);
 
-    //TODO:renjian
-//    getNftMetaInfoById(Context context, String NftMetaId)
+
+    NftMetaDto getNftMetaInfoById(Context context, String NftMetaId);
 
     /**
      * getListByGroup

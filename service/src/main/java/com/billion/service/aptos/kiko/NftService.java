@@ -67,4 +67,12 @@ public interface NftService extends ICacheService<Nft> {
      * @return
      */
     List<Nft> getListByAccount(Context context, String account);
+
+    /**
+     * getOwnerByTokenId
+     * @param context
+     * @param tokenId
+     * @return
+     */
+    String getOwnerByTokenId(Context context, String tokenId);
 }

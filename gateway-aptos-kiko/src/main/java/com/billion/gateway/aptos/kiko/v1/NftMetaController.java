@@ -64,8 +64,13 @@ public class NftMetaController implements IController<NftMeta> {
     }
 
     @GetMapping("/getAttributeValue/{nftMetaId}")
-    public Response getNftMetaService(@RequestHeader Context context, @PathVariable String nftMetaId) {
+    public Response getAttributeValue(@RequestHeader Context context, @PathVariable String nftMetaId) {
         return Response.success(nftAttributeValueService.getNftAttributeValueByMetaId(context, nftMetaId));
+    }
+
+    @GetMapping("/getNftMetaInfo/{nftMetaId}")
+    public Response getNftMetaInfo(@RequestHeader Context context, @PathVariable String nftMetaId) {
+        return Response.success(nftMetaService.getNftMetaInfoById(context, nftMetaId));
     }
 
     @GetMapping("/testMint")

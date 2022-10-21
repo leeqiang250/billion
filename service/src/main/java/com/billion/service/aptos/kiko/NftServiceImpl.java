@@ -175,4 +175,26 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         return map.values().stream().collect(Collectors.toList());
     }
 
+    @Override
+    public String getOwnerByTokenId(Context context, String tokenId) {
+        QueryWrapper<Nft> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Nft::getChain, context.getChain());
+        queryWrapper.lambda().eq(Nft::getTokenId, tokenId);
+
+        queryWrapper.lambda().eq(Nft::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().eq(Nft::getTransactionStatus, TransactionStatus.STATUS_2_ING.getCode());
+        queryWrapper.lambda().orderByAsc(Nft::getId);
+
+        String owner = "";
+        var nftList = this.list(queryWrapper);
+        for (int i = nftList.size() - 1; i >= 0; i--) {
+            if (NftDepositEvent.EVENT_NAME.equals(nftList.get(i).getEvent())) {
+                owner = nftList.get(i).getOwner();
+                break;
+            }
+
+        }
+        return owner;
+    }
+
 }

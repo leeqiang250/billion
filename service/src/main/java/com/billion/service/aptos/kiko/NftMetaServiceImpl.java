@@ -6,6 +6,7 @@ import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMetaMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.NftMetaDto;
 import com.billion.model.entity.*;
 import com.billion.model.enums.*;
 import com.billion.model.enums.Language;
@@ -260,6 +261,45 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     }
 
     @Override
+    public NftMetaDto getNftMetaInfoById(Context context, String nftMetaId) {
+        QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
+        nftMetaQueryWrapper.lambda().eq(NftMeta::getId, nftMetaId);
+
+        var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
+//        changeLanguage(context, nftMeta);
+
+        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
+
+        NftMetaDto nftMetaDto = NftMetaDto.builder()
+                .id(nftMeta.getId())
+                .nftGroupId(nftMeta.getNftGroupId())
+                .displayName(nftMeta.getDisplayName())
+                .description(nftMeta.getDescription())
+                .uri(nftMeta.getUri())
+                .rank(nftMeta.getRank())
+                .isBorn(nftMeta.getIsBorn())
+                .tokenId(nftMeta.getTokenId())
+                .score(nftMeta.getScore())
+                .attributeType(nftMeta.getAttributeType())
+                .owner(nftService.getOwnerByTokenId(context, nftMeta.getTokenId()))
+                .contract(nftGroup.getNftContract())
+                .build();
+
+        //合约数据
+        String contract = nftGroup.getNftContract();
+        String[] contractInfos = contract.split("::");
+        contract = contractInfos[0] + "::" + changeLanguageContract(context, contractInfos[1]);
+
+        nftMetaDto.setContract(contract);
+
+        //属性数据
+        var nftAttributeValues = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
+        nftMetaDto.setAttributeValues(nftAttributeValues);
+
+        return nftMetaDto;
+    }
+
+    @Override
     public List<NftMeta> getListByGroup(Context context, String type, String groupId) {
         QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftMeta::getNftGroupId, groupId);
@@ -304,5 +344,21 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
             e.setDescription(mapDescription.get(e.getDescription()).toString());
         });
+    }
+
+    private void changeLanguage(Context context, NftMeta nftMeta) {
+        Set.of(nftMeta.getDisplayName());
+        Set setDisplayName = Set.of(nftMeta.getDisplayName());
+        Set setDescription = Set.of(nftMeta.getDescription());
+
+        Map mapDisplayName = languageService.getByKeys(context, setDisplayName);
+        Map mapDescription = languageService.getByKeys(context, setDescription);
+
+        nftMeta.setDisplayName(mapDisplayName.get(nftMeta.getDisplayName()).toString());
+        nftMeta.setDescription(mapDescription.get(nftMeta.getDescription()).toString());
+    }
+
+    private String changeLanguageContract(Context context, String str) {
+        return languageService.getByKey(context, str);
     }
 }
