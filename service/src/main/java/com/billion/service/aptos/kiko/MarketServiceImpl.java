@@ -4,12 +4,14 @@ import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billion.dao.aptos.kiko.MarketMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.dto.MarketDto;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
+import com.billion.model.enums.MarketTokenType;
 import com.billion.model.enums.OperationType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
@@ -363,14 +365,25 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     }
 
     @Override
-    public MarketDto getMarketList(Context context, Integer pageStart, Integer pageLimt) {
+    public MarketDto getMarketList(Context context, String condition, String order, String orderType, Integer pageStart, Integer pageLimt) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
         List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
-        queryWrapper.lambda().orderByAsc(Market::getId);
+
+        if (MarketTokenType.NFT.getType().equals(condition)) {
+            queryWrapper.lambda().ne(Market::getTokenId, "");
+        }else if (MarketTokenType.BOX.getType().equals(condition)) {
+            queryWrapper.lambda().eq(Market::getTokenId, "");
+        }
 
         Page<Market> page = Page.of(pageStart, pageLimt);
+        if (("asc").equals(orderType)) {
+            page.addOrder(OrderItem.asc(order));
+        }else {
+            page.addOrder(OrderItem.desc(order));
+        }
+
         var pageResult = this.page(page, queryWrapper);
 
         var marketList = pageResult.getRecords();

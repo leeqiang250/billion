@@ -31,6 +31,9 @@ public interface NftMetaService extends ICacheService<NftMeta> {
      */
     Response<TableTokenData> getTableTokenData(Serializable id);
 
+    //TODO:renjian
+//    getNftMetaInfoById(Context context, String NftMetaId)
+
     /**
      * getListByGroup
      *

@@ -48,6 +48,11 @@ public class NftMetaController implements IController<NftMeta> {
         return IController.super.cacheMap(context);
     }
 
+//    @GetMapping("getNftMetaInfoById/{nftMetaId}")
+//    public Response getNftMetaInfoById(@RequestHeader Context context, @PathVariable String nftMetaId) {
+//
+//    }
+
     @RequestMapping("/group/{type}/{groupId}")
     public Response getByGroup(@RequestHeader Context context, @PathVariable String type, @PathVariable String groupId) {
         return Response.success(nftMetaService.getListByGroup(context, type, groupId));

@@ -22,8 +22,9 @@ public class MarketController  implements IController<Market> {
     @Resource
     MarketService marketService;
 
-    @GetMapping("getMarketList/{pageStart}/{pageLimit}")
-    public Response getMarketList(@RequestHeader Context context, @PathVariable Integer pageStart, @PathVariable Integer pageLimit) {
-        return Response.success(marketService.getMarketList(context, pageStart, pageLimit));
+    @GetMapping("getMarketList/{condition}/{order}/{orderType}/{pageStart}/{pageLimit}")
+    public Response getMarketList(@RequestHeader Context context, @PathVariable String condition, @PathVariable String order,
+                                  @PathVariable String orderType, @PathVariable Integer pageStart, @PathVariable Integer pageLimit) {
+        return Response.success(marketService.getMarketList(context, condition, order, orderType, pageStart, pageLimit));
     }
 }
