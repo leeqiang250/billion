@@ -13,10 +13,7 @@ import com.billion.model.entity.Operation;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.OperationType;
 import com.billion.model.enums.TransactionStatus;
-import com.billion.model.event.NftCreateTokenDataEvent;
-import com.billion.model.event.NftDepositEvent;
-import com.billion.model.event.NftWithdrawEvent;
-import com.billion.model.event.OpenBoxEvent;
+import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -147,6 +144,29 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         operation.setTransactionHash(transaction.getHash());
         operationService.save(operation);
+
+        return nft;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Nft addNftBurnTokenEvent(Transaction transaction, Event event, NftBurnTokenEvent nftBurnTokenEvent) {
+        Nft nft = Nft.builder()
+                .chain(Chain.APTOS.getCode())
+                .version(Long.parseLong(transaction.getVersion()))
+                .event(event.getType())
+                .owner(event.getGuid().getAccountAddress())
+                .tokenId(nftBurnTokenEvent.getId().getNftTokenIdKey())
+                .ts(transaction.getTimestampMillisecond())
+                .isEnabled(Boolean.TRUE)
+                .build();
+        nft.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
+        nft.setTransactionHash(transaction.getHash());
+
+        super.save(nft);
+
+        //NFT销毁记录
+        //TODO renjian
 
         return nft;
     }

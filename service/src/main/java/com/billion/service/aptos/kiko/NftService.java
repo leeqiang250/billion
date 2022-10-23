@@ -4,6 +4,7 @@ import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Nft;
+import com.billion.model.event.NftBurnTokenEvent;
 import com.billion.model.event.NftCreateTokenDataEvent;
 import com.billion.model.event.NftDepositEvent;
 import com.billion.model.event.NftWithdrawEvent;
@@ -59,6 +60,18 @@ public interface NftService extends ICacheService<Nft> {
     @Transactional(rollbackFor = Exception.class)
     Nft addNftDepositEvent(Transaction transaction, Event event, NftDepositEvent nftDepositEvent);
 
+
+    /**
+     * addNftBurnTokenEvent
+     *
+     * @param transaction       transaction
+     * @param event             event
+     * @param nftBurnTokenEvent nftBurnTokenEvent
+     * @return Nft
+     */
+    @Transactional(rollbackFor = Exception.class)
+    Nft addNftBurnTokenEvent(Transaction transaction, Event event, NftBurnTokenEvent nftBurnTokenEvent);
+
     /**
      * getTokenIdsByAccount 根据地址查询当前拥有的NFT列表
      *
@@ -70,6 +83,7 @@ public interface NftService extends ICacheService<Nft> {
 
     /**
      * getOwnerByTokenId
+     *
      * @param context
      * @param tokenId
      * @return

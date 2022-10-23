@@ -17,8 +17,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class NftBurnTokenEvent implements Serializable {
 
-    TokenId id;
+    public static final String EVENT_NAME = "0x3::token::BurnTokenEvent";
 
     String amount;
+
+    TokenId id;
 
 }

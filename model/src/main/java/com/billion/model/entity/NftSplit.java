@@ -26,16 +26,34 @@ public class NftSplit extends TransactionStatus implements IModel {
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
+    /**
+     * Version
+     */
+    @TableField("version")
+    Long version;
+
+    /**
+     * OrderId
+     */
     @TableField("order_id")
     String orderId;
 
+    /**
+     * IsExecute
+     */
     @TableField("is_execute")
     Boolean isExecute;
 
+    /**
+     * owner
+     */
     @TableField("owner")
     String owner;
 
-    @TableField("source_uri")
-    String sourceUri;
+    /**
+     * MetaIds
+     */
+    @TableField("meta_ids")
+    String metaIds;
 
 }

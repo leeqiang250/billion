@@ -39,6 +39,17 @@ public class EventType {
         return NftDepositEvent.EVENT_NAME.equals(event.getType());
     }
 
+
+    /**
+     * isNftBurnTokenEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isNftBurnTokenEvent(Event event) {
+        return NftBurnTokenEvent.EVENT_NAME.equals(event.getType());
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**

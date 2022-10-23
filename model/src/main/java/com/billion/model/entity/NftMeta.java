@@ -73,21 +73,25 @@ public class NftMeta extends TransactionStatus implements IModel {
      */
     @TableField("score")
     String score;
+    //TODO leeqiang score是否放在这里
 
     @TableField("attribute_type")
     Integer attributeType;
+    //TODO leeqiang renjian attribute_type是否放在这里
 
     /**
      * table_handle
      */
     @TableField("table_handle")
     String tableHandle;
+    //TODO leeqiang tableHandle是否放在这里
 
     /**
      * table_collection
      */
     @TableField("table_collection")
     String tableCollection;
+    //TODO leeqiang tableCollection是否放在这里
 
     /**
      * table_creator

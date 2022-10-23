@@ -120,6 +120,7 @@ public class ScanDispatchService implements Serializable {
                     if (EventType.isNftCreateTokenDataEvent(event)
                             || EventType.isNftDepositEvent(event)
                             || EventType.isNftDepositEvent(event)
+                            || EventType.isNftBurnTokenEvent(event)
                             || EventType.isOpenBoxEvent(event)
                             || EventType.isNftComposeEvent(event)
                             || EventType.isNftSplitEvent(event)
@@ -185,6 +186,11 @@ public class ScanDispatchService implements Serializable {
                 if (ContextService.getKikoOwner().equals(nftDepositEvent.getId().getTokenDataId().getCreator())) {
                     nftService.addNftDepositEvent(transaction, event, nftDepositEvent);
                 }
+            } else if (EventType.isNftBurnTokenEvent(event)) {
+                NftBurnTokenEvent nftBurnTokenEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftBurnTokenEvent.class);
+                if (ContextService.getKikoOwner().equals(nftBurnTokenEvent.getId().getTokenDataId().getCreator())) {
+                    nftService.addNftBurnTokenEvent(transaction, event, nftBurnTokenEvent);
+                }
             } else if (EventType.isOpenBoxEvent(event)) {
                 OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
                 //TODO leeqiang
@@ -192,7 +198,7 @@ public class ScanDispatchService implements Serializable {
                 log.info(openBoxEvent.toString());
             } else if (EventType.isNftSplitEvent(event)) {
                 NftSplitEvent nftSplitEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftSplitEvent.class);
-                nftOpService.addNftSplitEvent(nftSplitEvent);
+                nftOpService.addNftSplitEvent(transaction, nftSplitEvent);
             } else if (EventType.isNftComposeEvent(event)) {
                 NftComposeEvent nftComposeEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftComposeEvent.class);
                 nftOpService.addNftComposeEvent(nftComposeEvent);

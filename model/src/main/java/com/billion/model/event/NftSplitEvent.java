@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.TableTokenData;
 import com.aptos.request.v1.model.TokenId;
 import com.billion.model.dto.NftCollection;
 import lombok.AllArgsConstructor;
@@ -28,13 +29,10 @@ public class NftSplitEvent implements Serializable {
 
     String owner;
 
-    @JSONField(name = "source_uri")
-    String sourceUri;
-
     @JSONField(name = "token_id")
     TokenId tokenId;
 
-    String property;
+    TableTokenData.DefaultProperties property;
 
     NftCollection collection;
 
