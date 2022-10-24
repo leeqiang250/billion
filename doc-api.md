@@ -449,7 +449,7 @@ pageLimit：分页条数
 
 | 名称 | 类型 |描述|
 |----|----|----|
-| condition | string |检索条件:NFT:NFT,BOX:盲盒|
+| condition | string |检索条件:ALL:全部;NFT:NFT,BOX:盲盒|
 | order | string |排序字段，ts:上架时间; bid_amount:价格; dead_ts:截止时间|
 | orderType | string |排序类型：asc:顺序; desc:倒序|
 | pageStart | int |查询开始页数 从1开始|
