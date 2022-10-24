@@ -6,7 +6,14 @@ http://52.77.131.111:8890/
 
 context: {"chain":"aptos", "language":"zh-TC"}
 
-## 三、接口
+## 三、合约接口
+盲盒公售购买接口
+@primary_market::primary_market::buy<AskToken, BidToken>(
+account: &signer,
+amount: u64
+)
+
+## 四、后端接口
 
 ### config基础信息查询接口
 
