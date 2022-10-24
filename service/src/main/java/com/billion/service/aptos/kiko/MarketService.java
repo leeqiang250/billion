@@ -123,7 +123,20 @@ public interface MarketService extends ICacheService<Market> {
      */
     MarketDto getMarketList(Context context, String condition, String order, String orderType, Integer pageStart, Integer pageLimit);
 
+    /**
+     * getMarketListByAccount
+     * @param context
+     * @param account
+     * @param type
+     * @return
+     */
     List<Market> getMarketListByAccount(Context context, String account, String type);
 
+    /**
+     * getMarketListByTokenId
+     * @param context
+     * @param account
+     * @return
+     */
     List<Market> getMarketListByTokenId(Context context, String account);
 }

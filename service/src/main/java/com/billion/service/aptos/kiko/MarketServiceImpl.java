@@ -399,8 +399,12 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         var pageResult = this.page(page, queryWrapper);
 
         var marketList = pageResult.getRecords();
-        List<String> nftTokenIdList = marketList.stream().filter(market -> StringUtils.isNotEmpty(market.getTokenId())).map(market -> market.getTokenId()).collect(Collectors.toList());
-        List<String> coinIdList = marketList.stream().filter(market -> StringUtils.isEmpty(market.getTokenId())).map(market -> market.getAskToken()).collect(Collectors.toList());
+        //过滤orderid重复的market记录
+        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market -> market), (key1, key2) -> key2));
+        var distinctMarkets = marketMap.values().stream().collect(Collectors.toList());
+
+        List<String> nftTokenIdList = distinctMarkets.stream().filter(market -> StringUtils.isNotEmpty(market.getTokenId())).map(market -> market.getTokenId()).collect(Collectors.toList());
+        List<String> coinIdList = distinctMarkets.stream().filter(market -> StringUtils.isEmpty(market.getTokenId())).map(market -> market.getAskToken()).collect(Collectors.toList());
 
         var nftTokenList = nftMetaService.getListByTokenIds(nftTokenIdList);
         var coinList = tokenService.getByCoinIdList(context, coinIdList);
@@ -410,7 +414,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 + e.getModuleName() + "::" + e.getStructName(), (e) -> e));
 
         List<MarketDto.MarketInfo> resultList = new ArrayList<>();
-        marketList.forEach(e -> {
+        distinctMarkets.forEach(e -> {
             MarketDto.MarketInfo marketDto = MarketDto.MarketInfo.builder()
                     .id(e.getId())
                     .chain(e.getChain())
