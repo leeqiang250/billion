@@ -26,19 +26,64 @@ public class NftCompose extends TransactionStatus implements IModel {
     @TableId(value = "id", type = IdType.AUTO)
     Long id;
 
+    /**
+     * version
+     */
+    @TableField("version")
+    Long version;
+
+    /**
+     * order_id
+     */
     @TableField("order_id")
     String orderId;
 
+    /**
+     * is_execute
+     */
     @TableField("is_execute")
     Boolean isExecute;
 
+    /**
+     * owner
+     */
     @TableField("owner")
     String owner;
 
-    @TableField("name")
+    /**
+     * name
+     */
+    @TableField("name_")
     String name;
 
+    /**
+     * description
+     */
     @TableField("description")
     String description;
+
+    /**
+     * property_keys
+     */
+    @TableField("property_keys")
+    String propertyKeys;
+
+    /**
+     * property_values
+     */
+    @TableField("property_values")
+    String propertyValues;
+
+    /**
+     * property_types
+     */
+    @TableField("property_types")
+    String propertyTypes;
+
+    /**
+     * collection
+     */
+    @TableField("collection")
+    String collection;
 
 }

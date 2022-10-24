@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author liqiang
@@ -32,13 +33,13 @@ public class NftComposeEvent implements Serializable {
     String description;
 
     @JSONField(name = "property_keys")
-    String propertyKeys;
+    List<String> propertyKeys;
 
     @JSONField(name = "property_values")
-    String propertyValues;
+    List<String> propertyValues;
 
     @JSONField(name = "property_types")
-    String propertyTypes;
+    List<String> propertyTypes;
 
     NftCollection collection;
 

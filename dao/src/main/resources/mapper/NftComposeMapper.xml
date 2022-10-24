@@ -6,11 +6,16 @@
     <sql id="Base_Column_List">
         id
         as id
+        ,version as version
         ,order_id as order_id
         ,is_execute as is_execute
         ,owner as owner
-        ,name as name
+        ,name_ as name_
         ,description as description
+        ,property_keys as property_keys
+        ,property_values as property_values
+        ,property_types as property_types
+        ,collection as collection
         ,transaction_status as transaction_status
         ,transaction_hash as transaction_hash
     </sql>

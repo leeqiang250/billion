@@ -12,6 +12,7 @@ import com.billion.service.aptos.ContextService;
 import com.billion.service.aptos.kiko.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -74,6 +75,7 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
+    //@Async
     //@Scheduled(fixedDelay = 3000)
     void dispatch() {
         this.next = true;
@@ -193,15 +195,13 @@ public class ScanDispatchService implements Serializable {
                 }
             } else if (EventType.isOpenBoxEvent(event)) {
                 OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
-                //TODO leeqiang
-                log.info(event.getType());
-                log.info(openBoxEvent.toString());
+                //TODO renjian 开盲盒记录
             } else if (EventType.isNftSplitEvent(event)) {
                 NftSplitEvent nftSplitEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftSplitEvent.class);
                 nftOpService.addNftSplitEvent(transaction, nftSplitEvent);
             } else if (EventType.isNftComposeEvent(event)) {
                 NftComposeEvent nftComposeEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftComposeEvent.class);
-                nftOpService.addNftComposeEvent(nftComposeEvent);
+                nftOpService.addNftComposeEvent(transaction, nftComposeEvent);
             } else if (EventType.isBoxMakerEvent(event)) {
                 BoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), BoxMakerEvent.class);
                 marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);

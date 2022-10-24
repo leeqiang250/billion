@@ -23,11 +23,12 @@ public interface NftOpService {
     /**
      * addNftComposeEvent
      *
+     * @param transaction     transaction
      * @param nftComposeEvent nftComposeEvent
      * @return boolean
      */
     @Transactional(rollbackFor = Exception.class)
-    boolean addNftComposeEvent(NftComposeEvent nftComposeEvent);
+    boolean addNftComposeEvent(Transaction transaction, NftComposeEvent nftComposeEvent);
 
     /**
      * execute

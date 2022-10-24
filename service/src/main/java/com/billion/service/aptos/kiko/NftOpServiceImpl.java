@@ -179,23 +179,23 @@ public class NftOpServiceImpl implements NftOpService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addNftComposeEvent(NftComposeEvent nftComposeEvent) {
-//        var nftCompose = NftCompose.builder()
-//                .orderId(nftComposeEvent.getOrderId())
-//                .isExecute(nftComposeEvent.isExecute())
-//                .owner(nftComposeEvent.getOwner())
-//                .name(nftComposeEvent.getName())
-//                .description(nftComposeEvent.getDescription())
-//                .build();
-//        nftCompose.setTransactionStatus_(TransactionStatus.);
-//        nftCompose.setTransactionHash(EMPTY);
-//        nftComposeMapper.insert(nftCompose);
-
-        if (nftComposeEvent.isExecute()) {
-            //TODO renjian
-            //合成记录
-        } else {
-
+    public boolean addNftComposeEvent(Transaction transaction, NftComposeEvent nftComposeEvent) {
+        if (!nftComposeEvent.isExecute()) {
+            var nftCompose = NftCompose.builder()
+                    .version(Long.parseLong(transaction.getVersion()))
+                    .orderId(nftComposeEvent.getOrderId())
+                    .isExecute(nftComposeEvent.isExecute())
+                    .owner(nftComposeEvent.getOwner())
+                    .name(nftComposeEvent.getName())
+                    .description(nftComposeEvent.getDescription())
+                    .propertyKeys(nftComposeEvent.getPropertyKeys().stream().collect(Collectors.joining(",")))
+                    .propertyValues(nftComposeEvent.getPropertyValues().stream().collect(Collectors.joining(",")))
+                    .propertyTypes(nftComposeEvent.getPropertyTypes().stream().collect(Collectors.joining(",")))
+                    .collection(nftComposeEvent.getCollection().getNftCollectionKey())
+                    .build();
+            nftCompose.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
+            nftCompose.setTransactionHash(EMPTY);
+            this.nftComposeMapper.insert(nftCompose);
         }
 
         return true;
@@ -472,31 +472,31 @@ public class NftOpServiceImpl implements NftOpService {
 
     boolean nftCompose() {
         {
-            TransactionPayload transactionPayload = TransactionPayload.builder()
-                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-                    .function(ContextService.getKikoOwner() + "::op_nft::compose_step1")
-                    .arguments(List.of(
-                            "0x3564df14abd47b153746038e36f9fd98f1a7a500c977e1c3e0f29980274c5fd7",
-                            "0xe5908de7a7b0313030313131323239",
-                            "0x6565652331",
-                            "description",
-                            List.of("0xe5908de7a7b031303031313132333020232031", "0xe5908de7a7b031303031313132333020232032"),
-                            List.of("0x6e66745f6174747269627574655f7365785f626f79353935", "0x6e66745f6174747269627574655f736b696e5f7768697465353938")
-                    ))
-                    .typeArguments(List.of(com.aptos.request.v1.model.Resource.APT().resourceTag()))
-                    .build();
-
-            var response = AptosService.getAptosClient().requestSubmitTransaction(
-                    ContextService.getKikoOwner(),
-                    transactionPayload);
-            if (response.isValid()) {
-                log.info("{}", response);
-            }
-            log.info("{}", response);
-            if (!AptosService.checkTransaction(response.getData().getHash())) {
-                log.info("{}", response);
-            }
-            log.info("{}", response);
+//            TransactionPayload transactionPayload = TransactionPayload.builder()
+//                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+//                    .function(ContextService.getKikoOwner() + "::op_nft::compose_step1")
+//                    .arguments(List.of(
+//                            "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d",
+//                            "0xe5908de7a7b0313030313131323431",
+//                            Hex.encode("我是名称"),
+//                            Hex.encode("我是描述"),
+//                            List.of("0xe5908de7a7b031303031313132343220232032", "0xe5908de7a7b031303031313132343220232031"),
+//                            List.of("0x6e66745f6174747269627574655f636c6f746865735f626c7565363735", "0x6e66745f6174747269627574655f736b696e5f7768697465363831")
+//                    ))
+//                    .typeArguments(List.of(com.aptos.request.v1.model.Resource.APT().resourceTag()))
+//                    .build();
+//
+//            var response = AptosService.getAptosClient().requestSubmitTransaction(
+//                    ContextService.getKikoOwner(),
+//                    transactionPayload);
+//            if (response.isValid()) {
+//                log.info("{}", response);
+//            }
+//            log.info("{}", response);
+//            if (!AptosService.checkTransaction(response.getData().getHash())) {
+//                log.info("{}", response);
+//            }
+//            log.info("{}", response);
         }
         QueryWrapper<NftCompose> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftCompose::getIsExecute, Boolean.FALSE);
