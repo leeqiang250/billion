@@ -471,6 +471,33 @@ public class NftOpServiceImpl implements NftOpService {
     }
 
     boolean nftCompose() {
+        {
+            TransactionPayload transactionPayload = TransactionPayload.builder()
+                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
+                    .function(ContextService.getKikoOwner() + "::op_nft::compose_step1")
+                    .arguments(List.of(
+                            "0x3564df14abd47b153746038e36f9fd98f1a7a500c977e1c3e0f29980274c5fd7",
+                            "0xe5908de7a7b0313030313131323239",
+                            "0x6565652331",
+                            "description",
+                            List.of("0xe5908de7a7b031303031313132333020232031", "0xe5908de7a7b031303031313132333020232032"),
+                            List.of("0x6e66745f6174747269627574655f7365785f626f79353935", "0x6e66745f6174747269627574655f736b696e5f7768697465353938")
+                    ))
+                    .typeArguments(List.of(com.aptos.request.v1.model.Resource.APT().resourceTag()))
+                    .build();
+
+            var response = AptosService.getAptosClient().requestSubmitTransaction(
+                    ContextService.getKikoOwner(),
+                    transactionPayload);
+            if (response.isValid()) {
+                log.info("{}", response);
+            }
+            log.info("{}", response);
+            if (!AptosService.checkTransaction(response.getData().getHash())) {
+                log.info("{}", response);
+            }
+            log.info("{}", response);
+        }
         QueryWrapper<NftCompose> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftCompose::getIsExecute, Boolean.FALSE);
         wrapper.lambda().eq(NftCompose::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());

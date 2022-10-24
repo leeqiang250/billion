@@ -24,7 +24,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Service
 public class InitServiceImpl implements InitService {
 
-    final String kiko = "0x3564df14abd47b153746038e36f9fd98f1a7a500c977e1c3e0f29980274c5fd7";
+    final String kiko = "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d";
 
     @Resource
     BoxGroupService boxGroupService;
