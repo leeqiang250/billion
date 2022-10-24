@@ -530,6 +530,32 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 ]
 }`
 
+### 查询二级市场盲盒详情
+| 方法 | GET |
+|----|----|
+| 路径 |/aptos/kiko/v1/nft/boxGroup/getBoxById/{groupId}/{saleState}/{orderId} |
+saleState:售卖状态。onSale:售卖中;unSale:未出售
+orderId:非必填，为出售中状态的订单id
+
+响应
+`{
+"code": 200,
+"ts": 1665888505470,
+"msg": "success",
+"data":{
+"id": 2,
+"chain": "aptos",
+"coinId": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11::box::BoxV1",
+"name": "BoxV1",
+"symbol": "BoxV1",
+"decimals": 0,
+"displayDecimals": null,
+"uri": ""
+}
+}`
+
+
+
 ### 二级市场列表接口
 
 | 方法 | GET |

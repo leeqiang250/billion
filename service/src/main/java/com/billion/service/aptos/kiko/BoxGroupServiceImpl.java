@@ -21,6 +21,7 @@ import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -226,7 +227,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     }
 
     @Override
-    public BoxGroupDto.BoxGroupInfo getBoxById(Context context, String boxId) {
+    public BoxGroupDto.BoxGroupInfo getBoxGroupById(Context context, String boxId) {
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, boxId);
         var boxGroup = this.getOne(boxGroupQueryWrapper);
@@ -277,6 +278,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 for (int i = 0; i < num; i++) {
                     MyBoxDto myBoxDto = MyBoxDto.builder()
                             .id(token.getId())
+                            .boxGroupId(b.getId())
                             .chain(token.getChain())
                             .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
                             .name(token.getName())
@@ -299,6 +301,27 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             resultList = boxs.stream().filter(box -> !marketMap.containsKey(box.getCoinId())).collect(Collectors.toList());
         }
         return resultList;
+    }
+
+    @Override
+    public MyBoxDto getBoxById(Context context, String boxGroupId, String saleState, String orderId) {
+        BoxGroup boxGroup = this.getById(boxGroupId);
+        if (Objects.isNull(boxGroup)) {
+            return null;
+        }
+        Token token = tokenService.getById(boxGroup.getAskToken());
+        MyBoxDto myBoxDto = MyBoxDto.builder()
+                .id(token.getId())
+                .boxGroupId(boxGroup.getId())
+                .chain(token.getChain())
+                .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
+                .name(token.getName())
+                .symbol(token.getSymbol())
+                .decimals(token.getDecimals())
+                .uri(token.getUri())
+                .build();
+
+        return myBoxDto;
     }
 
     @Override

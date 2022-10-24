@@ -24,6 +24,11 @@ public class MyBoxDto implements Serializable {
     Long id;
 
     /**
+     * boxGroupId
+     */
+    Long boxGroupId;
+
+    /**
      * 链类型
      */
     String chain;
