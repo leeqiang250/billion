@@ -288,6 +288,13 @@ public class InitServiceImpl implements InitService {
 
         this.contractService.save(Contract.builder()
                 .chain(Chain.APTOS.getCode())
+                .name("kiko_owner")
+                .moduleAddress(kiko)
+                .moduleName(EMPTY)
+                .build());
+
+        this.contractService.save(Contract.builder()
+                .chain(Chain.APTOS.getCode())
                 .name("primary_market")
                 .moduleAddress(kiko)
                 .moduleName("primary_market")
