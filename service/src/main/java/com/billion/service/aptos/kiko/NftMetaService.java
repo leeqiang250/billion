@@ -52,7 +52,7 @@ public interface NftMetaService extends ICacheService<NftMeta> {
      * @param account
      * @return
      */
-    List<NftMeta> getMyNfts(Context context, String account, String saleState);
+    List<NftMetaDto> getMyNfts(Context context, String account, String saleState);
 
     /**
      * getListByTokenIds

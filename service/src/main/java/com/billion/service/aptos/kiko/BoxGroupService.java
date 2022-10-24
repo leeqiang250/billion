@@ -64,5 +64,13 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      */
     List<MyBoxDto> getMyBox(Context context, String account, String saleState);
 
+    /**
+     * getBoxById
+     * @param context
+     * @param boxGroupId
+     * @param saleState
+     * @param orderId
+     * @return
+     */
     MyBoxDto getBoxById(Context context, String boxGroupId, String saleState, String orderId);
 }

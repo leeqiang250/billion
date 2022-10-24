@@ -15,6 +15,7 @@
         ,price as price
         ,description as description
         ,rule as rule
+        ,uri as uri
         ,ts as ts
         ,sort as sort
         ,is_enabled as is_enabled

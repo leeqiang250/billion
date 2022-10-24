@@ -451,12 +451,26 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
         //指定发起交易的账户
         queryWrapper.lambda().eq(Market::getMaker, account);
+        queryWrapper.lambda().orderByAsc(Market::getId);
 
         if (MarketTokenType.NFT.getType().equals(type)) {
             queryWrapper.lambda().ne(Market::getTokenId, EMPTY);
         }else if (MarketTokenType.BOX.getType().equals(type)) {
             queryWrapper.lambda().eq(Market::getTokenId, EMPTY);
         }
+
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<Market> getMarketListByTokenId(Context context, String tokenId) {
+        QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, context.getChain());
+        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+        //指定发起交易的账户
+        queryWrapper.lambda().eq(Market::getTokenId, tokenId);
+        queryWrapper.lambda().orderByAsc(Market::getId);
 
         return this.list(queryWrapper);
     }

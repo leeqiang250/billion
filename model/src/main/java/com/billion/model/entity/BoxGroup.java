@@ -80,6 +80,13 @@ public class BoxGroup extends TransactionStatus implements IModel {
     @TableField("rule")
     String rule;
 
+
+    /**
+     * 封面
+     */
+    @TableField("uri")
+    String uri;
+
     /**
      * 起售时间
      */
