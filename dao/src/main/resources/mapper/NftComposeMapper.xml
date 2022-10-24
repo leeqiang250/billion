@@ -12,6 +12,7 @@
         ,owner as owner
         ,name_ as name_
         ,description as description
+        ,meta_id as meta_id
         ,property_keys as property_keys
         ,property_values as property_values
         ,property_types as property_types

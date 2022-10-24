@@ -63,6 +63,12 @@ public class NftCompose extends TransactionStatus implements IModel {
     String description;
 
     /**
+     * metaId
+     */
+    @TableField("meta_id")
+    Long metaId;
+
+    /**
      * property_keys
      */
     @TableField("property_keys")

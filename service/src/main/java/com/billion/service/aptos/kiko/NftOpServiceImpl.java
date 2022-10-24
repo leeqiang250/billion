@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.TokenDataId;
 import com.aptos.request.v1.model.TokenId;
 import com.aptos.request.v1.model.Transaction;
@@ -14,6 +15,7 @@ import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.NftComposeEvent;
 import com.billion.model.event.NftSplitEvent;
+import com.billion.model.exception.BizException;
 import com.billion.model.resource.OpNftData;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
@@ -45,10 +47,10 @@ public class NftOpServiceImpl implements NftOpService {
     LanguageService languageService;
 
     @Resource
-    NftSplitMapper nftSplitMapper;
+    NftSplitService nftSplitService;
 
     @Resource
-    NftComposeMapper nftComposeMapper;
+    NftComposeService nftComposeService;
 
     @Resource
     NftMetaService nftMetaService;
@@ -77,8 +79,13 @@ public class NftOpServiceImpl implements NftOpService {
 
             QueryWrapper<NftGroup> nftGroupQueryWrapper = new QueryWrapper<>();
             nftGroupQueryWrapper.lambda().eq(NftGroup::getDisplayName, language.getKey());
+            nftGroupQueryWrapper.lambda().eq(NftGroup::getOwner, nftSplitEvent.getCollection().getCreator());
             nftGroupQueryWrapper.lambda().eq(NftGroup::getChain, Chain.APTOS.getCode());
             var nftGroup = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
+
+            nftGroupQueryWrapper = new QueryWrapper<>();
+            nftGroupQueryWrapper.lambda().eq(NftGroup::getSplit, nftGroup.getId());
+            nftGroup = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
 
             for (var data : nftSplitEvent.getProperty().getMap().getData()) {
                 if (data.getKey().startsWith("0x")) {
@@ -171,7 +178,7 @@ public class NftOpServiceImpl implements NftOpService {
                     .build();
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
             nftSplit.setTransactionHash(transaction.getHash());
-            this.nftSplitMapper.insert(nftSplit);
+            this.nftSplitService.save(nftSplit);
         }
 
         return true;
@@ -181,6 +188,104 @@ public class NftOpServiceImpl implements NftOpService {
     @Transactional(rollbackFor = Exception.class)
     public boolean addNftComposeEvent(Transaction transaction, NftComposeEvent nftComposeEvent) {
         if (!nftComposeEvent.isExecute()) {
+            var collection = Hex.decodeToString(nftComposeEvent.getCollection().getCollection());
+
+            QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
+            languageQueryWrapper.lambda().eq(Language::getValue, collection);
+            languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+            var language = this.languageService.getOneThrowEx(languageQueryWrapper);
+
+            QueryWrapper<NftGroup> nftGroupQueryWrapper = new QueryWrapper<>();
+            nftGroupQueryWrapper.lambda().eq(NftGroup::getDisplayName, language.getKey());
+            nftGroupQueryWrapper.lambda().eq(NftGroup::getOwner, nftComposeEvent.getCollection().getCreator());
+            nftGroupQueryWrapper.lambda().eq(NftGroup::getChain, Chain.APTOS.getCode());
+            var nftGroup = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
+
+            nftGroupQueryWrapper = new QueryWrapper<>();
+            nftGroupQueryWrapper.lambda().eq(NftGroup::getSplit, nftGroup.getId());
+            nftGroup = this.nftGroupService.getOneThrowEx(nftGroupQueryWrapper);
+
+            var nftMeta = NftMeta.builder()
+                    .nftGroupId(nftGroup.getId())
+                    .displayName(UUID.randomUUID().toString())
+                    .description(UUID.randomUUID().toString())
+                    .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/4031cc60-3e88-4f78-b412-5006ecf5c100/public")
+                    .rank(0L)
+                    .isBorn(Boolean.FALSE)
+                    .score(EMPTY)
+                    .attributeType(0)
+                    .tableHandle(EMPTY)
+                    .tableCollection(EMPTY)
+                    .tableCreator(EMPTY)
+                    .tableName(EMPTY)
+                    .build();
+            nftMeta.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
+            nftMeta.setTransactionHash(EMPTY);
+
+            QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
+            nftMetaQueryWrapper.lambda().eq(NftMeta::getNftGroupId, nftGroup.getId());
+            var list = this.nftMetaService.list(nftMetaQueryWrapper);
+
+            languageQueryWrapper = new QueryWrapper<>();
+            languageQueryWrapper.lambda().in(Language::getKey, list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet()));
+            languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+            var languages = this.languageService.list(languageQueryWrapper);
+
+            long maxNumber = 0L;
+            for (var language_ : languages) {
+                var index = language_.getValue().lastIndexOf("#");
+                if (0 <= index) {
+                    var number = language_.getValue().substring(index + 1).trim();
+                    maxNumber = Math.max(maxNumber, Long.parseLong(number));
+                }
+            }
+            maxNumber++;
+
+            var languageDisplayName = Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key(nftMeta.getDisplayName())
+                    .value(language.getValue() + " # " + maxNumber)
+                    .build();
+            this.languageService.save(languageDisplayName);
+
+            this.languageService.save(Language.builder()
+                    .language(com.billion.model.enums.Language.EN.getCode())
+                    .key(nftMeta.getDescription())
+                    .value(languageDisplayName.getValue())
+                    .build());
+
+            var tokenId = TokenId.builder()
+                    .tokenDataId(TokenDataId.builder()
+                            .creator(nftComposeEvent.getCollection().getCreator())
+                            .collection(nftComposeEvent.getCollection().getCollection())
+                            .name(Hex.encode(languageDisplayName.getValue()))
+                            .build())
+                    .propertyVersion("0")
+                    .build();
+            nftMeta.setTokenId(tokenId.getNftTokenIdKey());
+            this.nftMetaService.save(nftMeta);
+
+            for (int i = 0; i < nftComposeEvent.getPropertyKeys().size(); i++) {
+                var propertyKey = nftComposeEvent.getPropertyKeys().get(i);
+                var propertyType = nftComposeEvent.getPropertyTypes().get(i);
+
+                QueryWrapper<NftAttributeType> nftAttributeTypeQueryWrapper = new QueryWrapper<>();
+                nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getNftGroupId, nftGroup.getId());
+                nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getClassName, Hex.decodeToString(propertyType));
+                var nftAttributeType = this.nftAttributeTypeService.getOneThrowEx(nftAttributeTypeQueryWrapper);
+
+                QueryWrapper<NftAttributeMeta> nftAttributeMetaQueryWrapper = new QueryWrapper<>();
+                nftAttributeMetaQueryWrapper.lambda().eq(NftAttributeMeta::getNftAttributeTypeId, nftAttributeType.getId());
+                nftAttributeMetaQueryWrapper.lambda().eq(NftAttributeMeta::getAttribute, Hex.decodeToString(propertyKey));
+                var nftAttributeMeta = this.nftAttributeMetaService.getOneThrowEx(nftAttributeMetaQueryWrapper);
+
+                var nftAttributeValue = NftAttributeValue.builder()
+                        .nftAttributeMetaId(nftAttributeMeta.getId())
+                        .nftMetaId(nftMeta.getId())
+                        .build();
+                this.nftAttributeValueService.save(nftAttributeValue);
+            }
+
             var nftCompose = NftCompose.builder()
                     .version(Long.parseLong(transaction.getVersion()))
                     .orderId(nftComposeEvent.getOrderId())
@@ -188,6 +293,7 @@ public class NftOpServiceImpl implements NftOpService {
                     .owner(nftComposeEvent.getOwner())
                     .name(nftComposeEvent.getName())
                     .description(nftComposeEvent.getDescription())
+                    .metaId(nftMeta.getId())
                     .propertyKeys(nftComposeEvent.getPropertyKeys().stream().collect(Collectors.joining(",")))
                     .propertyValues(nftComposeEvent.getPropertyValues().stream().collect(Collectors.joining(",")))
                     .propertyTypes(nftComposeEvent.getPropertyTypes().stream().collect(Collectors.joining(",")))
@@ -195,7 +301,7 @@ public class NftOpServiceImpl implements NftOpService {
                     .build();
             nftCompose.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
             nftCompose.setTransactionHash(EMPTY);
-            this.nftComposeMapper.insert(nftCompose);
+            this.nftComposeService.save(nftCompose);
         }
 
         return true;
@@ -286,7 +392,7 @@ public class NftOpServiceImpl implements NftOpService {
         QueryWrapper<NftSplit> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftSplit::getIsExecute, Boolean.FALSE);
         wrapper.lambda().eq(NftSplit::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var nftSplit = nftSplitMapper.selectOne(wrapper);
+        var nftSplit = this.nftSplitService.getOne(wrapper, false);
         if (Objects.isNull(nftSplit)) {
             return false;
         }
@@ -330,7 +436,7 @@ public class NftOpServiceImpl implements NftOpService {
         if (nftMetas.isEmpty()) {
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftSplit.setTransactionHash(EMPTY);
-            this.nftSplitMapper.updateById(nftSplit);
+            this.nftSplitService.updateById(nftSplit);
 
             return false;
         }
@@ -358,7 +464,7 @@ public class NftOpServiceImpl implements NftOpService {
             ) {
                 nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
                 nftSplit.setTransactionHash(EMPTY);
-                this.nftSplitMapper.updateById(nftSplit);
+                this.nftSplitService.updateById(nftSplit);
 
                 for (NftMeta nftMeta_ : nftMetas) {
                     nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -372,7 +478,7 @@ public class NftOpServiceImpl implements NftOpService {
             if (26 < displayName.length()) {
                 nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
                 nftSplit.setTransactionHash(EMPTY);
-                this.nftSplitMapper.updateById(nftSplit);
+                this.nftSplitService.updateById(nftSplit);
 
                 for (NftMeta nftMeta_ : nftMetas) {
                     nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -386,11 +492,11 @@ public class NftOpServiceImpl implements NftOpService {
             names.add(Hex.encode(displayName));
             descriptions.add(Hex.encode(description));
             uris.add(Hex.encode(nftMeta.getUri()));
-            var nftAttributeList = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
+            var nftAttributeList = this.nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
             if (1 != nftAttributeList.size()) {
                 nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
                 nftSplit.setTransactionHash(EMPTY);
-                this.nftSplitMapper.updateById(nftSplit);
+                this.nftSplitService.updateById(nftSplit);
 
                 for (NftMeta nftMeta_ : nftMetas) {
                     nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -406,7 +512,7 @@ public class NftOpServiceImpl implements NftOpService {
         if (nftMetas.size() != names.size()) {
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftSplit.setTransactionHash(EMPTY);
-            this.nftSplitMapper.updateById(nftSplit);
+            this.nftSplitService.updateById(nftSplit);
 
             return false;
         }
@@ -428,7 +534,7 @@ public class NftOpServiceImpl implements NftOpService {
         if (responseTransaction.isValid()) {
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftSplit.setTransactionHash(EMPTY);
-            this.nftSplitMapper.updateById(nftSplit);
+            this.nftSplitService.updateById(nftSplit);
 
             for (NftMeta nftMeta_ : nftMetas) {
                 nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -442,7 +548,7 @@ public class NftOpServiceImpl implements NftOpService {
         if (!AptosService.checkTransaction(responseTransaction.getData().getHash())) {
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftSplit.setTransactionHash(responseTransaction.getData().getHash());
-            this.nftSplitMapper.updateById(nftSplit);
+            this.nftSplitService.updateById(nftSplit);
 
             for (NftMeta nftMeta_ : nftMetas) {
                 nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
@@ -456,7 +562,7 @@ public class NftOpServiceImpl implements NftOpService {
         nftSplit.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         nftSplit.setTransactionHash(responseTransaction.getData().getHash());
         nftSplit.setIsExecute(Boolean.TRUE);
-        this.nftSplitMapper.updateById(nftSplit);
+        this.nftSplitService.updateById(nftSplit);
 
         for (NftMeta nftMeta_ : nftMetas) {
             nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
@@ -471,49 +577,57 @@ public class NftOpServiceImpl implements NftOpService {
     }
 
     boolean nftCompose() {
-        {
-//            TransactionPayload transactionPayload = TransactionPayload.builder()
-//                    .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
-//                    .function(ContextService.getKikoOwner() + "::op_nft::compose_step1")
-//                    .arguments(List.of(
-//                            "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d",
-//                            "0xe5908de7a7b0313030313131323431",
-//                            Hex.encode("我是名称"),
-//                            Hex.encode("我是描述"),
-//                            List.of("0xe5908de7a7b031303031313132343220232032", "0xe5908de7a7b031303031313132343220232031"),
-//                            List.of("0x6e66745f6174747269627574655f636c6f746865735f626c7565363735", "0x6e66745f6174747269627574655f736b696e5f7768697465363831")
-//                    ))
-//                    .typeArguments(List.of(com.aptos.request.v1.model.Resource.APT().resourceTag()))
-//                    .build();
-//
-//            var response = AptosService.getAptosClient().requestSubmitTransaction(
-//                    ContextService.getKikoOwner(),
-//                    transactionPayload);
-//            if (response.isValid()) {
-//                log.info("{}", response);
-//            }
-//            log.info("{}", response);
-//            if (!AptosService.checkTransaction(response.getData().getHash())) {
-//                log.info("{}", response);
-//            }
-//            log.info("{}", response);
-        }
         QueryWrapper<NftCompose> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NftCompose::getIsExecute, Boolean.FALSE);
         wrapper.lambda().eq(NftCompose::getTransactionStatus, TransactionStatus.STATUS_1_READY.getCode());
-        var nftCompose = nftComposeMapper.selectOne(wrapper);
+        var nftCompose = this.nftComposeService.getOne(wrapper, false);
         if (Objects.isNull(nftCompose)) {
             return false;
         }
 
-        List<String> propertyKeys = new ArrayList<>();
+        var nftMeta = this.nftMetaService.getById(nftCompose.getMetaId());
+        if (Objects.isNull(nftMeta)) {
+            throw new BizException("compose meta id is null");
+        }
+
+        var requestAccountResource = AptosService.getAptosClient().requestAccountResource(
+                ContextService.getKikoOwner(), com.aptos.request.v1.model.Resource.builder()
+                        .moduleAddress(ContextService.getKikoOwner())
+                        .moduleName("op_nft")
+                        .resourceName("Data")
+                        .build());
+        if (requestAccountResource.isValid()) {
+            return false;
+        }
+
+        var opNftData = requestAccountResource.getData().getData().to(OpNftData.class);
+
+        var responseNftComposeEvent = AptosService.getAptosClient().requestTable(
+                opNftData.getOrderCompose().getHandle(),
+                TableBody.builder()
+                        .keyType("u64")
+                        .valueType(ContextService.getKikoOwner() + "::op_nft::NftComposeEvent")
+                        .key(nftCompose.getOrderId())
+                        .build(),
+                NftComposeEvent.class
+        );
+        if (responseNftComposeEvent.isValid()) {
+            return false;
+        }
+
+        if (responseNftComposeEvent.getData().isExecute()) {
+            nftCompose.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            nftCompose.setTransactionHash(EMPTY);
+            nftCompose.setIsExecute(Boolean.TRUE);
+            return true;
+        }
 
         TransactionPayload transactionPayload = TransactionPayload.builder()
                 .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                 .function(ContextService.getKikoOwner() + "::op_nft::compose_step2")
                 .arguments(List.of(
-                        nftCompose.getOrderId()
-                        //uri
+                        nftCompose.getOrderId(),
+                        Hex.encode(nftMeta.getUri())
                 ))
                 .typeArguments(List.of())
                 .build();
@@ -524,7 +638,7 @@ public class NftOpServiceImpl implements NftOpService {
         if (response.isValid()) {
             nftCompose.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftCompose.setTransactionHash(EMPTY);
-            nftComposeMapper.updateById(nftCompose);
+            this.nftComposeService.updateById(nftCompose);
 
             return false;
         }
@@ -532,7 +646,7 @@ public class NftOpServiceImpl implements NftOpService {
         if (!AptosService.checkTransaction(response.getData().getHash())) {
             nftCompose.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftCompose.setTransactionHash(response.getData().getHash());
-            nftComposeMapper.updateById(nftCompose);
+            this.nftComposeService.updateById(nftCompose);
 
             return false;
         }
@@ -540,8 +654,10 @@ public class NftOpServiceImpl implements NftOpService {
         nftCompose.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
         nftCompose.setTransactionHash(response.getData().getHash());
         nftCompose.setIsExecute(Boolean.TRUE);
+        this.nftComposeService.updateById(nftCompose);
 
-        nftComposeMapper.updateById(nftCompose);
+        //合成记录
+        //TODO renjian
 
         return true;
     }

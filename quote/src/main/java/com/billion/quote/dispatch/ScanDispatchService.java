@@ -45,6 +45,12 @@ public class ScanDispatchService implements Serializable {
     MarketService marketService;
 
     @Resource
+    NftComposeService nftComposeService;
+
+    @Resource
+    NftSplitService nftSplitService;
+
+    @Resource
     NftService nftService;
 
     @Resource
@@ -153,8 +159,10 @@ public class ScanDispatchService implements Serializable {
 
                 if (valid) {
                     Long transactionVersion = Long.parseLong(transaction.getVersion());
-                    nftService.removeGe(transactionVersion);
-                    marketService.removeGe(transactionVersion);
+                    this.nftService.removeGe(transactionVersion);
+                    this.marketService.removeGe(transactionVersion);
+                    this.nftComposeService.removeGe(transactionVersion);
+                    this.nftSplitService.removeGe(transactionVersion);
 
                     this.process(transaction);
                 }
