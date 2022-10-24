@@ -122,7 +122,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         QueryWrapper<com.billion.model.entity.Language> languageQueryWrapper = new QueryWrapper<>();
         languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
         languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftGroup.getDisplayName());
-        var nftGroupDisplayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
+        var nftGroupDisplayName = this.languageService.getOneThrowEx(languageQueryWrapper).getValue();
         if (StringUtils.isEmpty(nftGroupDisplayName)
                 || DEFAULT_TEXT.equals(nftGroupDisplayName)
         ) {
@@ -140,12 +140,12 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDisplayName());
-            var displayName = languageService.getOneThrowEx(languageQueryWrapper).getValue();
+            var displayName = this.languageService.getOneThrowEx(languageQueryWrapper).getValue();
 
             languageQueryWrapper = new QueryWrapper<>();
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, Language.EN.getCode());
             languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDescription());
-            var description = languageService.getOneThrowEx(languageQueryWrapper).getValue();
+            var description = this.languageService.getOneThrowEx(languageQueryWrapper).getValue();
 
             if (StringUtils.isEmpty(displayName)
                     || StringUtils.isEmpty(description)
@@ -167,7 +167,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                 throw new BizException("display name too long, max 26");
             }
 
-            var image = imageService.add(nftMeta.getUri(), nftMeta.getClass().getSimpleName() + ":" + nftMeta.getId());
+            var image = this.imageService.add(nftMeta.getUri(), nftMeta.getClass().getSimpleName() + ":" + nftMeta.getId());
 
             var nftAttributeList = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
             var nftAttributeMap = nftAttributeList.stream().collect(Collectors.toMap(e -> e.getKey(), (e) -> e));
@@ -337,8 +337,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
         Set setDescription = list.stream().map(e -> e.getDescription()).collect(Collectors.toSet());
 
-        Map mapDisplayName = languageService.getByKeys(context, setDisplayName);
-        Map mapDescription = languageService.getByKeys(context, setDescription);
+        Map mapDisplayName = this.languageService.getByKeys(context, setDisplayName);
+        Map mapDescription = this.languageService.getByKeys(context, setDescription);
 
         list.forEach(e -> {
             e.setDisplayName(mapDisplayName.get(e.getDisplayName()).toString());
@@ -351,14 +351,14 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         Set setDisplayName = Set.of(nftMeta.getDisplayName());
         Set setDescription = Set.of(nftMeta.getDescription());
 
-        Map mapDisplayName = languageService.getByKeys(context, setDisplayName);
-        Map mapDescription = languageService.getByKeys(context, setDescription);
+        Map mapDisplayName = this.languageService.getByKeys(context, setDisplayName);
+        Map mapDescription = this.languageService.getByKeys(context, setDescription);
 
         nftMeta.setDisplayName(mapDisplayName.get(nftMeta.getDisplayName()).toString());
         nftMeta.setDescription(mapDescription.get(nftMeta.getDescription()).toString());
     }
 
     private String changeLanguageContract(Context context, String str) {
-        return languageService.getByKey(context, str);
+        return this.languageService.getByKey(context, str);
     }
 }

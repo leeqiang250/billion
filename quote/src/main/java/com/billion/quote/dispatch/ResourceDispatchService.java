@@ -8,6 +8,7 @@ import com.billion.service.aptos.kiko.TokenTransferService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -32,7 +33,6 @@ public class ResourceDispatchService implements Serializable {
     @Resource
     NftOpService nftOpService;
 
-    //@Scheduled(cron = "*/3 * * * * ?")
     //@Scheduled(fixedDelay = 3000)
     void dispatch() {
         TokenTransfer tokenTransfer = TokenTransfer.builder().build();

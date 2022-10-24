@@ -4,7 +4,9 @@ import com.aptos.request.v1.model.TokenDataId;
 import com.aptos.request.v1.model.TokenId;
 import com.aptos.request.v1.model.Transaction;
 import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.request.v1.rpc.body.TableBody;
 import com.aptos.utils.Hex;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.*;
 import com.billion.model.entity.*;
@@ -12,6 +14,7 @@ import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.NftComposeEvent;
 import com.billion.model.event.NftSplitEvent;
+import com.billion.model.resource.OpNftData;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.billion.model.constant.RequestPath.DEFAULT_TEXT;
 import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
@@ -31,6 +34,9 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Slf4j
 @Service
 public class NftOpServiceImpl implements NftOpService {
+
+    @Resource
+    ImageService imageService;
 
     @Resource
     NftGroupService nftGroupService;
@@ -59,20 +65,7 @@ public class NftOpServiceImpl implements NftOpService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addNftSplitEvent(Transaction transaction, NftSplitEvent nftSplitEvent) {
-        if (nftSplitEvent.isExecute()) {
-            var nftSplit = NftSplit.builder()
-                    .orderId(nftSplitEvent.getOrderId())
-                    .isExecute(nftSplitEvent.isExecute())
-                    .owner(nftSplitEvent.getOwner())
-                    .metaIds(EMPTY)
-                    .build();
-            nftSplit.setTransactionStatus_(TransactionStatus.STATUS_2_ING);
-            nftSplit.setTransactionHash(transaction.getHash());
-            nftSplitMapper.insert(nftSplit);
-
-            //分解记录
-            //TODO renjian
-        } else {
+        if (!nftSplitEvent.isExecute()) {
             Set<String> metaIds = new HashSet<>(nftSplitEvent.getProperty().getMap().getData().size());
 
             var collection = Hex.decodeToString(nftSplitEvent.getCollection().getCollection());
@@ -103,8 +96,8 @@ public class NftOpServiceImpl implements NftOpService {
                             .tableCreator(EMPTY)
                             .tableName(EMPTY)
                             .build();
-                    nftMeta.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-                    nftMeta.setTransactionHash(transaction.getHash());
+                    nftMeta.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
+                    nftMeta.setTransactionHash(EMPTY);
 
                     QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
                     nftMetaQueryWrapper.lambda().eq(NftMeta::getNftGroupId, nftGroup.getId());
@@ -170,6 +163,7 @@ public class NftOpServiceImpl implements NftOpService {
             }
 
             var nftSplit = NftSplit.builder()
+                    .version(Long.parseLong(transaction.getVersion()))
                     .orderId(nftSplitEvent.getOrderId())
                     .isExecute(nftSplitEvent.isExecute())
                     .owner(nftSplitEvent.getOwner())
@@ -177,7 +171,7 @@ public class NftOpServiceImpl implements NftOpService {
                     .build();
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
             nftSplit.setTransactionHash(transaction.getHash());
-            nftSplitMapper.insert(nftSplit);
+            this.nftSplitMapper.insert(nftSplit);
         }
 
         return true;
@@ -210,13 +204,13 @@ public class NftOpServiceImpl implements NftOpService {
     @Override
     public boolean execute() {
         while (true) {
-            if (!nftSplit()) {
+            if (!this.nftSplit()) {
                 break;
             }
         }
 
         while (true) {
-            if (!nftCompose()) {
+            if (!this.nftCompose()) {
                 break;
             }
         }
@@ -297,42 +291,181 @@ public class NftOpServiceImpl implements NftOpService {
             return false;
         }
 
+        var requestAccountResource = AptosService.getAptosClient().requestAccountResource(
+                ContextService.getKikoOwner(), com.aptos.request.v1.model.Resource.builder()
+                        .moduleAddress(ContextService.getKikoOwner())
+                        .moduleName("op_nft")
+                        .resourceName("Data")
+                        .build());
+        if (requestAccountResource.isValid()) {
+            return false;
+        }
+
+        var opNftData = requestAccountResource.getData().getData().to(OpNftData.class);
+
+        var responseNftSplitEvent = AptosService.getAptosClient().requestTable(
+                opNftData.getOrderSpilt().getHandle(),
+                TableBody.builder()
+                        .keyType("u64")
+                        .valueType(ContextService.getKikoOwner() + "::op_nft::NftSplitEvent")
+                        .key(nftSplit.getOrderId())
+                        .build(),
+                NftSplitEvent.class
+        );
+        if (responseNftSplitEvent.isValid()) {
+            return false;
+        }
+
+        if (responseNftSplitEvent.getData().isExecute()) {
+            nftSplit.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            nftSplit.setTransactionHash(EMPTY);
+            nftSplit.setIsExecute(Boolean.TRUE);
+            return true;
+        }
+
+        var metaIds = nftSplit.getMetaIds().split(",");
+        QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
+        nftMetaQueryWrapper.lambda().in(NftMeta::getId, metaIds);
+        var nftMetas = this.nftMetaService.list(nftMetaQueryWrapper);
+        if (nftMetas.isEmpty()) {
+            nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftSplit.setTransactionHash(EMPTY);
+            this.nftSplitMapper.updateById(nftSplit);
+
+            return false;
+        }
+
+        List<String> names = new ArrayList<>();
+        List<String> descriptions = new ArrayList<>();
+        List<String> uris = new ArrayList<>();
         List<String> propertyKeys = new ArrayList<>();
+
+        for (NftMeta nftMeta : nftMetas) {
+            QueryWrapper<com.billion.model.entity.Language> languageQueryWrapper = new QueryWrapper<>();
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDisplayName());
+            var displayName = this.languageService.getOneThrowEx(languageQueryWrapper).getValue();
+
+            languageQueryWrapper = new QueryWrapper<>();
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+            languageQueryWrapper.lambda().eq(com.billion.model.entity.Language::getKey, nftMeta.getDescription());
+            var description = this.languageService.getOneThrowEx(languageQueryWrapper).getValue();
+
+            if (StringUtils.isEmpty(displayName)
+                    || StringUtils.isEmpty(description)
+                    || DEFAULT_TEXT.equals(displayName)
+                    || DEFAULT_TEXT.equals(description)
+            ) {
+                nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftSplit.setTransactionHash(EMPTY);
+                this.nftSplitMapper.updateById(nftSplit);
+
+                for (NftMeta nftMeta_ : nftMetas) {
+                    nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                    nftMeta_.setTransactionHash(EMPTY);
+                    this.nftMetaService.updateById(nftMeta_);
+                }
+
+                return false;
+            }
+
+            if (26 < displayName.length()) {
+                nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftSplit.setTransactionHash(EMPTY);
+                this.nftSplitMapper.updateById(nftSplit);
+
+                for (NftMeta nftMeta_ : nftMetas) {
+                    nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                    nftMeta_.setTransactionHash(EMPTY);
+                    this.nftMetaService.updateById(nftMeta_);
+                }
+
+                return false;
+            }
+
+            names.add(Hex.encode(displayName));
+            descriptions.add(Hex.encode(description));
+            uris.add(Hex.encode(nftMeta.getUri()));
+            var nftAttributeList = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
+            if (1 != nftAttributeList.size()) {
+                nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftSplit.setTransactionHash(EMPTY);
+                this.nftSplitMapper.updateById(nftSplit);
+
+                for (NftMeta nftMeta_ : nftMetas) {
+                    nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                    nftMeta_.setTransactionHash(EMPTY);
+                    this.nftMetaService.updateById(nftMeta_);
+                }
+
+                return false;
+            }
+            propertyKeys.add(nftAttributeList.get(0).getKey());
+        }
+
+        if (nftMetas.size() != names.size()) {
+            nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+            nftSplit.setTransactionHash(EMPTY);
+            this.nftSplitMapper.updateById(nftSplit);
+
+            return false;
+        }
 
         TransactionPayload transactionPayload = TransactionPayload.builder()
                 .type(TransactionPayload.ENTRY_FUNCTION_PAYLOAD)
                 .function(ContextService.getKikoOwner() + "::op_nft::split_step2")
                 .arguments(List.of(
                         nftSplit.getOrderId(),
+                        names,
+                        descriptions,
+                        uris,
                         propertyKeys
                 ))
                 .typeArguments(List.of())
                 .build();
 
-        var response = AptosService.getAptosClient().requestSubmitTransaction(
-                ContextService.getKikoOwner(),
-                transactionPayload);
-        if (response.isValid()) {
+        var responseTransaction = AptosService.getAptosClient().requestSubmitTransaction(ContextService.getKikoOwner(), transactionPayload);
+        if (responseTransaction.isValid()) {
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
             nftSplit.setTransactionHash(EMPTY);
-            nftSplitMapper.updateById(nftSplit);
+            this.nftSplitMapper.updateById(nftSplit);
+
+            for (NftMeta nftMeta_ : nftMetas) {
+                nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta_.setTransactionHash(EMPTY);
+                this.nftMetaService.updateById(nftMeta_);
+            }
 
             return false;
         }
 
-        if (!AptosService.checkTransaction(response.getData().getHash())) {
+        if (!AptosService.checkTransaction(responseTransaction.getData().getHash())) {
             nftSplit.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
-            nftSplit.setTransactionHash(response.getData().getHash());
-            nftSplitMapper.updateById(nftSplit);
+            nftSplit.setTransactionHash(responseTransaction.getData().getHash());
+            this.nftSplitMapper.updateById(nftSplit);
+
+            for (NftMeta nftMeta_ : nftMetas) {
+                nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_4_FAILURE);
+                nftMeta_.setTransactionHash(responseTransaction.getData().getHash());
+                this.nftMetaService.updateById(nftMeta_);
+            }
 
             return false;
         }
 
         nftSplit.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-        nftSplit.setTransactionHash(response.getData().getHash());
+        nftSplit.setTransactionHash(responseTransaction.getData().getHash());
         nftSplit.setIsExecute(Boolean.TRUE);
+        this.nftSplitMapper.updateById(nftSplit);
 
-        nftSplitMapper.updateById(nftSplit);
+        for (NftMeta nftMeta_ : nftMetas) {
+            nftMeta_.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
+            nftMeta_.setTransactionHash(responseTransaction.getData().getHash());
+            this.nftMetaService.updateById(nftMeta_);
+        }
+
+        //分解记录
+        //TODO renjian
 
         return true;
     }
