@@ -471,7 +471,8 @@ pageLimit：分页条数
 
 | 方法 | GET |
 |----|----|
-| 路径 |/aptos/kiko/v1/nft/meta/myNfts/{account}} |
+| 路径 |/aptos/kiko/v1/nft/meta/myNfts/{account}/{saleState} |
+saleState:售卖状态。onSale:售卖中;unSale:未出售
 
 响应
 
@@ -506,7 +507,8 @@ pageLimit：分页条数
 
 | 方法 | GET |
 |----|----|
-| 路径 |/aptos/kiko/v1/nft/boxGroup/getMyBox/{account}} |
+| 路径 |/aptos/kiko/v1/nft/boxGroup/getMyBox/{account}/{saleState} |
+saleState:售卖状态。onSale:售卖中;unSale:未出售
 
 响应
 

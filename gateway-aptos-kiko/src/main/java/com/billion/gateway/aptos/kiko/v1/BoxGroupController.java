@@ -24,9 +24,9 @@ public class BoxGroupController {
         return Response.success(boxGroupService.getBoxById(context, boxId));
     }
 
-    @GetMapping("getMyBox/{account}")
-    public Response getMyBox(@RequestHeader Context context, @PathVariable String account) {
-        return Response.success(boxGroupService.getMyBox(context, account));
+    @GetMapping("getMyBox/{account}/{saleState}")
+    public Response getMyBox(@RequestHeader Context context, @PathVariable String account, @PathVariable String saleState) {
+        return Response.success(boxGroupService.getMyBox(context, account, saleState));
     }
 
     @GetMapping(value = {"getSaleList/{pageStart}/{pageLimit}", "getSaleList"})
