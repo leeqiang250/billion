@@ -10,17 +10,18 @@ import com.billion.dao.aptos.kiko.BoxGroupMapper;
 import com.billion.model.dto.BoxGroupDto;
 import com.billion.model.dto.Context;
 import com.billion.model.dto.MyBoxDto;
-import com.billion.model.entity.BoxGroup;
-import com.billion.model.entity.Market;
-import com.billion.model.entity.Pair;
-import com.billion.model.entity.Token;
+import com.billion.model.entity.*;
 import com.billion.model.enums.*;
+import com.billion.model.enums.Language;
+import com.billion.model.enums.TokenScene;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +39,9 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
     @Resource
     PairService pairService;
+
+    @Resource
+    MarketService marketService;
 
     @Resource
     LanguageService languageService;
@@ -223,7 +227,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     }
 
     @Override
-    public BoxGroupDto.BoxGroupInfo getBoxById(Context context, String boxId) {
+    public BoxGroupDto.BoxGroupInfo getBoxGroupById(Context context, String boxId) {
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getId, boxId);
         var boxGroup = this.getOne(boxGroupQueryWrapper);
@@ -249,7 +253,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
 
 
     @Override
-    public List<MyBoxDto> getMyBox(Context context, String account) {
+    public List<MyBoxDto> getMyBox(Context context, String account, String saleState) {
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, context.getChain());
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
@@ -271,9 +275,10 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             CoinStore coinStore = coinStoreResponse.getData();
             if (!Objects.isNull(coinStore)) {
                 Long num = Long.valueOf(coinStore.getData().getCoin().getValue());
-                if (num > 0) {
+                for (int i = 0; i < num; i++) {
                     MyBoxDto myBoxDto = MyBoxDto.builder()
                             .id(token.getId())
+                            .boxGroupId(b.getId())
                             .chain(token.getChain())
                             .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
                             .name(token.getName())
@@ -284,9 +289,39 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                     boxs.add(myBoxDto);
                 }
 
+
             }
         });
-        return boxs;
+        var marketList = marketService.getMarketListByAccount(context, account, MarketTokenType.BOX.getType());
+        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getAskToken(), (market) -> market));
+        List<MyBoxDto> resultList = new ArrayList<>();
+        if ("onSale".equals(saleState)) {
+            resultList = boxs.stream().filter(box -> marketMap.containsKey(box.getCoinId())).collect(Collectors.toList());
+        }else if ("unSale".equals(saleState)) {
+            resultList = boxs.stream().filter(box -> !marketMap.containsKey(box.getCoinId())).collect(Collectors.toList());
+        }
+        return resultList;
+    }
+
+    @Override
+    public MyBoxDto getBoxById(Context context, String boxGroupId, String saleState, String orderId) {
+        BoxGroup boxGroup = this.getById(boxGroupId);
+        if (Objects.isNull(boxGroup)) {
+            return null;
+        }
+        Token token = tokenService.getById(boxGroup.getAskToken());
+        MyBoxDto myBoxDto = MyBoxDto.builder()
+                .id(token.getId())
+                .boxGroupId(boxGroup.getId())
+                .chain(token.getChain())
+                .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
+                .name(token.getName())
+                .symbol(token.getSymbol())
+                .decimals(token.getDecimals())
+                .uri(token.getUri())
+                .build();
+
+        return myBoxDto;
     }
 
     @Override

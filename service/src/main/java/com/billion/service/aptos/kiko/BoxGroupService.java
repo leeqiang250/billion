@@ -38,15 +38,7 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      * @param boxId
      * @return
      */
-    BoxGroupDto.BoxGroupInfo getBoxById(Context context, String boxId);
-
-    /**
-     * getMyBox 我的盲盒
-     * @param context
-     * @param account
-     * @return
-     */
-    List<MyBoxDto> getMyBox(Context context, String account);
+    BoxGroupDto.BoxGroupInfo getBoxGroupById(Context context, String boxId);
 
     /**
      * getListByTokenIds
@@ -62,4 +54,15 @@ public interface BoxGroupService extends ICacheService<BoxGroup> {
      * @return
      */
     BoxGroupDto getSaleList(Context context, Integer pageStart, Integer pageLimit);
+
+
+    /**
+     * getMyBox 我的盲盒
+     * @param context
+     * @param account
+     * @return
+     */
+    List<MyBoxDto> getMyBox(Context context, String account, String saleState);
+
+    MyBoxDto getBoxById(Context context, String boxGroupId, String saleState, String orderId);
 }

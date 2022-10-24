@@ -16,6 +16,7 @@ import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -59,7 +60,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     NftService nftService;
 
     @Resource
-    OperationService operationService;
+    @Lazy
+    MarketService marketService;
 
     @Override
     public Map cacheMap(Context context) {
@@ -312,14 +314,24 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     }
 
     @Override
-    public List<NftMeta> getMyNfts(Context context, String account) {
+    public List<NftMeta> getMyNfts(Context context, String account, String saleState) {
         List<Nft> nftList = nftService.getListByAccount(context, account);
         if (nftList.size() == 0) {
             return new ArrayList<>();
         }
         List<String> tokenIdList = nftList.stream().map(Nft::getTokenId).collect(Collectors.toList());
+        var nftMetaList = this.getListByTokenIds(tokenIdList);
+        //查询销售中的NFT
+        var marketList = marketService.getMarketListByAccount(context, account, MarketTokenType.NFT.getType());
+        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getTokenId(), (market) -> market));
+        List<NftMeta> resultList = new ArrayList<>();
+        if ("onSale".equals(saleState)) {
+            resultList = nftMetaList.stream().filter(nft -> marketMap.containsKey(nft.getTokenId())).collect(Collectors.toList());
+        }else if ("unSale".equals(saleState)) {
+            resultList = nftMetaList.stream().filter(nft -> !marketMap.containsKey(nft.getTokenId())).collect(Collectors.toList());
+        }
 
-        return this.getListByTokenIds(tokenIdList);
+        return resultList;
     }
 
     @Override

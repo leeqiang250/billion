@@ -9,6 +9,8 @@ import com.billion.model.event.*;
 import com.billion.model.service.ICacheService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author liqiang
  */
@@ -120,4 +122,6 @@ public interface MarketService extends ICacheService<Market> {
      * @return
      */
     MarketDto getMarketList(Context context, String condition, String order, String orderType, Integer pageStart, Integer pageLimit);
+
+    List<Market> getMarketListByAccount(Context context, String account, String type);
 }
