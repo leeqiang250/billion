@@ -128,7 +128,7 @@ public class InitServiceImpl implements InitService {
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
                     .rule(EMPTY)
-                    .ts(String.valueOf(System.currentTimeMillis() + 3600000000L))
+                    .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
                     .build();
@@ -160,7 +160,7 @@ public class InitServiceImpl implements InitService {
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
                     .rule(EMPTY)
-                    .ts(String.valueOf(System.currentTimeMillis() + 3600000000L))
+                    .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
                     .build();
@@ -192,7 +192,7 @@ public class InitServiceImpl implements InitService {
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
                     .rule(EMPTY)
-                    .ts(String.valueOf(System.currentTimeMillis() + 3600000000L))
+                    .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
                     .build();
@@ -224,7 +224,7 @@ public class InitServiceImpl implements InitService {
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
                     .rule(EMPTY)
-                    .ts(String.valueOf(System.currentTimeMillis() + 3600000000L))
+                    .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
                     .build();
@@ -256,7 +256,7 @@ public class InitServiceImpl implements InitService {
                     .price(String.valueOf(Math.abs(UUID.randomUUID().toString().hashCode()) % 1000 + 1))
                     .description(UUID.randomUUID().toString())
                     .rule(EMPTY)
-                    .ts(String.valueOf(System.currentTimeMillis() + 3600000000L))
+                    .ts(String.valueOf(System.currentTimeMillis()))
                     .sort(0)
                     .isEnabled(Boolean.TRUE)
                     .build();
