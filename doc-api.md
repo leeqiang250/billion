@@ -7,11 +7,93 @@ http://52.77.131.111:8890/
 context: {"chain":"aptos", "language":"zh-TC"}
 
 ## 三、合约接口
-盲盒公售购买接口
+### 盲盒公售-盲盒购买接口
 @primary_market::primary_market::buy<AskToken, BidToken>(
 account: &signer,
 amount: u64
 )
+
+### 我的盲盒-开盲盒接口
+@kiko_owner::help::open_box<Box>(account: &signer)
+
+### 我的盲盒-盲盒一口价售卖接口
+@secondary_market::secondary_market::box_sell_fix_price<AskToken, BidToken>(
+account: &signer,
+price: u64,
+amount: u64
+)
+
+### 我的盲盒-盲盒拍卖接口
+@secondary_market::secondary_market::box_sell_auction<AskToken, BidToken>(
+account: &signer,
+price: u64,
+amount: u64,
+dead_ts: u64
+)
+
+### 我的NFT-NFT一口价售卖接口
+@secondary_market::secondary_market::nft_sell_fix_price<BidToken>(
+account: &signer,
+price: u64,
+creator: address,
+collection: String,
+name: String,
+property_version: u64
+)
+
+### 我的NFT-NFT拍卖接口
+@secondary_market::secondary_market::nft_sell_auction<BidToken>(
+account: &signer,
+price: u64,
+dead_ts: u64,
+creator: address,
+collection: String,
+name: String,
+property_version: u64
+)
+
+### 二级市场-盲盒一口价购买接口
+@secondary_market::secondary_market::box_buy_fix_price<AskToken, BidToken>(
+account: &signer,
+id: u64
+)
+
+### 二级市场-盲盒拍卖出价接口
+@secondary_market::secondary_market::box_buy_auction<AskToken, BidToken>(
+account: &signer,
+id: u64,
+price: u64
+)
+
+### 二级市场-盲盒拍卖吃单接口
+@secondary_market::secondary_market::box_accept_bid<AskToken, BidToken>(
+account: &signer,
+id: u64
+)
+
+### 二级市场-NFT一口价购买接口
+@secondary_market::secondary_market::nft_buy_fix_price<BidToken>(
+account: &signer,
+id: u64
+)
+
+### 二级市场-NFT拍卖出价接口
+@secondary_market::secondary_market::nft_buy_auction<BidToken>(
+account: &signer,
+id: u64,
+price: u64
+)
+
+### 二级市场-NFT拍卖吃单接口
+@secondary_market::secondary_market::nft_accept_bid<BidToken>(
+account: &signer,
+id: u64
+)
+
+### NFT拆解接口
+
+### NFT合成接口
+
 
 ## 四、后端接口
 
