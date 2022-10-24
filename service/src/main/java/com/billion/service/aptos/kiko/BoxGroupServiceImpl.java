@@ -320,8 +320,8 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             if (!boxGroup.getTransactionStatus().equals(TransactionStatus.STATUS_3_SUCCESS.getCode())) {
                 return;
             }
-            Token askToken = (Token) tokenMap.get(String.valueOf(boxGroup.getAskToken()));
-            Token bitToken = (Token) tokenMap.get(String.valueOf(boxGroup.getBidToken()));
+            Object askToken =  tokenMap.get(String.valueOf(boxGroup.getAskToken()));
+            Object bitToken =  tokenMap.get(String.valueOf(boxGroup.getBidToken()));
             BoxGroupDto.BoxGroupInfo boxGroupInfo = BoxGroupDto.BoxGroupInfo.builder()
                     .id(boxGroup.getId())
                     .chain(boxGroup.getChain())

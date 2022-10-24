@@ -55,12 +55,12 @@ public class BoxGroupDto implements Serializable {
         /**
          * 询价币种
          */
-        Token askToken;
+        Object askToken;
 
         /**
          * 计价币种
          */
-        Token bidToken;
+        Object bidToken;
 
         /**
          * 计价价格
