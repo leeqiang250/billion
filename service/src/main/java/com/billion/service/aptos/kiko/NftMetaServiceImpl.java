@@ -298,6 +298,19 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         var nftAttributeValues = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
         nftMetaDto.setAttributeValues(nftAttributeValues);
 
+        //售卖数据
+        var marketList = marketService.getMarketListByTokenId(context, nftMetaDto.getTokenId());
+        if (Objects.nonNull(marketList) && marketList.size() > 0) {
+            Market market = marketList.get(marketList.size() - 1);
+            nftMetaDto.setOrderId(market.getOrderId());
+            nftMetaDto.setOrderId(market.getOrderId());
+            nftMetaDto.setSaleType(market.getType());
+            nftMetaDto.setPrice(market.getPrice());
+            nftMetaDto.setBidder(market.getBidder());
+            nftMetaDto.setBidPrice(market.getBidAmount());
+            nftMetaDto.setTs(market.getTs());
+        }
+
         return nftMetaDto;
     }
 
@@ -314,23 +327,77 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     }
 
     @Override
-    public List<NftMeta> getMyNfts(Context context, String account, String saleState) {
+    public List<NftMetaDto> getMyNfts(Context context, String account, String saleState) {
+        List<NftMetaDto> resultList = new ArrayList<>();
+        if ("unSale".equals(saleState)) {
+            resultList = getMyNftsUnSale(context, account);
+        }else if ("onSale".equals(saleState)) {
+            resultList = getMyNftsOnSale(context, account);
+        }
+        return resultList;
+    }
+
+    public List<NftMetaDto> getMyNftsUnSale(Context context, String account) {
         List<Nft> nftList = nftService.getListByAccount(context, account);
         if (nftList.size() == 0) {
             return new ArrayList<>();
         }
         List<String> tokenIdList = nftList.stream().map(Nft::getTokenId).collect(Collectors.toList());
         var nftMetaList = this.getListByTokenIds(tokenIdList);
+
+        List<NftMetaDto> resultList = new ArrayList<>();
+        nftMetaList.forEach(nftMeta -> {
+            NftMetaDto nftMetaDto = NftMetaDto.builder()
+                    .id(nftMeta.getId())
+                    .nftGroupId(nftMeta.getNftGroupId())
+                    .displayName(nftMeta.getDisplayName())
+                    .description(nftMeta.getDescription())
+                    .uri(nftMeta.getUri())
+                    .rank(nftMeta.getRank())
+                    .isBorn(nftMeta.getIsBorn())
+                    .tokenId(nftMeta.getTokenId())
+                    .score(nftMeta.getScore())
+                    .attributeType(nftMeta.getAttributeType())
+                    .owner(account)
+                    .build();
+            resultList.add(nftMetaDto);
+        });
+
+        return resultList;
+    }
+
+
+    public List<NftMetaDto> getMyNftsOnSale(Context context, String account) {
         //查询销售中的NFT
         var marketList = marketService.getMarketListByAccount(context, account, MarketTokenType.NFT.getType());
-        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getTokenId(), (market) -> market));
-        List<NftMeta> resultList = new ArrayList<>();
-        if ("onSale".equals(saleState)) {
-            resultList = nftMetaList.stream().filter(nft -> marketMap.containsKey(nft.getTokenId())).collect(Collectors.toList());
-        }else if ("unSale".equals(saleState)) {
-            resultList = nftMetaList.stream().filter(nft -> !marketMap.containsKey(nft.getTokenId())).collect(Collectors.toList());
-        }
 
+        var nftMetas = getListByTokenIds(marketList.stream().map(Market::getTokenId).collect(Collectors.toList()));
+        var nftMetaMap = nftMetas.stream().collect(Collectors.toMap(nftMeta -> nftMeta.getTokenId(), (nftMeta) -> nftMeta));
+
+        List<NftMetaDto> resultList = new ArrayList<>();
+        marketList.forEach(nftMarket -> {
+            NftMeta nftMeta = nftMetaMap.get(nftMarket.getTokenId());
+            NftMetaDto nftMetaDto = NftMetaDto.builder()
+                    .id(nftMeta.getId())
+                    .nftGroupId(nftMeta.getNftGroupId())
+                    .displayName(nftMeta.getDisplayName())
+                    .description(nftMeta.getDescription())
+                    .uri(nftMeta.getUri())
+                    .rank(nftMeta.getRank())
+                    .isBorn(nftMeta.getIsBorn())
+                    .tokenId(nftMeta.getTokenId())
+                    .score(nftMeta.getScore())
+                    .attributeType(nftMeta.getAttributeType())
+                    .owner(account)
+                    .orderId(nftMarket.getOrderId())
+                    .saleType(nftMarket.getType())
+                    .price(nftMarket.getPrice())
+                    .bidder(nftMarket.getBidder())
+                    .bidPrice(nftMarket.getBidAmount())
+                    .ts(nftMarket.getTs())
+                    .build();
+            resultList.add(nftMetaDto);
+        });
         return resultList;
     }
 

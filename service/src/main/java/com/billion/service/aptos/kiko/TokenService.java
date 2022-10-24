@@ -48,4 +48,14 @@ public interface TokenService extends ICacheService<Token> {
      * @return
      */
     public List<Token> getByCoinIdList(Context context, List<String> coinIdList);
+
+    /**
+     * getByTokenInfo
+     * @param context
+     * @param address
+     * @param moduleName
+     * @param struct
+     * @return
+     */
+    public Token getByTokenInfo(Context context, String address, String moduleName, String struct);
 }

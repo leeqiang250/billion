@@ -251,7 +251,6 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         return boxGroupInfo;
     }
 
-
     @Override
     public List<MyBoxDto> getMyBox(Context context, String account, String saleState) {
         QueryWrapper<BoxGroup> boxGroupQueryWrapper = new QueryWrapper<>();
@@ -260,8 +259,19 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
         var boxGroups = super.list(boxGroupQueryWrapper);
 
-        List<MyBoxDto> boxs = new ArrayList<>();
+        List<MyBoxDto> resultList = new ArrayList<>();
+        if ("unSale".equals(saleState)) {
+            resultList = getMyBoxUnSale(context, account, boxGroups);
+        }else if ("onSale".equals(saleState)) {
+            resultList = getMyboxOnSale(context, account, boxGroups);
+        }
+        return resultList;
+    }
 
+
+    public List<MyBoxDto> getMyBoxUnSale(Context context, String account, List<BoxGroup> boxGroups) {
+
+        List<MyBoxDto> boxs = new ArrayList<>();
         boxGroups.forEach(b -> {
             Token token = tokenService.getById(b.getAskToken());
             //从链上查询余额
@@ -284,22 +294,50 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                             .name(token.getName())
                             .symbol(token.getSymbol())
                             .decimals(token.getDecimals())
-                            .uri(token.getUri())
+                            .uri(b.getUri())
                             .build();
+
                     boxs.add(myBoxDto);
                 }
-
-
             }
         });
+
+
+
+
+        return boxs;
+    }
+
+    public List<MyBoxDto> getMyboxOnSale(Context context, String account, List<BoxGroup> boxGroups) {
         var marketList = marketService.getMarketListByAccount(context, account, MarketTokenType.BOX.getType());
-        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getAskToken(), (market) -> market));
-        List<MyBoxDto> resultList = new ArrayList<>();
-        if ("onSale".equals(saleState)) {
-            resultList = boxs.stream().filter(box -> marketMap.containsKey(box.getCoinId())).collect(Collectors.toList());
-        }else if ("unSale".equals(saleState)) {
-            resultList = boxs.stream().filter(box -> !marketMap.containsKey(box.getCoinId())).collect(Collectors.toList());
+        if (marketList.size() == 0) {
+            return null;
         }
+        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market) -> market, (key1, key2) -> key2));
+        var boxGroupMap = boxGroups.stream().collect(Collectors.toMap(boxGroup -> boxGroup.getAskToken(), (boxGroup )-> boxGroup));
+        List<MyBoxDto> resultList = new ArrayList<>();
+        marketMap.forEach((key, value) ->{
+            String[] askTokenInfo = value.getAskToken().split("::");
+            Token token = tokenService.getByTokenInfo(context, askTokenInfo[0], askTokenInfo[1], askTokenInfo[2]);
+            BoxGroup boxGroup = boxGroupMap.get(token.getId());
+            MyBoxDto myBoxDto = MyBoxDto.builder()
+                    .id(token.getId())
+                    .boxGroupId(boxGroup.getId())
+                    .chain(token.getChain())
+                    .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
+                    .name(token.getName())
+                    .symbol(token.getSymbol())
+                    .decimals(token.getDecimals())
+                    .uri(boxGroup.getUri())
+                    .orderId(value.getOrderId())
+                    .saleType(value.getType())
+                    .price(value.getPrice())
+                    .bidder(value.getBidder())
+                    .bidPrice(value.getBidAmount())
+                    .ts(value.getTs())
+                    .build();
+            resultList.add(myBoxDto);
+        });
         return resultList;
     }
 

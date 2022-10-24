@@ -482,9 +482,6 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 "msg": "success",
 "data": [
 {
-"transactionStatus": "status_3_success",
-"transactionHash": "0x14075727132f19b8dfd13de74aea60e41b3c4a0bff51f5e9856835d19d5752fb",
-"transactionStatus_": "STATUS_3_SUCCESS",
 "id": 20000006595,
 "nftGroupId": 1,
 "displayName": "213a20f4-2c9e-42b9-947e-8f5ecccf8037",
@@ -494,11 +491,12 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 "isBorn": false,
 "tokenId": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11@0xe5908de7a7b031@0x33302de68f8fe8bfb03230303030303036353935@0",
 "score": "",
-"attributeType": 0,
-"tableHandle": "0xec4d7086e662c621c5011deb383abe67c9f04ffab889b52ddb0e8008363e4503",
-"tableCollection": "0xe5908de7a7b031",
-"tableCreator": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11",
-"tableName": "0x33302de68f8fe8bfb03230303030303036353935"
+"orderId": null,
+"saleType": null,
+"price": null,
+"bidder": null,
+"bidPrice": null,
+"ts": null
 }
 ]
 }`
@@ -525,7 +523,13 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 "symbol": "BoxV1",
 "decimals": 0,
 "displayDecimals": null,
-"uri": ""
+"uri": "",
+"orderId": null,
+"saleType": null,
+"price": null,
+"bidder": null,
+"bidPrice": null,
+"ts": null
 }
 ]
 }`

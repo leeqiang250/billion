@@ -64,4 +64,16 @@ public class NftMetaDto {
     String contract;
 
     List<NftAttribute> attributeValues;
+
+    String orderId;
+
+    String saleType;
+
+    String price;
+
+    String bidder;
+
+    String bidPrice;
+
+    String ts;
 }
