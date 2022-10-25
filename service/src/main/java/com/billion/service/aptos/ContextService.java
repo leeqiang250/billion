@@ -97,7 +97,7 @@ public class ContextService {
     public void init() {
         ContextService.env = this.pEnv;
 
-        initService.initialize();
+        //initService.initialize();
 
         ContextService.applicationName = this.pApplicationName;
         ContextService.cacheTsTypeDurationMap.put(CacheTsType.SHORT, Duration.ofSeconds(pCacheShort));
