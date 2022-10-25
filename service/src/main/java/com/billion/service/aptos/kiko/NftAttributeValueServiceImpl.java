@@ -58,8 +58,6 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
             resultList.add(attributeType);
         });
 
-        changeLanguage(context, resultList);
-
         return resultList;
     }
 

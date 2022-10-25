@@ -271,6 +271,23 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
         var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
 
+        return this.getNftMetaDto(context, nftMeta, nftGroup);
+    }
+
+    @Override
+    public NftMetaDto getNftMetaInfoByToken(Context context, String nftTokenId) {
+        QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
+        nftMetaQueryWrapper.lambda().eq(NftMeta::getTokenId, nftTokenId);
+
+        var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
+
+        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
+
+        return this.getNftMetaDto(context, nftMeta, nftGroup);
+    }
+
+
+    public NftMetaDto getNftMetaDto(Context context, NftMeta nftMeta, NftGroup nftGroup) {
         NftMetaDto nftMetaDto = NftMetaDto.builder()
                 .id(nftMeta.getId())
                 .nftGroupId(nftMeta.getNftGroupId())
@@ -295,7 +312,10 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         nftMetaDto.setContract(contract);
 
         //属性数据
-        var nftAttributeValues = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
+        var nftAttributeValues = nftAttributeValueService.getNftAttributeValueByMetaId(context, String.valueOf(nftMeta.getId()));
+        //计算score
+        Integer score = nftAttributeValues.stream().map(nftAttribute -> Integer.valueOf(nftAttribute.getValue())).reduce(Integer::sum).get();
+        nftMetaDto.setScore(score.toString());
         nftMetaDto.setAttributeValues(nftAttributeValues);
 
         //售卖数据
@@ -312,58 +332,6 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
         return nftMetaDto;
     }
-
-    @Override
-    public NftMetaDto getNftMetaInfoByToken(Context context, String nftTokenId) {
-        QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
-        nftMetaQueryWrapper.lambda().eq(NftMeta::getTokenId, nftTokenId);
-
-        var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
-
-        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
-
-        NftMetaDto nftMetaDto = NftMetaDto.builder()
-                .id(nftMeta.getId())
-                .nftGroupId(nftMeta.getNftGroupId())
-                .creator(nftMeta.getTableCreator())
-                .displayName(nftMeta.getDisplayName())
-                .description(nftMeta.getDescription())
-                .uri(nftMeta.getUri())
-                .rank(nftMeta.getRank())
-                .isBorn(nftMeta.getIsBorn())
-                .tokenId(nftMeta.getTokenId())
-                .score(nftMeta.getScore())
-                .attributeType(nftMeta.getAttributeType())
-                .owner(nftService.getOwnerByTokenId(context, nftMeta.getTokenId()))
-                .contract(nftGroup.getNftContract())
-                .build();
-
-        //合约数据
-        String contract = nftGroup.getNftContract();
-        String[] contractInfos = contract.split("::");
-        contract = contractInfos[0] + "::" + changeLanguageContract(context, contractInfos[1]);
-
-        nftMetaDto.setContract(contract);
-
-        //属性数据
-        var nftAttributeValues = nftAttributeValueService.getNftAttributeForMint(nftMeta.getId());
-        nftMetaDto.setAttributeValues(nftAttributeValues);
-
-        //售卖数据
-        var marketList = marketService.getMarketListByTokenId(context, nftMetaDto.getTokenId());
-        if (Objects.nonNull(marketList) && marketList.size() > 0) {
-            Market market = marketList.get(marketList.size() - 1);
-            nftMetaDto.setOrderId(market.getOrderId());
-            nftMetaDto.setSaleType(market.getType());
-            nftMetaDto.setPrice(market.getPrice());
-            nftMetaDto.setBidder(market.getBidder());
-            nftMetaDto.setBidPrice(market.getBidAmount());
-            nftMetaDto.setTs(market.getTs());
-        }
-
-        return nftMetaDto;
-    }
-
     @Override
     public List<NftMeta> getListByGroup(Context context, String type, String groupId) {
         QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
