@@ -342,11 +342,12 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     }
 
     @Override
-    public MyBoxDto getBoxById(Context context, String boxGroupId, String saleState, String orderId) {
+    public MyBoxDto getBoxById(Context context, String boxGroupId, String account, String saleState, String orderId) {
         BoxGroup boxGroup = this.getById(boxGroupId);
         if (Objects.isNull(boxGroup)) {
             return null;
         }
+
         Token token = tokenService.getById(boxGroup.getAskToken());
         MyBoxDto myBoxDto = MyBoxDto.builder()
                 .id(token.getId())
@@ -356,9 +357,27 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .name(token.getName())
                 .symbol(token.getSymbol())
                 .decimals(token.getDecimals())
-                .uri(token.getUri())
+                .uri(boxGroup.getUri())
+                .creator(token.getModuleAddress())
+                .owner(account)
                 .build();
 
+        if ("onSale".equals(saleState)) {
+            var marketList = marketService.getMarketListByOrderId(context, orderId);
+            if (marketList.size() < 1) {
+                return myBoxDto;
+            }
+            Market market = marketList.get(marketList.size() - 1);
+            myBoxDto.setSaleType(market.getType());
+            myBoxDto.setPrice(market.getPrice());
+            myBoxDto.setBidder(market.getBidder());
+            myBoxDto.setBidPrice(market.getBidAmount());
+            myBoxDto.setTs(market.getTs());
+
+            //TODO:renjianq确认
+            myBoxDto.setOwner(market.getMaker());
+
+        }
         return myBoxDto;
     }
 
