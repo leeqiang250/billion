@@ -19,6 +19,6 @@ mkdir -p /home/ubuntu/${app_name}/logs
 
 rm -rf /home/ubuntu/${app_name}/${app_name}.jar
 cp /home/ubuntu/source-code/billion/${app_name}/target/${app_name}-0.0.1-SNAPSHOT.jar /home/ubuntu/${app_name}/${app_name}.jar
-cp /home/ubuntu/source-code/billion/shell/${app_name}/restart-${app_name}.sh /home/ubuntu/${app_name}/restart.sh
+cp /home/ubuntu/source-code/billion/shell/restart-${app_name}.sh /home/ubuntu/${app_name}/restart.sh
 
 sh /home/ubuntu/${app_name}/restart.sh
