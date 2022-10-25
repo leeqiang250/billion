@@ -501,6 +501,59 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 ]
 }`
 
+### NFT详情列表接口
+
+| 方法 | GET |
+|----|----|
+| 路径 |/aptos/kiko/v1/nft/meta/getNftMetaInfoByToken/{nftTokenId} 或者 /getAttributeValue/{nftMetaId} |
+NFT的TokenId，拼接规则为：creator@collection@name@property_version
+nftMetaId为数据库主键Id
+
+响应
+`{
+"code": 200,
+"ts": 1666686414408,
+"msg": "success",
+"data": {
+"id": 20000007132,
+"nftGroupId": 100111258,
+"displayName": "22c92a7d-f4ae-41e0-8aa8-cebb73a1977c",
+"description": "d5b30176-e924-440d-866c-528a0e4239d3",
+"uri": "https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/4031cc60-3e88-4f78-b412-5006ecf5c100/public",
+"rank": 0,
+"isBorn": false,
+"tokenId": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d@0xe5908de7a7b0313030313131323538@0x66612de68f8fe8bfb03230303030303037313332@0",
+"score": "",
+"creator": "",
+"attributeType": 0,
+"owner": "",
+"contract": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d::名称100111258",
+"attributeValues": [
+{
+"type": "0x6e66745f6174747269627574655f636c6f746865735f333431",
+"key": "0x6e66745f6174747269627574655f636c6f746865735f79656c6c6f77373839",
+"value": "0x3330"
+},
+{
+"type": "0x6e66745f6174747269627574655f7365785f333432",
+"key": "0x6e66745f6174747269627574655f7365785f626f79373930",
+"value": "0x3230"
+},
+{
+"type": "0x6e66745f6174747269627574655f736b696e5f333433",
+"key": "0x6e66745f6174747269627574655f736b696e5f79656c6c6f77373932",
+"value": "0x3230"
+}
+],
+"orderId": null,
+"saleType": null,
+"price": null,
+"bidder": null,
+"bidPrice": null,
+"ts": null
+}
+}`
+
 ### 我的盲盒列表接口
 
 | 方法 | GET |

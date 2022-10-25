@@ -35,6 +35,8 @@ public interface NftMetaService extends ICacheService<NftMeta> {
 
     NftMetaDto getNftMetaInfoById(Context context, String NftMetaId);
 
+    NftMetaDto getNftMetaInfoByToken(Context context, String nftTokenId);
+
     /**
      * getListByGroup
      *

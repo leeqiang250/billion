@@ -57,6 +57,8 @@ public class NftMetaDto {
      */
     String score;
 
+    String creator;
+
     Integer attributeType;
 
     String owner;
