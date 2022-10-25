@@ -83,6 +83,15 @@ public class InitServiceImpl implements InitService {
     @Resource
     NftAttributeValueService nftAttributeValueService;
 
+    @Resource
+    NftSplitService nftSplitService;
+
+    @Resource
+    NftComposeService nftComposeService;
+
+    @Resource
+    OperationService operationService;
+
     @Override
     public boolean initialize() {
         if (!ContextService.getEnv().equalsIgnoreCase("dev")) {
@@ -108,6 +117,8 @@ public class InitServiceImpl implements InitService {
         this.pair();
         this.token();
         this.tokenScene();
+        this.nftSplit();
+        this.nftCompose();
         this.tokenTransfer();
 
         return true;
@@ -846,6 +857,18 @@ public class InitServiceImpl implements InitService {
                 .scene("market")
                 .build();
         this.tokenSceneMapper.insert(tokenScene);
+    }
+
+    void nftSplit() {
+        this.nftSplitService.remove(null);
+    }
+
+    void nftCompose() {
+        this.nftComposeService.remove(null);
+    }
+
+    void operation() {
+        this.operationService.remove(null);
     }
 
     void tokenTransfer() {
