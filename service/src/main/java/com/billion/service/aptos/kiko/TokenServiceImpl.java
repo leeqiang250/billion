@@ -208,7 +208,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
     @Override
     public Token getByTokenInfo(Context context, String address, String moduleName, String struct) {
         QueryWrapper<Token> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(Token::getChain, context);
+        queryWrapper.lambda().eq(Token::getChain, context.getChain());
         queryWrapper.lambda().eq(Token::getModuleAddress, address);
         queryWrapper.lambda().eq(Token::getModuleName, moduleName);
         queryWrapper.lambda().eq(Token::getStructName, struct);

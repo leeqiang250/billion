@@ -59,6 +59,9 @@ public class ScanDispatchService implements Serializable {
     @Resource
     DistributedLockService distributedLockService;
 
+    @Resource
+    OperationService operationService;
+
     boolean next;
 
     @PostConstruct
@@ -202,7 +205,7 @@ public class ScanDispatchService implements Serializable {
                 }
             } else if (EventType.isOpenBoxEvent(event)) {
                 OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
-                //TODO renjian 开盲盒记录
+                operationService.addOpenBoxOpt(openBoxEvent, transaction);
             } else if (EventType.isNftSplitEvent(event)) {
                 NftSplitEvent nftSplitEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftSplitEvent.class);
                 nftOpService.addNftSplitEvent(transaction, nftSplitEvent);

@@ -18,6 +18,7 @@ import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.AbstractCacheService;
 import com.billion.service.aptos.AptosService;
 import com.billion.service.aptos.ContextService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +42,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     PairService pairService;
 
     @Resource
+    @Lazy
     MarketService marketService;
 
     @Resource
@@ -390,6 +392,14 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         boxGroupQueryWrapper.lambda().in(BoxGroup::getAskToken, tokenIdList);
         //TODO：补充完整
         return null;
+    }
+
+    @Override
+    public BoxGroup getByTokenId(Context context, String tokenId) {
+        Token token = tokenService.getByTokenInfo(context, tokenId.split("::")[0], tokenId.split("::")[1], tokenId.split("::")[2]);
+        QueryWrapper<BoxGroup> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(BoxGroup::getAskToken, token.getId());
+        return this.getOne(queryWrapper);
     }
 
     @Override
