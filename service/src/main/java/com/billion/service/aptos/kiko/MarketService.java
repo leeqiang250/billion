@@ -139,4 +139,12 @@ public interface MarketService extends ICacheService<Market> {
      * @return
      */
     List<Market> getMarketListByTokenId(Context context, String account);
+
+    /**
+     * getMarketListByOrderId
+     * @param context
+     * @param account
+     * @return
+     */
+    List<Market> getMarketListByOrderId(Context context, String account);
 }

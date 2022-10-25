@@ -29,9 +29,9 @@ public class BoxGroupController {
         return Response.success(boxGroupService.getMyBox(context, account, saleState));
     }
 
-    @GetMapping({"getBoxById/{groupId}/{saleState}/{orderId}", "getBoxById/{groupId}/{saleState}"})
-    public Response getBoxById(@RequestHeader Context context, @PathVariable String groupId, @PathVariable String saleState, @PathVariable(required = false) String orderId) {
-        return Response.success(boxGroupService.getBoxById(context, groupId, saleState, orderId));
+    @GetMapping({"getBoxById/{groupId}/{account}/{saleState}/{orderId}", "getBoxById/{groupId}/{account}/{saleState}"})
+    public Response getBoxById(@RequestHeader Context context, @PathVariable String groupId, @PathVariable String account, @PathVariable String saleState, @PathVariable(required = false) String orderId) {
+        return Response.success(boxGroupService.getBoxById(context, groupId, account, saleState, orderId));
     }
 
     @GetMapping(value = {"getSaleList/{pageStart}/{pageLimit}", "getSaleList"})

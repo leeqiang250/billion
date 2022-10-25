@@ -537,9 +537,10 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 ### 查询二级市场盲盒详情
 | 方法 | GET |
 |----|----|
-| 路径 |/aptos/kiko/v1/nft/boxGroup/getBoxById/{groupId}/{saleState}/{orderId} |
+| 路径 |/aptos/kiko/v1/nft/boxGroup/getBoxById/{groupId}/{account}/{saleState}/{orderId} |
 saleState:售卖状态。onSale:售卖中;unSale:未出售
 orderId:非必填，为出售中状态的订单id
+account:当前用户
 
 响应
 `{
@@ -554,7 +555,15 @@ orderId:非必填，为出售中状态的订单id
 "symbol": "BoxV1",
 "decimals": 0,
 "displayDecimals": null,
-"uri": ""
+"uri": "",
+"creator": "",
+"owner": "",
+"orderId": null,
+"saleType": null,
+"price": null,
+"bidder": null,
+"bidPrice": null,
+"ts": null
 }
 }`
 

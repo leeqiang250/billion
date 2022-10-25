@@ -58,6 +58,10 @@ public class MyBoxDto implements Serializable {
      */
     Integer displayDecimals;
 
+    String creator;
+
+    String owner;
+
     /**
      * uri
      */

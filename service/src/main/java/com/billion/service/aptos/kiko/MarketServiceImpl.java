@@ -479,4 +479,17 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         return this.list(queryWrapper);
     }
 
+    @Override
+    public List<Market> getMarketListByOrderId(Context context, String orderId) {
+        QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, context.getChain());
+        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+        //指定发起交易的账户
+        queryWrapper.lambda().eq(Market::getOrderId, orderId);
+        queryWrapper.lambda().orderByAsc(Market::getId);
+
+        return this.list(queryWrapper);
+    }
+
 }
