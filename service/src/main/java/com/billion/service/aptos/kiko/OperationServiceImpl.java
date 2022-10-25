@@ -2,18 +2,27 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.Transaction;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.OperationMapper;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.OperationDto;
+import com.billion.model.entity.BoxGroup;
+import com.billion.model.entity.NftMeta;
 import com.billion.model.entity.Operation;
+import com.billion.model.entity.Token;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.OperationTraStateType;
 import com.billion.model.enums.OperationType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +33,17 @@ import static com.billion.model.constant.RequestPath.EMPTY;
  */
 @Service
 public class OperationServiceImpl extends AbstractCacheService<OperationMapper, Operation> implements OperationService {
+
+    @Resource
+    @Lazy
+    NftMetaService nftMetaService;
+
+    @Resource
+    BoxGroupService boxGroupService;
+
+    @Resource
+    TokenService tokenService;
+
 
     @Override
     public Operation addBoxMakerOpt(Transaction transaction, Event event, BoxMakerEvent boxMakerEvent) {
@@ -384,6 +404,93 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
         queryWrapper.lambda().eq(Operation::getTokenId, tokenId);
 
         return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<OperationDto> getSaleRecord(Context context, String account) {
+        //makerevent state 为Done 或者sell的
+        QueryWrapper<Operation> operationQueryWrapper = new QueryWrapper<>();
+        operationQueryWrapper.lambda().eq(Operation::getChain, context.getChain());
+        operationQueryWrapper.lambda().eq(Operation::getMaker, account);
+        operationQueryWrapper.lambda().and(wrapper -> {
+            wrapper.and(w1 -> {
+                w1.or(w2 -> {
+                            w2.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType())
+                                    .and(w3 -> {
+                                        w3.eq(Operation::getState, OperationTraStateType.SELL.getType());
+                                    });
+                        });
+                w1.or(w4 -> {
+                    w4.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType())
+                            .and(w5 -> {
+                                w5.eq(Operation::getState, OperationTraStateType.DONE.getType());
+                            });
+                });
+                w1.or(w6 -> {
+                    w6.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType())
+                            .and(w7 -> {
+                                w7.eq(Operation::getState, OperationTraStateType.SELL.getType());
+                            });
+                });
+                w1.or(w8 -> {
+                    w8.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType())
+                            .and(w9 -> {
+                                w9.eq(Operation::getState, OperationTraStateType.DONE.getType());
+                            });
+                });
+            });
+        });
+
+        operationQueryWrapper.lambda().orderByDesc(Operation::getId);
+        var operationList = this.list(operationQueryWrapper);
+
+        return this.buildOperation(context, operationList);
+    }
+
+    @Override
+    public List<OperationDto> getBuyRecord(Context context, String account) {
+        //takerevent state 为accept
+        //bidderevent state为overprice或者higeprice
+        QueryWrapper<Operation> operationQueryWrapper = new QueryWrapper<>();
+        operationQueryWrapper.lambda().eq(Operation::getChain, context.getChain());
+        operationQueryWrapper.lambda().eq(Operation::getMaker, account);
+        operationQueryWrapper.lambda().and(wrapper -> {
+            wrapper.and(w1 -> {
+                w1.or(w2 -> {
+                    w2.eq(Operation::getState, OperationTraStateType.ACCEPT_PRICE.getType());
+                });
+                w1.or(w3 -> {
+                    w3.eq(Operation::getState, OperationTraStateType.OVER_PRICE.getType());
+                });
+                w1.or(w4 -> {
+                    w4.eq(Operation::getState, OperationTraStateType.SELL.getType());
+                });
+            });
+        });
+        operationQueryWrapper.lambda().orderByDesc(Operation::getId);
+        var operationList = this.list(operationQueryWrapper);
+
+        return this.buildOperation(context, operationList);
+    }
+
+    private List<OperationDto> buildOperation(Context context, List<Operation> operationList) {
+        List<OperationDto> resultList = new ArrayList<>();
+        operationList.forEach(operation -> {
+            OperationDto operationDto = OperationDto.of(operation);
+            if (operation.getType().contains("NFT")) {
+                NftMeta nftMeta = nftMetaService.getById(operation.getTokenId());
+                operationDto.setUrl(nftMeta.getUri());
+            } else if (operation.getType().contains("Box")) {
+                BoxGroup boxGroup = boxGroupService.getByTokenId(context, operation.getTokenId());
+                operationDto.setUrl(boxGroup.getUri());
+            }
+            String bidToken = operation.getBidToken();
+            if (!StringUtils.isEmpty(bidToken)) {
+                operationDto.setBidToken(tokenService.getByTokenInfo(context, bidToken.split("::")[0], bidToken.split("::")[1], bidToken.split("::")[2]));
+            }
+            resultList.add(operationDto);
+        });
+        return resultList;
     }
 
 

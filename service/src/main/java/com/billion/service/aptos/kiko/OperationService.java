@@ -1,9 +1,11 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
+import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.Transaction;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.dto.Context;
+import com.billion.model.dto.OperationDto;
 import com.billion.model.entity.Operation;
 import com.billion.model.event.*;
 
@@ -50,4 +52,7 @@ public interface OperationService extends IService<Operation> {
      * @return
      */
     public List<Operation> getListById(Context context, String tokenId);
+
+    public List<OperationDto> getSaleRecord(Context context, String account);
+    public List<OperationDto> getBuyRecord(Context context, String account);
 }
