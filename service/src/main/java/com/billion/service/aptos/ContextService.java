@@ -66,6 +66,12 @@ public class ContextService {
     @Getter
     static String kikoStcImageInfoApi;
 
+    @Value("${kiko.nft-image-path}")
+    String pKikoNftImagePath;
+
+    @Getter
+    static String kikoNftImagePath;
+
     @Value("${kiko.host}")
     String pKikoHost;
 
