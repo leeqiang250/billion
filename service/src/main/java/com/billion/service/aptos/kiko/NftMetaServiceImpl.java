@@ -274,7 +274,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         NftMetaDto nftMetaDto = NftMetaDto.builder()
                 .id(nftMeta.getId())
                 .nftGroupId(nftMeta.getNftGroupId())
-                .creator(nftMeta.getTableCreator())
+                .creator(nftGroup.getOwner())
                 .displayName(nftMeta.getDisplayName())
                 .description(nftMeta.getDescription())
                 .uri(nftMeta.getUri())
