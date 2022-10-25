@@ -554,6 +554,19 @@ nftMetaId为数据库主键Id
 }
 }`
 
+参数说明
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| id | string |数据库主键Id|
+| tokenId | string |链上tokenId|
+| creator | string |创建者|
+| owner | string |拥有者|
+| contract | string |合约地址|
+| score | string |稀有值|
+| attributeValues | arry |属性列表|
+
+
 ### 我的盲盒列表接口
 
 | 方法 | GET |
