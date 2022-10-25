@@ -8,6 +8,7 @@
         as id
         ,nft_group_id as nft_group_id
         ,class_name as class_name
+        ,sort as sort
     </sql>
 
 </mapper>

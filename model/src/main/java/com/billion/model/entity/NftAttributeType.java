@@ -38,4 +38,10 @@ public class NftAttributeType implements IModel {
     @TableField("class_name")
     String className;
 
+    /**
+     * 排序
+     */
+    @TableField("sort")
+    Integer sort;
+
 }

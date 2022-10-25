@@ -1,10 +1,9 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.billion.model.entity.BoxGroup;
-import com.billion.model.entity.Language;
-import com.billion.model.entity.NftAttributeMeta;
-import com.billion.model.entity.NftAttributeType;
+import com.billion.framework.util.Image;
+import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.ContextService;
@@ -14,8 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
 
@@ -49,6 +48,9 @@ public class MintServiceImpl implements MintService {
 
     @Resource
     NftAttributeMetaService nftAttributeMetaService;
+
+    @Resource
+    NftAttributeValueService nftAttributeValueService;
 
     @Override
     public boolean initialize(Serializable boxGroupId) {
@@ -155,4 +157,56 @@ public class MintServiceImpl implements MintService {
 
         return true;
     }
+
+    public boolean generateNftMetaFile(long nftMetaId) {
+        var nftMeta = this.nftMetaService.getById(nftMetaId);
+        if (Objects.isNull(nftMeta)) {
+            return false;
+        }
+
+        if (StringUtils.isNotEmpty(nftMeta.getFile())) {
+            return true;
+        }
+
+        var nftAttributeValues = this.nftAttributeValueService.getByNftMetaId(nftMetaId);
+        if (nftAttributeValues.isEmpty()) {
+            return false;
+        }
+
+        var nftAttributeMetaQueryWrapper = new QueryWrapper<NftAttributeMeta>();
+        nftAttributeMetaQueryWrapper.lambda().in(NftAttributeMeta::getId, nftAttributeValues.stream().map(e -> e.getNftAttributeMetaId()).collect(Collectors.toSet()));
+        var nftAttributeMetas = this.nftAttributeMetaService.list(nftAttributeMetaQueryWrapper);
+        if (nftAttributeValues.size() != nftAttributeMetas.size()) {
+            return false;
+        }
+
+        var nftAttributeTypeIds = nftAttributeMetas.stream().map(e -> e.getNftAttributeTypeId()).collect(Collectors.toSet());
+
+        var nftAttributeTypeQueryWrapper = new QueryWrapper<NftAttributeType>();
+        nftAttributeTypeQueryWrapper.lambda().in(NftAttributeType::getId, nftAttributeTypeIds);
+        nftAttributeTypeQueryWrapper.lambda().orderByAsc(NftAttributeType::getSort);
+        var nftAttributeTypes = this.nftAttributeTypeService.list(nftAttributeTypeQueryWrapper);
+        if (nftAttributeTypeIds.size() != nftAttributeTypes.size()) {
+            return false;
+        }
+
+        var path = new ArrayList<String>(nftAttributeMetas.size());
+        for (var nftAttributeType : nftAttributeTypes) {
+            for (var nftAttributeMeta : nftAttributeMetas) {
+                if (nftAttributeType.getId().longValue() == nftAttributeMeta.getNftAttributeTypeId().longValue()) {
+                    path.add(ContextService.getKikoNftImagePath() + nftAttributeMeta.getUri());
+                }
+            }
+        }
+
+        var file = ContextService.getKikoNftImagePath() + nftMeta.getNftGroupId() + "/output/" + UUID.randomUUID().toString() + ".png";
+        if (!Image.mergePicture(path, file)) {
+            return false;
+        }
+
+        nftMeta.setFile(file.substring(ContextService.getKikoNftImagePath().length()));
+        this.nftMetaService.updateById(nftMeta);
+        return true;
+    }
+
 }

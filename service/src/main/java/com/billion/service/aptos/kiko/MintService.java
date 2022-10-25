@@ -15,4 +15,12 @@ public interface MintService {
      */
     boolean initialize(Serializable boxGroupId);
 
+
+    /**
+     * generateNftMetaFile
+     *
+     * @param nftMetaId nftMetaId
+     * @return boolean
+     */
+    boolean generateNftMetaFile(long nftMetaId);
 }

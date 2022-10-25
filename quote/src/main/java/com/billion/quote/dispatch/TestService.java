@@ -28,8 +28,8 @@ public class TestService implements Serializable {
 
     //@Scheduled(fixedDelay = 1000)
     void dispatch() {
-        var list = boxGroupService.list();
-        list.forEach(boxGroup -> mintService.initialize(boxGroup.getId()));
+        var list = this.boxGroupService.list();
+        list.forEach(boxGroup -> this.mintService.initialize(boxGroup.getId()));
     }
 
 }

@@ -112,6 +112,8 @@ public class ContextService {
         Stream.of(CacheTsType.values()).forEach(e -> Assert.notNull(ContextService.cacheTsTypeDurationMap.get(e), "missing cache ts type"));
         ContextService.kikoStcImageGroupApi = this.pKikoStcImageGroupApi;
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
+        ContextService.kikoNftImagePath = this.pKikoNftImagePath;
+        ContextService.kikoNftImagePath = "/Users/liqiang/kiko/image/";
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
         ContextService.nftComposeFee = this.pNftComposeFee;

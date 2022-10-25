@@ -9,6 +9,7 @@
         ,nft_group_id as nft_group_id
         ,display_name as display_name
         ,description as description
+        ,file as file
         ,uri as uri
         ,rank as rank
         ,transaction_status as transaction_status

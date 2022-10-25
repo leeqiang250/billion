@@ -55,5 +55,6 @@ public class NftAttributeMeta implements IModel {
      */
     @TableField("sort")
     String sort;
+    //TODO sort 删除吧
 
 }

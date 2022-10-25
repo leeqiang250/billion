@@ -61,6 +61,12 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         return resultList;
     }
 
+    @Override
+    public List<NftAttributeValue> getByNftMetaId(Long nftMetaId) {
+        var wrapper = new QueryWrapper<NftAttributeValue>();
+        wrapper.lambda().eq(NftAttributeValue::getNftMetaId, nftMetaId);
+        return super.list(wrapper);
+    }
 
     private void changeLanguage(Context context, List<NftAttribute> list) {
         Set setKey = list.stream().map(e -> e.getKey()).collect(Collectors.toSet());

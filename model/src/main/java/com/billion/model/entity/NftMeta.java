@@ -47,6 +47,12 @@ public class NftMeta extends TransactionStatus implements IModel {
     /**
      * 图片
      */
+    @TableField("file")
+    String file;
+
+    /**
+     * 图片
+     */
     @TableField("uri")
     String uri;
 

@@ -18,14 +18,23 @@ public interface NftAttributeValueService extends ICacheService<NftAttributeValu
      * @param nftMetaId
      * @return
      */
-    public List<NftAttribute> getNftAttributeForMint(Long nftMetaId);
+    List<NftAttribute> getNftAttributeForMint(Long nftMetaId);
 
     /**
      * getNftAttributeValueByMetaId
-     * 经过国际化处理
+     *
      * @param context
      * @param nftMetaId
      * @return
      */
-    public List<NftAttribute> getNftAttributeValueByMetaId(Context context, String nftMetaId);
+    List<NftAttribute> getNftAttributeValueByMetaId(Context context, String nftMetaId);
+
+    /**
+     * getByNftMetaId
+     *
+     * @param nftMetaId
+     * @return
+     */
+    List<NftAttributeValue> getByNftMetaId(Long nftMetaId);
+
 }
