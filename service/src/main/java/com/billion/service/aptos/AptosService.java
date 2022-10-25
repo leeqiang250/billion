@@ -79,7 +79,7 @@ public class AptosService {
         );
     }
 
-    final static long cacheTs = 5000L;
+    final static long cacheTs = 10000L;
 
     static Node node;
 
