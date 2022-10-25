@@ -88,7 +88,7 @@ public class AptosService {
     public static Node requestNodeCache() {
         if (Objects.isNull(node) || System.currentTimeMillis() > (responseNodeTs + cacheTs)) {
             var response = AptosService.getAptosClient().requestNode();
-            if (!response.isValid()) {
+            if (!response.isValid() && !Objects.isNull(response.getData())) {
                 response.getData().setRpc(ContextService.getAptosHost());
 
                 responseNodeTs = System.currentTimeMillis();

@@ -64,18 +64,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         super.save(nft);
 
         //铸造NFT记录
-        Operation operation = Operation.builder()
-                .chain(Chain.APTOS.getCode())
-                .owner(event.getGuid().getAccountAddress())
-                .type(OperationType.NFT_MINT_EVENT.getType())
-                .tokenId(nftCreateTokenDataEvent.getTokenId().getNftTokenIdKey())
-                .tokenAmount(1L)
-                .bidToken(EMPTY)
-                .price(0L)
-                .build();
-        operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-        operation.setTransactionHash(transaction.getHash());
-        operationService.save(operation);
+        operationService.addNftMintOpt(transaction, event, nftCreateTokenDataEvent);
 
         return nft;
     }
@@ -98,18 +87,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         super.save(nft);
 
         //NFT转出记录
-        Operation operation = Operation.builder()
-                .chain(Chain.APTOS.getCode())
-                .owner(event.getGuid().getAccountAddress())
-                .type(OperationType.NFT_WITHDRAW_EVENT.getType())
-                .tokenId(nftWithdrawEvent.getId().getNftTokenIdKey())
-                .tokenAmount(1L)
-                .bidToken(EMPTY)
-                .price(0L)
-                .build();
-        operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-        operation.setTransactionHash(transaction.getHash());
-        operationService.save(operation);
+        operationService.addNftWithdrawOpt(transaction, event, nftWithdrawEvent);
 
         return nft;
     }
@@ -132,18 +110,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         super.save(nft);
 
         //NFT转入记录
-        Operation operation = Operation.builder()
-                .chain(Chain.APTOS.getCode())
-                .owner(event.getGuid().getAccountAddress())
-                .type(OperationType.NFT_DEPOSIT_EVENT.getType())
-                .tokenId(nftDepositEvent.getId().getNftTokenIdKey())
-                .tokenAmount(1L)
-                .bidToken(EMPTY)
-                .price(0L)
-                .build();
-        operation.setTransactionStatus_(TransactionStatus.STATUS_3_SUCCESS);
-        operation.setTransactionHash(transaction.getHash());
-        operationService.save(operation);
+        operationService.addNftDepositOpt(transaction, event, nftDepositEvent);
 
         return nft;
     }
@@ -166,7 +133,7 @@ public class NftServiceImpl extends AbstractCacheService<NftMapper, Nft> impleme
         super.save(nft);
 
         //NFT销毁记录
-        //TODO renjian
+        operationService.addNftBurnTokenOpt(transaction, event, nftBurnTokenEvent);
 
         return nft;
     }

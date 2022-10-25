@@ -35,8 +35,27 @@ public class Operation extends TransactionStatus implements IModel {
     /**
      * 操作用户地址
      */
-    @TableField("owner")
-    String owner;
+    @TableField("maker")
+    String maker;
+
+    /**
+     * 出价用户地址
+     */
+    @TableField("bidder")
+    String bidder;
+
+    /**
+     * 订单id
+     */
+    @TableField("order_id")
+    String orderId;
+
+
+    /**
+     * 交易类型 一口价or拍卖
+     */
+    @TableField("tra_type")
+    String traType;
 
     /**
      * 操作类型
@@ -57,16 +76,28 @@ public class Operation extends TransactionStatus implements IModel {
     Long tokenAmount;
 
     /**
-     * 交易代币
+     * 支付代币
      */
     @TableField("bid_token")
     String bidToken;
 
     /**
-     * 交易代币数量
+     * 支付代币数量
+     */
+    @TableField("bid_token_amount")
+    String bidTokenAmount;
+
+    /**
+     * 交易价格
      */
     @TableField("price")
-    Long price;
+    String price;
+
+    /**
+     *
+     */
+    @TableField("state")
+    String state;
 
     /**
      * 发生时间
