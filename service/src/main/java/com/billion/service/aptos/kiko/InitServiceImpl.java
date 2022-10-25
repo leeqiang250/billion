@@ -98,7 +98,6 @@ public class InitServiceImpl implements InitService {
             return false;
         }
 
-        //nft_split
         this.nftGroup();
         this.boxGroup();
         this.config();

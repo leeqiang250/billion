@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.LanguageMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
+import com.billion.model.entity.NftAttributeType;
 import com.billion.model.enums.CacheTsType;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
@@ -79,4 +80,11 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
         return values;
     }
 
+    @Override
+    public Language getByLanguageKey(com.billion.model.enums.Language language, String key) {
+        var wrapper = new QueryWrapper<Language>();
+        wrapper.lambda().eq(Language::getLanguage, language.getCode());
+        wrapper.lambda().eq(Language::getKey, key);
+        return super.getOne(wrapper, false);
+    }
 }

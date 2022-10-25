@@ -179,7 +179,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 pairQueryWrapper.lambda().eq(Pair::getContract, function);
                 pairQueryWrapper.lambda().eq(Pair::getAskToken, askToken.getId());
                 pairQueryWrapper.lambda().eq(Pair::getBidToken, bidToken.getId());
-                var pair = pairService.getOne(pairQueryWrapper, false);
+                var pair = this.pairService.getOne(pairQueryWrapper, false);
                 if (Objects.isNull(pair)) {
                     com.aptos.request.v1.model.Resource askTokenResource = com.aptos.request.v1.model.Resource.builder()
                             .moduleAddress(askToken.getModuleAddress())

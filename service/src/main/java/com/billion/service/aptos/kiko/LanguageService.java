@@ -30,4 +30,13 @@ public interface LanguageService extends ICacheService<Language> {
      */
     Map getByKeys(Context context, Set keys);
 
+    /**
+     * getByLanguageKey
+     *
+     * @param language language
+     * @param key      key
+     * @return Language
+     */
+    Language getByLanguageKey(com.billion.model.enums.Language language, String key);
+
 }
