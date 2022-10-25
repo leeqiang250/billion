@@ -257,6 +257,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getChain, context.getChain());
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getIsEnabled, Boolean.TRUE);
         boxGroupQueryWrapper.lambda().eq(BoxGroup::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+        boxGroupQueryWrapper.lambda().orderByDesc(BoxGroup::getId);
         var boxGroups = super.list(boxGroupQueryWrapper);
 
         List<MyBoxDto> resultList = new ArrayList<>();
