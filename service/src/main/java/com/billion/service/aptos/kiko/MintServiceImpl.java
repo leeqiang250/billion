@@ -82,8 +82,7 @@ public class MintServiceImpl implements MintService {
         return true;
     }
 
-
-    public boolean fsdfd(long nftGroupId) {
+    public boolean importNftImage2Db(long nftGroupId) {
         var group = new File(ContextService.getKikoNftImagePath() + nftGroupId);
         if (!group.isDirectory()) {
             return false;
