@@ -119,6 +119,7 @@ public class InitServiceImpl implements InitService {
         this.tokenScene();
         this.nftSplit();
         this.nftCompose();
+        this.operation();
         this.tokenTransfer();
 
         return true;
