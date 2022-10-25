@@ -8,7 +8,7 @@ git clone https://github.com/leeqiang250/aptos-sdk-java.git
 cd aptos-sdk-java
 mvn clean -DskipTests=true install
 
-app_name=gateway-aptos-kiko
+app_name=quote
 
 cd /home/ubuntu/source-code
 git clone https://github.com/leeqiang250/billion.git
