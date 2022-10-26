@@ -51,7 +51,7 @@ public interface OperationService extends IService<Operation> {
      * @param tokenId
      * @return
      */
-    public List<Operation> getListById(Context context, String tokenId);
+    public List<OperationDto> getListById(Context context, String tokenId);
 
     public List<OperationDto> getSaleRecord(Context context, String account);
     public List<OperationDto> getBuyRecord(Context context, String account);

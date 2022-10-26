@@ -505,7 +505,7 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 
 | 方法 | GET |
 |----|----|
-| 路径 |/aptos/kiko/v1/nft/meta/getNftMetaInfoByToken/{nftTokenId} 或者 /getAttributeValue/{nftMetaId} |
+| 路径 |/aptos/kiko/v1/nft/meta/getNftMetaInfoByToken/{nftTokenId} 或者 /getNftMetaInfo/{nftMetaId} |
 NFT的TokenId，拼接规则为：creator@collection@name@property_version
 nftMetaId为数据库主键Id
 
@@ -695,4 +695,89 @@ account:当前用户
 }
 ]
 }
+}`
+
+
+### 查询操作记录接口
+
+| 方法 | GET |
+|----|----|
+| 路径 |/aptos/kiko/v1/operation/getList/{tokenId} |
+
+响应
+
+`{
+"code": 200,
+"ts": 1666749260915,
+"msg": "success",
+"data": [
+{
+"id": 321,
+"chain": "aptos",
+"maker": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d",
+"bidder": null,
+"orderId": null,
+"traType": null,
+"type": "NFTMintEvent",
+"tokenId": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d@0xe5908de7a7b0313030313131323533@0x30382de68f8fe8bfb03230303030303037313234@0",
+"tokenAmount": 1,
+"bidToken": null,
+"bidTokenAmount": null,
+"price": "0",
+"state": null,
+"ts": "",
+"url": "http://52.77.131.111:8890/aptos/kiko/v1/image/281"
+},
+{
+"id": 322,
+"chain": "aptos",
+"maker": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d",
+"bidder": null,
+"orderId": null,
+"traType": null,
+"type": "NFTDepositEvent",
+"tokenId": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d@0xe5908de7a7b0313030313131323533@0x30382de68f8fe8bfb03230303030303037313234@0",
+"tokenAmount": 1,
+"bidToken": null,
+"bidTokenAmount": null,
+"price": "0",
+"state": null,
+"ts": "",
+"url": "http://52.77.131.111:8890/aptos/kiko/v1/image/281"
+},
+{
+"id": 323,
+"chain": "aptos",
+"maker": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d",
+"bidder": null,
+"orderId": null,
+"traType": null,
+"type": "NFTWithDrawEvent",
+"tokenId": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d@0xe5908de7a7b0313030313131323533@0x30382de68f8fe8bfb03230303030303037313234@0",
+"tokenAmount": 1,
+"bidToken": null,
+"bidTokenAmount": null,
+"price": "0",
+"state": null,
+"ts": "",
+"url": "http://52.77.131.111:8890/aptos/kiko/v1/image/281"
+},
+{
+"id": 348,
+"chain": "aptos",
+"maker": "0x6aa217b5b89f6ba3ed515fa7df7761e3b9908330fb85c1bfd362a7e6939fb16c",
+"bidder": null,
+"orderId": null,
+"traType": null,
+"type": "NFTDepositEvent",
+"tokenId": "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d@0xe5908de7a7b0313030313131323533@0x30382de68f8fe8bfb03230303030303037313234@0",
+"tokenAmount": 1,
+"bidToken": null,
+"bidTokenAmount": null,
+"price": "0",
+"state": null,
+"ts": "",
+"url": "http://52.77.131.111:8890/aptos/kiko/v1/image/281"
+}
+]
 }`

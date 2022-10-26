@@ -398,12 +398,12 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public List<Operation> getListById(Context context, String tokenId) {
+    public List<OperationDto> getListById(Context context, String tokenId) {
         QueryWrapper<Operation> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Operation::getChain, context.getChain());
         queryWrapper.lambda().eq(Operation::getTokenId, tokenId);
 
-        return this.list(queryWrapper);
+        return this.buildOperation(context, this.list(queryWrapper));
     }
 
     @Override
@@ -478,7 +478,10 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
         operationList.forEach(operation -> {
             OperationDto operationDto = OperationDto.of(operation);
             if (operation.getType().contains("NFT")) {
-                NftMeta nftMeta = nftMetaService.getById(operation.getTokenId());
+                QueryWrapper<NftMeta> nftMetaQueryWrapper = new QueryWrapper<>();
+                nftMetaQueryWrapper.lambda().eq(NftMeta::getTokenId, operation.getTokenId());
+                nftMetaService.getOneThrowEx(nftMetaQueryWrapper);
+                NftMeta nftMeta = nftMetaService.getOneThrowEx(nftMetaQueryWrapper);
                 operationDto.setUrl(nftMeta.getUri());
             } else if (operation.getType().contains("Box")) {
                 BoxGroup boxGroup = boxGroupService.getByTokenId(context, operation.getTokenId());
