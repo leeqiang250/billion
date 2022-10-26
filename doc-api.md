@@ -781,3 +781,18 @@ account:当前用户
 }
 ]
 }`
+
+操作类型（type字段说明）：
+"NFTMintEvent", "铸造"
+"NFTWithDrawEvent", "取出"
+"NFTDepositEvent", "转入"
+"NFTBurnEvent", "销毁"
+"NFTMakerEvent", "NFT挂单"
+"NFTTakerEvent", "NFT吃单"
+"NFTBidEvent", "NFT拍卖报价"
+"NFTCancelEvent", "NFT取消挂单"
+"BoxMakerEvent", "盲盒挂单"
+"BoxTakerEvent", "盲盒吃单"
+"BoxBidEvent", "盲盒拍卖报价"
+"BoxCancelEvent", "盲盒取消挂单"
+"BoxOpenEvent", "开盲盒"
