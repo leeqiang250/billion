@@ -86,6 +86,8 @@ public class BoxGroupDto implements Serializable {
          * 排序
          */
         Integer sort;
+
+        String url;
     }
 
 }

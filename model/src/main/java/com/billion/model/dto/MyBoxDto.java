@@ -3,6 +3,7 @@ package com.billion.model.dto;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.billion.model.entity.Token;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -77,7 +78,11 @@ public class MyBoxDto implements Serializable {
 
     String bidder;
 
+    Token bidToken;
+
     String bidPrice;
+
+    String auctionPrice;
 
     String ts;
 
