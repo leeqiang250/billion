@@ -363,6 +363,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .uri(boxGroup.getUri())
                 .creator(token.getModuleAddress())
                 .owner(account)
+                .desc(boxGroup.getDescription())//TODO:renjian 国际化
                 .build();
 
         if ("onSale".equals(saleState)) {
@@ -376,8 +377,6 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             myBoxDto.setBidder(market.getBidder());
             myBoxDto.setBidPrice(market.getBidAmount());
             myBoxDto.setTs(market.getTs());
-
-            //TODO:renjianq确认
             myBoxDto.setOwner(market.getMaker());
 
         }
