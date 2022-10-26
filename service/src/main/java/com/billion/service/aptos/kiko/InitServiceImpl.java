@@ -24,7 +24,7 @@ import static com.billion.model.constant.RequestPath.EMPTY;
 @Service
 public class InitServiceImpl implements InitService {
 
-    final String kiko = "0xa9e93a5297a5ee85445c52daabf0d7a8cf92f770a12e3a621690d050b2bd7e5d";
+    final String kiko = "0xb560154d648ee4c0012acb6b68fc428f7bdb6be11026ae432057122edd73635f";
 
     @Resource
     BoxGroupService boxGroupService;
@@ -415,9 +415,9 @@ public class InitServiceImpl implements InitService {
 
         var nftGroups = this.nftGroupService.list();
         nftGroups.forEach(nftGroup -> {
-            int total = 2;
+            int total = 10;
             if (0 == nftGroup.getId() % 2) {
-                total = 1;
+                total = 10;
             }
 
             for (int i = 0; i < total; i++) {
@@ -497,6 +497,7 @@ public class InitServiceImpl implements InitService {
             NftAttributeType nftAttributeType = NftAttributeType.builder()
                     .nftGroupId(nftGroup.getId())
                     .className(EMPTY)
+                    .sort(0)
                     .build();
             this.nftAttributeTypeService.save(nftAttributeType);
 
@@ -565,6 +566,7 @@ public class InitServiceImpl implements InitService {
             NftAttributeType nftAttributeType2 = NftAttributeType.builder()
                     .nftGroupId(nftGroup.getId())
                     .className(EMPTY)
+                    .sort(0)
                     .build();
             this.nftAttributeTypeService.save(nftAttributeType2);
 
@@ -616,6 +618,7 @@ public class InitServiceImpl implements InitService {
             NftAttributeType nftAttributeType3 = NftAttributeType.builder()
                     .nftGroupId(nftGroup.getId())
                     .className(EMPTY)
+                    .sort(0)
                     .build();
             this.nftAttributeTypeService.save(nftAttributeType3);
 
