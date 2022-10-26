@@ -373,8 +373,10 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         }else if (MarketTokenType.BOX.getType().equals(type)) {
             queryWrapper.lambda().eq(Market::getTokenId, EMPTY);
         }
+        var marketList = this.list(queryWrapper);
+        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market -> market), (key1, key2) -> key2));
 
-        return this.list(queryWrapper);
+        return marketMap.values().stream().collect(Collectors.toList());
     }
 
     @Override

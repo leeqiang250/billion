@@ -1,5 +1,6 @@
 package com.billion.model.dto;
 
+import com.billion.model.entity.Token;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -74,6 +75,10 @@ public class NftMetaDto {
     String price;
 
     String bidder;
+
+    Token bidToken;
+
+    String auctionPrice;
 
     String bidPrice;
 

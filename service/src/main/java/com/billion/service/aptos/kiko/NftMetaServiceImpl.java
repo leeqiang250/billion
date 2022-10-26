@@ -416,8 +416,14 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                     .price(nftMarket.getPrice())
                     .bidder(nftMarket.getBidder())
                     .bidPrice(nftMarket.getBidAmount())
+                    .auctionPrice(nftMarket.getBidAmount())
                     .ts(nftMarket.getTs())
                     .build();
+            String bidToken = nftMarket.getBidToken();
+            if (StringUtils.isNotEmpty(bidToken)) {
+                String[] tokenInfo = bidToken.split("::");
+                nftMetaDto.setBidToken(tokenService.getByTokenInfo(context, tokenInfo[0], tokenInfo[1], tokenInfo[2]));
+            }
             resultList.add(nftMetaDto);
         });
         return resultList;
