@@ -62,4 +62,6 @@ public interface NftMetaService extends ICacheService<NftMeta> {
      * @return
      */
     List<NftMeta> getListByTokenIds(List<String> tokenIds);
+
+    public void rank(Serializable nftGroupId);
 }

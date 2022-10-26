@@ -78,9 +78,9 @@ public class NftMetaController implements IController<NftMeta> {
         return Response.success(nftMetaService.getNftMetaInfoByToken(context, nftTokenId));
     }
 
-    @GetMapping("/testMint")
+    @GetMapping("/test")
     public void testMint() {
-        nftMetaService.initialize(43, 5);
+        nftMetaService.rank(String.valueOf(100111265));
     }
 
 }

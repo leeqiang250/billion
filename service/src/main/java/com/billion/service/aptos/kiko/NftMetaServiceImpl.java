@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -234,6 +235,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
             nftMeta.setTableName(Hex.encode(displayName));
 
             super.updateById(nftMeta);
+            this.rank(nftGroupId);
         }
 
         //TODO 删除缓存
@@ -315,8 +317,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         //属性数据
         var nftAttributeValues = nftAttributeValueService.getNftAttributeValueByMetaId(context, String.valueOf(nftMeta.getId()));
         //计算score
-        Integer score = nftAttributeValues.stream().map(nftAttribute -> Integer.valueOf(nftAttribute.getValue())).reduce(Integer::sum).get();
-        nftMetaDto.setScore(score.toString());
+//        BigDecimal score = nftAttributeValues.stream().map(nftAttribute -> BigDecimal.valueOf(Double.valueOf(nftAttribute.getValue()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+//        nftMetaDto.setScore(score.toString());
         nftMetaDto.setAttributeValues(nftAttributeValues);
 
         //售卖数据
@@ -431,6 +433,34 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
         return this.list(queryWrapper);
     }
+
+    @Override
+    public void rank(Serializable nftGroupId) {
+        QueryWrapper<NftMeta> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(NftMeta::getNftGroupId, nftGroupId);
+        wrapper.lambda().eq(NftMeta::getIsBorn, Boolean.FALSE);
+        wrapper.lambda().eq(NftMeta::getTransactionStatus, TransactionStatus.STATUS_3_SUCCESS.getCode());
+
+        var nftMetaList = super.list(wrapper);
+
+        nftMetaList.forEach(nftMeta -> {
+            //属性数据
+            var nftAttributeValues = nftAttributeValueService.getNftAttributeValueByMetaId(null, String.valueOf(nftMeta.getId()));
+            //计算score
+            BigDecimal score = nftAttributeValues.stream().map(nftAttribute -> BigDecimal.valueOf(Double.valueOf(nftAttribute.getValue()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+            nftMeta.setScore(score.toString());
+        });
+
+        nftMetaList = nftMetaList.stream().
+                sorted(Comparator.comparing(NftMeta::getScore, Comparator.reverseOrder())).
+                collect(Collectors.toList());
+        for (int i = 0; i < nftMetaList.size(); i++) {
+            NftMeta nftMeta = nftMetaList.get(i);
+            nftMeta.setRank(i + 1L);
+            this.updateById(nftMeta);
+        }
+    }
+
 
     private void changeLanguage(Context context, List<NftMeta> list) {
         Set setDisplayName = list.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet());
