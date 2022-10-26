@@ -619,6 +619,7 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 }
 ]
 }`
+
 | 名称 | 类型 |描述|
 |----|----|----|
 | rank | string |排名|
