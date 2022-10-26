@@ -719,7 +719,7 @@ public class InitServiceImpl implements InitService {
                     .moduleName("aptos_coin")
                     .structName("AptosCoin")
                     .name("AptosCoin")
-                    .symbol("AptosCoin")
+                    .symbol("APT")
                     .decimals(8)
                     .displayDecimals(2)
                     .uri(EMPTY)

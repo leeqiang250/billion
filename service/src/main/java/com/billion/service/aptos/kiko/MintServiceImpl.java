@@ -209,4 +209,10 @@ public class MintServiceImpl implements MintService {
         return true;
     }
 
+//1.规范图片命名
+//2.导入图片到数据库
+//3.导出nft_attribute_meta，人工设置分值
+//4.导入设置分值的nft_attribute_meta
+//
+//
 }
