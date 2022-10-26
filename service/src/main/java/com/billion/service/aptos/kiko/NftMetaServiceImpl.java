@@ -268,6 +268,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         nftMetaQueryWrapper.lambda().eq(NftMeta::getId, nftMetaId);
 
         var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
+        changeLanguage(context, nftMeta);
 
         var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
 
@@ -280,7 +281,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         nftMetaQueryWrapper.lambda().eq(NftMeta::getTokenId, nftTokenId);
 
         var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
-
+        changeLanguage(context, nftMeta);
         var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
 
         return this.getNftMetaDto(context, nftMeta, nftGroup);
@@ -362,7 +363,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         }
         List<String> tokenIdList = nftList.stream().map(Nft::getTokenId).collect(Collectors.toList());
         var nftMetaList = this.getListByTokenIds(tokenIdList);
-
+        changeLanguage(context, nftMetaList);
         List<NftMetaDto> resultList = new ArrayList<>();
         nftMetaList.forEach(nftMeta -> {
             NftMetaDto nftMetaDto = NftMetaDto.builder()
@@ -390,6 +391,7 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         var marketList = marketService.getMarketListByAccount(context, account, MarketTokenType.NFT.getType());
 
         var nftMetas = getListByTokenIds(marketList.stream().map(Market::getTokenId).collect(Collectors.toList()));
+        changeLanguage(context, nftMetas);
         var nftMetaMap = nftMetas.stream().collect(Collectors.toMap(nftMeta -> nftMeta.getTokenId(), (nftMeta) -> nftMeta));
 
         List<NftMetaDto> resultList = new ArrayList<>();
@@ -444,15 +446,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
     }
 
     private void changeLanguage(Context context, NftMeta nftMeta) {
-        Set.of(nftMeta.getDisplayName());
-        Set setDisplayName = Set.of(nftMeta.getDisplayName());
-        Set setDescription = Set.of(nftMeta.getDescription());
-
-        Map mapDisplayName = this.languageService.getByKeys(context, setDisplayName);
-        Map mapDescription = this.languageService.getByKeys(context, setDescription);
-
-        nftMeta.setDisplayName(mapDisplayName.get(nftMeta.getDisplayName()).toString());
-        nftMeta.setDescription(mapDescription.get(nftMeta.getDescription()).toString());
+        nftMeta.setDisplayName(languageService.getByKey(context, nftMeta.getDisplayName()));
+        nftMeta.setDescription(languageService.getByKey(context, nftMeta.getDescription()));
     }
 
     private String changeLanguageContract(Context context, String str) {

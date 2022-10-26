@@ -347,6 +347,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     @Override
     public MyBoxDto getBoxById(Context context, String boxGroupId, String account, String saleState, String orderId) {
         BoxGroup boxGroup = this.getById(boxGroupId);
+        changeLanguage(context, boxGroup);
         if (Objects.isNull(boxGroup)) {
             return null;
         }
@@ -363,7 +364,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .uri(boxGroup.getUri())
                 .creator(token.getModuleAddress())
                 .owner(account)
-                .desc(boxGroup.getDescription())//TODO:renjian 国际化
+                .desc(boxGroup.getDescription())
                 .build();
 
         if ("onSale".equals(saleState)) {
@@ -414,6 +415,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         Page<BoxGroup> page = Page.of(pageStart, pageLimt);
         var pageResult = this.page(page, boxGroupQueryWrapper);
         var boxGroups = pageResult.getRecords();
+        changeLanguage(context, boxGroups);
 
         Map tokenMap = tokenService.cacheMap(context);
 
@@ -467,6 +469,13 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             e.setDescription(mapDescription.get(e.getDescription()).toString());
             e.setRule(mapRule.get(e.getRule()).toString());
         });
+    }
+
+
+    private void changeLanguage(Context context, BoxGroup boxGroup) {
+        boxGroup.setDisplayName(languageService.getByKey(context, boxGroup.getDisplayName()));
+        boxGroup.setRule(languageService.getByKey(context, boxGroup.getRule()));
+        boxGroup.setDescription(languageService.getByKey(context, boxGroup.getDescription()));
     }
 
 }
