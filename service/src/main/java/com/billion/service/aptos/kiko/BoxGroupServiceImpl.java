@@ -4,6 +4,7 @@ import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.CoinStore;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.billion.dao.aptos.kiko.BoxGroupMapper;
@@ -337,8 +338,14 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                     .price(value.getPrice())
                     .bidder(value.getBidder())
                     .bidPrice(value.getBidAmount())
+                    .auctionPrice(value.getBidAmount())
                     .ts(value.getTs())
                     .build();
+
+            if (StringUtils.isNotEmpty(value.getBidToken())) {
+                String[] tokenInfo = value.getBidToken().split("::");
+                myBoxDto.setBidToken(tokenService.getByTokenInfo(context, tokenInfo[0], tokenInfo[1], tokenInfo[2]));
+            }
             resultList.add(myBoxDto);
         });
         return resultList;
@@ -379,6 +386,11 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             myBoxDto.setBidPrice(market.getBidAmount());
             myBoxDto.setTs(market.getTs());
             myBoxDto.setOwner(market.getMaker());
+            myBoxDto.setAuctionPrice(market.getBidAmount());
+            if (StringUtils.isNotEmpty(market.getBidToken())) {
+                String[] tokenInfo = market.getBidToken().split("::");
+                myBoxDto.setBidToken(tokenService.getByTokenInfo(context, tokenInfo[0], tokenInfo[1], tokenInfo[2]));
+            }
 
         }
         return myBoxDto;
@@ -438,6 +450,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                     .rule(boxGroup.getRule())
                     .ts(boxGroup.getTs())
                     .sort(boxGroup.getSort())
+                    .url(boxGroup.getUri())
                     .build();
             resultList.add(boxGroupInfo);
 

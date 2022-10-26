@@ -578,27 +578,58 @@ saleState:售卖状态。onSale:售卖中;unSale:未出售
 
 `{
 "code": 200,
-"ts": 1665888505470,
+"ts": 1666777741968,
 "msg": "success",
 "data": [
 {
-"id": 2,
+"id": 20000007196,
+"nftGroupId": 100111265,
+"displayName": "68-描述20000007196",
+"description": "b0-描述20000007196",
+"uri": "http://52.77.131.111:8890/aptos/kiko/v1/image/295",
+"rank": 7,
+"isBorn": false,
+"tokenId": "0xb560154d648ee4c0012acb6b68fc428f7bdb6be11026ae432057122edd73635f@0xe5908de7a7b0313030313131323635@0x36382de68f8fe8bfb03230303030303037313936@0",
+"score": "10.0",
+"creator": null,
+"attributeType": 0,
+"owner": "0x6aa217b5b89f6ba3ed515fa7df7761e3b9908330fb85c1bfd362a7e6939fb16c",
+"contract": null,
+"attributeValues": null,
+"orderId": "1",
+"saleType": "fix_price",
+"price": "100000000",
+"bidder": "",
+"bidToken": {
+"id": 1,
 "chain": "aptos",
-"coinId": "0x1c87ad158f251d661cbacb167e0e459ab1ab43e1a3ca61edbf548f1cc6b23b11::box::BoxV1",
-"name": "BoxV1",
-"symbol": "BoxV1",
-"decimals": 0,
-"displayDecimals": null,
+"moduleAddress": "0x1",
+"moduleName": "aptos_coin",
+"structName": "AptosCoin",
+"name": "AptosCoin",
+"symbol": "AptosCoin",
+"decimals": 8,
+"displayDecimals": 2,
 "uri": "",
-"orderId": null,
-"saleType": null,
-"price": null,
-"bidder": null,
-"bidPrice": null,
-"ts": null
+"isShow": true
+},
+"auctionPrice": "",
+"bidPrice": "",
+"ts": "1666771303186"
 }
 ]
 }`
+
+| 名称 | 类型 |描述|
+|----|----|----|
+| rank | string |排名|
+| tokenId | string |链上tokenId|
+| orderId | string |订单id|
+| saleType | string |售卖类型:fix_price:一口价;auction:拍卖|
+| bidToken | object |购买币种|
+| score | string |稀有值|
+| auctionPrice | string |拍卖当前出价|
+
 
 ### 查询二级市场盲盒详情
 | 方法 | GET |

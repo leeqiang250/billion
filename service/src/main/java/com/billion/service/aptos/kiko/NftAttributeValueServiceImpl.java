@@ -53,6 +53,9 @@ public class NftAttributeValueServiceImpl extends AbstractCacheService<NftAttrib
         var attributeValue = super.list(queryWrapper);
 
         List<NftAttribute> resultList = new ArrayList<>(attributeValue.size() + 3);
+        if (context != null) {
+            changeLanguage(context, resultList);
+        }
         attributeValue.forEach(v -> {
             var attributeType = nftAttributeTypeService.getNftAttributeInfoByMetaId(v.getNftAttributeMetaId());
             resultList.add(attributeType);

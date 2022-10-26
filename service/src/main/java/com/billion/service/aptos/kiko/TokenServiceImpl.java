@@ -190,6 +190,7 @@ public class TokenServiceImpl extends AbstractCacheService<TokenMapper, Token> i
 
     @Override
     public List<Token> getByCoinIdList(Context context, List<String> coinIdList) {
+        coinIdList = coinIdList.stream().distinct().collect(Collectors.toList());
         if (Objects.isNull(coinIdList) || coinIdList.size() == 0) {
             return new ArrayList<>();
         }
