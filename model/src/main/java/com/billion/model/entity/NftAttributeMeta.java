@@ -56,11 +56,4 @@ public class NftAttributeMeta implements IModel {
     @TableField("uri")
     String uri;
 
-    /**
-     * sort
-     */
-    @JSONField(name = "sort")
-    @TableField("sort")
-    String sort;
-
 }

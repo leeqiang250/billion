@@ -10,7 +10,6 @@
         ,attribute as attribute
         ,value as value
         ,uri as uri
-        ,sort as sort
     </sql>
 
 </mapper>

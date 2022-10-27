@@ -515,7 +515,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("10")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta);
             languageService.save(Language.builder()
@@ -532,7 +531,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("20")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta2);
             languageService.save(Language.builder()
@@ -549,7 +547,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("30")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta3);
             languageService.save(Language.builder()
@@ -584,7 +581,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("20")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta4);
             languageService.save(Language.builder()
@@ -601,7 +597,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("10")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta5);
             languageService.save(Language.builder()
@@ -636,7 +631,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("20")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta6);
             languageService.save(Language.builder()
@@ -653,7 +647,6 @@ public class InitServiceImpl implements InitService {
                     .attribute(EMPTY)
                     .value("10")
                     .uri(EMPTY)
-                    .sort(EMPTY)
                     .build();
             this.nftAttributeMetaService.save(nftAttributeMeta7);
             languageService.save(Language.builder()

@@ -134,7 +134,6 @@ public class MintServiceImpl implements MintService {
                                     .attribute(attribute)
                                     .value(EMPTY)
                                     .uri(file_.getAbsolutePath().substring(ContextService.getKikoNftImagePath().length()))
-                                    .sort(EMPTY)
                                     .build();
                             this.nftAttributeMetaService.save(nftAttributeMeta);
                             log.info("{}", nftAttributeMeta);
