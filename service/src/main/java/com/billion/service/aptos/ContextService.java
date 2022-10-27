@@ -72,6 +72,9 @@ public class ContextService {
     @Getter
     static String kikoNftImagePath;
 
+    @Getter
+    static String kikoPath;
+
     @Value("${kiko.host}")
     String pKikoHost;
 
@@ -114,6 +117,7 @@ public class ContextService {
         ContextService.kikoStcImageInfoApi = this.pKikoStcImageInfoApi;
         ContextService.kikoNftImagePath = this.pKikoNftImagePath;
         ContextService.kikoNftImagePath = "/Users/liqiang/kiko/image/";
+        ContextService.kikoPath = "/Users/liqiang/kiko/image/";
         ContextService.kikoHost = this.pKikoHost;
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
         ContextService.nftComposeFee = this.pNftComposeFee;

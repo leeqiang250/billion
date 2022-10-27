@@ -179,14 +179,13 @@ public class Excel {
         // 生成表头
         Row headRow = sheet.createRow(0);
         for (int fieldNum = 0; fieldNum < fields.length; fieldNum++) {
-            CellStyle headStyle = workbook.createCellStyle();
+            CellStyle cellStyle = workbook.createCellStyle();
             Font font = workbook.createFont();
             font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-            headStyle.setFont(font);
+            cellStyle.setFont(font);
             Cell cell = headRow.createCell(fieldNum);
             cell.setCellValue(fields[fieldNum].getName());
-            cell.setCellStyle(headStyle);
-
+            cell.setCellStyle(cellStyle);
         }
 
         //构建表格数据
@@ -218,13 +217,17 @@ public class Excel {
             sheet.addMergedRegion(new CellRangeAddress(list.get(0), list.get(1), list.get(2), list.get(3)));
         }
 
+        var file = new File(path);
+        if (file.exists()) {
+            file.delete();
+        }
+
         FileOutputStream fileOutputStream = new FileOutputStream(path);
         workbook.write(fileOutputStream);
         //关闭流
         fileOutputStream.close();
         return true;
     }
-
 
     private static boolean isMergedColumn(Sheet sheet, int row, int column) {
         int sheetMergeCount = sheet.getNumMergedRegions();

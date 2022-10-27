@@ -2,6 +2,7 @@ package com.billion.service.aptos.kiko;
 
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.billion.framework.util.Excel;
 import com.billion.framework.util.Image;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
@@ -158,8 +159,17 @@ public class MintServiceImpl implements MintService {
         return true;
     }
 
-    public boolean exportNftImage2Db(long nftGroupId) {
-        return true;
+    public boolean exportNftAttributeTypeMeta(long nftGroupId) {
+        var list = this.nftAttributeTypeService.getNftAttributeTypeMetaByNftGroupId(nftGroupId);
+        var path = ContextService.getKikoPath() + "NftAttributeTypeMeta-NftGroupId-" + nftGroupId + ".xlsx";
+        try {
+            var result = Excel.writeMergeColumnExcel(path, list, "NftAttributeTypeMeta", "nftAttributeTypeId");
+            log.info("result[{}] path[{}]", result, path);
+            return result;
+        } catch (Exception e) {
+            log.error("{}", e);
+            return false;
+        }
     }
 
     public boolean generateNftMetaFile(long nftMetaId) {
