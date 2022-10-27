@@ -158,6 +158,10 @@ public class MintServiceImpl implements MintService {
         return true;
     }
 
+    public boolean exportNftImage2Db(long nftGroupId) {
+        return true;
+    }
+
     public boolean generateNftMetaFile(long nftMetaId) {
         var nftMeta = this.nftMetaService.getById(nftMetaId);
         if (Objects.isNull(nftMeta)) {

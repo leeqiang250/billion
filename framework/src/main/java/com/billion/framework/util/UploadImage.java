@@ -33,14 +33,13 @@ public class UploadImage {
                 log.warn("nft_cloudflare info upload result is empty");
                 return "";
             }
-            Map map =JSONObject.parseObject(builder.toString(), Map.class);
+            Map map = JSONObject.parseObject(builder.toString(), Map.class);
 
             if (CollectionUtils.isEmpty(map)) {
                 log.error("nft_cloudflare info get upload result is error {}", builder.toString());
                 return "";
             }
             boolean success = (boolean) map.get("success");
-//            FileOperateUtil.delFile(imagePath);
             if (success) {
                 Map result = (Map) map.get("result");
                 ArrayList<String> variants = (ArrayList<String>) result.get("variants");

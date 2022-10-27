@@ -3,9 +3,7 @@ package com.billion.framework.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,7 +65,7 @@ public class Excel {
         List<T> resultList = new ArrayList<>();
         Row headRow = sheet.getRow(0);
         Map<Integer, String> headMap = new HashMap<>();
-        for (int i = 0;;i++) {
+        for (int i = 0; ; i++) {
             Cell cell = headRow.getCell(i);
             if (Objects.isNull(cell)) {
                 break;
@@ -81,7 +79,7 @@ public class Excel {
                 break;
             }
             T t = clazz.getDeclaredConstructor().newInstance();
-            for (int cellNum = 0; cellNum < headMap.keySet().size(); cellNum ++) {
+            for (int cellNum = 0; cellNum < headMap.keySet().size(); cellNum++) {
                 row.getCell(cellNum).setCellType(Cell.CELL_TYPE_STRING);
                 String cell = row.getCell(cellNum).getStringCellValue();
                 if (isMergedColumn(sheet, rowNum, cellNum)) {
@@ -197,7 +195,7 @@ public class Excel {
             //构建要合并的单元格信息
             List<Integer> mergeParam = new ArrayList<>(4);
             mergeParam.add(rowNum);
-            mergeParam.add(rowNum + itemList.size() -1);
+            mergeParam.add(rowNum + itemList.size() - 1);
             mergeParam.add(0);
             mergeParam.add(0);
             mergeParams.add(mergeParam);
@@ -227,7 +225,7 @@ public class Excel {
     }
 
 
-    private static boolean isMergedColumn(Sheet sheet, int row ,int column) {
+    private static boolean isMergedColumn(Sheet sheet, int row, int column) {
         int sheetMergeCount = sheet.getNumMergedRegions();
         for (int i = 0; i < sheetMergeCount; i++) {
             CellRangeAddress range = sheet.getMergedRegion(i);
@@ -244,7 +242,7 @@ public class Excel {
         return false;
     }
 
-    public static String getMergedColumnValue(Sheet sheet ,int row , int column) {
+    public static String getMergedColumnValue(Sheet sheet, int row, int column) {
         int sheetMergeCount = sheet.getNumMergedRegions();
         for (int i = 0; i < sheetMergeCount; i++) {
             CellRangeAddress ca = sheet.getMergedRegion(i);
@@ -265,8 +263,8 @@ public class Excel {
     }
 
 
-    private static Method getClassGetMethod(Class clazz, String fieldName) throws NoSuchMethodException{
-        return  clazz.getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1));
+    private static Method getClassGetMethod(Class clazz, String fieldName) throws NoSuchMethodException {
+        return clazz.getMethod("get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1));
     }
 
     private static Method getClassMethod(Class aClazz, String methodName) {
