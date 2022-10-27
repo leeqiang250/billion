@@ -325,12 +325,11 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         var pageResult = this.page(page, queryWrapper);
 
         var marketList = pageResult.getRecords();
-        //过滤orderid重复的market记录
-        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market -> market), (key1, key2) -> key2));
-        var distinctMarkets = marketMap.values().stream().collect(Collectors.toList());
+        //去重数据
+        marketList = distinctOnSalList(context, marketList);
 
-        List<String> nftTokenIdList = distinctMarkets.stream().filter(market -> StringUtils.isNotEmpty(market.getTokenId())).map(market -> market.getTokenId()).collect(Collectors.toList());
-        List<String> coinIdList = distinctMarkets.stream().filter(market -> StringUtils.isEmpty(market.getTokenId())).map(market -> market.getAskToken()).collect(Collectors.toList());
+        List<String> nftTokenIdList = marketList.stream().filter(market -> StringUtils.isNotEmpty(market.getTokenId())).map(market -> market.getTokenId()).collect(Collectors.toList());
+        List<String> coinIdList = marketList.stream().filter(market -> StringUtils.isEmpty(market.getTokenId())).map(market -> market.getAskToken()).collect(Collectors.toList());
 
         var nftTokenList = nftMetaService.getListByTokenIds(nftTokenIdList);
         var coinList = tokenService.getByCoinIdList(context, coinIdList);
@@ -340,7 +339,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 + e.getModuleName() + "::" + e.getStructName(), (e) -> e));
 
         List<MarketDto.MarketInfo> resultList = new ArrayList<>();
-        distinctMarkets.forEach(e -> {
+        marketList.forEach(e -> {
             MarketDto.MarketInfo marketInfoDto = MarketDto.MarketInfo.builder()
                     .id(e.getId())
                     .chain(e.getChain())
@@ -390,11 +389,12 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     public List<Market> getMarketListByAccount(Context context, String account, String type) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        List status = List.of(TransactionStatus.STATUS_3_SUCCESS.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
         //指定发起交易的账户
         queryWrapper.lambda().eq(Market::getMaker, account);
-        queryWrapper.lambda().orderByAsc(Market::getId);
+        queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().orderByDesc(Market::getVersion);
 
         if (MarketTokenType.NFT.getType().equals(type)) {
             queryWrapper.lambda().ne(Market::getTokenId, EMPTY);
@@ -402,35 +402,91 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
             queryWrapper.lambda().eq(Market::getTokenId, EMPTY);
         }
         var marketList = this.list(queryWrapper);
-        var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market -> market), (key1, key2) -> key2));
 
-        return marketMap.values().stream().collect(Collectors.toList());
+        return distinctOnSalList(context, marketList);
     }
 
     @Override
-    public List<Market> getMarketListByTokenId(Context context, String tokenId) {
+    public Market getMarketByTokenId(Context context, String tokenId) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        List status = List.of(TransactionStatus.STATUS_3_SUCCESS.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
         //指定发起交易的账户
         queryWrapper.lambda().eq(Market::getTokenId, tokenId);
-        queryWrapper.lambda().orderByAsc(Market::getId);
+        queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().orderByDesc(Market::getVersion);
 
-        return this.list(queryWrapper);
+        var marketList = this.list(queryWrapper);
+        Map<String, Market> makerMap = new HashMap<>(30);
+        Map<String, Market> takerMap = new HashMap<>(30);
+        Map<String, Market> cancleMap = new HashMap<>(30);
+        Map<String, Market> bidMap = new HashMap<>(30);
+        marketList.forEach(market -> {
+            if (market.getEvent().equals(BoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketMakerEvent.EVENT_NAME)) {
+                makerMap.put(market.getOrderId(), market);
+            }
+            if (market.getEvent().equals(BoxTakerEvent.EVENT_NAME) || market.getEvent().equals(MarketTakerEvent.EVENT_NAME)) {
+                takerMap.put(market.getOrderId(), market);
+            }
+            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketCancelEvent.EVENT_NAME)) {
+                cancleMap.put(market.getOrderId(), market);
+            }
+            if (market.getEvent().equals(BoxBidEvent.EVENT_NAME) || market.getEvent().equals(MarketBidEvent.EVENT_NAME)) {
+                bidMap.put(market.getOrderId(), market);
+            }
+        });
+        //根据orderId去掉已取消或已交易成功的
+        var makerList = makerMap.values().stream().collect(Collectors.toList());
+        makerList = makerList.stream().filter(market -> !takerMap.containsKey(market.getOrderId())).collect(Collectors.toList());
+        makerList = makerList.stream().filter(market -> !cancleMap.containsKey(market.getOrderId())).collect(Collectors.toList());
+
+        if (makerList.size() > 0) {
+            Market market = marketList.get(0);
+            if (bidMap.containsKey(market.getOrderId())) {
+                market.setBidder(bidMap.get(market.getOrderId()).getBidder());
+                market.setBidAmount(bidMap.get(market.getOrderId()).getBidAmount());
+            }
+            return market;
+        }
+        return null;
     }
 
     @Override
-    public List<Market> getMarketListByOrderId(Context context, String orderId) {
+    public Market getMarketByOrderId(Context context, String orderId) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        List status = List.of(TransactionStatus.STATUS_3_SUCCESS.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
         queryWrapper.lambda().in(Market::getTransactionStatus, status);
-        //指定发起交易的账户
+        //指定orderId
         queryWrapper.lambda().eq(Market::getOrderId, orderId);
-        queryWrapper.lambda().orderByAsc(Market::getId);
-
-        return this.list(queryWrapper);
+        queryWrapper.lambda().orderByDesc(Market::getVersion);
+        var marketList = this.list(queryWrapper);
+        if (marketList.size() == 0) {
+            return null;
+        }
+        //修改拍卖最新报价
+        Market resultMarket = null;
+        String bidderAmount = null;
+        String bidder = null;
+        for (Market market : marketList) {
+            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(BoxTakerEvent.EVENT_NAME)
+            || market.getEvent().equals(MarketCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketTakerEvent.EVENT_NAME)) {
+                return null;
+            }
+            if (market.getEvent().equals(BoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketMakerEvent.EVENT_NAME)) {
+                resultMarket = market;
+            }
+            if (market.getEvent().equals(BoxBidEvent.EVENT_NAME) || market.getEvent().equals(MarketBidEvent.EVENT_NAME)) {
+                bidderAmount = market.getBidAmount();
+            }
+        }
+        //说明有拍卖出价
+        if (null != bidder && null != bidderAmount) {
+            resultMarket.setBidder(bidder);
+            resultMarket.setBidAmount(bidderAmount);
+        }
+        return resultMarket;
     }
 
     @Override
@@ -450,5 +506,71 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         return onSale;
     }
+
+    private List<Market> distinctOnSalList(Context context, List<Market> marketList) {
+        Map<String, Market> makerMap = new HashMap<>(30);
+        Map<String, Market> takerMap = new HashMap<>(30);
+        Map<String, Market> cancleMap = new HashMap<>(30);
+        Map<String, Market> bidMap = new HashMap<>(30);
+        marketList.forEach(market -> {
+            if (market.getEvent().equals(BoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketMakerEvent.EVENT_NAME)) {
+                makerMap.put(market.getOrderId(), market);
+            }
+            if (market.getEvent().equals(BoxTakerEvent.EVENT_NAME) || market.getEvent().equals(MarketTakerEvent.EVENT_NAME)) {
+                takerMap.put(market.getOrderId(), market);
+            }
+            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketCancelEvent.EVENT_NAME)) {
+                cancleMap.put(market.getOrderId(), market);
+            }
+        });
+
+        //根据orderId去掉已取消或已交易成功的
+        var makerList = makerMap.values().stream().collect(Collectors.toList());
+        makerList = makerList.stream().filter(market -> !takerMap.containsKey(market.getOrderId())).collect(Collectors.toList());
+        makerList = makerList.stream().filter(market -> !cancleMap.containsKey(market.getOrderId())).collect(Collectors.toList());
+        if (makerList.size() == 0) {
+            return new ArrayList<>();
+        }
+        //取消或吃单事件有可能没在当前页查出来，根据orderId和event再去查一遍
+        QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, context.getChain());
+        queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().in(Market::getOrderId, makerMap.keySet());
+        queryWrapper.lambda().and(w1 -> {
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketCancelEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketTakerEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, BoxCancelEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, BoxTakerEvent.EVENT_NAME));
+        });
+        var removeList = this.list(queryWrapper);
+        var removeMap = removeList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market) -> market));
+        makerList = makerList.stream().filter(market -> !removeMap.containsKey(market.getOrderId())).collect(Collectors.toList());
+        if (makerList.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        //拍卖类型的订单，找出最高出价和出价人
+        var orderIdList = makerList.stream().filter(market -> market.getType().equals("auction")).map(Market::getOrderId).collect(Collectors.toList());
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, context.getChain());
+        queryWrapper.lambda().eq(Market::getOrderId, orderIdList);
+        queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().and(w1 -> {
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketMakerEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, BoxMakerEvent.EVENT_NAME));
+        });
+
+        var higheBidList = this.list(queryWrapper);
+        var highBidMap = higheBidList.stream().collect(Collectors.toMap(market -> market.getOrderId(), market -> market));
+
+        makerList.forEach(market -> {
+            if (highBidMap.containsKey(market.getOrderId())) {
+                market.setBidder(highBidMap.get(market.getOrderId()).getBidder());
+                market.setBidAmount(highBidMap.get(market.getOrderId()).getBidAmount());
+            }
+        });
+        return makerList;
+    }
+
 
 }
