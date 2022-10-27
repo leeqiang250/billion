@@ -71,11 +71,19 @@ account: &signer,
 id: u64
 )
 
+### 二级市场-盲盒取消拍卖接口
+public entry fun box_cancel<AskToken, BidToken>(
+account: &signer,
+id: u64
+)
+
 ### 二级市场-NFT一口价购买接口
 @secondary_market::secondary_market::nft_buy_fix_price<BidToken>(
 account: &signer,
 id: u64
 )
+
+id为orderid
 
 ### 二级市场-NFT拍卖出价接口
 @secondary_market::secondary_market::nft_buy_auction<BidToken>(
@@ -84,11 +92,23 @@ id: u64,
 price: u64
 )
 
+id为orderid
+
 ### 二级市场-NFT拍卖吃单接口
 @secondary_market::secondary_market::nft_accept_bid<BidToken>(
 account: &signer,
 id: u64
 )
+
+id为orderid
+
+### 二级市场-NFT取消拍卖接口
+public entry fun nft_cancel<BidToken>(
+account: &signer,
+id: u64
+)
+
+id为orderid
 
 ### NFT拆解接口
 

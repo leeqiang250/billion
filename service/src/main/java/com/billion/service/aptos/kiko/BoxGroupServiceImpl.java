@@ -327,6 +327,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             BoxGroup boxGroup = boxGroupMap.get(token.getId());
             MyBoxDto myBoxDto = MyBoxDto.builder()
                     .id(token.getId())
+                    .orderId(value.getOrderId())
                     .boxGroupId(boxGroup.getId())
                     .chain(token.getChain())
                     .coinId(token.getModuleAddress() + "::" + token.getModuleName() + "::" + token.getStructName())
