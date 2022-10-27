@@ -753,6 +753,25 @@ account:当前用户
 
 | 方法 | GET |
 |----|----|
+| 路径 |http://localhost:8890/aptos/kiko/v1/market/isOnSale/{orderId}|
+
+响应
+
+`{
+"code": 200,
+"ts": 1666857400387,
+"msg": "success",
+"data": "unSale"
+}`
+
+data说明：unSale为未售卖，onSale为售卖中
+
+
+
+### 查询操作记录接口
+
+| 方法 | GET |
+|----|----|
 | 路径 |/aptos/kiko/v1/operation/getList/{tokenId} |
 
 响应

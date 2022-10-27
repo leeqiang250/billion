@@ -431,7 +431,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         boolean onSale = true;
         for (var market : marketList)
             //TODO:renjian 补充事件类型
-            if (market.getEvent().equals("")){
+            if (market.getEvent().equals("1")){
                 onSale = false;
                 break;
             }
