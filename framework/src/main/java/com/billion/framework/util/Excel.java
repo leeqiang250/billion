@@ -125,13 +125,6 @@ public class Excel {
     }
 
 
-    /**
-     * 判断合并了行
-     * @param sheet
-     * @param row
-     * @param column
-     * @return
-     */
     private static boolean isMergedColumn(Sheet sheet, int row ,int column) {
         int sheetMergeCount = sheet.getNumMergedRegions();
         for (int i = 0; i < sheetMergeCount; i++) {
