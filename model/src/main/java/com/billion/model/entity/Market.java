@@ -52,6 +52,12 @@ public class Market extends TransactionStatus implements IModel {
     String type;
 
     /**
+     * Event
+     */
+    @TableField("event")
+    String event;
+
+    /**
      * price
      */
     @TableField("price")
