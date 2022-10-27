@@ -11,6 +11,7 @@ import com.billion.model.dto.Context;
 import com.billion.model.dto.MarketDto;
 import com.billion.model.entity.*;
 import com.billion.model.enums.*;
+import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
@@ -182,7 +185,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftMakerEvent.getId())
                 .type(nftMakerEvent.getType())
-                .event(MarketMakerEvent.MAKER_EVENT_NAME)
+                .event(MarketMakerEvent.EVENT_NAME)
                 .maker(nftMakerEvent.getMaker())
                 .price(nftMakerEvent.getPrice())
                 .askToken(nftMakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -212,7 +215,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftTakerEvent.getId())
                 .type(nftTakerEvent.getType())
-                .event(MarketMakerEvent.TAKER_EVENT_NAME)
+                .event(MarketTakerEvent.EVENT_NAME)
                 .maker(nftTakerEvent.getMaker())
                 .price(nftTakerEvent.getPrice())
                 .askToken(nftTakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -300,8 +303,9 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     public MarketDto getMarketList(Context context, String condition, String order, String orderType, Integer pageStart, Integer pageLimt) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-//        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
-//        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+        List status = List.of(TransactionStatus.STATUS_3_SUCCESS.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+
         queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
 
         if (MarketTokenType.NFT.getType().equals(condition)) {
@@ -311,6 +315,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         }
 
         Page<Market> page = Page.of(pageStart, pageLimt);
+        page.addOrder(OrderItem.desc("version"));
         if (("asc").equals(orderType)) {
             page.addOrder(OrderItem.asc(order));
         }else {
@@ -438,8 +443,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         var marketList = this.list(queryWrapper);
         boolean onSale = true;
         for (var market : marketList)
-            //TODO:renjian 补充事件类型
-            if (market.getEvent().equals("1")){
+            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketCancelEvent.EVENT_NAME)){
                 onSale = false;
                 break;
             }
