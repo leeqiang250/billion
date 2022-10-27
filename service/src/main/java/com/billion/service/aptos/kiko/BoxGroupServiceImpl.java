@@ -1,6 +1,5 @@
 package com.billion.service.aptos.kiko;
 
-import com.aptos.request.v1.model.CoinInfo;
 import com.aptos.request.v1.model.CoinStore;
 import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.TransactionPayload;
@@ -23,7 +22,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.swing.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -316,7 +314,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
     public List<MyBoxDto> getMyboxOnSale(Context context, String account, List<BoxGroup> boxGroups) {
         var marketList = marketService.getMarketListByAccount(context, account, MarketTokenType.BOX.getType());
         if (marketList.size() == 0) {
-            return null;
+            return new ArrayList<>();
         }
         var marketMap = marketList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market) -> market, (key1, key2) -> key2));
         var boxGroupMap = boxGroups.stream().collect(Collectors.toMap(boxGroup -> boxGroup.getAskToken(), (boxGroup )-> boxGroup));
@@ -378,11 +376,10 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .build();
 
         if ("onSale".equals(saleState)) {
-            var marketList = marketService.getMarketListByOrderId(context, orderId);
-            if (marketList.size() < 1) {
+            Market market = marketService.getMarketByOrderId(context, orderId);
+            if (Objects.isNull(market)) {
                 return myBoxDto;
             }
-            Market market = marketList.get(marketList.size() - 1);
             myBoxDto.setOrderId(market.getOrderId());
             myBoxDto.setSaleType(market.getType());
             myBoxDto.setPrice(market.getPrice());

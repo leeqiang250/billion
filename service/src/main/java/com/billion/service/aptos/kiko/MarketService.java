@@ -138,7 +138,7 @@ public interface MarketService extends ICacheService<Market> {
      * @param account
      * @return
      */
-    List<Market> getMarketListByTokenId(Context context, String account);
+    Market getMarketByTokenId(Context context, String account);
 
     /**
      * getMarketListByOrderId
@@ -146,7 +146,13 @@ public interface MarketService extends ICacheService<Market> {
      * @param account
      * @return
      */
-    List<Market> getMarketListByOrderId(Context context, String account);
+    Market getMarketByOrderId(Context context, String account);
 
+    /**
+     * isOnSale
+     * @param context
+     * @param orderId
+     * @return
+     */
     boolean isOnSale(Context context, String orderId);
 }

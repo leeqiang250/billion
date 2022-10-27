@@ -326,9 +326,8 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         nftMetaDto.setAttributeValues(nftAttributeValues);
 
         //售卖数据
-        var marketList = marketService.getMarketListByTokenId(context, nftMetaDto.getTokenId());
-        if (Objects.nonNull(marketList) && marketList.size() > 0) {
-            Market market = marketList.get(marketList.size() - 1);
+        var market = marketService.getMarketByTokenId(context, nftMetaDto.getTokenId());
+        if (Objects.nonNull(market) ) {
             nftMetaDto.setOrderId(market.getOrderId());
             nftMetaDto.setSaleType(market.getType());
             nftMetaDto.setPrice(market.getPrice());
