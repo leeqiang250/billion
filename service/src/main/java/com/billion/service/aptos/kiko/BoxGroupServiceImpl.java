@@ -382,6 +382,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 return myBoxDto;
             }
             Market market = marketList.get(marketList.size() - 1);
+            myBoxDto.setOrderId(market.getOrderId());
             myBoxDto.setSaleType(market.getType());
             myBoxDto.setPrice(market.getPrice());
             myBoxDto.setBidder(market.getBidder());
