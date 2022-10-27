@@ -138,9 +138,10 @@ public class Excel {
 
 
     public static <T> boolean writeMergeColumnExcel(String path, List<T> dataList, String sheetName, String mergeColumnName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
-        if (dataList.size() < 1) {
+        if (0 == dataList.size()) {
             return true;
         }
+
         Map<String, List<T>> dataMap = new HashMap<>(dataList.size());
         Field[] fields = dataList.get(0).getClass().getDeclaredFields();
         //记录要合并的列在字段数组中的位置
