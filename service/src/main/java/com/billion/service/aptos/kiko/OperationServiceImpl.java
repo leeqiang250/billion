@@ -482,10 +482,10 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
                 nftMetaQueryWrapper.lambda().eq(NftMeta::getTokenId, operation.getTokenId());
                 nftMetaService.getOneThrowEx(nftMetaQueryWrapper);
                 NftMeta nftMeta = nftMetaService.getOneThrowEx(nftMetaQueryWrapper);
-                operationDto.setUrl(nftMeta.getUri());
+                operationDto.setUri(nftMeta.getUri());
             } else if (operation.getType().contains("Box")) {
                 BoxGroup boxGroup = boxGroupService.getByTokenId(context, operation.getTokenId());
-                operationDto.setUrl(boxGroup.getUri());
+                operationDto.setUri(boxGroup.getUri());
             }
             String bidToken = operation.getBidToken();
             if (!StringUtils.isEmpty(bidToken)) {

@@ -250,7 +250,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .rule(boxGroup.getRule())
                 .ts(boxGroup.getTs())
                 .sort(boxGroup.getSort())
-                .url(boxGroup.getUri())
+                .uri(boxGroup.getUri())
                 .build();
         return boxGroupInfo;
     }
@@ -373,7 +373,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .uri(boxGroup.getUri())
                 .creator(token.getModuleAddress())
                 .owner(account)
-                .desc(boxGroup.getDescription())
+                .description(boxGroup.getDescription())
                 .build();
 
         if ("onSale".equals(saleState)) {
@@ -456,7 +456,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                     .rule(boxGroup.getRule())
                     .ts(boxGroup.getTs())
                     .sort(boxGroup.getSort())
-                    .url(boxGroup.getUri())
+                    .uri(boxGroup.getUri())
                     .build();
             resultList.add(boxGroupInfo);
 

@@ -294,8 +294,9 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     public MarketDto getMarketList(Context context, String condition, String order, String orderType, Integer pageStart, Integer pageLimt) {
         QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Market::getChain, context.getChain());
-        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
-        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+//        List status = List.of(com.billion.model.enums.TransactionStatus.STATUS_1_READY.getCode(), com.billion.model.enums.TransactionStatus.STATUS_2_ING.getCode());
+//        queryWrapper.lambda().in(Market::getTransactionStatus, status);
+        queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
 
         if (MarketTokenType.NFT.getType().equals(condition)) {
             queryWrapper.lambda().ne(Market::getTokenId, EMPTY);
@@ -351,14 +352,14 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 marketInfoDto.setOrderType(MarketTokenType.BOX.getType());
                 marketInfoDto.setName(boxGroup.getDisplayName());
                 marketInfoDto.setContract(e.getAskToken());
-                marketInfoDto.setUrl(boxGroup.getUri());
+                marketInfoDto.setUri(boxGroup.getUri());
             } else {
                 marketInfoDto.setAskToken(nftMap.get(e.getTokenId()));
                 marketInfoDto.setOrderType(MarketTokenType.NFT.getType());
                 NftMeta nftMeta = nftMap.get(e.getTokenId());
                 marketInfoDto.setName(nftMeta.getDisplayName());
                 marketInfoDto.setContract(nftMetaService.getContract(context, nftMeta));
-                marketInfoDto.setUrl(nftMeta.getUri());
+                marketInfoDto.setUri(nftMeta.getUri());
                 marketInfoDto.setScore(nftMeta.getScore());
             }
             resultList.add(marketInfoDto);

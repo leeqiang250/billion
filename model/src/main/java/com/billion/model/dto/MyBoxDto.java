@@ -54,7 +54,7 @@ public class MyBoxDto implements Serializable {
      */
     Integer decimals;
 
-    String desc;
+    String description;
 
     /**
      * 显示精度

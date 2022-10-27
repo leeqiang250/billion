@@ -48,7 +48,7 @@ public class MarketDto implements Serializable {
 
         String contract;
 
-        String url;
+        String uri;
 
         /**
          * 订单类型

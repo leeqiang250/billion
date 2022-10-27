@@ -86,7 +86,7 @@ public class OperationDto {
      */
     String ts;
 
-    String url;
+    String uri;
 
     public static OperationDto of(Operation operation){
         OperationDto operationDto = OperationDto.builder()
