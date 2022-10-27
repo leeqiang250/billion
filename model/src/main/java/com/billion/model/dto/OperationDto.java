@@ -59,7 +59,7 @@ public class OperationDto {
     /**
      * 操作对象数量
      */
-    Long tokenAmount;
+    String tokenAmount;
 
     /**
      * 支付代币

@@ -73,7 +73,7 @@ public class Operation extends TransactionStatus implements IModel {
      * 操作对象数量
      */
     @TableField("token_amount")
-    Long tokenAmount;
+    String tokenAmount;
 
     /**
      * 支付代币
