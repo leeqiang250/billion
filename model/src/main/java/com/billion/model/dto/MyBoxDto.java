@@ -86,4 +86,6 @@ public class MyBoxDto implements Serializable {
 
     String ts;
 
+    String deadTs;
+
 }

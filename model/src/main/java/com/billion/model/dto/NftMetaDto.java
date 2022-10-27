@@ -83,4 +83,6 @@ public class NftMetaDto {
     String bidPrice;
 
     String ts;
+
+    String deadTs;
 }
