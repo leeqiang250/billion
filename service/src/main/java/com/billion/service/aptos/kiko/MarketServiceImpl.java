@@ -353,6 +353,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 marketInfoDto.setName(boxGroup.getDisplayName());
                 marketInfoDto.setContract(e.getAskToken());
                 marketInfoDto.setUri(boxGroup.getUri());
+                marketInfoDto.setBoxGroupId(boxGroup.getId().toString());
             } else {
                 marketInfoDto.setAskToken(nftMap.get(e.getTokenId()));
                 marketInfoDto.setOrderType(MarketTokenType.NFT.getType());
@@ -361,6 +362,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 marketInfoDto.setContract(nftMetaService.getContract(context, nftMeta));
                 marketInfoDto.setUri(nftMeta.getUri());
                 marketInfoDto.setScore(nftMeta.getScore());
+                marketInfoDto.setNftMetaId(nftMeta.getId().toString());
             }
             resultList.add(marketInfoDto);
         });

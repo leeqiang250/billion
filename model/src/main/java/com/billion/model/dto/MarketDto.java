@@ -44,6 +44,10 @@ public class MarketDto implements Serializable {
 
         String name;
 
+        String boxGroupId;
+
+        String nftMetaId;
+
         String score;
 
         String contract;
