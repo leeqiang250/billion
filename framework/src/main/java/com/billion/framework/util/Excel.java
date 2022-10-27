@@ -145,7 +145,7 @@ public class Excel {
         }
         Map<String, List<T>> dataMap = new HashMap<>(dataList.size());
         Field[] fields = dataList.get(0).getClass().getDeclaredFields();
-        //记录要合并列在字段数组中的位置
+        //记录要合并的列在字段数组中的位置
         Integer mergeFieldSite = 0;
         //根据合并字段组装数据
         for (int i = 0; i < dataList.size(); i++) {
@@ -167,14 +167,12 @@ public class Excel {
             }
         }
 
-
         if (mergeFieldSite != 0) {
             //如果要合并的字段不是在第一个，则将其移动到第一个
             Field sitField = fields[mergeFieldSite];
             fields[mergeFieldSite] = fields[0];
             fields[0] = sitField;
         }
-
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
@@ -192,10 +190,11 @@ public class Excel {
 
         }
 
+        //构建表格数据
         Integer rowNum = 1;
         List<List<Integer>> mergeParams = new ArrayList<>();
         for (List<T> itemList : dataMap.values()) {
-
+            //构建要合并的单元格信息
             List<Integer> mergeParam = new ArrayList<>(4);
             mergeParam.add(rowNum);
             mergeParam.add(rowNum + itemList.size() -1);
