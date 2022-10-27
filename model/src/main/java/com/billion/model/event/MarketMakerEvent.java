@@ -19,6 +19,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class MarketMakerEvent implements Serializable {
 
+    public static String MAKER_EVENT_NAME = "::secondary_market::NftMakerEvent<";
+    public static String TAKER_EVENT_NAME = "::secondary_market::NftTakerEvent<";
+
     String id;
 
     String type;

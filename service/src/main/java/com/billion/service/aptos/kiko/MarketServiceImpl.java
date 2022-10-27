@@ -11,7 +11,6 @@ import com.billion.model.dto.Context;
 import com.billion.model.dto.MarketDto;
 import com.billion.model.entity.*;
 import com.billion.model.enums.*;
-import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
@@ -65,6 +63,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxMakerEvent.getId())
                 .type(boxMakerEvent.getType())
+                .event(BoxMakerEvent.EVENT_NAME)
                 .maker(boxMakerEvent.getMaker())
                 .price(boxMakerEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -94,6 +93,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxTakerEvent.getId())
                 .type(boxTakerEvent.getType())
+                .event(BoxTakerEvent.EVENT_NAME)
                 .maker(boxTakerEvent.getMaker())
                 .price(boxTakerEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -123,6 +123,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxBidEvent.getId())
                 .type(boxBidEvent.getType())
+                .event(BoxBidEvent.EVENT_NAME)
                 .maker(boxBidEvent.getMaker())
                 .price(boxBidEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -152,6 +153,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxCancelEvent.getId())
                 .type(boxCancelEvent.getType())
+                .event(BoxCancelEvent.EVENT_NAME)
                 .maker(boxCancelEvent.getMaker())
                 .price(boxCancelEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -180,6 +182,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftMakerEvent.getId())
                 .type(nftMakerEvent.getType())
+                .event(MarketMakerEvent.MAKER_EVENT_NAME)
                 .maker(nftMakerEvent.getMaker())
                 .price(nftMakerEvent.getPrice())
                 .askToken(nftMakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -209,6 +212,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftTakerEvent.getId())
                 .type(nftTakerEvent.getType())
+                .event(MarketMakerEvent.TAKER_EVENT_NAME)
                 .maker(nftTakerEvent.getMaker())
                 .price(nftTakerEvent.getPrice())
                 .askToken(nftTakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -238,6 +242,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftBidEvent.getId())
                 .type(nftBidEvent.getType())
+                .event(MarketBidEvent.EVENT_NAME)
                 .maker(nftBidEvent.getMaker())
                 .price(nftBidEvent.getPrice())
                 .askToken(nftBidEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -268,6 +273,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftCancelEvent.getId())
                 .type(nftCancelEvent.getType())
+                .event(MarketBidEvent.EVENT_NAME)
                 .maker(nftCancelEvent.getMaker())
                 .price(nftCancelEvent.getPrice())
                 .askToken(nftCancelEvent.getTokenId().getTokenDataId().getNftGroupKey())
