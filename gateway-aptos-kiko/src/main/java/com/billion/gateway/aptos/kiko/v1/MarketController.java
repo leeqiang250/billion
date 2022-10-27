@@ -29,4 +29,9 @@ public class MarketController  implements IController<Market> {
         return Response.success(marketService.getMarketList(context, condition, order, orderType, pageStart, pageLimit));
     }
 
+    @GetMapping("/isOnSale/{orderId}")
+    public Response getIsOnSale(@RequestHeader Context context, @PathVariable String orderId) {
+        return Response.success(marketService.isOnSale(context, orderId) ? "onSale" : "unSale");
+    }
+
 }

@@ -420,4 +420,23 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         return this.list(queryWrapper);
     }
 
+    @Override
+    public boolean isOnSale(Context context, String orderId) {
+        QueryWrapper<Market> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Market::getChain, context.getChain());
+        queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
+        queryWrapper.lambda().eq(Market::getOrderId, orderId);
+
+        var marketList = this.list(queryWrapper);
+        boolean onSale = true;
+        for (var market : marketList)
+            //TODO:renjian 补充事件类型
+            if (market.getEvent().equals("")){
+                onSale = false;
+                break;
+            }
+
+        return onSale;
+    }
+
 }

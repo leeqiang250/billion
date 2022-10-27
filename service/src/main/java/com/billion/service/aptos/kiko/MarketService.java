@@ -147,4 +147,6 @@ public interface MarketService extends ICacheService<Market> {
      * @return
      */
     List<Market> getMarketListByOrderId(Context context, String account);
+
+    boolean isOnSale(Context context, String orderId);
 }
