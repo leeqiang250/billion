@@ -45,6 +45,12 @@
             <version>3.8</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${com.alibaba.fastjson2.fastjson2.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
