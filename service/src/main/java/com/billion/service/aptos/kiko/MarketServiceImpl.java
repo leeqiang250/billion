@@ -44,6 +44,9 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
     @Resource
     OperationService operationService;
 
+    @Resource
+    BoxGroupService boxGroupService;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -326,28 +329,39 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         List<MarketDto.MarketInfo> resultList = new ArrayList<>();
         distinctMarkets.forEach(e -> {
-            MarketDto.MarketInfo marketDto = MarketDto.MarketInfo.builder()
+            MarketDto.MarketInfo marketInfoDto = MarketDto.MarketInfo.builder()
                     .id(e.getId())
                     .chain(e.getChain())
                     .orderId(e.getOrderId())
-                    .type(e.getType())
+                    .saleType(e.getType())
                     .price(e.getPrice())
-                    .maker(e.getMaker())
+                    .owner(e.getMaker())
                     .askAmount(e.getAskAmount())
                     .bidder(e.getBidder())
-                    .bidToken(e.getBidToken())
                     .bidAmount(e.getBidAmount())
                     .ts(e.getTs())
                     .deadTs(e.getDeadTs()).build();
-
-            if (StringUtils.isEmpty(e.getTokenId())) {
-                marketDto.setAskToken(coinMap.get(e.getAskToken()));
-                marketDto.setOrderType(0);
-            } else {
-                marketDto.setAskToken(nftMap.get(e.getTokenId()));
-                marketDto.setOrderType(1);
+            if (StringUtils.isNotEmpty(e.getBidToken())) {
+                String[] tokenInfo = e.getBidToken().split("::");
+                marketInfoDto.setBidToken(tokenService.getByTokenInfo(context, tokenInfo[0], tokenInfo[1], tokenInfo[2]));
             }
-            resultList.add(marketDto);
+            if (StringUtils.isEmpty(e.getTokenId())) {
+                marketInfoDto.setAskToken(coinMap.get(e.getAskToken()));
+                BoxGroup boxGroup = boxGroupService.getByTokenId(context, e.getAskToken());
+                marketInfoDto.setOrderType(MarketTokenType.BOX.getType());
+                marketInfoDto.setName(boxGroup.getDisplayName());
+                marketInfoDto.setContract(e.getAskToken());
+                marketInfoDto.setUrl(boxGroup.getUri());
+            } else {
+                marketInfoDto.setAskToken(nftMap.get(e.getTokenId()));
+                marketInfoDto.setOrderType(MarketTokenType.NFT.getType());
+                NftMeta nftMeta = nftMap.get(e.getTokenId());
+                marketInfoDto.setName(nftMeta.getDisplayName());
+                marketInfoDto.setContract(nftMetaService.getContract(context, nftMeta));
+                marketInfoDto.setUrl(nftMeta.getUri());
+                marketInfoDto.setScore(nftMeta.getScore());
+            }
+            resultList.add(marketInfoDto);
         });
         MarketDto marketDto = MarketDto.builder()
                 .pages(pageResult.getPages())

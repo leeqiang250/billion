@@ -414,7 +414,10 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
         Token token = tokenService.getByTokenInfo(context, tokenId.split("::")[0], tokenId.split("::")[1], tokenId.split("::")[2]);
         QueryWrapper<BoxGroup> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(BoxGroup::getAskToken, token.getId());
-        return this.getOne(queryWrapper);
+        BoxGroup boxGroup = this.getOne(queryWrapper);
+
+        changeLanguage(context, boxGroup);
+        return boxGroup;
     }
 
     @Override

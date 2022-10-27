@@ -272,9 +272,9 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
         var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
         changeLanguage(context, nftMeta);
 
-        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
+//        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
 
-        return this.getNftMetaDto(context, nftMeta, nftGroup);
+        return this.getNftMetaDto(context, nftMeta);
     }
 
     @Override
@@ -284,17 +284,26 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
 
         var nftMeta = this.getOneThrowEx(nftMetaQueryWrapper);
         changeLanguage(context, nftMeta);
-        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
 
-        return this.getNftMetaDto(context, nftMeta, nftGroup);
+        return this.getNftMetaDto(context, nftMeta);
+    }
+
+    @Override
+    public String getContract(Context context, NftMeta nftMeta) {
+        var nftGroup = nftGroupService.getById(nftMeta.getNftGroupId());
+        //合约数据
+        String contract = nftGroup.getNftContract();
+        String[] contractInfos = contract.split("::");
+        contract = contractInfos[0] + "::" + changeLanguageContract(context, contractInfos[1]);
+        return contract;
     }
 
 
-    public NftMetaDto getNftMetaDto(Context context, NftMeta nftMeta, NftGroup nftGroup) {
+    public NftMetaDto getNftMetaDto(Context context, NftMeta nftMeta) {
         NftMetaDto nftMetaDto = NftMetaDto.builder()
                 .id(nftMeta.getId())
                 .nftGroupId(nftMeta.getNftGroupId())
-                .creator(nftGroup.getOwner())
+                .creator(nftMeta.getTokenId().split("@")[0])
                 .displayName(nftMeta.getDisplayName())
                 .description(nftMeta.getDescription())
                 .uri(nftMeta.getUri())
@@ -304,15 +313,10 @@ public class NftMetaServiceImpl extends AbstractCacheService<NftMetaMapper, NftM
                 .score(nftMeta.getScore())
                 .attributeType(nftMeta.getAttributeType())
                 .owner(nftService.getOwnerByTokenId(context, nftMeta.getTokenId()))
-                .contract(nftGroup.getNftContract())
                 .build();
 
         //合约数据
-        String contract = nftGroup.getNftContract();
-        String[] contractInfos = contract.split("::");
-        contract = contractInfos[0] + "::" + changeLanguageContract(context, contractInfos[1]);
-
-        nftMetaDto.setContract(contract);
+        nftMetaDto.setContract(this.getContract(context, nftMeta));
 
         //属性数据
         var nftAttributeValues = nftAttributeValueService.getNftAttributeValueByMetaId(context, String.valueOf(nftMeta.getId()));

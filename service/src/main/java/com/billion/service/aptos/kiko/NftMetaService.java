@@ -37,6 +37,7 @@ public interface NftMetaService extends ICacheService<NftMeta> {
 
     NftMetaDto getNftMetaInfoByToken(Context context, String nftTokenId);
 
+    String getContract(Context context, NftMeta nftMeta);
     /**
      * getListByGroup
      *
@@ -63,5 +64,5 @@ public interface NftMetaService extends ICacheService<NftMeta> {
      */
     List<NftMeta> getListByTokenIds(List<String> tokenIds);
 
-    public void rank(Serializable nftGroupId);
+    void rank(Serializable nftGroupId);
 }

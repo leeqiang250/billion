@@ -1,5 +1,6 @@
 package com.billion.model.dto;
 
+import com.billion.model.entity.Token;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,10 +42,18 @@ public class MarketDto implements Serializable {
          */
         String orderId;
 
+        String name;
+
+        String score;
+
+        String contract;
+
+        String url;
+
         /**
          * 订单类型
          */
-        String type;
+        String saleType;
 
         /**
          * price
@@ -52,9 +61,9 @@ public class MarketDto implements Serializable {
         String price;
 
         /**
-         * maker
+         * owner
          */
-        String maker;
+        String owner;
 
         /**
          * 询价币种
@@ -73,7 +82,7 @@ public class MarketDto implements Serializable {
         /**
          * 报价币种
          */
-        String bidToken;
+        Token bidToken;
 
         /**
          * 报价币种数量
@@ -92,9 +101,9 @@ public class MarketDto implements Serializable {
         String deadTs;
 
         /**
-         * 订单类型:0:box;1:nft
+         * 订单类型:box或nft
          */
-        Integer orderType;
+        String orderType;
     }
 
 
