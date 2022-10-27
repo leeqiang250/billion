@@ -250,6 +250,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
                 .rule(boxGroup.getRule())
                 .ts(boxGroup.getTs())
                 .sort(boxGroup.getSort())
+                .url(boxGroup.getUri())
                 .build();
         return boxGroupInfo;
     }
