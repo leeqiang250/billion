@@ -54,8 +54,4 @@ public class UploadImage {
         }
     }
 
-    public static void main(String[] args) {
-        String path = "/Users/renjian/Desktop/public.png";
-        System.out.printf(upload(path));
-    }
 }
