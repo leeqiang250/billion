@@ -74,6 +74,8 @@ public class MyBoxDto implements Serializable {
 
     String saleType;
 
+    String orderType;
+
     String price;
 
     String bidder;

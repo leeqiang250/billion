@@ -72,6 +72,8 @@ public class NftMetaDto {
 
     String saleType;
 
+    String orderType;
+
     String price;
 
     String bidder;
