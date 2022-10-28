@@ -387,6 +387,7 @@ public class BoxGroupServiceImpl extends AbstractCacheService<BoxGroupMapper, Bo
             myBoxDto.setBidPrice(market.getBidAmount());
             myBoxDto.setTs(market.getTs());
             myBoxDto.setOwner(market.getMaker());
+            myBoxDto.setDeadTs(market.getDeadTs());
             myBoxDto.setAuctionPrice(market.getBidAmount());
             if (StringUtils.isNotEmpty(market.getBidToken())) {
                 String[] tokenInfo = market.getBidToken().split("::");
