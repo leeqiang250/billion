@@ -39,20 +39,30 @@ public interface OperationService extends IService<Operation> {
     Operation addNftBidOpt(Transaction transaction, Event event, MarketBidEvent nftBidEvent);
 
     Operation addNftCancelOpt(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent);
-    /**
-     * addOpenBoxOpt
-     * @param openBoxEvent
-     * @param transaction
-     */
-    public void addOpenBoxOpt(OpenBoxEvent openBoxEvent, Transaction transaction);
+    
+    void addOpenBoxOpt(OpenBoxEvent openBoxEvent, Transaction transaction);
+
     /**
      * getListById
      * @param context
      * @param tokenId
      * @return
      */
-    public List<OperationDto> getListById(Context context, String tokenId);
+    List<OperationDto> getListById(Context context, String tokenId);
 
-    public List<OperationDto> getSaleRecord(Context context, String account);
-    public List<OperationDto> getBuyRecord(Context context, String account);
+    /**
+     * getSaleRecord
+     * @param context
+     * @param account
+     * @return
+     */
+    List<OperationDto> getSaleRecord(Context context, String account);
+
+    /**
+     * getBuyRecord
+     * @param context
+     * @param account
+     * @return
+     */
+    List<OperationDto> getBuyRecord(Context context, String account);
 }
