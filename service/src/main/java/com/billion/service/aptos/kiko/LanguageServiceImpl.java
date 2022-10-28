@@ -1,5 +1,6 @@
 package com.billion.service.aptos.kiko;
 
+import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.LanguageMapper;
 import com.billion.model.dto.Context;
@@ -9,6 +10,7 @@ import com.billion.model.enums.CacheTsType;
 import com.billion.service.aptos.AbstractCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,4 +89,31 @@ public class LanguageServiceImpl extends AbstractCacheService<LanguageMapper, La
         wrapper.lambda().eq(Language::getKey, key);
         return super.getOne(wrapper, false);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Language updateByLanguageKey(com.billion.model.enums.Language language, String key, String value) {
+        if (StringUtils.isEmpty(value)) {
+            value = DEFAULT_TEXT;
+        }
+
+        var wrapper = new QueryWrapper<Language>();
+        wrapper.lambda().eq(Language::getLanguage, language.getCode());
+        wrapper.lambda().eq(Language::getKey, key);
+        var language_ = super.getOne(wrapper, false);
+        if (Objects.isNull(language_)) {
+            language_ = Language.builder()
+                    .language(language.getCode())
+                    .key(key)
+                    .value(value)
+                    .build();
+            super.save(language_);
+        } else {
+            language_.setValue(value);
+            super.updateById(language_);
+        }
+
+        return language_;
+    }
+
 }

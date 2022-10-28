@@ -7,19 +7,27 @@ import com.billion.model.dto.NftAttribute;
 import com.billion.model.dto.NftAttributeTypeMeta;
 import com.billion.model.entity.NftAttributeMeta;
 import com.billion.model.entity.NftAttributeType;
+import com.billion.model.enums.Language;
 import com.billion.service.aptos.AbstractCacheService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author jason
  */
 @Service
 public class NftAttributeTypeServiceImpl extends AbstractCacheService<NftAttributeTypeMapper, NftAttributeType> implements NftAttributeTypeService {
+
+    @Resource
+    LanguageService languageService;
 
     @Resource
     NftAttributeMetaService nftAttributeMetaService;
@@ -59,11 +67,50 @@ public class NftAttributeTypeServiceImpl extends AbstractCacheService<NftAttribu
             nftAttributeMetas.forEach(nftAttributeMeta -> {
                 var nftAttributeMetaMap = JSONObject.parseObject(JSONObject.toJSONString(nftAttributeMeta), Map.class);
                 nftAttributeTypeMap.putAll(nftAttributeMetaMap);
-                result.add(JSONObject.parseObject(JSONObject.toJSONString(nftAttributeTypeMap), NftAttributeTypeMeta.class));
+
+                var nftAttributeTypeMeta = JSONObject.parseObject(JSONObject.toJSONString(nftAttributeTypeMap), NftAttributeTypeMeta.class);
+
+                var languageEn = this.languageService.getByLanguageKey(Language.EN, nftAttributeTypeMeta.getClassName());
+                nftAttributeTypeMeta.setClassNameEn(Objects.isNull(languageEn) ? EMPTY : languageEn.getValue());
+                var languageZhTC = this.languageService.getByLanguageKey(Language.ZH_TC, nftAttributeTypeMeta.getClassName());
+                nftAttributeTypeMeta.setClassNameZhTC(Objects.isNull(languageZhTC) ? EMPTY : languageZhTC.getValue());
+
+                languageEn = this.languageService.getByLanguageKey(Language.EN, nftAttributeTypeMeta.getAttribute());
+                nftAttributeTypeMeta.setAttributeEn(Objects.isNull(languageEn) ? EMPTY : languageEn.getValue());
+                languageZhTC = this.languageService.getByLanguageKey(Language.ZH_TC, nftAttributeTypeMeta.getAttribute());
+                nftAttributeTypeMeta.setAttributeZhTC(Objects.isNull(languageZhTC) ? EMPTY : languageZhTC.getValue());
+
+                result.add(nftAttributeTypeMeta);
             });
         });
 
         return result;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateNftAttributeTypeMeta(List<NftAttributeTypeMeta> nftAttributeTypeMetas) {
+        nftAttributeTypeMetas.forEach(nftAttributeTypeMeta -> {
+            this.updateById(NftAttributeType.builder()
+                    .id(Long.parseLong(nftAttributeTypeMeta.getNftAttributeTypeId()))
+                    .nftGroupId(Long.parseLong(nftAttributeTypeMeta.getNftGroupId()))
+                    .className(nftAttributeTypeMeta.getClassName())
+                    .sort(Integer.parseInt(nftAttributeTypeMeta.getSort()))
+                    .build());
+
+            this.languageService.updateByLanguageKey(Language.EN, nftAttributeTypeMeta.getClassName(), nftAttributeTypeMeta.getClassNameEn());
+            this.languageService.updateByLanguageKey(Language.ZH_TC, nftAttributeTypeMeta.getClassName(), nftAttributeTypeMeta.getAttributeZhTC());
+
+            this.nftAttributeMetaService.updateById(NftAttributeMeta.builder()
+                    .id(Long.parseLong(nftAttributeTypeMeta.getId()))
+                    .nftAttributeTypeId(Long.parseLong(nftAttributeTypeMeta.getNftAttributeTypeId()))
+                    .attribute(nftAttributeTypeMeta.getAttribute())
+                    .value(nftAttributeTypeMeta.getValue())
+                    .uri(nftAttributeTypeMeta.getUri())
+                    .build());
+
+            this.languageService.updateByLanguageKey(Language.EN, nftAttributeTypeMeta.getAttribute(), nftAttributeTypeMeta.getAttributeEn());
+            this.languageService.updateByLanguageKey(Language.ZH_TC, nftAttributeTypeMeta.getAttribute(), nftAttributeTypeMeta.getAttributeZhTC());
+        });
     }
 
 }

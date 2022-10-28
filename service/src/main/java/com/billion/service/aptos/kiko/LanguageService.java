@@ -3,6 +3,7 @@ package com.billion.service.aptos.kiko;
 import com.billion.model.service.ICacheService;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Language;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,5 +39,16 @@ public interface LanguageService extends ICacheService<Language> {
      * @return Language
      */
     Language getByLanguageKey(com.billion.model.enums.Language language, String key);
+
+    /**
+     * updateByLanguageKey
+     *
+     * @param language language
+     * @param key      key
+     * @param value    value
+     * @return Language
+     */
+    @Transactional(rollbackFor = Exception.class)
+    Language updateByLanguageKey(com.billion.model.enums.Language language, String key, String value);
 
 }

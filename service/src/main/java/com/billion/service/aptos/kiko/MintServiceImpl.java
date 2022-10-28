@@ -4,13 +4,16 @@ import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.framework.util.Excel;
 import com.billion.framework.util.Image;
+import com.billion.model.dto.NftAttributeTypeMeta;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.service.aptos.ContextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.Serializable;
@@ -158,6 +161,12 @@ public class MintServiceImpl implements MintService {
         return true;
     }
 
+    @PostConstruct
+    public void d() {
+//        this.exportNftAttributeTypeMeta(100111266L);
+//        this.importNftAttributeTypeMeta(100111266L);
+    }
+
     public boolean exportNftAttributeTypeMeta(long nftGroupId) {
         var list = this.nftAttributeTypeService.getNftAttributeTypeMetaByNftGroupId(nftGroupId);
         var path = ContextService.getKikoPath() + "NftAttributeTypeMeta-NftGroupId-" + nftGroupId + ".xlsx";
@@ -169,6 +178,20 @@ public class MintServiceImpl implements MintService {
             log.error("{}", e);
             return false;
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean importNftAttributeTypeMeta(long nftGroupId) {
+        var path = ContextService.getKikoPath() + "NftAttributeTypeMeta-NftGroupId-" + nftGroupId + ".xlsx";
+        try {
+            var nftAttributeTypeMetas = Excel.readMergeColumnExcel(path, NftAttributeTypeMeta.class, "NftAttributeTypeMeta");
+            this.nftAttributeTypeService.updateNftAttributeTypeMeta(nftAttributeTypeMetas);
+            log.info("{}", nftAttributeTypeMetas);
+        } catch (Exception e) {
+            log.error("{}", e);
+            return false;
+        }
+        return true;
     }
 
     public boolean generateNftMetaFile(long nftMetaId) {

@@ -18,24 +18,36 @@ import java.io.Serializable;
 public class NftAttributeTypeMeta implements Serializable {
 
     @JSONField(name = "nft_group_id")
-    Long nftGroupId;
+    String nftGroupId;
 
     @JSONField(name = "class_name")
     String className;
 
+    @JSONField(name = "class_name_zh-TC")
+    String classNameZhTC;
+
+    @JSONField(name = "class_name_en")
+    String classNameEn;
+
     @JSONField(name = "sort")
-    Integer sort;
+    String sort;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @JSONField(name = "id")
-    Long id;
+    String id;
 
     @JSONField(name = "nft_attribute_type_id")
-    Long nftAttributeTypeId;
+    String nftAttributeTypeId;
 
     @JSONField(name = "attribute")
     String attribute;
+
+    @JSONField(name = "attribute_zh-TC")
+    String attributeZhTC;
+
+    @JSONField(name = "attribute_en")
+    String attributeEn;
 
     @JSONField(name = "value")
     String value;

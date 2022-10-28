@@ -58,7 +58,7 @@ public class Excel {
 
 
     public static <T> List<T> readMergeColumnExcel(String path, Class<T> clazz, String sheetName) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        FileInputStream inputStream = new FileInputStream(new File(path));
+        FileInputStream inputStream = new FileInputStream(path);
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheet(sheetName);
         Map<String, Integer> results = new HashMap<>();

@@ -4,6 +4,7 @@ import com.billion.model.dto.NftAttribute;
 import com.billion.model.dto.NftAttributeTypeMeta;
 import com.billion.model.entity.NftAttributeType;
 import com.billion.model.service.ICacheService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,5 +28,14 @@ public interface NftAttributeTypeService extends ICacheService<NftAttributeType>
      * @return List<NftAttributeTypeMeta>
      */
     List<NftAttributeTypeMeta> getNftAttributeTypeMetaByNftGroupId(Long nftGroupId);
+
+
+    /**
+     * updateNftAttributeTypeMeta
+     *
+     * @param nftAttributeTypeMetas nftAttributeTypeMetas
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void updateNftAttributeTypeMeta(List<NftAttributeTypeMeta> nftAttributeTypeMetas);
 
 }
