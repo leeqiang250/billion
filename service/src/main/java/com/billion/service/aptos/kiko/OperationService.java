@@ -1,7 +1,6 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
-import com.aptos.request.v1.model.Response;
 import com.aptos.request.v1.model.Transaction;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.billion.model.dto.Context;
@@ -39,7 +38,7 @@ public interface OperationService extends IService<Operation> {
     Operation addNftBidOpt(Transaction transaction, Event event, MarketBidEvent nftBidEvent);
 
     Operation addNftCancelOpt(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent);
-    
+
     void addOpenBoxOpt(OpenBoxEvent openBoxEvent, Transaction transaction);
 
     /**

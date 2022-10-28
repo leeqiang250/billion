@@ -57,7 +57,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
                 .tokenId(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
                 .tokenAmount(boxMakerEvent.getAmount())
                 .price(boxMakerEvent.getPrice())
-                .bidToken(EMPTY)
+                .bidToken(event.getType().split("<")[1].split(">")[0].split(",")[1].trim())
                 .bidTokenAmount(EMPTY)
                 .state(OperationTraStateType.SELL.getType())
                 .ts(boxMakerEvent.getTs())
@@ -412,34 +412,46 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
         QueryWrapper<Operation> operationQueryWrapper = new QueryWrapper<>();
         operationQueryWrapper.lambda().eq(Operation::getChain, context.getChain());
         operationQueryWrapper.lambda().eq(Operation::getMaker, account);
+        operationQueryWrapper.lambda().ne(Operation::getState, OperationTraStateType.SELL_CANCEL.getType());
         operationQueryWrapper.lambda().and(wrapper -> {
             wrapper.and(w1 -> {
                 w1.or(w2 -> {
-                            w2.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType())
-                                    .and(w3 -> {
-                                        w3.eq(Operation::getState, OperationTraStateType.SELL.getType());
-                                    });
-                        });
+                    w2.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType());
+                });
                 w1.or(w4 -> {
-                    w4.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType())
-                            .and(w5 -> {
-                                w5.eq(Operation::getState, OperationTraStateType.DONE.getType());
-                            });
-                });
-                w1.or(w6 -> {
-                    w6.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType())
-                            .and(w7 -> {
-                                w7.eq(Operation::getState, OperationTraStateType.SELL.getType());
-                            });
-                });
-                w1.or(w8 -> {
-                    w8.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType())
-                            .and(w9 -> {
-                                w9.eq(Operation::getState, OperationTraStateType.DONE.getType());
-                            });
+                    w4.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType());
                 });
             });
         });
+
+//        operationQueryWrapper.lambda().and(wrapper -> {
+//            wrapper.and(w1 -> {
+//                w1.or(w2 -> {
+//                            w2.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType())
+//                                    .and(w3 -> {
+//                                        w3.eq(Operation::getState, OperationTraStateType.SELL.getType());
+//                                    });
+//                        });
+//                w1.or(w4 -> {
+//                    w4.eq(Operation::getType, OperationType.BOX_MAKER_EVENT.getType())
+//                            .and(w5 -> {
+//                                w5.eq(Operation::getState, OperationTraStateType.DONE.getType());
+//                            });
+//                });
+//                w1.or(w6 -> {
+//                    w6.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType())
+//                            .and(w7 -> {
+//                                w7.eq(Operation::getState, OperationTraStateType.SELL.getType());
+//                            });
+//                });
+//                w1.or(w8 -> {
+//                    w8.eq(Operation::getType, OperationType.NFT_MAKER_EVENT.getType())
+//                            .and(w9 -> {
+//                                w9.eq(Operation::getState, OperationTraStateType.DONE.getType());
+//                            });
+//                });
+//            });
+//        });
 
         operationQueryWrapper.lambda().orderByDesc(Operation::getId);
         var operationList = this.list(operationQueryWrapper);
