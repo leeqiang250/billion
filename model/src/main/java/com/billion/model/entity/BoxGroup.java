@@ -97,7 +97,7 @@ public class BoxGroup extends TransactionStatus implements IModel {
      * 排序
      */
     @TableField("sort")
-    Integer sort;
+    Long sort;
 
     /**
      * 是否激活(0:不可用,1:可用)

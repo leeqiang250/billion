@@ -49,12 +49,14 @@ public class NftGroup extends TransactionStatus implements IModel {
      */
     @TableField("meta")
     String metaQiyong;
+    //TODO delete ?
 
     /**
      * body
      */
     @TableField("body")
     String bodyQiyong;
+    //TODO delete ?
 
     /**
      * 系列名称

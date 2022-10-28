@@ -142,7 +142,7 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/87b47f3a-c033-47ea-0096-40a4ea1fab00/public")
                     .ts(String.valueOf(System.currentTimeMillis()))
-                    .sort(0)
+                    .sort(0L)
                     .isEnabled(Boolean.TRUE)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
@@ -175,7 +175,7 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/87b47f3a-c033-47ea-0096-40a4ea1fab00/public")
                     .ts(String.valueOf(System.currentTimeMillis()))
-                    .sort(0)
+                    .sort(0L)
                     .isEnabled(Boolean.TRUE)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
@@ -208,7 +208,7 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/87b47f3a-c033-47ea-0096-40a4ea1fab00/public")
                     .ts(String.valueOf(System.currentTimeMillis()))
-                    .sort(0)
+                    .sort(0L)
                     .isEnabled(Boolean.TRUE)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
@@ -241,7 +241,7 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/87b47f3a-c033-47ea-0096-40a4ea1fab00/public")
                     .ts(String.valueOf(System.currentTimeMillis()))
-                    .sort(0)
+                    .sort(0L)
                     .isEnabled(Boolean.TRUE)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
@@ -274,7 +274,7 @@ public class InitServiceImpl implements InitService {
                     .rule(EMPTY)
                     .uri("https://imagedelivery.net/3mRLd_IbBrrQFSP57PNsVw/87b47f3a-c033-47ea-0096-40a4ea1fab00/public")
                     .ts(String.valueOf(System.currentTimeMillis()))
-                    .sort(0)
+                    .sort(0L)
                     .isEnabled(Boolean.TRUE)
                     .build();
             boxGroup.setTransactionStatus_(com.billion.model.enums.TransactionStatus.STATUS_1_READY);
