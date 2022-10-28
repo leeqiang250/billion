@@ -38,4 +38,12 @@ public interface NftAttributeTypeService extends ICacheService<NftAttributeType>
     @Transactional(rollbackFor = Exception.class)
     void updateNftAttributeTypeMeta(List<NftAttributeTypeMeta> nftAttributeTypeMetas);
 
+    /**
+     * getNftAttributeTypeByNftGroupId
+     *
+     * @param nftGroupId nftGroupId
+     * @return List<NftAttributeType>
+     */
+    List<NftAttributeType> getNftAttributeTypeByNftGroupId(Long nftGroupId);
+
 }

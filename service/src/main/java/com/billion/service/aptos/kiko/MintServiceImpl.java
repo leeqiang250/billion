@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static com.billion.model.constant.RequestPath.EMPTY;
@@ -163,6 +164,12 @@ public class MintServiceImpl implements MintService {
 
     @PostConstruct
     public void d() {
+//        this.fsdfsdfds(100111266L, 222);
+//        this.fsdfsdfds(100111266L, 222);
+//        this.fsdfsdfds(100111266L, 222);
+//        this.fsdfsdfds(100111266L, 222);
+//        this.fsdfsdfds(100111266L, 222);
+//        this.fsdfsdfds(100111266L, 222);
 //        this.exportNftAttributeTypeMeta(100111266L);
 //        this.importNftAttributeTypeMeta(100111266L);
     }
@@ -191,6 +198,101 @@ public class MintServiceImpl implements MintService {
             log.error("{}", e);
             return false;
         }
+        return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean fsdfsdfds(long nftGroupId, long total) {
+        var nftMetaQueryWrapper = new QueryWrapper<NftMeta>();
+        nftMetaQueryWrapper.lambda().eq(NftMeta::getNftGroupId, nftGroupId);
+        if (this.nftMetaService.count(nftMetaQueryWrapper) >= total) {
+            return true;
+        }
+
+        var nftGroup = this.nftGroupService.getById(nftGroupId);
+
+        var languageQueryWrapper = new QueryWrapper<Language>();
+        languageQueryWrapper.lambda().eq(Language::getKey, nftGroup.getDisplayName());
+        languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+        var languageNftGroup = languageService.getOneThrowEx(languageQueryWrapper);
+
+        var nftAttributeTypes = this.nftAttributeTypeService.getNftAttributeTypeByNftGroupId(nftGroupId);
+        var nftAttributeMetas = this.nftAttributeMetaService.getNftAttributeMetaByNftGroupId(nftAttributeTypes.stream().map(e -> e.getId()).collect(Collectors.toSet()));
+        var nftAttributeMetaMap = nftAttributeMetas.stream().collect(Collectors.groupingBy(NftAttributeMeta::getNftAttributeTypeId));
+
+        AtomicLong score = new AtomicLong(0L);
+
+        var nftAttributeValues = new ArrayList<NftAttributeValue>(nftAttributeTypes.size());
+        nftAttributeTypes.forEach(nftAttributeType -> {
+            var nftAttributeMetas_ = nftAttributeMetaMap.get(nftAttributeType.getId());
+            if (Objects.isNull(nftAttributeMetas_) || nftAttributeMetas_.isEmpty()) {
+                return;
+            }
+
+            var nftAttributeMeta = nftAttributeMetas_.get(Math.abs(UUID.randomUUID().hashCode()) % nftAttributeMetas_.size());
+            if (!Objects.isNull(nftAttributeMeta.getValue()) && StringUtils.isNotEmpty(nftAttributeMeta.getValue())) {
+                var dd = Long.parseLong(nftAttributeMeta.getValue());
+                score.addAndGet(dd);
+            }
+            nftAttributeValues.add(NftAttributeValue.builder()
+                    .nftAttributeMetaId(nftAttributeMeta.getId())
+                    .build());
+        });
+
+        nftMetaQueryWrapper = new QueryWrapper<NftMeta>();
+        nftMetaQueryWrapper.lambda().eq(NftMeta::getNftGroupId, nftGroupId);
+        var nftMetas = this.nftMetaService.list(nftMetaQueryWrapper);
+
+        languageQueryWrapper = new QueryWrapper<Language>();
+        languageQueryWrapper.lambda().in(Language::getKey, nftMetas.stream().map(e -> e.getDisplayName()).collect(Collectors.toSet()));
+        languageQueryWrapper.lambda().eq(Language::getLanguage, com.billion.model.enums.Language.EN.getCode());
+        var languages = this.languageService.list(languageQueryWrapper);
+
+        long maxNumber = 0L;
+        for (var language_ : languages) {
+            var index = language_.getValue().lastIndexOf("#");
+            if (0 <= index) {
+                var number = language_.getValue().substring(index + 1).trim();
+                maxNumber = Math.max(maxNumber, Long.parseLong(number));
+            }
+        }
+        maxNumber++;
+
+        var nftMeta = NftMeta.builder()
+                .nftGroupId(nftGroupId)
+                .displayName(UUID.randomUUID().toString())
+                .description(UUID.randomUUID().toString())
+                .uri(EMPTY)
+                .rank(0L)
+                .isBorn(Boolean.FALSE)
+                .score(score.toString())
+                .attributeType(0)
+                .tableHandle(EMPTY)
+                .tableCollection(EMPTY)
+                .tableCreator(EMPTY)
+                .tableName(EMPTY)
+                .build();
+        nftMeta.setTransactionStatus_(TransactionStatus.STATUS_1_READY);
+        nftMeta.setTransactionHash(EMPTY);
+
+        var languageDisplayName = Language.builder()
+                .language(com.billion.model.enums.Language.EN.getCode())
+                .key(nftMeta.getDisplayName())
+                .value(languageNftGroup.getValue() + " # " + maxNumber)
+                .build();
+        this.languageService.save(languageDisplayName);
+
+        this.languageService.save(Language.builder()
+                .language(com.billion.model.enums.Language.EN.getCode())
+                .key(nftMeta.getDescription())
+                .value(languageDisplayName.getValue())
+                .build());
+
+        this.nftMetaService.save(nftMeta);
+
+        nftAttributeValues.forEach(nftAttributeValue -> nftAttributeValue.setNftMetaId(nftMeta.getId()));
+        this.nftAttributeValueService.saveBatch(nftAttributeValues);
+
         return true;
     }
 

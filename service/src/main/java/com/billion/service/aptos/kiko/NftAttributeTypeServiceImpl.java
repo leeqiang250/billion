@@ -40,7 +40,7 @@ public class NftAttributeTypeServiceImpl extends AbstractCacheService<NftAttribu
 
         QueryWrapper<NftAttributeType> nftAttributeTypeQueryWrapper = new QueryWrapper<>();
         nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getId, attributeMeta.getNftAttributeTypeId());
-        var attributeType = this.getOneThrowEx(nftAttributeTypeQueryWrapper);
+        var attributeType = super.getOneThrowEx(nftAttributeTypeQueryWrapper);
 
         return NftAttribute.builder()
                 .type(attributeType.getClassName())
@@ -56,7 +56,7 @@ public class NftAttributeTypeServiceImpl extends AbstractCacheService<NftAttribu
         nftAttributeTypeQueryWrapper.lambda().eq(NftAttributeType::getNftGroupId, nftGroupId);
         nftAttributeTypeQueryWrapper.lambda().orderByAsc(NftAttributeType::getSort);
         nftAttributeTypeQueryWrapper.lambda().orderByAsc(NftAttributeType::getId);
-        var attributeTypes = this.list(nftAttributeTypeQueryWrapper);
+        var attributeTypes = super.list(nftAttributeTypeQueryWrapper);
         attributeTypes.forEach(nftAttributeType -> {
             var nftAttributeTypeMap = JSONObject.parseObject(JSONObject.toJSONString(nftAttributeType), Map.class);
 
@@ -113,4 +113,13 @@ public class NftAttributeTypeServiceImpl extends AbstractCacheService<NftAttribu
         });
     }
 
+    @Override
+    public List<NftAttributeType> getNftAttributeTypeByNftGroupId(Long nftGroupId) {
+        var result = new ArrayList<NftAttributeType>();
+        var wrapper = new QueryWrapper<NftAttributeType>();
+        wrapper.lambda().eq(NftAttributeType::getNftGroupId, nftGroupId);
+        wrapper.lambda().orderByAsc(NftAttributeType::getSort);
+        wrapper.lambda().orderByAsc(NftAttributeType::getId);
+        return super.list(wrapper);
+    }
 }
