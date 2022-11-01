@@ -139,45 +139,36 @@ public class ScanDispatchService implements Serializable {
                         break;
                     }
 
-                    if (ContextService.getKikoOwner().contains(event.getType().split("::")[0])) {
-                        if (EventTypeMarket.isMarketBoxMakerEvent(event)
-                                || EventTypeMarket.isMarketBoxTakerEvent(event)
-                                || EventTypeMarket.isMarketBoxBidEvent(event)
-                                || EventTypeMarket.isMarketBoxCancelEvent(event)
-                                || EventTypeMarket.isMarketNftMakerEvent(event)
-                                || EventTypeMarket.isMarketNftTakerEvent(event)
-                                || EventTypeMarket.isMarketNftBidEvent(event)
-                                || EventTypeMarket.isMarketNftCancelEvent(event)
-                        ) {
-                            log.info(event.getType());
+                    if (this.isMarketEvent(event)) {
+                        log.info(event.getType());
 
-                            valid = true;
-                            break;
-                        }
+                        valid = true;
+                        break;
                     }
-                }
-
-                if (valid) {
-                    Long transactionVersion = Long.parseLong(transaction.getVersion());
-                    this.nftService.removeGe(transactionVersion);
-                    this.marketService.removeGe(transactionVersion);
-                    this.nftComposeService.removeGe(transactionVersion);
-                    this.nftSplitService.removeGe(transactionVersion);
-
-                    this.process(transaction);
                 }
             }
 
-            Config.SCAN_CHAIN_CURSOR.setValue(transaction.getVersion());
+            if (valid) {
+                Long transactionVersion = Long.parseLong(transaction.getVersion());
+                this.nftService.removeGe(transactionVersion);
+                this.marketService.removeGe(transactionVersion);
+                this.nftComposeService.removeGe(transactionVersion);
+                this.nftSplitService.removeGe(transactionVersion);
+
+                this.process(transaction);
+            }
         }
+
+        Config.SCAN_CHAIN_CURSOR.setValue(transaction.getVersion());
+    }
 
         this.configService.updateById(Config.SCAN_CHAIN_CURSOR);
 
-        log.info("{}", Config.SCAN_CHAIN_CURSOR);
+        log.info("{}",Config.SCAN_CHAIN_CURSOR);
         log.info("------------------------------------------------------------------------------------------------");
 
-        this.next = true;
-    }
+        this.next =true;
+}
 
     void process(Transaction transaction) {
         var events = transaction.getEvents();
