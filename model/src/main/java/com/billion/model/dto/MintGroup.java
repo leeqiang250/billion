@@ -1,15 +1,11 @@
 package com.billion.model.dto;
 
 import com.alibaba.fastjson2.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.billion.model.entity.TransactionStatus;
-import com.billion.model.model.IModel;
 
 import java.io.Serializable;
 
-public class sss extends TransactionStatus implements Serializable {
+public class MintGroup extends TransactionStatus implements Serializable {
 
     @JSONField(name = "id")
     Long id;
@@ -27,33 +23,27 @@ public class sss extends TransactionStatus implements Serializable {
     String boxDisplayName;
 
     /**
-     * nft_group
-     */
-    @JSONField(name = "nft_group")
-    Long nftGroup;
-
-    /**
      * 询价币种
      */
-    @JSONField(name = "ask_token")
+    @JSONField(name = "box_ask_token")
     Long askToken;
 
     /**
      * 询价数量
      */
-    @JSONField(name = "amount")
+    @JSONField(name = "box_amount")
     String amount;
 
     /**
      * 计价币种
      */
-    @JSONField(name = "bid_token")
+    @JSONField(name = "box_bid_token")
     Long bidToken;
 
     /**
      * 计价价格
      */
-    @JSONField(name = "price")
+    @JSONField(name = "box_price")
     String price;
 
     /**
@@ -65,7 +55,7 @@ public class sss extends TransactionStatus implements Serializable {
     /**
      * 规则
      */
-    @JSONField(name = "rule")
+    @JSONField(name = "box_rule")
     String rule;
 
     /**
@@ -77,13 +67,13 @@ public class sss extends TransactionStatus implements Serializable {
     /**
      * 起售时间
      */
-    @JSONField(name = "ts")
+    @JSONField(name = "box_ts")
     String ts;
 
     /**
      * 排序
      */
-    @JSONField(name = "sort")
+    @JSONField(name = "box_sort")
     Integer sort;
 
     /**
@@ -97,17 +87,14 @@ public class sss extends TransactionStatus implements Serializable {
     /**
      * 子系列
      */
-    @JSONField(name = "split")
-    Long split;
+    @JSONField(name = "nft_split")
+    Long nftSplit;
 
     /**
      * 所有者
      */
-    @JSONField(name = "owner")
-    String owner;
-
-    @JSONField(name = "body")
-    String bodyQiyong;
+    @JSONField(name = "nft_owner")
+    String nftOwner;
 
     /**
      * 系列名称
@@ -124,14 +111,14 @@ public class sss extends TransactionStatus implements Serializable {
     /**
      * 当前供应量
      */
-    @JSONField(name = "current_supply")
-    String currentSupply;
+    @JSONField(name = "nft_current_supply")
+    String nftCurrentSupply;
 
     /**
      * 总计供应量
      */
-    @JSONField(name = "total_supply")
-    String totalSupply;
+    @JSONField(name = "nft_total_supply")
+    String nftTotalSupply;
 
     /**
      * 图片
@@ -148,8 +135,8 @@ public class sss extends TransactionStatus implements Serializable {
     /**
      * 是否初始化nft_op
      */
-    @JSONField(name = "is_initialize_nft_op")
-    Boolean isInitializeNftOp;
+    @JSONField(name = "nft_is_initialize_nft_op")
+    Boolean nftIsInitializeNftOp;
 
     /**
      * 排序

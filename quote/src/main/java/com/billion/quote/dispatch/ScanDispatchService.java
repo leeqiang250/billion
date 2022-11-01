@@ -12,9 +12,7 @@ import com.billion.service.aptos.ContextService;
 import com.billion.service.aptos.kiko.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,7 +82,7 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
-    @Scheduled(fixedDelay = 3000)
+    //@Scheduled(fixedDelay = 3000)
     void dispatch() {
         this.next = true;
         while (this.next) {
@@ -147,7 +145,7 @@ public class ScanDispatchService implements Serializable {
                                 || EventType.isBoxBidEvent(event)
                                 || EventType.isBoxCancelEvent(event)
                                 || EventType.isNftMakerEvent(event)
-                                || EventType.isNftTakerEvent(event)
+                                || EventType.isMarketNftTakerEvent(event)
                                 || EventType.isNftBidEvent(event)
                                 || EventType.isNftCancelEvent(event)
                         ) {
@@ -229,7 +227,7 @@ public class ScanDispatchService implements Serializable {
                 if (EventType.isNftMakerEvent(event)) {
                     MarketMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketMakerEvent.class);
                     marketService.addNftMakerEvent(transaction, event, nftMakerEvent);
-                } else if (EventType.isNftTakerEvent(event)) {
+                } else if (EventType.isMarketNftTakerEvent(event)) {
                     MarketTakerEvent nftTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketTakerEvent.class);
                     marketService.addNftTakerEvent(transaction, event, nftTakerEvent);
                 } else if (EventType.isNftBidEvent(event)) {

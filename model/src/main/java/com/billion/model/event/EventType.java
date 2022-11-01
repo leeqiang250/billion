@@ -130,7 +130,7 @@ public class EventType {
      * @param event event
      * @return boolean
      */
-    public static boolean isNftTakerEvent(Event event) {
+    public static boolean isMarketNftTakerEvent(Event event) {
         return event.getType().contains("::secondary_market::NftTakerEvent<");
     }
 

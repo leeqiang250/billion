@@ -57,12 +57,6 @@ public class MintServiceImpl implements MintService {
     @Resource
     NftAttributeValueService nftAttributeValueService;
 
-    public void wwerew(Serializable boxGroupId) {
-//        BoxGroup
-//                NftGroup
-    }
-
-
     @Override
     public boolean initialize(Serializable boxGroupId) {
         if (!this.tokenService.initialize()) {
