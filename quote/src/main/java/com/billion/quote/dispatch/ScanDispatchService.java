@@ -144,7 +144,7 @@ public class ScanDispatchService implements Serializable {
                                 || EventType.isBoxTakerEvent(event)
                                 || EventType.isBoxBidEvent(event)
                                 || EventType.isBoxCancelEvent(event)
-                                || EventType.isNftMakerEvent(event)
+                                || EventType.isMarketNftMakerEvent(event)
                                 || EventType.isMarketNftTakerEvent(event)
                                 || EventType.isMarketNftBidEvent(event)
                                 || EventType.isMarketNftCancelEvent(event)
@@ -224,7 +224,7 @@ public class ScanDispatchService implements Serializable {
                 marketService.addBoxCancelEvent(transaction, event, boxCancelEvent);
             }
             if (ContextService.getKikoOwner().contains(event.getType().split("::")[0])) {
-                if (EventType.isNftMakerEvent(event)) {
+                if (EventType.isMarketNftMakerEvent(event)) {
                     MarketMakerEvent nftMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketMakerEvent.class);
                     marketService.addNftMakerEvent(transaction, event, nftMakerEvent);
                 } else if (EventType.isMarketNftTakerEvent(event)) {

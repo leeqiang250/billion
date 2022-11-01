@@ -115,12 +115,12 @@ public class EventType {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * isNftMakerEvent
+     * isMarketNftMakerEvent
      *
      * @param event event
      * @return boolean
      */
-    public static boolean isNftMakerEvent(Event event) {
+    public static boolean isMarketNftMakerEvent(Event event) {
         return event.getType().contains("::secondary_market::NftMakerEvent<");
     }
 
