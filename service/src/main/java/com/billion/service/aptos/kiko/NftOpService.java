@@ -1,8 +1,8 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Transaction;
-import com.billion.model.event.NftComposeEvent;
-import com.billion.model.event.NftSplitEvent;
+import com.billion.model.event.OpNftComposeEvent;
+import com.billion.model.event.OpNftSplitEvent;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,7 +18,7 @@ public interface NftOpService {
      * @return boolean
      */
     @Transactional(rollbackFor = Exception.class)
-    boolean addNftSplitEvent(Transaction transaction, NftSplitEvent nftSplitEvent);
+    boolean addNftSplitEvent(Transaction transaction, OpNftSplitEvent nftSplitEvent);
 
     /**
      * addNftComposeEvent
@@ -28,7 +28,7 @@ public interface NftOpService {
      * @return boolean
      */
     @Transactional(rollbackFor = Exception.class)
-    boolean addNftComposeEvent(Transaction transaction, NftComposeEvent nftComposeEvent);
+    boolean addNftComposeEvent(Transaction transaction, OpNftComposeEvent nftComposeEvent);
 
     /**
      * execute

@@ -125,24 +125,11 @@ public class ScanDispatchService implements Serializable {
 
                 var events = transaction.getEvents();
                 for (Event<Map> event : events) {
-                    if (EventType.isOpenBoxEvent(event)
-                            || EventType.isNftComposeEvent(event)
-                            || EventType.isNftSplitEvent(event)
+                    if (this.isMarketEvent(event)
+                            || this.isNftEvent(event)
+                            || this.isOpenBoxEvent(event)
+                            || this.isOpNftEvent(event)
                     ) {
-                        log.info(event.getType());
-
-                        valid = true;
-                        break;
-                    }
-
-                    if (this.isNftEvent(event)) {
-                        log.info(event.getType());
-
-                        valid = true;
-                        break;
-                    }
-
-                    if (this.isMarketEvent(event)) {
                         log.info(event.getType());
 
                         valid = true;
@@ -175,39 +162,6 @@ public class ScanDispatchService implements Serializable {
     void process(Transaction transaction) {
         var events = transaction.getEvents();
         for (Event<Map> event : events) {
-
-            if (NftCreateTokenDataEvent.isNftCreateTokenDataEvent(event)
-                    && ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress())) {
-                NftCreateTokenDataEvent nftCreateTokenDataEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCreateTokenDataEvent.class);
-                nftService.addNftCreateTokenDataEvent(transaction, event, nftCreateTokenDataEvent);
-            } else if (NftWithdrawEvent.isNftWithdrawEvent(event)) {
-                NftWithdrawEvent nftWithdrawEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftWithdrawEvent.class);
-                if (ContextService.getKikoOwner().equals(nftWithdrawEvent.getId().getTokenDataId().getCreator())) {
-                    nftService.addNftWithdrawEvent(transaction, event, nftWithdrawEvent);
-                }
-            } else if (NftDepositEvent.isNftDepositEvent(event)) {
-                NftDepositEvent nftDepositEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftDepositEvent.class);
-                if (ContextService.getKikoOwner().equals(nftDepositEvent.getId().getTokenDataId().getCreator())) {
-                    nftService.addNftDepositEvent(transaction, event, nftDepositEvent);
-                }
-            } else if (NftBurnTokenEvent.isNftBurnTokenEvent(event)) {
-                NftBurnTokenEvent nftBurnTokenEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftBurnTokenEvent.class);
-                if (ContextService.getKikoOwner().equals(nftBurnTokenEvent.getId().getTokenDataId().getCreator())) {
-                    nftService.addNftBurnTokenEvent(transaction, event, nftBurnTokenEvent);
-                }
-            }
-
-            if (EventType.isOpenBoxEvent(event)) {
-                OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
-                operationService.addOpenBoxOpt(openBoxEvent, transaction);
-            } else if (EventType.isNftSplitEvent(event)) {
-                NftSplitEvent nftSplitEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftSplitEvent.class);
-                nftOpService.addNftSplitEvent(transaction, nftSplitEvent);
-            } else if (EventType.isNftComposeEvent(event)) {
-                NftComposeEvent nftComposeEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftComposeEvent.class);
-                nftOpService.addNftComposeEvent(transaction, nftComposeEvent);
-            }
-
             if (MarketBoxMakerEvent.isMarketBoxMakerEvent(event)) {
                 MarketBoxMakerEvent boxMakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketBoxMakerEvent.class);
                 marketService.addBoxMakerEvent(transaction, event, boxMakerEvent);
@@ -233,6 +187,41 @@ public class ScanDispatchService implements Serializable {
                 MarketNftCancelEvent nftCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketNftCancelEvent.class);
                 marketService.addNftCancelEvent(transaction, event, nftCancelEvent);
             }
+
+            if (NftCreateTokenDataEvent.isNftCreateTokenDataEvent(event)
+                    && ContextService.getKikoOwner().equals(event.getGuid().getAccountAddress())) {
+                NftCreateTokenDataEvent nftCreateTokenDataEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftCreateTokenDataEvent.class);
+                nftService.addNftCreateTokenDataEvent(transaction, event, nftCreateTokenDataEvent);
+            } else if (NftWithdrawEvent.isNftWithdrawEvent(event)) {
+                NftWithdrawEvent nftWithdrawEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftWithdrawEvent.class);
+                if (ContextService.getKikoOwner().equals(nftWithdrawEvent.getId().getTokenDataId().getCreator())) {
+                    nftService.addNftWithdrawEvent(transaction, event, nftWithdrawEvent);
+                }
+            } else if (NftDepositEvent.isNftDepositEvent(event)) {
+                NftDepositEvent nftDepositEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftDepositEvent.class);
+                if (ContextService.getKikoOwner().equals(nftDepositEvent.getId().getTokenDataId().getCreator())) {
+                    nftService.addNftDepositEvent(transaction, event, nftDepositEvent);
+                }
+            } else if (NftBurnTokenEvent.isNftBurnTokenEvent(event)) {
+                NftBurnTokenEvent nftBurnTokenEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), NftBurnTokenEvent.class);
+                if (ContextService.getKikoOwner().equals(nftBurnTokenEvent.getId().getTokenDataId().getCreator())) {
+                    nftService.addNftBurnTokenEvent(transaction, event, nftBurnTokenEvent);
+                }
+            }
+
+            if (OpenBoxEvent.isOpenBoxEvent(event)) {
+                OpenBoxEvent openBoxEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpenBoxEvent.class);
+                operationService.addOpenBoxOpt(openBoxEvent, transaction);
+
+            }
+
+            if (OpNftComposeEvent.isOpNftComposeEvent(event)) {
+                OpNftComposeEvent nftComposeEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpNftComposeEvent.class);
+                nftOpService.addNftComposeEvent(transaction, nftComposeEvent);
+            } else if (OpNftSplitEvent.isOpNftSplitEvent(event)) {
+                OpNftSplitEvent nftSplitEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), OpNftSplitEvent.class);
+                nftOpService.addNftSplitEvent(transaction, nftSplitEvent);
+            }
         }
     }
 
@@ -253,6 +242,15 @@ public class ScanDispatchService implements Serializable {
                 || NftDepositEvent.isNftDepositEvent(event)
                 || NftBurnTokenEvent.isNftBurnTokenEvent(event);
 
+    }
+
+    boolean isOpenBoxEvent(Event event) {
+        return OpenBoxEvent.isOpenBoxEvent(event);
+    }
+
+    boolean isOpNftEvent(Event event) {
+        return OpNftComposeEvent.isOpNftComposeEvent(event)
+                || OpNftSplitEvent.isOpNftSplitEvent(event);
     }
 
 }

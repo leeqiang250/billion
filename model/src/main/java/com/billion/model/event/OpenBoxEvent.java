@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.TokenId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,5 +27,15 @@ public class OpenBoxEvent implements Serializable {
     String owner;
 
     String ts;
+
+    /**
+     * isOpenBoxEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isOpenBoxEvent(Event event) {
+        return OpenBoxEvent.EVENT_NAME.equals(event.getType());
+    }
 
 }

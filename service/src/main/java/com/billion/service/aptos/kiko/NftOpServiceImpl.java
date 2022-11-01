@@ -1,6 +1,5 @@
 package com.billion.service.aptos.kiko;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.aptos.request.v1.model.TokenDataId;
 import com.aptos.request.v1.model.TokenId;
 import com.aptos.request.v1.model.Transaction;
@@ -9,12 +8,11 @@ import com.aptos.request.v1.rpc.body.TableBody;
 import com.aptos.utils.Hex;
 import com.aptos.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.billion.dao.aptos.kiko.*;
 import com.billion.model.entity.*;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.TransactionStatus;
-import com.billion.model.event.NftComposeEvent;
-import com.billion.model.event.NftSplitEvent;
+import com.billion.model.event.OpNftComposeEvent;
+import com.billion.model.event.OpNftSplitEvent;
 import com.billion.model.exception.BizException;
 import com.billion.model.resource.OpNftData;
 import com.billion.service.aptos.AptosService;
@@ -66,7 +64,7 @@ public class NftOpServiceImpl implements NftOpService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addNftSplitEvent(Transaction transaction, NftSplitEvent nftSplitEvent) {
+    public boolean addNftSplitEvent(Transaction transaction, OpNftSplitEvent nftSplitEvent) {
         if (!nftSplitEvent.isExecute()) {
             Set<String> metaIds = new HashSet<>(nftSplitEvent.getProperty().getMap().getData().size());
 
@@ -186,7 +184,7 @@ public class NftOpServiceImpl implements NftOpService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addNftComposeEvent(Transaction transaction, NftComposeEvent nftComposeEvent) {
+    public boolean addNftComposeEvent(Transaction transaction, OpNftComposeEvent nftComposeEvent) {
         if (!nftComposeEvent.isExecute()) {
             var collection = Hex.decodeToString(nftComposeEvent.getCollection().getCollection());
 
@@ -416,7 +414,7 @@ public class NftOpServiceImpl implements NftOpService {
                         .valueType(ContextService.getKikoOwner() + "::op_nft::NftSplitEvent")
                         .key(nftSplit.getOrderId())
                         .build(),
-                NftSplitEvent.class
+                OpNftSplitEvent.class
         );
         if (responseNftSplitEvent.isValid()) {
             return false;
@@ -609,7 +607,7 @@ public class NftOpServiceImpl implements NftOpService {
                         .valueType(ContextService.getKikoOwner() + "::op_nft::NftComposeEvent")
                         .key(nftCompose.getOrderId())
                         .build(),
-                NftComposeEvent.class
+                OpNftComposeEvent.class
         );
         if (responseNftComposeEvent.isValid()) {
             return false;

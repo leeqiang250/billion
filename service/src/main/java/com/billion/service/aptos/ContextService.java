@@ -120,14 +120,21 @@ public class ContextService {
         ContextService.kikoOwner = contractService.getByName(Contract.PRIMARY_MARKET.getCode()).getModuleAddress();
         ContextService.nftComposeFee = this.pNftComposeFee;
         ContextService.aptosHost = this.pAptosHost;
-        NftComposeEvent.EVENT_NAME = ContextService.kikoOwner + NftComposeEvent.EVENT_NAME;
-        NftSplitEvent.EVENT_NAME = ContextService.kikoOwner + NftSplitEvent.EVENT_NAME;
-        OpenBoxEvent.EVENT_NAME = ContextService.kikoOwner + OpenBoxEvent.EVENT_NAME;
 
         MarketNftBidEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftBidEvent.EVENT_NAME;
         MarketNftCancelEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftCancelEvent.EVENT_NAME;
         MarketNftMakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftMakerEvent.EVENT_NAME;
         MarketNftTakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftTakerEvent.EVENT_NAME;
+
+        MarketBoxBidEvent.EVENT_NAME = ContextService.kikoOwner + MarketBoxBidEvent.EVENT_NAME;
+        MarketBoxCancelEvent.EVENT_NAME = ContextService.kikoOwner + MarketBoxCancelEvent.EVENT_NAME;
+        MarketBoxMakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketBoxMakerEvent.EVENT_NAME;
+        MarketBoxTakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketBoxTakerEvent.EVENT_NAME;
+
+        OpenBoxEvent.EVENT_NAME = ContextService.kikoOwner + OpenBoxEvent.EVENT_NAME;
+
+        OpNftComposeEvent.EVENT_NAME = ContextService.kikoOwner + OpNftComposeEvent.EVENT_NAME;
+        OpNftSplitEvent.EVENT_NAME = ContextService.kikoOwner + OpNftSplitEvent.EVENT_NAME;
 
         aptosService.initialize();
     }

@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.TableTokenData;
 import com.aptos.request.v1.model.TokenId;
 import com.billion.model.dto.NftCollection;
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NftSplitEvent implements Serializable {
+public class OpNftSplitEvent implements Serializable {
 
     public static String EVENT_NAME = "::op_nft::NftSplitEvent";
 
@@ -35,5 +36,15 @@ public class NftSplitEvent implements Serializable {
     TableTokenData.DefaultProperties property;
 
     NftCollection collection;
+
+    /**
+     * isOpNftSplitEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isOpNftSplitEvent(Event event) {
+        return OpNftSplitEvent.EVENT_NAME.equals(event.getType());
+    }
 
 }

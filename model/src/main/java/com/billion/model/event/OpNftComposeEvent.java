@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.Event;
 import com.billion.model.dto.NftCollection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NftComposeEvent implements Serializable {
+public class OpNftComposeEvent implements Serializable {
 
     public static String EVENT_NAME = "::op_nft::NftComposeEvent";
 
@@ -42,5 +43,15 @@ public class NftComposeEvent implements Serializable {
     List<String> propertyTypes;
 
     NftCollection collection;
+
+    /**
+     * isOpNftComposeEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isOpNftComposeEvent(Event event) {
+        return OpNftComposeEvent.EVENT_NAME.equals(event.getType());
+    }
 
 }
