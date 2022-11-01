@@ -146,29 +146,28 @@ public class ScanDispatchService implements Serializable {
                         break;
                     }
                 }
+
+                if (valid) {
+                    Long transactionVersion = Long.parseLong(transaction.getVersion());
+                    this.nftService.removeGe(transactionVersion);
+                    this.marketService.removeGe(transactionVersion);
+                    this.nftComposeService.removeGe(transactionVersion);
+                    this.nftSplitService.removeGe(transactionVersion);
+
+                    this.process(transaction);
+                }
             }
 
-            if (valid) {
-                Long transactionVersion = Long.parseLong(transaction.getVersion());
-                this.nftService.removeGe(transactionVersion);
-                this.marketService.removeGe(transactionVersion);
-                this.nftComposeService.removeGe(transactionVersion);
-                this.nftSplitService.removeGe(transactionVersion);
-
-                this.process(transaction);
-            }
+            Config.SCAN_CHAIN_CURSOR.setValue(transaction.getVersion());
         }
-
-        Config.SCAN_CHAIN_CURSOR.setValue(transaction.getVersion());
-    }
 
         this.configService.updateById(Config.SCAN_CHAIN_CURSOR);
 
-        log.info("{}",Config.SCAN_CHAIN_CURSOR);
+        log.info("{}", Config.SCAN_CHAIN_CURSOR);
         log.info("------------------------------------------------------------------------------------------------");
 
-        this.next =true;
-}
+        this.next = true;
+    }
 
     void process(Transaction transaction) {
         var events = transaction.getEvents();
