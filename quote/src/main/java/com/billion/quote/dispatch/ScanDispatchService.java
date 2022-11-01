@@ -241,7 +241,6 @@ public class ScanDispatchService implements Serializable {
                 || NftWithdrawEvent.isNftWithdrawEvent(event)
                 || NftDepositEvent.isNftDepositEvent(event)
                 || NftBurnTokenEvent.isNftBurnTokenEvent(event);
-
     }
 
     boolean isOpenBoxEvent(Event event) {
