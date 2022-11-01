@@ -124,10 +124,10 @@ public class ContextService {
         NftSplitEvent.EVENT_NAME = ContextService.kikoOwner + NftSplitEvent.EVENT_NAME;
         OpenBoxEvent.EVENT_NAME = ContextService.kikoOwner + OpenBoxEvent.EVENT_NAME;
 
-        MarketBidEvent.EVENT_NAME = ContextService.kikoOwner + MarketBidEvent.EVENT_NAME;
-        MarketCancelEvent.EVENT_NAME = ContextService.kikoOwner + MarketCancelEvent.EVENT_NAME;
-        MarketMakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketMakerEvent.EVENT_NAME;
-        MarketTakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketTakerEvent.EVENT_NAME;
+        MarketNftBidEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftBidEvent.EVENT_NAME;
+        MarketNftCancelEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftCancelEvent.EVENT_NAME;
+        MarketNftMakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftMakerEvent.EVENT_NAME;
+        MarketNftTakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketNftTakerEvent.EVENT_NAME;
 
         aptosService.initialize();
     }

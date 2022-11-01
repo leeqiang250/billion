@@ -14,7 +14,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketBoxMakerEvent(Event event) {
-        return event.getType().contains(BoxMakerEvent.EVENT_NAME);
+        return event.getType().contains(MarketBoxMakerEvent.EVENT_NAME);
     }
 
     /**
@@ -24,7 +24,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketBoxTakerEvent(Event event) {
-        return event.getType().contains(BoxTakerEvent.EVENT_NAME);
+        return event.getType().contains(MarketBoxTakerEvent.EVENT_NAME);
     }
 
     /**
@@ -34,7 +34,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketBoxBidEvent(Event event) {
-        return event.getType().contains(BoxBidEvent.EVENT_NAME);
+        return event.getType().contains(MarketBoxBidEvent.EVENT_NAME);
     }
 
     /**
@@ -44,7 +44,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketBoxCancelEvent(Event event) {
-        return event.getType().contains(BoxCancelEvent.EVENT_NAME);
+        return event.getType().contains(MarketBoxCancelEvent.EVENT_NAME);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftMakerEvent(Event event) {
-        return event.getType().contains(MarketMakerEvent.EVENT_NAME);
+        return event.getType().contains(MarketNftMakerEvent.EVENT_NAME);
     }
 
     /**
@@ -66,7 +66,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftTakerEvent(Event event) {
-        return event.getType().contains(MarketTakerEvent.EVENT_NAME);
+        return event.getType().contains(MarketNftTakerEvent.EVENT_NAME);
     }
 
     /**
@@ -76,7 +76,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftBidEvent(Event event) {
-        return event.getType().contains(MarketBidEvent.EVENT_NAME);
+        return event.getType().contains(MarketNftBidEvent.EVENT_NAME);
     }
 
     /**
@@ -86,7 +86,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftCancelEvent(Event event) {
-        return event.getType().contains(MarketCancelEvent.EVENT_NAME);
+        return event.getType().contains(MarketNftCancelEvent.EVENT_NAME);
     }
 
 }

@@ -34,7 +34,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addBoxMakerEvent(Transaction transaction, Event event, BoxMakerEvent boxMakerEvent);
+    Market addBoxMakerEvent(Transaction transaction, Event event, MarketBoxMakerEvent boxMakerEvent);
 
     /**
      * addBoxTakerEvent
@@ -45,7 +45,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addBoxTakerEvent(Transaction transaction, Event event, BoxTakerEvent boxTakerEvent);
+    Market addBoxTakerEvent(Transaction transaction, Event event, MarketBoxTakerEvent boxTakerEvent);
 
     /**
      * addBoxBidEvent
@@ -56,7 +56,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addBoxBidEvent(Transaction transaction, Event event, BoxBidEvent boxBidEvent);
+    Market addBoxBidEvent(Transaction transaction, Event event, MarketBoxBidEvent boxBidEvent);
 
     /**
      * addBoxCancelEvent
@@ -67,7 +67,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addBoxCancelEvent(Transaction transaction, Event event, BoxCancelEvent boxCancelEvent);
+    Market addBoxCancelEvent(Transaction transaction, Event event, MarketBoxCancelEvent boxCancelEvent);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +80,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftMakerEvent(Transaction transaction, Event event, MarketMakerEvent nftMakerEvent);
+    Market addNftMakerEvent(Transaction transaction, Event event, MarketNftMakerEvent nftMakerEvent);
 
     /**
      * addNftTakerEvent
@@ -91,7 +91,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftTakerEvent(Transaction transaction, Event event, MarketTakerEvent nftTakerEvent);
+    Market addNftTakerEvent(Transaction transaction, Event event, MarketNftTakerEvent nftTakerEvent);
 
     /**
      * addNftBidEvent
@@ -102,7 +102,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftBidEvent(Transaction transaction, Event event, MarketBidEvent nftBidEvent);
+    Market addNftBidEvent(Transaction transaction, Event event, MarketNftBidEvent nftBidEvent);
 
     /**
      * addNftCancelEvent
@@ -113,7 +113,7 @@ public interface MarketService extends ICacheService<Market> {
      * @return Market
      */
     @Transactional(rollbackFor = Exception.class)
-    Market addNftCancelEvent(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent);
+    Market addNftCancelEvent(Transaction transaction, Event event, MarketNftCancelEvent nftCancelEvent);
 
     /**
      * getMarketList

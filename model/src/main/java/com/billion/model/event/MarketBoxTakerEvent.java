@@ -16,9 +16,9 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoxBidEvent implements Serializable {
+public class MarketBoxTakerEvent implements Serializable {
 
-    public static String EVENT_NAME = "::secondary_market::BoxBidEvent<";
+    public static String EVENT_NAME = "::secondary_market::BoxTakerEvent<";
 
     String id;
 
@@ -37,14 +37,14 @@ public class BoxBidEvent implements Serializable {
 
     String bidder;
 
-    @JSONField(name = "bid_price")
-    String bidPrice;
+    @JSONField(name = "final_price")
+    String finalPrice;
 
-    @JSONField(name = "prev_bidder")
-    String prevBidder;
+    @JSONField(name = "creator_fee")
+    String creatorFee;
 
-    @JSONField(name = "prev_bid_price")
-    String prevBidPrice;
+    @JSONField(name = "platform_fee")
+    String platformFee;
 
     public void setType(String type) {
         if (type.startsWith("0x")) {
@@ -53,4 +53,5 @@ public class BoxBidEvent implements Serializable {
             this.type = type;
         }
     }
+
 }

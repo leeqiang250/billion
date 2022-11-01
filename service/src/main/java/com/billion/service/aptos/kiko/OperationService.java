@@ -15,13 +15,13 @@ import java.util.List;
  */
 public interface OperationService extends IService<Operation> {
 
-    Operation addBoxMakerOpt(Transaction transaction, Event event, BoxMakerEvent boxMakerEvent);
+    Operation addMarketBoxMakerOpt(Transaction transaction, Event event, MarketBoxMakerEvent boxMakerEvent);
 
-    Operation addBoxTakerOpt(Transaction transaction, Event event, BoxTakerEvent boxTakerEvent);
+    Operation addMarketBoxTakerOpt(Transaction transaction, Event event, MarketBoxTakerEvent boxTakerEvent);
 
-    Operation addBoxBidOpt(Transaction transaction, Event event, BoxBidEvent boxBidEvent);
+    Operation addMarketBoxBidOpt(Transaction transaction, Event event, MarketBoxBidEvent boxBidEvent);
 
-    Operation addBoxCancelOpt(Transaction transaction, Event event, BoxCancelEvent boxCancelEvent);
+    Operation addMarketBoxCancelOpt(Transaction transaction, Event event, MarketBoxCancelEvent boxCancelEvent);
 
     Operation addNftMintOpt(Transaction transaction, Event event, NftCreateTokenDataEvent nftCreateTokenDataEvent);
 
@@ -31,18 +31,19 @@ public interface OperationService extends IService<Operation> {
 
     Operation addNftBurnTokenOpt(Transaction transaction, Event event, NftBurnTokenEvent nftBurnTokenEvent);
 
-    Operation addNftMakerOpt(Transaction transaction, Event event, MarketMakerEvent nftMakerEvent);
+    Operation addMarketNftMakerOpt(Transaction transaction, Event event, MarketNftMakerEvent nftMakerEvent);
 
-    Operation addNftTakerOpt(Transaction transaction, Event event, MarketTakerEvent nftTakerEvent);
+    Operation addMarketNftTakerOpt(Transaction transaction, Event event, MarketNftTakerEvent nftTakerEvent);
 
-    Operation addNftBidOpt(Transaction transaction, Event event, MarketBidEvent nftBidEvent);
+    Operation addMarketNftBidOpt(Transaction transaction, Event event, MarketNftBidEvent nftBidEvent);
 
-    Operation addNftCancelOpt(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent);
+    Operation addMarketNftCancelOpt(Transaction transaction, Event event, MarketNftCancelEvent nftCancelEvent);
 
     void addOpenBoxOpt(OpenBoxEvent openBoxEvent, Transaction transaction);
 
     /**
      * getListById
+     *
      * @param context
      * @param tokenId
      * @return
@@ -51,6 +52,7 @@ public interface OperationService extends IService<Operation> {
 
     /**
      * getSaleRecord
+     *
      * @param context
      * @param account
      * @return
@@ -59,6 +61,7 @@ public interface OperationService extends IService<Operation> {
 
     /**
      * getBuyRecord
+     *
      * @param context
      * @param account
      * @return

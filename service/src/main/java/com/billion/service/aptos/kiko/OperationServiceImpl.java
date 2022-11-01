@@ -10,7 +10,6 @@ import com.billion.model.dto.OperationDto;
 import com.billion.model.entity.BoxGroup;
 import com.billion.model.entity.NftMeta;
 import com.billion.model.entity.Operation;
-import com.billion.model.entity.Token;
 import com.billion.model.enums.Chain;
 import com.billion.model.enums.OperationTraStateType;
 import com.billion.model.enums.OperationType;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +44,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
 
 
     @Override
-    public Operation addBoxMakerOpt(Transaction transaction, Event event, BoxMakerEvent boxMakerEvent) {
+    public Operation addMarketBoxMakerOpt(Transaction transaction, Event event, MarketBoxMakerEvent boxMakerEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(boxMakerEvent.getMaker())
@@ -69,7 +67,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addBoxTakerOpt(Transaction transaction, Event event, BoxTakerEvent boxTakerEvent) {
+    public Operation addMarketBoxTakerOpt(Transaction transaction, Event event, MarketBoxTakerEvent boxTakerEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(boxTakerEvent.getMaker())
@@ -100,7 +98,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addBoxBidOpt(Transaction transaction, Event event, BoxBidEvent boxBidEvent) {
+    public Operation addMarketBoxBidOpt(Transaction transaction, Event event, MarketBoxBidEvent boxBidEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(boxBidEvent.getMaker())
@@ -132,7 +130,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addBoxCancelOpt(Transaction transaction, Event event, BoxCancelEvent boxCancelEvent) {
+    public Operation addMarketBoxCancelOpt(Transaction transaction, Event event, MarketBoxCancelEvent boxCancelEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(boxCancelEvent.getMaker())
@@ -256,7 +254,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addNftMakerOpt(Transaction transaction, Event event, MarketMakerEvent nftMakerEvent) {
+    public Operation addMarketNftMakerOpt(Transaction transaction, Event event, MarketNftMakerEvent nftMakerEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(nftMakerEvent.getMaker())
@@ -279,7 +277,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addNftTakerOpt(Transaction transaction, Event event, MarketTakerEvent nftTakerEvent) {
+    public Operation addMarketNftTakerOpt(Transaction transaction, Event event, MarketNftTakerEvent nftTakerEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(nftTakerEvent.getMaker())
@@ -311,7 +309,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addNftBidOpt(Transaction transaction, Event event, MarketBidEvent nftBidEvent) {
+    public Operation addMarketNftBidOpt(Transaction transaction, Event event, MarketNftBidEvent nftBidEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(nftBidEvent.getMaker())
@@ -344,7 +342,7 @@ public class OperationServiceImpl extends AbstractCacheService<OperationMapper, 
     }
 
     @Override
-    public Operation addNftCancelOpt(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent) {
+    public Operation addMarketNftCancelOpt(Transaction transaction, Event event, MarketNftCancelEvent nftCancelEvent) {
         Operation operation = Operation.builder()
                 .chain(Chain.APTOS.getCode())
                 .maker(nftCancelEvent.getMaker())

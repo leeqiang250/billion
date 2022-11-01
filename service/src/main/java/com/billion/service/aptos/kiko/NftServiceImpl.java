@@ -1,17 +1,12 @@
 package com.billion.service.aptos.kiko;
 
 import com.aptos.request.v1.model.Event;
-import com.aptos.request.v1.model.TokenDataId;
-import com.aptos.request.v1.model.TokenId;
 import com.aptos.request.v1.model.Transaction;
-import com.aptos.utils.Hex;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.billion.dao.aptos.kiko.NftMapper;
 import com.billion.model.dto.Context;
 import com.billion.model.entity.Nft;
-import com.billion.model.entity.Operation;
 import com.billion.model.enums.Chain;
-import com.billion.model.enums.OperationType;
 import com.billion.model.enums.TransactionStatus;
 import com.billion.model.event.*;
 import com.billion.service.aptos.AbstractCacheService;
@@ -24,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.billion.model.constant.RequestPath.EMPTY;
 
 /**
  * @author liqiang

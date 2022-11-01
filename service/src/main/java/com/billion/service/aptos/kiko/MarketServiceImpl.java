@@ -60,13 +60,13 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Market addBoxMakerEvent(Transaction transaction, Event event, BoxMakerEvent boxMakerEvent) {
+    public Market addBoxMakerEvent(Transaction transaction, Event event, MarketBoxMakerEvent boxMakerEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxMakerEvent.getId())
                 .type(boxMakerEvent.getType())
-                .event(BoxMakerEvent.EVENT_NAME)
+                .event(MarketBoxMakerEvent.EVENT_NAME)
                 .maker(boxMakerEvent.getMaker())
                 .price(boxMakerEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -83,20 +83,20 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录,售卖
-        operationService.addBoxMakerOpt(transaction, event, boxMakerEvent);
+        operationService.addMarketBoxMakerOpt(transaction, event, boxMakerEvent);
 
         return market;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Market addBoxTakerEvent(Transaction transaction, Event event, BoxTakerEvent boxTakerEvent) {
+    public Market addBoxTakerEvent(Transaction transaction, Event event, MarketBoxTakerEvent boxTakerEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxTakerEvent.getId())
                 .type(boxTakerEvent.getType())
-                .event(BoxTakerEvent.EVENT_NAME)
+                .event(MarketBoxTakerEvent.EVENT_NAME)
                 .maker(boxTakerEvent.getMaker())
                 .price(boxTakerEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -113,20 +113,20 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录，购买
-        operationService.addBoxTakerOpt(transaction, event, boxTakerEvent);
+        operationService.addMarketBoxTakerOpt(transaction, event, boxTakerEvent);
 
         return market;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Market addBoxBidEvent(Transaction transaction, Event event, BoxBidEvent boxBidEvent) {
+    public Market addBoxBidEvent(Transaction transaction, Event event, MarketBoxBidEvent boxBidEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxBidEvent.getId())
                 .type(boxBidEvent.getType())
-                .event(BoxBidEvent.EVENT_NAME)
+                .event(MarketBoxBidEvent.EVENT_NAME)
                 .maker(boxBidEvent.getMaker())
                 .price(boxBidEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -143,20 +143,20 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录, 拍卖出价
-        operationService.addBoxBidOpt(transaction, event, boxBidEvent);
+        operationService.addMarketBoxBidOpt(transaction, event, boxBidEvent);
 
         return market;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Market addBoxCancelEvent(Transaction transaction, Event event, BoxCancelEvent boxCancelEvent) {
+    public Market addBoxCancelEvent(Transaction transaction, Event event, MarketBoxCancelEvent boxCancelEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(boxCancelEvent.getId())
                 .type(boxCancelEvent.getType())
-                .event(BoxCancelEvent.EVENT_NAME)
+                .event(MarketBoxCancelEvent.EVENT_NAME)
                 .maker(boxCancelEvent.getMaker())
                 .price(boxCancelEvent.getPrice())
                 .askToken(event.getType().split("<")[1].split(">")[0].split(",")[0].trim())
@@ -173,19 +173,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录,取消交易
-        operationService.addBoxCancelOpt(transaction, event, boxCancelEvent);
+        operationService.addMarketBoxCancelOpt(transaction, event, boxCancelEvent);
 
         return market;
     }
 
     @Override
-    public Market addNftMakerEvent(Transaction transaction, Event event, MarketMakerEvent nftMakerEvent) {
+    public Market addNftMakerEvent(Transaction transaction, Event event, MarketNftMakerEvent nftMakerEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftMakerEvent.getId())
                 .type(nftMakerEvent.getType())
-                .event(MarketMakerEvent.EVENT_NAME)
+                .event(MarketNftMakerEvent.EVENT_NAME)
                 .maker(nftMakerEvent.getMaker())
                 .price(nftMakerEvent.getPrice())
                 .askToken(nftMakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -203,19 +203,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录,售卖
-        operationService.addNftMakerOpt(transaction, event, nftMakerEvent);
+        operationService.addMarketNftMakerOpt(transaction, event, nftMakerEvent);
 
         return market;
     }
 
     @Override
-    public Market addNftTakerEvent(Transaction transaction, Event event, MarketTakerEvent nftTakerEvent) {
+    public Market addNftTakerEvent(Transaction transaction, Event event, MarketNftTakerEvent nftTakerEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftTakerEvent.getId())
                 .type(nftTakerEvent.getType())
-                .event(MarketTakerEvent.EVENT_NAME)
+                .event(MarketNftTakerEvent.EVENT_NAME)
                 .maker(nftTakerEvent.getMaker())
                 .price(nftTakerEvent.getPrice())
                 .askToken(nftTakerEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -233,19 +233,19 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录，购买
-        operationService.addNftTakerOpt(transaction, event, nftTakerEvent);
+        operationService.addMarketNftTakerOpt(transaction, event, nftTakerEvent);
 
         return market;
     }
 
     @Override
-    public Market addNftBidEvent(Transaction transaction, Event event, MarketBidEvent nftBidEvent) {
+    public Market addNftBidEvent(Transaction transaction, Event event, MarketNftBidEvent nftBidEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftBidEvent.getId())
                 .type(nftBidEvent.getType())
-                .event(MarketBidEvent.EVENT_NAME)
+                .event(MarketNftBidEvent.EVENT_NAME)
                 .maker(nftBidEvent.getMaker())
                 .price(nftBidEvent.getPrice())
                 .askToken(nftBidEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -263,20 +263,20 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录,拍卖出价
-        operationService.addNftBidOpt(transaction, event, nftBidEvent);
+        operationService.addMarketNftBidOpt(transaction, event, nftBidEvent);
 
         return market;
 
     }
 
     @Override
-    public Market addNftCancelEvent(Transaction transaction, Event event, MarketCancelEvent nftCancelEvent) {
+    public Market addNftCancelEvent(Transaction transaction, Event event, MarketNftCancelEvent nftCancelEvent) {
         Market market = Market.builder()
                 .chain(Chain.APTOS.getCode())
                 .version(Long.parseLong(transaction.getVersion()))
                 .orderId(nftCancelEvent.getId())
                 .type(nftCancelEvent.getType())
-                .event(MarketBidEvent.EVENT_NAME)
+                .event(MarketNftBidEvent.EVENT_NAME)
                 .maker(nftCancelEvent.getMaker())
                 .price(nftCancelEvent.getPrice())
                 .askToken(nftCancelEvent.getTokenId().getTokenDataId().getNftGroupKey())
@@ -294,7 +294,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         super.save(market);
 
         //交易记录，取消交易
-        operationService.addNftCancelOpt(transaction, event, nftCancelEvent);
+        operationService.addMarketNftCancelOpt(transaction, event, nftCancelEvent);
 
         return market;
     }
@@ -310,7 +310,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         if (MarketTokenType.NFT.getType().equals(condition)) {
             queryWrapper.lambda().ne(Market::getTokenId, EMPTY);
-        }else if (MarketTokenType.BOX.getType().equals(condition)) {
+        } else if (MarketTokenType.BOX.getType().equals(condition)) {
             queryWrapper.lambda().eq(Market::getTokenId, EMPTY);
         }
 
@@ -318,7 +318,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         page.addOrder(OrderItem.desc("version"));
         if (("asc").equals(orderType)) {
             page.addOrder(OrderItem.asc(order));
-        }else {
+        } else {
             page.addOrder(OrderItem.desc(order));
         }
 
@@ -398,7 +398,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
 
         if (MarketTokenType.NFT.getType().equals(type)) {
             queryWrapper.lambda().ne(Market::getTokenId, EMPTY);
-        }else if (MarketTokenType.BOX.getType().equals(type)) {
+        } else if (MarketTokenType.BOX.getType().equals(type)) {
             queryWrapper.lambda().eq(Market::getTokenId, EMPTY);
         }
         var marketList = this.list(queryWrapper);
@@ -423,16 +423,16 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         Map<String, Market> cancleMap = new HashMap<>(30);
         Map<String, Market> bidMap = new HashMap<>(30);
         marketList.forEach(market -> {
-            if (market.getEvent().equals(BoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketMakerEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketNftMakerEvent.EVENT_NAME)) {
                 makerMap.put(market.getOrderId(), market);
             }
-            if (market.getEvent().equals(BoxTakerEvent.EVENT_NAME) || market.getEvent().equals(MarketTakerEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxTakerEvent.EVENT_NAME) || market.getEvent().equals(MarketNftTakerEvent.EVENT_NAME)) {
                 takerMap.put(market.getOrderId(), market);
             }
-            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketCancelEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketNftCancelEvent.EVENT_NAME)) {
                 cancleMap.put(market.getOrderId(), market);
             }
-            if (market.getEvent().equals(BoxBidEvent.EVENT_NAME) || market.getEvent().equals(MarketBidEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxBidEvent.EVENT_NAME) || market.getEvent().equals(MarketNftBidEvent.EVENT_NAME)) {
                 bidMap.put(market.getOrderId(), market);
             }
         });
@@ -470,14 +470,14 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         String bidderAmount = null;
         String bidder = null;
         for (Market market : marketList) {
-            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(BoxTakerEvent.EVENT_NAME)
-            || market.getEvent().equals(MarketCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketTakerEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketBoxTakerEvent.EVENT_NAME)
+                    || market.getEvent().equals(MarketNftCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketNftTakerEvent.EVENT_NAME)) {
                 return null;
             }
-            if (market.getEvent().equals(BoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketMakerEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketNftMakerEvent.EVENT_NAME)) {
                 resultMarket = market;
             }
-            if (market.getEvent().equals(BoxBidEvent.EVENT_NAME) || market.getEvent().equals(MarketBidEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxBidEvent.EVENT_NAME) || market.getEvent().equals(MarketNftBidEvent.EVENT_NAME)) {
                 bidderAmount = market.getBidAmount();
             }
         }
@@ -499,7 +499,7 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         var marketList = this.list(queryWrapper);
         boolean onSale = true;
         for (var market : marketList)
-            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketCancelEvent.EVENT_NAME)){
+            if (market.getEvent().equals(MarketBoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketNftCancelEvent.EVENT_NAME)) {
                 onSale = false;
                 break;
             }
@@ -513,13 +513,13 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         Map<String, Market> cancleMap = new HashMap<>(30);
         Map<String, Market> bidMap = new HashMap<>(30);
         marketList.forEach(market -> {
-            if (market.getEvent().equals(BoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketMakerEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxMakerEvent.EVENT_NAME) || market.getEvent().equals(MarketNftMakerEvent.EVENT_NAME)) {
                 makerMap.put(market.getOrderId(), market);
             }
-            if (market.getEvent().equals(BoxTakerEvent.EVENT_NAME) || market.getEvent().equals(MarketTakerEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxTakerEvent.EVENT_NAME) || market.getEvent().equals(MarketNftTakerEvent.EVENT_NAME)) {
                 takerMap.put(market.getOrderId(), market);
             }
-            if (market.getEvent().equals(BoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketCancelEvent.EVENT_NAME)) {
+            if (market.getEvent().equals(MarketBoxCancelEvent.EVENT_NAME) || market.getEvent().equals(MarketNftCancelEvent.EVENT_NAME)) {
                 cancleMap.put(market.getOrderId(), market);
             }
         });
@@ -537,10 +537,10 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
         queryWrapper.lambda().in(Market::getOrderId, makerMap.keySet());
         queryWrapper.lambda().and(w1 -> {
-            w1.or(w2 -> w2.eq(Market::getEvent, MarketCancelEvent.EVENT_NAME));
-            w1.or(w2 -> w2.eq(Market::getEvent, MarketTakerEvent.EVENT_NAME));
-            w1.or(w2 -> w2.eq(Market::getEvent, BoxCancelEvent.EVENT_NAME));
-            w1.or(w2 -> w2.eq(Market::getEvent, BoxTakerEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketNftCancelEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketNftTakerEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketBoxCancelEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketBoxTakerEvent.EVENT_NAME));
         });
         var removeList = this.list(queryWrapper);
         var removeMap = removeList.stream().collect(Collectors.toMap(market -> market.getOrderId(), (market) -> market));
@@ -556,8 +556,8 @@ public class MarketServiceImpl extends AbstractCacheService<MarketMapper, Market
         queryWrapper.lambda().eq(Market::getOrderId, orderIdList);
         queryWrapper.lambda().eq(Market::getIsEnabled, Boolean.TRUE);
         queryWrapper.lambda().and(w1 -> {
-            w1.or(w2 -> w2.eq(Market::getEvent, MarketMakerEvent.EVENT_NAME));
-            w1.or(w2 -> w2.eq(Market::getEvent, BoxMakerEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketNftMakerEvent.EVENT_NAME));
+            w1.or(w2 -> w2.eq(Market::getEvent, MarketBoxMakerEvent.EVENT_NAME));
         });
 
         var higheBidList = this.list(queryWrapper);

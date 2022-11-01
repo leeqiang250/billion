@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MarketCancelEvent implements Serializable {
+public class MarketNftCancelEvent implements Serializable {
 
     public static String EVENT_NAME = "::secondary_market::NftCancelEvent<";
 

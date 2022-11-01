@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.TokenId;
 import com.aptos.utils.Hex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,9 +17,9 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoxCancelEvent implements Serializable {
+public class MarketNftBidEvent implements Serializable {
 
-    public static String EVENT_NAME = "::secondary_market::BoxCancelEvent<";
+    public static String EVENT_NAME = "::secondary_market::NftBidEvent<";
 
     String id;
 
@@ -27,6 +28,9 @@ public class BoxCancelEvent implements Serializable {
     String maker;
 
     String price;
+
+    @JSONField(name = "token_id")
+    TokenId tokenId;
 
     String amount;
 
@@ -40,6 +44,12 @@ public class BoxCancelEvent implements Serializable {
     @JSONField(name = "bid_price")
     String bidPrice;
 
+    @JSONField(name = "prev_bidder")
+    String prevBidder;
+
+    @JSONField(name = "prev_bid_price")
+    String prevBidPrice;
+
     public void setType(String type) {
         if (type.startsWith("0x")) {
             this.type = Hex.decodeToString(type);
@@ -47,5 +57,4 @@ public class BoxCancelEvent implements Serializable {
             this.type = type;
         }
     }
-
 }
