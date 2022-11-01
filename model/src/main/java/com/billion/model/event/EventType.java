@@ -125,7 +125,7 @@ public class EventType {
     }
 
     /**
-     * isNftTakerEvent
+     * isMarketNftTakerEvent
      *
      * @param event event
      * @return boolean
@@ -135,22 +135,22 @@ public class EventType {
     }
 
     /**
-     * isNftBidEvent
+     * isMarketNftBidEvent
      *
      * @param event event
      * @return boolean
      */
-    public static boolean isNftBidEvent(Event event) {
+    public static boolean isMarketNftBidEvent(Event event) {
         return event.getType().contains("::secondary_market::NftBidEvent<");
     }
 
     /**
-     * isNftCancelEvent
+     * isMarketNftCancelEvent
      *
      * @param event event
      * @return boolean
      */
-    public static boolean isNftCancelEvent(Event event) {
+    public static boolean isMarketNftCancelEvent(Event event) {
         return event.getType().contains("::secondary_market::NftCancelEvent<");
     }
 

@@ -146,8 +146,8 @@ public class ScanDispatchService implements Serializable {
                                 || EventType.isBoxCancelEvent(event)
                                 || EventType.isNftMakerEvent(event)
                                 || EventType.isMarketNftTakerEvent(event)
-                                || EventType.isNftBidEvent(event)
-                                || EventType.isNftCancelEvent(event)
+                                || EventType.isMarketNftBidEvent(event)
+                                || EventType.isMarketNftCancelEvent(event)
                         ) {
                             log.info(event.getType());
 
@@ -230,10 +230,10 @@ public class ScanDispatchService implements Serializable {
                 } else if (EventType.isMarketNftTakerEvent(event)) {
                     MarketTakerEvent nftTakerEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketTakerEvent.class);
                     marketService.addNftTakerEvent(transaction, event, nftTakerEvent);
-                } else if (EventType.isNftBidEvent(event)) {
+                } else if (EventType.isMarketNftBidEvent(event)) {
                     MarketBidEvent nftBidEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketBidEvent.class);
                     marketService.addNftBidEvent(transaction, event, nftBidEvent);
-                } else if (EventType.isNftCancelEvent(event)) {
+                } else if (EventType.isMarketNftCancelEvent(event)) {
                     MarketCancelEvent nftCancelEvent = JSONObject.parseObject(JSONObject.toJSONString(event.getData()), MarketCancelEvent.class);
                     marketService.addNftCancelEvent(transaction, event, nftCancelEvent);
                 }
