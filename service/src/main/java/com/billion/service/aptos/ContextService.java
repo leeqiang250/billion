@@ -2,9 +2,7 @@ package com.billion.service.aptos;
 
 import com.billion.model.enums.CacheTsType;
 import com.billion.model.enums.Contract;
-import com.billion.model.event.NftComposeEvent;
-import com.billion.model.event.NftSplitEvent;
-import com.billion.model.event.OpenBoxEvent;
+import com.billion.model.event.*;
 import com.billion.service.aptos.kiko.ContractService;
 import com.billion.service.aptos.kiko.InitService;
 import lombok.Getter;
@@ -125,6 +123,12 @@ public class ContextService {
         NftComposeEvent.EVENT_NAME = ContextService.kikoOwner + NftComposeEvent.EVENT_NAME;
         NftSplitEvent.EVENT_NAME = ContextService.kikoOwner + NftSplitEvent.EVENT_NAME;
         OpenBoxEvent.EVENT_NAME = ContextService.kikoOwner + OpenBoxEvent.EVENT_NAME;
+
+        MarketBidEvent.EVENT_NAME = ContextService.kikoOwner + MarketBidEvent.EVENT_NAME;
+        MarketCancelEvent.EVENT_NAME = ContextService.kikoOwner + MarketCancelEvent.EVENT_NAME;
+        MarketMakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketMakerEvent.EVENT_NAME;
+        MarketTakerEvent.EVENT_NAME = ContextService.kikoOwner + MarketTakerEvent.EVENT_NAME;
+
         aptosService.initialize();
     }
 

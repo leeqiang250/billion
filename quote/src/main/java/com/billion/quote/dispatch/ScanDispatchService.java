@@ -241,4 +241,15 @@ public class ScanDispatchService implements Serializable {
         }
     }
 
+    boolean isMarketEvent(Event event) {
+        return EventTypeMarket.isMarketBoxMakerEvent(event)
+                || EventTypeMarket.isMarketBoxTakerEvent(event)
+                || EventTypeMarket.isMarketBoxBidEvent(event)
+                || EventTypeMarket.isMarketBoxCancelEvent(event)
+                || EventTypeMarket.isMarketNftMakerEvent(event)
+                || EventTypeMarket.isMarketNftTakerEvent(event)
+                || EventTypeMarket.isMarketNftBidEvent(event)
+                || EventTypeMarket.isMarketNftCancelEvent(event);
+    }
+
 }

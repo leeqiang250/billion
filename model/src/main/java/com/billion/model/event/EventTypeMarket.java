@@ -56,7 +56,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftMakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftMakerEvent<");
+        return event.getType().contains(MarketMakerEvent.EVENT_NAME);
     }
 
     /**
@@ -66,7 +66,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftTakerEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftTakerEvent<");
+        return event.getType().contains(MarketTakerEvent.EVENT_NAME);
     }
 
     /**
@@ -76,7 +76,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftBidEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftBidEvent<");
+        return event.getType().contains(MarketBidEvent.EVENT_NAME);
     }
 
     /**
@@ -86,7 +86,7 @@ public class EventTypeMarket {
      * @return boolean
      */
     public static boolean isMarketNftCancelEvent(Event event) {
-        return event.getType().contains("::secondary_market::NftCancelEvent<");
+        return event.getType().contains(MarketCancelEvent.EVENT_NAME);
     }
 
 }
