@@ -1,5 +1,6 @@
 package com.billion.model.event;
 
+import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.TokenId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +23,15 @@ public class NftBurnTokenEvent implements Serializable {
     String amount;
 
     TokenId id;
+
+    /**
+     * isNftBurnTokenEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isNftBurnTokenEvent(Event event) {
+        return NftBurnTokenEvent.EVENT_NAME.equals(event.getType());
+    }
 
 }

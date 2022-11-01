@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.Event;
 import com.aptos.utils.Hex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +53,16 @@ public class MarketBoxTakerEvent implements Serializable {
         } else {
             this.type = type;
         }
+    }
+
+    /**
+     * isMarketBoxTakerEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isMarketBoxTakerEvent(Event event) {
+        return event.getType().contains(MarketBoxTakerEvent.EVENT_NAME);
     }
 
 }

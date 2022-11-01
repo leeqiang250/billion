@@ -1,6 +1,7 @@
 package com.billion.model.event;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.TokenId;
 import com.aptos.utils.Hex;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,16 @@ public class MarketNftCancelEvent implements Serializable {
         } else {
             this.type = type;
         }
+    }
+
+    /**
+     * isMarketNftCancelEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isMarketNftCancelEvent(Event event) {
+        return event.getType().contains(MarketNftCancelEvent.EVENT_NAME);
     }
 
 }

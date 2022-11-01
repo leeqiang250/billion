@@ -1,5 +1,6 @@
 package com.billion.model.event;
 
+import com.aptos.request.v1.model.Event;
 import com.aptos.request.v1.model.TokenId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +23,15 @@ public class NftWithdrawEvent implements Serializable {
     String amount;
 
     TokenId id;
+
+    /**
+     * isWithdrawEvent
+     *
+     * @param event event
+     * @return boolean
+     */
+    public static boolean isNftWithdrawEvent(Event event) {
+        return NftWithdrawEvent.EVENT_NAME.equals(event.getType());
+    }
 
 }
