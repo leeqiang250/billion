@@ -5,7 +5,7 @@ import com.aptos.request.v1.model.Event;
 /**
  * @author liqiang
  */
-public class EventTypeMarketBox {
+public class EventMarketBox {
 
     /**
      * isMarketBoxMakerEvent
