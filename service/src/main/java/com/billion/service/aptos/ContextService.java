@@ -136,6 +136,7 @@ public class ContextService {
         OpNftComposeEvent.EVENT_NAME = ContextService.kikoOwner + OpNftComposeEvent.EVENT_NAME;
         OpNftSplitEvent.EVENT_NAME = ContextService.kikoOwner + OpNftSplitEvent.EVENT_NAME;
 
+        ContextService.aptosHost = "https://fullnode.testnet.aptoslabs.com";
         aptosService.initialize();
     }
 
